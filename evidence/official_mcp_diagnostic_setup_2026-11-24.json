@@ -1,0 +1,41 @@
+{
+  "evidence_id": "vater.mcp.diagnostic.2026-11-24.001",
+  "verification_time_zone": "Asia/Tokyo",
+  "task_ids": [
+    "task.mcp_transport.006",
+    "task.mcp_transport.007",
+    "task.scope.015"
+  ],
+  "state": "DIAGNOSTIC_CONFIG_VERIFIED_REAL_PROTOCOL_UNOBSERVED",
+  "source_provenance": {
+    ".github/workflows/official-mcp-smoke.yml": "27f6aabab927b0bb71ec3380a7a99554138a76fc",
+    ".github/workflows/python-verification.yml": "81fa3e1cc60a7d55b31b81958fbbdba0ace18e7a",
+    ".github/workflows/dependency-lock-candidate.yml": "f59c47f1ac916ab1b668a5e884b21c3ad897d6c8",
+    "tests/test_ci_workflow_contracts.py": "082b9f2438129fb2fbd66cfd005dd6450eeaa647",
+    "tests/test_official_mcp_sdk.py": "8cedee3d6686e3a7c3f6c89550c1d917f7fe251e",
+    "scripts/check_test_report.py": "f65140aaec3d31a84ecbffbe3fb151b5c22a04ef"
+  },
+  "verification": {
+    "kind": "read-only live GitHub file content comparisons",
+    "configuration_checks_passed": 10,
+    "configuration_checks_total": 10,
+    "actual_workflow_run_checked": false,
+    "actual_pytest_executed_in_this_task": false,
+    "official_mcp_connected": false
+  },
+  "local_dependency_attempts": {
+    "python": "3.13.5",
+    "uv": "0.10.0",
+    "offline_resolve": "failed - mcp==2.3.0 not in local cache",
+    "online_resolve": "failed - network DNS resolution while fetching https://pypi.org/simple/pytest/",
+    "hash_locked_requirements_created": false
+  },
+  "primary_sources": [
+    "https://pypi.org/project/mcp/2.3.0/",
+    "https://docs.astral.sh/uv/pip/compile/",
+    "https://docs.astral.sh/uv/pip/packages/"
+  ],
+  "machine_contract": "SOURCE_COMMITTED -> CONFIG_CHECKED -> WORKFLOW_RESULT_PENDING -> {REAL_TEST_PASS | FAILED | NOT_RUN}",
+  "release_status": "BLOCKED",
+  "notes": "Diagnostic smoke runs with unlocked transitive dependencies and cannot replace the reviewed hash-locked release gate."
+}
