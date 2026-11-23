@@ -48,7 +48,9 @@ jobs:
       - name: Exercise the real official SDK separately
         env:
           PYTHONPATH: src
-        run: .venv/bin/python -m pytest -q -rs tests/test_official_mcp_sdk.py
+        run: .venv/bin/python -m pytest -q -rs --junitxml=official-mcp-report.xml tests/test_official_mcp_sdk.py
+      - name: Refuse partial or entirely skipped official SDK test runs
+        run: .venv/bin/python scripts/check_test_report.py official-mcp-report.xml --minimum 14
       - name: Publish lock candidate for human review
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
