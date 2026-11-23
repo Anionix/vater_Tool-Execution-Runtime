@@ -1,0 +1,60 @@
+name: Python validation (experimental)
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: python-validation-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify-offline:
+    name: Check source, backlog and offline execution
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install local test dependencies (no MCP SDK)
+        run: python -m pip install --disable-pip-version-check ".[test]"
+
+      - name: Compile Python source
+        run: python -m compileall -q src scripts tests server_mcp.py backlog
+
+      - name: Validate all 351 task records
+        run: python backlog/validate_tasks.py
+
+      - name: Run selected offline regression tests
+        run: |
+          mkdir -p artifacts
+          timeout 180s python -m pytest -q -rs --junitxml=artifacts/offline-smoke.xml \
+            tests/test_core.py \
+            tests/test_contracts.py \
+            tests/test_adapter_boundary.py \
+            tests/test_recorded_calculator.py \
+            tests/test_recorded_tool_bridge.py \
+            tests/test_cancellation_journal.py
+
+      - name: Preserve test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-offline-smoke
+          path: artifacts/offline-smoke.xml
+          if-no-files-found: ignore
+          retention-days: 14
+
+# MACHINE CONTRACT: This workflow tests local Python behavior only.
+# Official MCP interoperability, cancellation-on-wire, production authentication,
+# and external side effects are not certified by a green workflow.
