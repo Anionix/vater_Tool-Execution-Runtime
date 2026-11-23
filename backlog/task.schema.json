@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Python-first verifiable execution task (versioned)",
+  "type": "object",
+  "required": [
+    "task_id",
+    "phase",
+    "title",
+    "acceptance_criteria",
+    "depends_on",
+    "required_for_minimum_release",
+    "status",
+    "verification_status",
+    "evidence_paths",
+    "source_ids",
+    "plan_version",
+    "implementation_stage"
+  ],
+  "properties": {
+    "task_id": {
+      "type": "string",
+      "pattern": "^(task|gate)\\.[a-z_]+\\.(\\d{3}|completed)$"
+    },
+    "phase": {
+      "type": "string"
+    },
+    "phase_title": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 4
+    },
+    "deliverable": {
+      "type": "string"
+    },
+    "acceptance_criteria": {
+      "type": "string",
+      "minLength": 8
+    },
+    "depends_on": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "required_for_minimum_release": {
+      "type": "boolean"
+    },
+    "status": {
+      "enum": [
+        "not_started",
+        "in_progress",
+        "blocked",
+        "review",
+        "done"
+      ]
+    },
+    "verification_status": {
+      "enum": [
+        "not_executed",
+        "failed",
+        "passed",
+        "not_applicable"
+      ]
+    },
+    "evidence_paths": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "source_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "implementation_language": {
+      "type": "string"
+    },
+    "plan_version": {
+      "type": "string",
+      "const": "2.0.0-python-first"
+    },
+    "implementation_stage": {
+      "enum": [
+        "python_minimum",
+        "post_minimum",
+        "optional_formal_rust"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,41 @@
+{
+  "original_tasks": 351,
+  "current_tasks": 351,
+  "atomic": 332,
+  "gates": 19,
+  "modified_record_count": 203,
+  "modified_acceptance_count": 86,
+  "new_minimum_atomic": 159,
+  "new_minimum_gates": 9,
+  "old_done": 7,
+  "current_done": 7,
+  "former_passed": 60,
+  "current_passed": 19,
+  "statuses": {
+    "in_progress": 238,
+    "done": 7,
+    "not_started": 94,
+    "review": 12
+  },
+  "phases": {
+    "scope": 19,
+    "trust": 19,
+    "contracts": 25,
+    "runtime": 19,
+    "mcp_transport": 21,
+    "authorization": 23,
+    "read_only": 16,
+    "formal_verification": 21,
+    "minimum_validation": 16,
+    "minimum_release": 10,
+    "provider_adapters": 21,
+    "http_interface": 18,
+    "durable_operations": 24,
+    "testing": 27,
+    "operations": 18,
+    "optional_webmcp": 13,
+    "optional_webassembly": 15,
+    "optional_webgpu": 13,
+    "optional_more_protocols": 13
+  }
+}
