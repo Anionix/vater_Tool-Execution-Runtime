@@ -50,4 +50,4 @@ Importing with `--execute` performs remote writes and requires the separately in
 - Do **not** expose this prototype to untrusted remote callers or privileged credentials.
 - Read [SECURITY.md](SECURITY.md) for current limitations.
 - Rust, Lean, Kani, and other interface adapters are optional later stages.
-- **No open-source license has been selected.** A public repository does not automatically grant redistribution permission.
+- **Licensed under the MIT License**; see [LICENSE](LICENSE). The license grants permissions, but does not certify security or production readiness.
