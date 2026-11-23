@@ -40,10 +40,11 @@ from verified_execution.cancellable_bridge import CancellableLeasedToolBridge, C
 from verified_execution.cancellation_journal import CancellationJournal
 from verified_execution.recorded_tool_bridge import RECORDED_TOOL_NAME, RecordedToolBridge
 from verified_execution.request_limits import ReadOnlyPolicy, BoundedReadOnlyExecutor
+from verified_execution.policy_config import load_local_policy
 
 ROOT = Path(__file__).resolve().parent
 # POLICY-010/011/012: default host-owned deployment policy, not client arguments.
-_LIMITS = json.loads((ROOT / "config" / "limits.json").read_text(encoding="utf-8"))
+_LIMITS = load_local_policy(ROOT / "config" / "limits.json")
 _READONLY_POLICY = ReadOnlyPolicy(
     timeout_ms=_LIMITS["readonly_request_timeout_ms"],
     max_concurrent=_LIMITS["readonly_max_concurrent"],
