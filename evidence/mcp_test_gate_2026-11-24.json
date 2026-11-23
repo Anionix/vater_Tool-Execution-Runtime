@@ -1,0 +1,45 @@
+{
+  "evidence_id": "vater.mcp.test-gate.2026-11-24.001",
+  "task_ids": [
+    "task.mcp_transport.006",
+    "task.mcp_transport.007",
+    "task.mcp_transport.015",
+    "task.runtime.016"
+  ],
+  "state": "LOCAL_GATE_TESTED_REMOTE_MCP_UNVERIFIED",
+  "transition_contract": "REPORT_ABSENT -> REJECTED; READ -> VALIDATED -> PASSED|REJECTED",
+  "tests": {
+    "test_file": "tests/test_test_report_gate.py",
+    "local_python": "3.13.5",
+    "result": "12 passed, 0 failed",
+    "junit_real_parser_recheck": "12 passed, 0 failures, 0 skipped",
+    "negative_cases": [
+      "missing report",
+      "invalid XML",
+      "missing test suite",
+      "skipped testcase",
+      "failure testcase",
+      "error testcase",
+      "below minimum test count",
+      "inconsistent suite totals",
+      "oversize report"
+    ]
+  },
+  "source_provenance": {
+    "scripts/check_test_report.py": "f65140aaec3d31a84ecbffbe3fb151b5c22a04ef",
+    "tests/test_test_report_gate.py": "f0a582ff200fb6ca9bb97a465f1f7a88424e4fd7"
+  },
+  "workflow_files": [
+    ".github/workflows/python-verification.yml",
+    ".github/workflows/dependency-lock-candidate.yml"
+  ],
+  "official_mcp_minimum_expected_collected_cases": 14,
+  "limitations": [
+    "12 tests validate the report gate, not the MCP protocol",
+    "No official MCP SDK integration run was performed in this local test",
+    "GitHub Actions run status has not been verified",
+    "Full hash-pinned dependency lock is not yet reviewed or committed",
+    "An input report from an untrusted actor can contain fabricated results; trustworthy runner provenance is separate"
+  ],
+  "release_status": "BLOCKED"
+}
