@@ -1,0 +1,71 @@
+{
+  "record_id": "vater-migration-verification-2026-11-23",
+  "as_of_date": "2026-11-23",
+  "repository": "Anionix/vater_Tool-Execution-Runtime",
+  "project_stage": "experimental_not_production_ready",
+  "source_origin": {
+    "archive": "github_verified_tool_execution_2026-11-23.zip",
+    "adjustments": "Local audit restored contracts/expected_cases.jsonl and config/limits.json from the Python-first scope snapshot, matching separately fetched GitHub paths. Importer source and unit-test Git blob hashes were checked to match GitHub.",
+    "limitations": "Local suites were run on a reconstructed publication snapshot, not a full fresh checkout of the exact current Git commit."
+  },
+  "task_ledger": {
+    "total": 351,
+    "atomic_tasks": 332,
+    "phase_gates": 19,
+    "historical_completed": 17
+  },
+  "issue_checkpoint": {
+    "total_gitHub_issue_records": 73,
+    "unique_task_ids": 71,
+    "duplicates_closed": [
+      56,
+      57
+    ],
+    "pending_unique_task_ids": 280
+  },
+  "test_results": [
+    {
+      "suite_id": "runtime_offline_baseline",
+      "tests": 285,
+      "passed": 271,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 14,
+      "source": "local reconstructed snapshot, excluding process lifecycle suites"
+    },
+    {
+      "suite_id": "process_lifecycle",
+      "tests": 18,
+      "passed": 18,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "source": "local reconstructed snapshot"
+    },
+    {
+      "suite_id": "issue_import_offline",
+      "tests": 7,
+      "passed": 7,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "source": "local, importer and lock-test files checked against GitHub Git blob hashes"
+    }
+  ],
+  "tested_total": {
+    "passed": 296,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 14
+  },
+  "official_mcp_interoperability": "not_executed_due_to_missing_official_sdk",
+  "evidence_boundaries": [
+    "These local checks do not establish compliance with the official MCP protocol.",
+    "The historical 17 completed tasks are not promoted by uploading or importing Issues.",
+    "Old source_sha256 entries may refer to a different file layout; reverify each result for current Git commits.",
+    "Public MIT license is present. Security/production readiness remains unapproved.",
+    "GitHub Issue creation does not support atomic deduplication outside cooperating importers."
+  ],
+  "git_importer_git_blob_sha": "63f623989db2bf5abef2a1d2ce02e794b4db5d3d",
+  "git_importer_lock_tests_git_blob_sha": "4d7c63e5e55635b0978ff73a7d345bb534e095eb"
+}
