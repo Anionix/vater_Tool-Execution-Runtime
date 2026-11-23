@@ -35,7 +35,7 @@ Some tests require the official Python MCP package, are explicitly skipped when 
 
 ## GitHub Issues
 
-**38 of 351 planned Issues** are registered. Additional Issues can be prepared and checked without writing to GitHub:
+Issue registration is incremental. The original plan has **351 stable task identifiers**. For the live registered count, open [all Issues](https://github.com/Anionix/vater_Tool-Execution-Runtime/issues?q=is%3Aissue) (including closed Issues); the historical first batch is recorded in [the import checkpoint](backlog/ISSUE_IMPORT_STATUS.md). Additional Issues can be prepared and checked without writing to GitHub:
 
 ```bash
 python scripts/import_github_issues.py --repo Anionix/vater_Tool-Execution-Runtime --all
