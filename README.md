@@ -2,7 +2,7 @@
 
 **Experimental Python-first tool execution runtime** for AI agents and other clients. Its current components validate inputs, enforce host-owned authorization, record operation state, and test cancellation. **MCP is the first planned protocol adapter, not the only possible interface.**
 
-> **Not production-ready.** The official Python MCP client/server interoperability tests have not been run successfully in the original environment. Offline Python test results do not establish protocol compliance or a complete security guarantee.
+> **Not production-ready.** Official Python MCP 2.3.0 client/server integration tests now pass **14/14 with zero skipped** in a GitHub-hosted Linux/Python 3.13 environment using a SHA-256 hash-pinned dependency lock. This scoped result does not prove full specification conformance, production safety or other platforms.
 
 ## Repository guide
 
@@ -31,7 +31,7 @@ To run the broader offline checks:
 ./scripts/run_offline_checks.sh
 ```
 
-Some tests require the official Python MCP package, are explicitly skipped when unavailable, and **must not** be counted as protocol validation. Transitive dependencies still lack an accepted hash-pinned lock. The [candidate generation and clean-install workflow](docs/DEPENDENCY_LOCK_WORKFLOW.md) is implemented, but its official MCP verification is **not yet confirmed**. Until an accepted lock is committed, the official MCP job intentionally fails closed.
+Some tests require the official Python MCP package, are explicitly skipped when unavailable, and **must not** be counted as protocol validation. The Python 3.13 Linux transitive dependencies are now recorded in [requirements-py313.lock](requirements-py313.lock): **33 pinned packages with 485 artifact hashes**. The [candidate resolver](docs/DEPENDENCY_LOCK_WORKFLOW.md) and [locked end-to-end test run](https://github.com/Anionix/vater_Tool-Execution-Runtime/actions/runs/45278396997) both passed. Local environments without the official MCP SDK still skip the integration tests and must not claim protocol validation.
 
 ## Official MCP verification paths
 
@@ -39,7 +39,7 @@ Some tests require the official Python MCP package, are explicitly skipped when 
 - [Dependency-lock candidate](.github/workflows/dependency-lock-candidate.yml): generates and verifies a candidate with package hashes.
 - [Release-oriented verification](.github/workflows/python-verification.yml): requires an accepted hash-pinned dependency lock and rejects skipped official MCP tests.
 
-**The diagnostic workflow has been committed, but its execution result has not yet been verified.** A passing diagnostic alone is not a production release gate.
+The [diagnostic workflow succeeded](https://github.com/Anionix/vater_Tool-Execution-Runtime/actions/runs/45277418204) (14/14), and the [hash-locked main-branch verification also succeeded](https://github.com/Anionix/vater_Tool-Execution-Runtime/actions/runs/45278396997). Remaining phase gates and production authorization work are still incomplete.
 
 ## GitHub Issues
 
