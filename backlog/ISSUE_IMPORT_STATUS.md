@@ -3,9 +3,9 @@
 Snapshot (2026-11-23, Japan time). GitHub issue imports may be concurrent; refresh before each later batch.
 
 - Original plan: **351 unique identifiers** (332 tasks, 19 phase gates).
-- Registered: **63 unique identifiers** (individual tasks 44, gates 19).
-- Not yet registered: **288**.
-- Open / closed canonical issues: **46 / 17**.
+- Registered: **71 unique identifiers** (individual tasks 52, gates 19).
+- Not yet registered: **280**.
+- Open / closed canonical issues: **54 / 17**.
 - Duplicate registrations: **2** (excluded from unique progress). GitHub does not provide an idempotency key for Issue creation.
 - Last audited task completion: **17 / 351**. This is *different* from the issue import count.
 - Official MCP live communication: **unverified**. Historic [Python test report](https://github.com/Anionix/vater_Tool-Execution-Runtime/blob/main/evidence/verification_0_11.json): 289 passed, 14 skipped. Not rerun here.
@@ -78,6 +78,15 @@ Snapshot (2026-11-23, Japan time). GitHub issue imports may be concurrent; refre
 | [#63](https://github.com/Anionix/vater_Tool-Execution-Runtime/issues/63) | `task.contracts.006` | open |
 | [#64](https://github.com/Anionix/vater_Tool-Execution-Runtime/issues/64) | `task.contracts.007` | open |
 | [#65](https://github.com/Anionix/vater_Tool-Execution-Runtime/issues/65) | `task.contracts.008` | open |
+
+| [#66](https://github.com/Anionix/vater_Tool-Execution-Runtime/issues/66) | `task.contracts.009` | open |
+| [#67](https://github.com/Anionix/vater_Tool-Execution-Runtime/issues/67) | `task.contracts.010` | open |
+| [#68](https://github.com/Anionix/vater_Tool-Execution-Runtime/issues/68) | `task.contracts.011` | open |
+| [#69](https://github.com/Anionix/vater_Tool-Execution-Runtime/issues/69) | `task.contracts.012` | open |
+| [#70](https://github.com/Anionix/vater_Tool-Execution-Runtime/issues/70) | `task.contracts.013` | open |
+| [#71](https://github.com/Anionix/vater_Tool-Execution-Runtime/issues/71) | `task.contracts.014` | open |
+| [#72](https://github.com/Anionix/vater_Tool-Execution-Runtime/issues/72) | `task.contracts.015` | open |
+| [#73](https://github.com/Anionix/vater_Tool-Execution-Runtime/issues/73) | `task.contracts.016` | open |
 
 ## Duplicate issues
 
