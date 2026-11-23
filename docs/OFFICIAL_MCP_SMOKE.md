@@ -1,6 +1,6 @@
 # Official MCP diagnostic verification
 
-**Status: diagnostic automation added; result not independently observed.**
+**Status: diagnostic 14/14 passed; separately, hash-locked main-branch integration 14/14 passed on Python 3.13 Linux.**
 
 The repository now has TWO different paths to official MCP verification, deliberately kept separate.
 
@@ -21,7 +21,7 @@ Its dependencies are **not fully hash-pinned**. Even if every test passes, this 
 
 The normal [Python verification](../.github/workflows/python-verification.yml) job refuses to start official SDK tests without a reviewed `requirements-py313.lock`, whose package artifact hashes are verified during installation.
 
-The [dependency-lock candidate workflow](../.github/workflows/dependency-lock-candidate.yml) attempts to create the lock from the real package registry and test a clean installation. A candidate must be reviewed before merging it into the repository. This is a separate release gate.
+The [dependency-lock candidate workflow](../.github/workflows/dependency-lock-candidate.yml) produced a verified 33-package hash-pinned lock, now committed as [requirements-py313.lock](../requirements-py313.lock). The [locked main-branch verification](https://github.com/Anionix/vater_Tool-Execution-Runtime/actions/runs/45278396997) succeeded in all three jobs (offline, durable state and real official SDK); the official integration suite executed 14 cases with zero skips and zero failures. Other release gates remain separate.
 
 ## State machine
 
