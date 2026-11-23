@@ -1,0 +1,10 @@
+{
+  "package": "mcp",
+  "requested_version": "2.3.0",
+  "installed": false,
+  "installation_attempt": "python -m pip download --no-deps --retries 0 --timeout 4 mcp==2.3.0",
+  "observed_result": "No matching distribution found (the environment has no usable package index)",
+  "official_mcp_sdk_test_status": "not_run",
+  "not_an_sdk_conformance_result": true,
+  "installed_version": null
+}
