@@ -1,10 +1,10 @@
 # Python 3.13 dependency-lock verification
 
-**State: preparation done; full transitive lock and real MCP test results still pending.**
+**State: Python 3.13 Linux lock committed, hash-checked install passed, real MCP 14/14 passed. Full production release gates remain open.**
 
 ## What this protects
 
-The official Python MCP package is fixed to **mcp 2.3.0** by the project configuration. The other dependencies, including transitive ones, are NOT fully pinned yet. Public package presence is not evidence of a verified installation.
+The official Python MCP SDK and its transitive dependencies are now pinned for Python 3.13 Linux in [requirements-py313.lock](../requirements-py313.lock): **33 distributions and 485 SHA-256 artifact hashes**. The committed file SHA-256 is `cc651303afe6b684a979e14fdd9d1ca8b73d7bda0ea6e1d0480a20ae792de51c`.
 
 ## Generate a candidate
 
@@ -18,7 +18,7 @@ It uses CPython 3.13 for x86-64 Linux, resolves the production, test and MCP pac
 4. Executes the real SDK communication tests separately from mock tests.
 5. Uploads an **unreviewed candidate** file to the run's artifacts, even if a later check fails.
 
-Review and accept the candidate **only when the workflow and real SDK tests pass**. Then add that exact lock file to the repository through a reviewed commit.
+**Completed on 2026-11-24 (Japan time):** [candidate generation and real SDK testing succeeded](https://github.com/Anionix/vater_Tool-Execution-Runtime/actions/runs/45277761135). The generated lock was independently checked against the candidate and committed. [The subsequent main-branch lock-enforced integration run also succeeded](https://github.com/Anionix/vater_Tool-Execution-Runtime/actions/runs/45278396997), including 14 executed official MCP cases with zero failures and zero skips.
 
 ## Strict release gates
 
