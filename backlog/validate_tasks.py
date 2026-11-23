@@ -4,6 +4,34 @@ from pathlib import Path
 import json, collections
 P=Path(__file__).resolve().parent
 REPOSITORY_ROOT=P.parent
+
+def evidence_matches_task(task):
+    """EVIDENCE-001: accept only local matching task evidence, not arbitrary files.
+
+    This verifies structural provenance, not the authenticity of old test runs.
+    """
+    if not task["evidence_paths"]:
+        return False
+    for item in task["evidence_paths"]:
+        if type(item) is not str:
+            return False
+        relative = Path(item)
+        if (relative.is_absolute() or ".." in relative.parts
+                or not relative.parts or relative.parts[0] != "evidence"):
+            return False
+        file_path = (REPOSITORY_ROOT / relative).resolve()
+        if not file_path.is_relative_to(REPOSITORY_ROOT) or not file_path.is_file():
+            return False
+        try:
+            proof = json.loads(file_path.read_text(encoding="utf-8"))
+        except (ValueError, UnicodeError, OSError):
+            return False
+        if (proof.get("task_id") != task["task_id"]
+                or proof.get("verification_status") != task["verification_status"]
+                or proof.get("executed") is not True):
+            return False
+    return True
+
 items=[json.loads(x) for x in (P/'tasks.jsonl').read_text(encoding='utf-8').splitlines() if x]
 ids=[x['task_id'] for x in items]
 assert len(ids)==len(set(ids)), 'duplicate task identifier'
@@ -19,7 +47,7 @@ for task in items:
     assert task['status'] in ['not_started','in_progress','blocked','review','done']
     assert task['verification_status'] in ['not_executed','failed','passed','not_applicable']
     if task['verification_status'] in ['passed','not_applicable']:
-        assert task['evidence_paths'] and all((REPOSITORY_ROOT/e).resolve().is_relative_to(REPOSITORY_ROOT.resolve()) and (REPOSITORY_ROOT/e).is_file() for e in task['evidence_paths']), task['task_id']
+        assert evidence_matches_task(task), task['task_id']
     if task['status']=='done':
         assert task['verification_status'] in ['passed','not_applicable']
 # detect dependency cycles by depth first search
