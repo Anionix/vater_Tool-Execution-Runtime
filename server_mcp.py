@@ -46,8 +46,8 @@ ROOT = Path(__file__).resolve().parent
 # POLICY-010/011/012: default host-owned deployment policy, not client arguments.
 _LIMITS = load_local_policy(ROOT / "config" / "limits.json")
 _READONLY_POLICY = ReadOnlyPolicy(
-    timeout_ms=_LIMITS["readonly_request_timeout_ms"],
-    max_concurrent=_LIMITS["readonly_max_concurrent"],
+    timeout_ms=_LIMITS.readonly_request_timeout_ms,
+    max_concurrent=_LIMITS.readonly_max_concurrent,
 )
 INPUT_SCHEMA = json.loads((ROOT / "contracts" / "checked_add.input.schema.json").read_text(encoding="utf-8"))
 OUTPUT_SCHEMA = {
