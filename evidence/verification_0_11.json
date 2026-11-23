@@ -1,0 +1,99 @@
+{
+  "report_identifier": "mcp-2026-11-23-python-feasible-0.11.0",
+  "generated_at_utc": "2026-11-23T10:35:42.855798+00:00",
+  "python": "3.13.5",
+  "suites": {
+    "baseline": {
+      "tests": 129,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 14,
+      "passed": 115,
+      "duration_seconds": 13.31,
+      "sha256": "9bfbb4da78b5b1f8f8330ad58a665f167195bda0128b747e6db633d4a0bf3316"
+    },
+    "ledger_and_cancellation": {
+      "tests": 156,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 156,
+      "duration_seconds": 14.563,
+      "sha256": "54658d37102e4b177885683d87351cb3b39eec2c393f9f52e4ad5f5cb07eef78"
+    },
+    "process_lifecycle": {
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 18,
+      "duration_seconds": 19.487,
+      "sha256": "41e2d82e0ff317c6bd51db0ebce28fb924e4d627248ef0278e982867adb64231"
+    }
+  },
+  "totals": {
+    "tests": 303,
+    "passed": 289,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 14
+  },
+  "stress": {
+    "runs": 3,
+    "requests": 1080,
+    "distinct_operations_per_run": 30,
+    "max_elapsed_seconds": 2.2123,
+    "evidence": "evidence/multiprocess_stress.json"
+  },
+  "sdk": {
+    "installed_version": null,
+    "real_sdk_tests_executed": 0,
+    "skipped": 14
+  },
+  "task_decisions": [
+    {
+      "task": "WORK-010-001",
+      "status": "SKIPPED_EXTERNAL_DEPENDENCY",
+      "reason": "Official Python MCP SDK unavailable locally"
+    },
+    {
+      "task": "WORK-010-002",
+      "status": "SKIPPED_EXTERNAL_DEPENDENCY",
+      "reason": "Real official MCP client/server cancellation cannot be executed"
+    },
+    {
+      "task": "WORK-010-003",
+      "status": "VERIFIED_BOUNDED_ONLY",
+      "reason": "1080 requests, 6 worker processes x 60 per trial x 3, plus unit tests; not a multi-day soak test"
+    },
+    {
+      "task": "WORK-010-004",
+      "status": "IMPLEMENTED_LOCAL",
+      "reason": "POSIX fsync cancellation journal, locked SQLite recovery, process crash, startup replay and access checks tested"
+    },
+    {
+      "task": "WORK-010-005",
+      "status": "SKIPPED_EXTERNAL_DEPENDENCY",
+      "reason": "No real mutation-capable provider or authoritative status endpoint to reconcile"
+    },
+    {
+      "task": "WORK-010-006",
+      "status": "SKIPPED_INDEPENDENT_REVIEW",
+      "reason": "Local negative tests are not independent security review or real identity authentication"
+    },
+    {
+      "task": "WORK-010-007",
+      "status": "SKIPPED_TOOLCHAIN",
+      "reason": "No Rust compiler available; cross-language execution not possible"
+    }
+  ],
+  "limitations": [
+    "short duration load does not verify multi-day availability",
+    "journal requires trusted POSIX filesystem, successful file and directory fsync",
+    "SQLite and journal storage can both fail; no durable guarantee then",
+    "remote side effects and real MCP transport not tested",
+    "approval identity issuance and independent audit not performed",
+    "single full combined pytest invocation timed out; separate suite executions passed"
+  ],
+  "release_decision": "BLOCKED"
+}
