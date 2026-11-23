@@ -41,6 +41,7 @@ jobs:
           tests/test_static_policy.py
           tests/test_dependency_lock.py
           tests/test_test_report_gate.py
+          tests/test_ci_workflow_contracts.py
 
   durable-state:
     runs-on: ubuntu-latest
