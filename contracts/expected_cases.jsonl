@@ -1,0 +1,10 @@
+{"case":"CALC-001","name":"checked_add","arguments":{"left":100,"right":200},"expected":{"ok":true,"value":300,"error_code":null}}
+{"case":"CALC-002","name":"checked_add","arguments":{"left":0,"right":0},"expected":{"ok":true,"value":0,"error_code":null}}
+{"case":"CALC-003","name":"checked_add","arguments":{"left":4294967295,"right":0},"expected":{"ok":true,"value":4294967295,"error_code":null}}
+{"case":"CALC-004","name":"checked_add","arguments":{"left":4294967295,"right":1},"expected":{"ok":false,"value":null,"error_code":"OVERFLOW"}}
+{"case":"CALC-005","name":"checked_add","arguments":{"left":true,"right":1},"expected":{"ok":false,"value":null,"error_code":"INVALID_ARGUMENT"}}
+{"case":"CALC-006","name":"checked_add","arguments":{"left":1.0,"right":1},"expected":{"ok":false,"value":null,"error_code":"INVALID_ARGUMENT"}}
+{"case":"CALC-007","name":"checked_add","arguments":{"left":-1,"right":1},"expected":{"ok":false,"value":null,"error_code":"OUT_OF_RANGE"}}
+{"case":"CALC-008","name":"checked_add","arguments":{"left":4294967296,"right":1},"expected":{"ok":false,"value":null,"error_code":"OUT_OF_RANGE"}}
+{"case":"CALC-009","name":"checked_add","arguments":{"left":1,"right":2,"permission":true},"expected":{"ok":false,"value":null,"error_code":"INVALID_ARGUMENT"}}
+{"case":"CALC-010","name":"delete_file","arguments":{},"expected":{"ok":false,"value":null,"error_code":"UNKNOWN_TOOL"}}

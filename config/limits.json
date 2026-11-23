@@ -1,0 +1,10 @@
+{
+  "policy_version": "1.0.0",
+  "request_input_max_bytes": 4096,
+  "request_output_max_bytes": 65536,
+  "json_max_depth": 32,
+  "readonly_request_timeout_ms": 2000,
+  "readonly_max_concurrent": 1,
+  "scope": "single-local-user; pure checked_add only",
+  "status": "prototype; official MCP SDK validation pending"
+}
