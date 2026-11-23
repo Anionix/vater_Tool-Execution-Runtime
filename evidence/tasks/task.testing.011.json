@@ -1,0 +1,25 @@
+{
+  "task_id": "task.testing.011",
+  "acceptance_criteria": "明確に拒否または固定規則で処理",
+  "verification_status": "passed",
+  "evidence": [
+    {
+      "type": "passing_junit_case",
+      "expected_test_prefix": "test_guarded_stdio.test_duplicate_keys_and_nonfinite_are_rejected_in_memory",
+      "matched_count": 1,
+      "matching_names": [
+        "test_guarded_stdio.test_duplicate_keys_and_nonfinite_are_rejected_in_memory"
+      ],
+      "junit_file": "app/evidence/baseline_0_11.xml",
+      "test_source": "app/tests/test_guarded_stdio.py",
+      "test_source_sha256": "1a7a76a30d283e0538d2072286826f9cd06a52f9cf140d7c4cb9ca35289e5cc3"
+    }
+  ],
+  "scope": "source assertions / local Python tests, not formal Rust or official MCP",
+  "executed": true,
+  "original_archives_sha256": {
+    "design": "50c674c84baaf1bb47bc22714fb4a600b86d03b258ff1d7a36eb490425c1ba9f",
+    "implementation": "6413bb1c4cec33405e6898bfacd78770b7d6dad194fddbaef68e28433c589373",
+    "blueprint": "e85cb78927bfa0ff6dbe668b4cc3ff7c71e6e4e5bb7c5bfc18763cc5ff9c03a2"
+  }
+}

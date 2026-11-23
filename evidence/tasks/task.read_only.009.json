@@ -1,0 +1,49 @@
+{
+  "task_id": "task.read_only.009",
+  "acceptance_criteria": "0と最大値を含む反例試験がある",
+  "verification_status": "passed",
+  "evidence": [
+    {
+      "type": "passing_junit_case",
+      "expected_test_prefix": "test_core.test_arithmetic",
+      "matched_count": 4,
+      "matching_names": [
+        "test_core.test_arithmetic[0-0-0]",
+        "test_core.test_arithmetic[100-200-300]",
+        "test_core.test_arithmetic[4294967295-0-4294967295]",
+        "test_core.test_arithmetic[1-1-2]"
+      ],
+      "junit_file": "app/evidence/baseline_0_11.xml",
+      "test_source": "app/tests/test_core.py",
+      "test_source_sha256": "b75541dbd01dac5279416e409849c2b63fe425b018d3ba95ec676b74960bd0e5"
+    },
+    {
+      "type": "passing_junit_case",
+      "expected_test_prefix": "test_core.test_not_unsigned_integer",
+      "matched_count": 11,
+      "matching_names": [
+        "test_core.test_not_unsigned_integer[True]",
+        "test_core.test_not_unsigned_integer[False]",
+        "test_core.test_not_unsigned_integer[1.0]",
+        "test_core.test_not_unsigned_integer[1.5]",
+        "test_core.test_not_unsigned_integer[None]",
+        "test_core.test_not_unsigned_integer[2]",
+        "test_core.test_not_unsigned_integer[value6]",
+        "test_core.test_not_unsigned_integer[value7]",
+        "test_core.test_not_unsigned_integer[-1]",
+        "test_core.test_not_unsigned_integer[4294967296]",
+        "test_core.test_not_unsigned_integer[1267650600228229401496703205376]"
+      ],
+      "junit_file": "app/evidence/baseline_0_11.xml",
+      "test_source": "app/tests/test_core.py",
+      "test_source_sha256": "b75541dbd01dac5279416e409849c2b63fe425b018d3ba95ec676b74960bd0e5"
+    }
+  ],
+  "scope": "source assertions / local Python tests, not formal Rust or official MCP",
+  "executed": true,
+  "original_archives_sha256": {
+    "design": "50c674c84baaf1bb47bc22714fb4a600b86d03b258ff1d7a36eb490425c1ba9f",
+    "implementation": "6413bb1c4cec33405e6898bfacd78770b7d6dad194fddbaef68e28433c589373",
+    "blueprint": "e85cb78927bfa0ff6dbe668b4cc3ff7c71e6e4e5bb7c5bfc18763cc5ff9c03a2"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0.0",
+  "task_id": "task.scope.004",
+  "acceptance_criteria": "Pythonの純粋な計算と公式MCPの標準入出力の試験を分離する。HTTP、WebMCP、モデル接続は後続の任意プロファイル",
+  "verification_status": "passed",
+  "executed": true,
+  "test_suite": "evidence/scope_sprint.xml",
+  "test_name": "test_scope_004_separated_mcp_and_pure_test_suites",
+  "python_version": "3.13.5",
+  "source_sha256": {
+    "SCOPE_CONTRACT.md": "9280871ac15567528847db2f83dffd59a1e50e6204129591c94183dfa32ddf2b",
+    "application/server_mcp.py": "0cf4ee56f650e4877a1c06f6e8e1bb9231d54be0e183d983ff7c2da2333bd727",
+    "application/tests/test_official_mcp_sdk.py": "def5bf79f3308e3f62cc31e3f7150d4c45298e9365dda100e450bb93b915cebc"
+  },
+  "limitation": "Offline scope acceptance. Does not prove real official MCP transport or signed external attestations."
+}

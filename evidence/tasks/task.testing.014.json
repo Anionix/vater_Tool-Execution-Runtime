@@ -1,0 +1,25 @@
+{
+  "task_id": "task.testing.014",
+  "acceptance_criteria": "設定した最大の深さを超えると処理を拒否する",
+  "verification_status": "passed",
+  "evidence": [
+    {
+      "type": "passing_junit_case",
+      "expected_test_prefix": "test_output_boundary.test_depth_bound_output",
+      "matched_count": 1,
+      "matching_names": [
+        "test_output_boundary.test_depth_bound_output"
+      ],
+      "junit_file": "app/evidence/baseline_0_11.xml",
+      "test_source": "app/tests/test_output_boundary.py",
+      "test_source_sha256": "e2a3ef6c73a9c93b137ccae6e6ec48581dfe9cddd753f79d5aa1df56c6c74aee"
+    }
+  ],
+  "scope": "source assertions / local Python tests, not formal Rust or official MCP",
+  "executed": true,
+  "original_archives_sha256": {
+    "design": "50c674c84baaf1bb47bc22714fb4a600b86d03b258ff1d7a36eb490425c1ba9f",
+    "implementation": "6413bb1c4cec33405e6898bfacd78770b7d6dad194fddbaef68e28433c589373",
+    "blueprint": "e85cb78927bfa0ff6dbe668b4cc3ff7c71e6e4e5bb7c5bfc18763cc5ff9c03a2"
+  }
+}

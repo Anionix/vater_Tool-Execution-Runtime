@@ -1,0 +1,20 @@
+{
+  "task_id": "task.scope.002",
+  "acceptance_criteria": "認証が必要な遠隔公開と明確に区別する",
+  "verification_status": "passed",
+  "evidence": [
+    {
+      "type": "source_assertion",
+      "source": "design/ARCHITECTURE.md",
+      "exact_text": "単一利用者・ローカル標準入出力",
+      "file_sha256": "a03a49691349b9e49fcd6b4cd5e0a06fb1976918d1d69b4a819d828831c49ea1"
+    }
+  ],
+  "scope": "source assertions / local Python tests, not formal Rust or official MCP",
+  "executed": true,
+  "original_archives_sha256": {
+    "design": "50c674c84baaf1bb47bc22714fb4a600b86d03b258ff1d7a36eb490425c1ba9f",
+    "implementation": "6413bb1c4cec33405e6898bfacd78770b7d6dad194fddbaef68e28433c589373",
+    "blueprint": "e85cb78927bfa0ff6dbe668b4cc3ff7c71e6e4e5bb7c5bfc18763cc5ff9c03a2"
+  }
+}

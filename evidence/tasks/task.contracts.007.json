@@ -1,0 +1,28 @@
+{
+  "task_id": "task.contracts.007",
+  "acceptance_criteria": "操作直前の版との比較が可能",
+  "verification_status": "passed",
+  "evidence": [
+    {
+      "type": "passing_junit_case",
+      "expected_test_prefix": "test_ledger.test_mismatched_approval_rejected",
+      "matched_count": 4,
+      "matching_names": [
+        "test_ledger.test_mismatched_approval_rejected[change0]",
+        "test_ledger.test_mismatched_approval_rejected[change1]",
+        "test_ledger.test_mismatched_approval_rejected[change2]",
+        "test_ledger.test_mismatched_approval_rejected[change3]"
+      ],
+      "junit_file": "app/evidence/ledger_0_11.xml",
+      "test_source": "app/tests/test_ledger.py",
+      "test_source_sha256": "7424562630e3509809e9bef2e8ab2c749a934b7089eff93b5c8bdf6f6d0684af"
+    }
+  ],
+  "scope": "source assertions / local Python tests, not formal Rust or official MCP",
+  "executed": true,
+  "original_archives_sha256": {
+    "design": "50c674c84baaf1bb47bc22714fb4a600b86d03b258ff1d7a36eb490425c1ba9f",
+    "implementation": "6413bb1c4cec33405e6898bfacd78770b7d6dad194fddbaef68e28433c589373",
+    "blueprint": "e85cb78927bfa0ff6dbe668b4cc3ff7c71e6e4e5bb7c5bfc18763cc5ff9c03a2"
+  }
+}

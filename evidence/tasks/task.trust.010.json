@@ -1,0 +1,25 @@
+{
+  "task_id": "task.trust.010",
+  "acceptance_criteria": "要求本文の自称識別子を採用しない",
+  "verification_status": "passed",
+  "evidence": [
+    {
+      "type": "passing_junit_case",
+      "expected_test_prefix": "test_recorded_cli.test_real_process_unauthorized_client_cannot_supply_identity",
+      "matched_count": 1,
+      "matching_names": [
+        "test_recorded_cli.test_real_process_unauthorized_client_cannot_supply_identity"
+      ],
+      "junit_file": "app/evidence/ledger_0_11.xml",
+      "test_source": "app/tests/test_recorded_cli.py",
+      "test_source_sha256": "e944d7b08c5b4e2d46303f1b94065e19f02613f1c1a506a58c1bd3d94bc98144"
+    }
+  ],
+  "scope": "source assertions / local Python tests, not formal Rust or official MCP",
+  "executed": true,
+  "original_archives_sha256": {
+    "design": "50c674c84baaf1bb47bc22714fb4a600b86d03b258ff1d7a36eb490425c1ba9f",
+    "implementation": "6413bb1c4cec33405e6898bfacd78770b7d6dad194fddbaef68e28433c589373",
+    "blueprint": "e85cb78927bfa0ff6dbe668b4cc3ff7c71e6e4e5bb7c5bfc18763cc5ff9c03a2"
+  }
+}

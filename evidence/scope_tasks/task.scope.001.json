@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0.0",
+  "task_id": "task.scope.001",
+  "acceptance_criteria": "1文の目的がREADMEと設計書で一致する",
+  "verification_status": "passed",
+  "executed": true,
+  "test_suite": "evidence/scope_sprint.xml",
+  "test_name": "test_scope_001_identical_single_purpose",
+  "python_version": "3.13.5",
+  "source_sha256": {
+    "README.md": "3058b4bd6fe8c8de5bc9a96bf46d0fda13fe43051e5455b03547aa8ed5e364d0",
+    "ARCHITECTURE.md": "daa90b71eee2fc522cc6588e72d1e065a53134bfa06e1527281e76d38b277940",
+    "SCOPE_CONTRACT.md": "9280871ac15567528847db2f83dffd59a1e50e6204129591c94183dfa32ddf2b"
+  },
+  "limitation": "Offline scope acceptance. Does not prove real official MCP transport or signed external attestations."
+}

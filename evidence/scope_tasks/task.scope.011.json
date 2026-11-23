@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0.0",
+  "task_id": "task.scope.011",
+  "acceptance_criteria": "要求単位で検証可能な上限がある",
+  "verification_status": "passed",
+  "executed": true,
+  "test_suite": "evidence/scope_sprint.xml",
+  "test_name": "test_scope_011_request_scoped_deadline_bounded",
+  "python_version": "3.13.5",
+  "source_sha256": {
+    "application/config/limits.json": "f10b9be0d6b196cb58aa5175dcd7a7ee45b481087c24834743408b60b387b20f",
+    "application/src/verified_execution/request_limits.py": "7db5a0c5d7158700d3a193592f9d5065dae153346bf4ef46723d7b7c0022002d",
+    "application/server_mcp.py": "0cf4ee56f650e4877a1c06f6e8e1bb9231d54be0e183d983ff7c2da2333bd727"
+  },
+  "limitation": "Offline scope acceptance. Does not prove real official MCP transport or signed external attestations."
+}

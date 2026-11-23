@@ -1,0 +1,25 @@
+{
+  "task_id": "task.read_only.007",
+  "acceptance_criteria": "許可していない要求は計算しない",
+  "verification_status": "passed",
+  "evidence": [
+    {
+      "type": "passing_junit_case",
+      "expected_test_prefix": "test_core.test_service_denies_even_read_tool_without_authority",
+      "matched_count": 1,
+      "matching_names": [
+        "test_core.test_service_denies_even_read_tool_without_authority"
+      ],
+      "junit_file": "app/evidence/baseline_0_11.xml",
+      "test_source": "app/tests/test_core.py",
+      "test_source_sha256": "b75541dbd01dac5279416e409849c2b63fe425b018d3ba95ec676b74960bd0e5"
+    }
+  ],
+  "scope": "source assertions / local Python tests, not formal Rust or official MCP",
+  "executed": true,
+  "original_archives_sha256": {
+    "design": "50c674c84baaf1bb47bc22714fb4a600b86d03b258ff1d7a36eb490425c1ba9f",
+    "implementation": "6413bb1c4cec33405e6898bfacd78770b7d6dad194fddbaef68e28433c589373",
+    "blueprint": "e85cb78927bfa0ff6dbe668b4cc3ff7c71e6e4e5bb7c5bfc18763cc5ff9c03a2"
+  }
+}

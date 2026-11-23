@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0.0",
+  "task_id": "task.scope.010",
+  "acceptance_criteria": "バイト単位の上限が設定ファイルにある",
+  "verification_status": "passed",
+  "executed": true,
+  "test_suite": "evidence/scope_sprint.xml",
+  "test_name": "test_scope_010_real_byte_limit_and_bound_launch",
+  "python_version": "3.13.5",
+  "source_sha256": {
+    "application/config/limits.json": "f10b9be0d6b196cb58aa5175dcd7a7ee45b481087c24834743408b60b387b20f",
+    "application/scripts/launch_guarded_mcp.py": "53d586b202eaa7c35457c780c6c4a6b0089056cde02a32fed93c7c67b0db7041",
+    "application/scripts/guarded_stdio.py": "5ab65165efdb6d6448de58c55210b76249d3173c915667ab887b6ab10987ea30"
+  },
+  "limitation": "Offline scope acceptance. Does not prove real official MCP transport or signed external attestations."
+}

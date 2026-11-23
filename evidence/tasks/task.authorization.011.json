@@ -1,0 +1,25 @@
+{
+  "task_id": "task.authorization.011",
+  "acceptance_criteria": "引数変更の反例を通す",
+  "verification_status": "passed",
+  "evidence": [
+    {
+      "type": "passing_junit_case",
+      "expected_test_prefix": "test_audit_acceptance.AuditAcceptance.test_changed_arguments_rejects_approval",
+      "matched_count": 1,
+      "matching_names": [
+        "test_audit_acceptance.AuditAcceptance.test_changed_arguments_rejects_approval"
+      ],
+      "junit_file": "app/evidence/audit_acceptance.xml",
+      "test_source": "scripts/test_audit_acceptance.py",
+      "test_source_sha256": "a3457ff88431aeceb380101f3dc352861484261fec355c5509a8bf9ee8f1593a"
+    }
+  ],
+  "scope": "source assertions / local Python tests, not formal Rust or official MCP",
+  "executed": true,
+  "original_archives_sha256": {
+    "design": "50c674c84baaf1bb47bc22714fb4a600b86d03b258ff1d7a36eb490425c1ba9f",
+    "implementation": "6413bb1c4cec33405e6898bfacd78770b7d6dad194fddbaef68e28433c589373",
+    "blueprint": "e85cb78927bfa0ff6dbe668b4cc3ff7c71e6e4e5bb7c5bfc18763cc5ff9c03a2"
+  }
+}

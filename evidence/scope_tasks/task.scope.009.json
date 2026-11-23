@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0.0",
+  "task_id": "task.scope.009",
+  "acceptance_criteria": "認証付き遠隔公開・決済・外部コード実行・GPUが明記される",
+  "verification_status": "passed",
+  "executed": true,
+  "test_suite": "evidence/scope_sprint.xml",
+  "test_name": "test_scope_009_non_goals_fully_excluded",
+  "python_version": "3.13.5",
+  "source_sha256": {
+    "SCOPE_CONTRACT.md": "9280871ac15567528847db2f83dffd59a1e50e6204129591c94183dfa32ddf2b",
+    "application/src/verified_execution/core.py": "0c90494f53a0bfc6b8a2b06992e9d182059a13d170950dccd9edf23c9063cc3e"
+  },
+  "limitation": "Offline scope acceptance. Does not prove real official MCP transport or signed external attestations."
+}

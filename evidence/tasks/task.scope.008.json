@@ -1,0 +1,20 @@
+{
+  "task_id": "task.scope.008",
+  "acceptance_criteria": "両者に独立した合格条件がある",
+  "verification_status": "passed",
+  "evidence": [
+    {
+      "type": "source_assertion",
+      "source": "app/GATES.md",
+      "exact_text": "GATE-EXTERNAL-001",
+      "file_sha256": "9e8865741e0a95be50f01472fc9a5e0c923720108514361d4db6c1729c6f67dc"
+    }
+  ],
+  "scope": "source assertions / local Python tests, not formal Rust or official MCP",
+  "executed": true,
+  "original_archives_sha256": {
+    "design": "50c674c84baaf1bb47bc22714fb4a600b86d03b258ff1d7a36eb490425c1ba9f",
+    "implementation": "6413bb1c4cec33405e6898bfacd78770b7d6dad194fddbaef68e28433c589373",
+    "blueprint": "e85cb78927bfa0ff6dbe668b4cc3ff7c71e6e4e5bb7c5bfc18763cc5ff9c03a2"
+  }
+}

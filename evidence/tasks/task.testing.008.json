@@ -1,0 +1,25 @@
+{
+  "task_id": "task.testing.008",
+  "acceptance_criteria": "重複する承認の消費は1件だけ成功する",
+  "verification_status": "passed",
+  "evidence": [
+    {
+      "type": "passing_junit_case",
+      "expected_test_prefix": "test_ledger.test_parallel_approval_consumption_only_one_winner",
+      "matched_count": 1,
+      "matching_names": [
+        "test_ledger.test_parallel_approval_consumption_only_one_winner"
+      ],
+      "junit_file": "app/evidence/ledger_0_11.xml",
+      "test_source": "app/tests/test_ledger.py",
+      "test_source_sha256": "7424562630e3509809e9bef2e8ab2c749a934b7089eff93b5c8bdf6f6d0684af"
+    }
+  ],
+  "scope": "source assertions / local Python tests, not formal Rust or official MCP",
+  "executed": true,
+  "original_archives_sha256": {
+    "design": "50c674c84baaf1bb47bc22714fb4a600b86d03b258ff1d7a36eb490425c1ba9f",
+    "implementation": "6413bb1c4cec33405e6898bfacd78770b7d6dad194fddbaef68e28433c589373",
+    "blueprint": "e85cb78927bfa0ff6dbe668b4cc3ff7c71e6e4e5bb7c5bfc18763cc5ff9c03a2"
+  }
+}

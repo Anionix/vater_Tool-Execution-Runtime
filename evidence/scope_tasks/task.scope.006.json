@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0.0",
+  "task_id": "task.scope.006",
+  "acceptance_criteria": "両者の定義が契約書にある",
+  "verification_status": "passed",
+  "executed": true,
+  "test_suite": "evidence/scope_sprint.xml",
+  "test_name": "test_scope_006_two_output_semantic_variants",
+  "python_version": "3.13.5",
+  "source_sha256": {
+    "application/contracts/checked_add.output.contract.json": "7ab3346c376fe15d24fb87dc374054a44b3e2eb161989363a7d4ac65c952861f",
+    "application/src/verified_execution/core.py": "0c90494f53a0bfc6b8a2b06992e9d182059a13d170950dccd9edf23c9063cc3e"
+  },
+  "limitation": "Offline scope acceptance. Does not prove real official MCP transport or signed external attestations."
+}
