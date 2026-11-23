@@ -1,0 +1,52 @@
+{
+  "task_id": "task.runtime.018",
+  "verification_status": "passed",
+  "executed": true,
+  "scope": "LOCAL_STATIC_GATE_ONLY",
+  "run_date": "2026-11-24",
+  "source": "Python 3.13.5 local project source + files matched by Git blob to current GitHub content",
+  "state_transition": "NOT_STARTED -> IMPLEMENTED -> LOCAL_TEST_PASSED -> REVIEW; RELEASE_GATE_BLOCKED",
+  "commands": [
+    "PYTHONPATH=src python scripts/check_static_policy.py",
+    "PYTHONPATH=src python -m pytest -q tests/test_static_policy.py",
+    "PYTHONPATH=src python -m pytest -q tests/test_adapter_boundary.py tests/test_cli.py tests/test_contracts.py tests/test_core.py tests/test_guarded_stdio.py tests/test_output_boundary.py tests/test_policy_config.py tests/test_static_policy.py",
+    "PYTHONPATH=src python -m pytest -q tests/test_ledger.py tests/test_recorded_calculator.py tests/test_recorded_cli.py tests/test_recorded_tool_bridge.py tests/test_worker_leases.py tests/test_worker_bridge.py tests/test_request_cancellation.py tests/test_async_request_cancellation.py tests/test_cancellation_journal.py tests/test_sqlite_cancel_wait.py"
+  ],
+  "results": {
+    "static_policy": {
+      "state": "pass",
+      "files_scanned": 14,
+      "findings": 0
+    },
+    "static_policy_tests": {
+      "passed": 22,
+      "failed": 0
+    },
+    "offline_contracts": {
+      "passed": 164,
+      "failed": 0
+    },
+    "durable_state": {
+      "passed": 153,
+      "failed": 0
+    },
+    "official_mcp": {
+      "passed": 0,
+      "skipped": 14,
+      "reason": "official Python MCP SDK unavailable locally"
+    }
+  },
+  "source_blobs": {
+    "scripts/check_static_policy.py": "17b87e7e40e6d8c0951e871a2a05ac8ced641a55",
+    "tests/test_static_policy.py": "05ca8af7cc0759f59a642b0e3b9e24f439dd93a0",
+    ".github/workflows/python-verification.yml": "cfe3070b35f6bcf1356ae7cf3eab43d0bcd9e29e"
+  },
+  "caveats": [
+    "GitHub Actions job results have not been verified",
+    "AST matching detects direct syntax patterns but is not a complete security proof",
+    "Phase gate gate.contracts.completed has not passed; task cannot be formally done",
+    "Official MCP real transport and fully hashed dependency lock are unverified"
+  ],
+  "source_of_truth": "backlog/tasks.jsonl",
+  "confidence": "local execution evidence only"
+}
