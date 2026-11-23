@@ -1,0 +1,81 @@
+# CI-STATE-001: CREATED -> RUNNING -> PASS | FAIL | NOT_RUN.
+# Real MCP tests must never be replaced by mocked adapter tests.
+name: Python verification
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: '3.13'
+      - name: Install offline test requirements
+        run: python -m pip install '.[test]'
+      - name: Compile Python source
+        run: python -m compileall -q src scripts tests server_mcp.py
+      - name: Run strict boundary tests
+        run: >-
+          python -m pytest -q
+          tests/test_adapter_boundary.py
+          tests/test_cli.py
+          tests/test_contracts.py
+          tests/test_core.py
+          tests/test_guarded_stdio.py
+          tests/test_output_boundary.py
+          tests/test_policy_config.py
+
+  durable-state:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: '3.13'
+      - name: Install local state test requirements
+        run: python -m pip install '.[test]'
+      - name: Run SQLite and cancellation tests
+        run: >-
+          python -m pytest -q
+          tests/test_ledger.py
+          tests/test_recorded_calculator.py
+          tests/test_recorded_cli.py
+          tests/test_recorded_tool_bridge.py
+          tests/test_worker_leases.py
+          tests/test_worker_bridge.py
+          tests/test_request_cancellation.py
+          tests/test_async_request_cancellation.py
+          tests/test_cancellation_journal.py
+          tests/test_sqlite_cancel_wait.py
+
+  official-mcp:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: '3.13'
+      - name: Install the explicitly selected official SDK version
+        run: python -m pip install '.[test,mcp]'
+      - name: Refuse tests if the real official SDK is missing
+        run: python -c "from importlib.metadata import version; assert version('mcp') == '2.3.0'"
+      - name: Run real official SDK integration separately
+        run: python -m pytest -q -rs tests/test_official_mcp_sdk.py
