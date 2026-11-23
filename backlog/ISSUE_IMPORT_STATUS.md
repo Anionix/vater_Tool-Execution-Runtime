@@ -56,4 +56,4 @@ These 7 extras were closed as duplicates. Keep the earliest Issue as the canonic
 - Issue creation does **not** prove implementation, security, compatibility or conformance with the official MCP SDK.
 - A future change to the task ledger requires a new reconciliation before calling this checkpoint current.
 
-**Ledger blob SHA:** `5f0a0ddb6899c9e7daa8b099875d015bbe21a407`.
+**Ledger blob SHA:** `0066939b800ce243fe2773f2a80aa78b6f4db837`.
