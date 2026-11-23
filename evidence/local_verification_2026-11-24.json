@@ -1,0 +1,69 @@
+{
+  "verification_id": "vater.verification.2026-11-24.001",
+  "state": "local_tests_passed_official_protocol_not_run",
+  "task_ids": [
+    "task.runtime.006",
+    "task.runtime.016",
+    "task.runtime.017"
+  ],
+  "runtime": {
+    "python": "3.13.5",
+    "pytest": "9.0.2",
+    "official_mcp_sdk_installed": false
+  },
+  "source_provenance": {
+    "assembly": "Original Python 0.11.0 project package plus exact files retrieved from the connected GitHub repository; not a fresh GitHub checkout.",
+    "verified_matching_git_blob_sha": {
+      "src/verified_execution/core.py": "6f94faee97d40d31e9a093a91e1108d3904393fb",
+      "src/verified_execution/ledger.py": "f6b35ae406fa9e1c0b951e14ac84bd4571f5da0b",
+      "src/verified_execution/policy_config.py": "00316d9ec3c3c17f09374b3230048857d592774a",
+      "tests/test_policy_config.py": "c61fb74552921667ef32bdb03e874ce2b0a3fa3d",
+      "tests/test_adapter_boundary.py": "b72b19af9be5db537f79ca557a3dd177015e9683",
+      "server_mcp.py": "436312fececbc1522ecca433239455650d2858e8",
+      "config/limits.json": "a1d7585fc89330a72cab6b4274c00411814dc029",
+      "contracts/expected_cases.jsonl": "cee7376c299b3c00b584a5332e88571c6db44a1c"
+    }
+  },
+  "results": [
+    {
+      "suite": "offline-contracts",
+      "tests": 142,
+      "passed": 142,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "source": "local pytest XML result from original source plus GitHub-current policy and adapter files"
+    },
+    {
+      "suite": "durable-state",
+      "tests": 153,
+      "passed": 153,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "source": "local pytest XML result; not an external service test"
+    },
+    {
+      "suite": "official-mcp",
+      "tests": 14,
+      "passed": 0,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 14,
+      "reason": "official Python MCP SDK unavailable locally"
+    }
+  ],
+  "additional_check": {
+    "suite": "matched-current-source-subset",
+    "tests": 91,
+    "passed": 91,
+    "errors": 0,
+    "failures": 0,
+    "note": "Subset overlaps with 142 tests; not additive"
+  },
+  "github_workflow": ".github/workflows/python-verification.yml",
+  "github_workflow_results": "not verified at record creation",
+  "release_gate": "not_passed",
+  "machine_contract": "NOT_EXECUTED -> LOCAL_VERIFIED -> REMOTE_CHECK_PENDING -> REMOTE_VERIFIED | FAILED; official MCP still NOT_EXECUTED",
+  "caveat": "Local mocked MCP handler tests and compileall do not prove real MCP interoperability. Runtime dependency transitive hash lock is not yet established."
+}
