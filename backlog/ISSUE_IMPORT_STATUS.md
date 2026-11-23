@@ -1,10 +1,10 @@
-# GitHub Issue registration status
+# GitHub Issue import checkpoint (historical first batch)
 
 **Repository:** `Anionix/vater_Tool-Execution-Runtime`
 
-As of 2026-11-23, **38 of 351 planned records** have GitHub Issues: **19 phase gates** and **19 individual tasks**. The remaining **313** are still in the source backlog and have **not** been created as GitHub Issues.
+The **first import batch** created 38 records (19 phase gates and 19 individual tasks). **This is a historical checkpoint, not the current total.** More Issues may have been created since this snapshot; view [live Issues](https://github.com/Anionix/vater_Tool-Execution-Runtime/issues?q=is%3Aissue) and reconcile by immutable task identifier before further imports. Closed duplicate Issues must not be counted as additional work items.
 
-This table is the import checkpoint. Before importing another batch, search for the stable task identifier in the issue title; do not create duplicates. Creating an Issue **never** means the task is done.
+This table records only the initial batch. Before importing another batch, search all open **and closed** Issues for the stable task identifier in the title; do not create duplicates. Creating an Issue **never** means the task is done.
 
 | GitHub Issue | Stable task identifier |
 |---|---|
