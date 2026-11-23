@@ -1,0 +1,289 @@
+"""SDK-free route contract tests (STUBS). NOT a real MCP protocol test.
+
+This unit test deliberately isolates the application handler, verifying that
+MCP handlers call the permission-checked core rather than a bypass.
+The real SDK test is in test_official_mcp_sdk.py and must not be replaced by this.
+"""
+import asyncio
+from importlib import util
+from pathlib import Path
+import sys
+from types import ModuleType, SimpleNamespace
+
+import pytest
+from verified_execution.core import LocalAuthority
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+@pytest.fixture
+def adapter(monkeypatch):
+    mcp_module = ModuleType("mcp")
+    server_module = ModuleType("mcp.server")
+    stdio_module = ModuleType("mcp.server.stdio")
+    types_module = ModuleType("mcp.types")
+
+    class SimpleResult:
+        def __init__(self, **kwargs):
+            self.__dict__.update(kwargs)
+
+    class MockServer:
+        def __init__(self, name, **kwargs):
+            self.name = name
+            self.__dict__.update(kwargs)
+
+    class TextContent(SimpleResult):
+        pass
+
+    for item in ["CallToolRequestParams", "CallToolResult", "ListToolsResult", "PaginatedRequestParams", "TextContent", "Tool"]:
+        setattr(types_module, item, TextContent if item == "TextContent" else SimpleResult)
+    server_module.Server = MockServer
+    server_module.ServerRequestContext = object
+    stdio_module.stdio_server = lambda: None
+    monkeypatch.setitem(sys.modules, "mcp", mcp_module)
+    monkeypatch.setitem(sys.modules, "mcp.server", server_module)
+    monkeypatch.setitem(sys.modules, "mcp.server.stdio", stdio_module)
+    monkeypatch.setitem(sys.modules, "mcp.types", types_module)
+
+    spec = util.spec_from_file_location("adapter_stub_20261123", ROOT / "server_mcp.py")
+    loaded = util.module_from_spec(spec)
+    spec.loader.exec_module(loaded)
+    return loaded
+
+
+def call(server, arguments, name="checked_add"):
+    return asyncio.run(server.on_call_tool(None, SimpleNamespace(name=name, arguments=arguments)))
+
+
+def test_registered_schema_exact(adapter):
+    server = adapter.build_server()
+    result = asyncio.run(server.on_list_tools(None, None))
+    assert len(result.tools) == 1
+    schema = result.tools[0].input_schema
+    assert schema["additionalProperties"] is False
+    assert set(schema["required"]) == {"left", "right"}
+
+
+def test_router_validates_then_runs(adapter):
+    result = call(adapter.build_server(), {"left": 4, "right": 5})
+    assert not getattr(result, "is_error", False)
+    assert result.structured_content == {"result": 9}
+
+
+def test_router_rejects_unauthorized_host_policy(adapter):
+    server = adapter.build_server(LocalAuthority(frozenset()))
+    result = call(server, {"left": 4, "right": 5})
+    assert result.is_error is True
+    assert result.content[0].text == "NOT_AUTHORIZED"
+
+
+@pytest.mark.parametrize("arguments,error", [
+    ({"left": 1, "right": 2, "permission": True}, "INVALID_ARGUMENT"),
+    ({"left": 1}, "INVALID_ARGUMENT"),
+    ({"left": 1.0, "right": 2}, "INVALID_ARGUMENT"),
+    ({"left": True, "right": 2}, "INVALID_ARGUMENT"),
+    ({"left": 4294967295, "right": 1}, "OVERFLOW"),
+])
+def test_router_rejects_invalid_arguments(adapter, arguments, error):
+    result = call(adapter.build_server(), arguments)
+    assert result.is_error is True
+    assert result.content[0].text == error
+
+
+def test_router_rejects_unlisted_tool(adapter):
+    result = call(adapter.build_server(), {}, name="not_registered")
+    assert result.is_error is True
+    assert result.content[0].text == "UNKNOWN_TOOL"
+
+
+def test_recorded_sdk_handler_uses_leased_ledger_by_default(adapter, tmp_path):
+    """Simulated SDK invocation, real server handler and SQLite worker path."""
+    path = tmp_path / 'worker.sqlite3'
+    first_server = adapter.build_server(ledger_path=str(path), principal='trusted-host')
+    second_server = adapter.build_server(ledger_path=str(path), principal='trusted-host')
+    discovered = asyncio.run(first_server.on_list_tools(None, None))
+    assert {tool.name for tool in discovered.tools} == {'checked_add', 'checked_add_recorded'}
+    args = {'request_key':'stable-request-1','left':21,'right':21}
+    first = call(first_server,args,name='checked_add_recorded')
+    second = call(second_server,args,name='checked_add_recorded')
+    assert first.structured_content['result'] == 42
+    assert first.structured_content['replayed'] is False
+    assert second.structured_content['result'] == 42
+    assert second.structured_content['replayed'] is True
+    assert second.structured_content['operation_id'] == first.structured_content['operation_id']
+    from verified_execution.worker_leases import LeasedLedger
+    assert LeasedLedger(path).history(first.structured_content['operation_id']).count('leased_dispatch') == 1
+
+
+def test_recorded_sdk_handler_denies_untrusted_host(adapter, tmp_path):
+    server = adapter.build_server(LocalAuthority(frozenset()), ledger_path=str(tmp_path/'denied.sqlite3'))
+    response = call(server,{'request_key':'attempt','left':1,'right':2},name='checked_add_recorded')
+    assert response.is_error and response.content[0].text == 'NOT_AUTHORIZED'
+
+
+def test_recorded_sdk_handler_rejects_colliding_request(adapter, tmp_path):
+    server = adapter.build_server(ledger_path=str(tmp_path/'collision.sqlite3'))
+    first = call(server,{'request_key':'stable','left':2,'right':3},name='checked_add_recorded')
+    second = call(server,{'request_key':'stable','left':2,'right':4},name='checked_add_recorded')
+    assert first.structured_content['result'] == 5
+    assert second.is_error and second.content[0].text == 'IDEMPOTENCY_CONFLICT'
+
+
+def test_sdk_stub_cancellation_before_dispatch(adapter, tmp_path):
+    """Adapter/SQLite only: the real MCP dispatcher remains untested."""
+    import asyncio
+    from verified_execution.worker_leases import LeasedLedger
+
+    async def scenario():
+        entered = asyncio.Event()
+        blocker = asyncio.Event()
+        async def paused(_op):
+            entered.set()
+            await blocker.wait()
+        db = tmp_path/'sdk-mock-pre.sqlite3'
+        handler = adapter.build_server(ledger_path=str(db), before_dispatch=paused)
+        task = asyncio.create_task(handler.on_call_tool(
+            None, SimpleNamespace(name='checked_add_recorded', arguments={
+                'request_key':'sdk-mock-1', 'left':20, 'right':22})))
+        await asyncio.wait_for(entered.wait(),2)
+        task.cancel()
+        with pytest.raises(asyncio.CancelledError):
+            await task
+        with LeasedLedger(db)._open() as conn:
+            assert conn.execute('SELECT state FROM operations').fetchone()==('cancelled',)
+    asyncio.run(scenario())
+
+
+def test_sdk_stub_cancellation_after_dispatch(adapter, tmp_path):
+    import asyncio
+    from verified_execution.worker_leases import LeasedLedger
+    async def scenario():
+        entered = asyncio.Event()
+        blocker = asyncio.Event()
+        async def paused(_op):
+            entered.set()
+            await blocker.wait()
+        db = tmp_path/'sdk-mock-running.sqlite3'
+        handler = adapter.build_server(ledger_path=str(db), after_dispatch=paused)
+        task = asyncio.create_task(handler.on_call_tool(
+            None, SimpleNamespace(name='checked_add_recorded', arguments={
+                'request_key':'sdk-mock-2', 'left':20, 'right':22})))
+        await asyncio.wait_for(entered.wait(),2)
+        task.cancel()
+        with pytest.raises(asyncio.CancelledError):
+            await task
+        with LeasedLedger(db)._open() as conn:
+            assert conn.execute('SELECT state,cancel_requested FROM operations').fetchone()==('unknown',1)
+    asyncio.run(scenario())
+
+
+def test_sdk_stub_cancellation_after_durable_commit(adapter, tmp_path):
+    import asyncio
+    from verified_execution.worker_leases import LeasedLedger
+    async def scenario():
+        entered = asyncio.Event()
+        blocker = asyncio.Event()
+        async def paused(_op):
+            entered.set()
+            await blocker.wait()
+        db = tmp_path/'sdk-mock-done.sqlite3'
+        handler = adapter.build_server(ledger_path=str(db), after_commit=paused)
+        task = asyncio.create_task(handler.on_call_tool(
+            None, SimpleNamespace(name='checked_add_recorded', arguments={
+                'request_key':'sdk-mock-3', 'left':20, 'right':22})))
+        await asyncio.wait_for(entered.wait(),2)
+        task.cancel()
+        with pytest.raises(asyncio.CancelledError):
+            await task
+        with LeasedLedger(db)._open() as conn:
+            assert conn.execute('SELECT state FROM operations').fetchone()==('succeeded',)
+            assert conn.execute('SELECT result FROM calculation_results').fetchone()==(42,)
+    asyncio.run(scenario())
+
+
+def test_sdk_stub_handler_cancel_pre_dispatch_without_response(adapter, tmp_path):
+    """Real async handler + actual SQLite; only SDK event matching is stubbed."""
+    import anyio
+    from verified_execution.worker_leases import LeasedLedger
+    from types import SimpleNamespace
+    destination = tmp_path / 'cancel-handler-pre.sqlite3'
+    started = anyio.Event()
+    async def before(_op):
+        started.set()
+        await anyio.Event().wait()
+    server = adapter.build_server(ledger_path=str(destination), before_dispatch=before)
+    async def exercise():
+        scope = anyio.CancelScope()
+        async def run_one():
+            with scope:
+                await server.on_call_tool(None, SimpleNamespace(
+                    name='checked_add_recorded',
+                    arguments={'request_key':'request-pre','left':10,'right':32}))
+        async with anyio.create_task_group() as tasks:
+            tasks.start_soon(run_one)
+            await started.wait()
+            scope.cancel()
+    anyio.run(exercise)
+    db=LeasedLedger(destination)
+    with db._open() as conn:
+        row=conn.execute("SELECT operation_id,state FROM operations WHERE request_key='request-pre'").fetchone()
+    assert row is not None and row[1]=='cancelled'
+    assert 'leased_dispatch' not in db.history(row[0])
+
+
+def test_sdk_stub_handler_cancel_post_dispatch_is_unknown(adapter, tmp_path):
+    import anyio
+    from verified_execution.worker_leases import LeasedLedger
+    from types import SimpleNamespace
+    destination = tmp_path / 'cancel-handler-post.sqlite3'
+    started = anyio.Event()
+    async def after(_op):
+        started.set()
+        await anyio.Event().wait()
+    server = adapter.build_server(ledger_path=str(destination), after_dispatch=after)
+    async def exercise():
+        scope = anyio.CancelScope()
+        async def run_one():
+            with scope:
+                await server.on_call_tool(None, SimpleNamespace(
+                    name='checked_add_recorded',
+                    arguments={'request_key':'request-post','left':10,'right':32}))
+        async with anyio.create_task_group() as tasks:
+            tasks.start_soon(run_one)
+            await started.wait()
+            scope.cancel()
+    anyio.run(exercise)
+    db=LeasedLedger(destination)
+    with db._open() as conn:
+        row=conn.execute("SELECT operation_id,state,cancel_requested FROM operations WHERE request_key='request-post'").fetchone()
+    assert row is not None and row[1:] == ('unknown',1)
+    assert db.history(row[0]).count('leased_dispatch') == 1
+
+
+def test_server_recovery_on_startup_without_sdk(adapter, tmp_path):
+    """SDK stub, but real server construction and durable SQLite recovery."""
+    from verified_execution.worker_leases import LeasedLedger
+    from verified_execution.cancellation_journal import CancellationJournal
+    db_path = tmp_path / 'server-startup.sqlite3'
+    ledger = LeasedLedger(db_path)
+    op = ledger.reserve(principal='host', request_key='recover-on-start',
+                        tool_name='checked_add', target_id=None, resource_version=None,
+                        arguments={'left':1,'right':2},requires_approval=False)
+    journal=CancellationJournal(tmp_path/'server-startup.sqlite3.cancel-intents')
+    journal.persist(op.operation_id, principal='host')
+    assert ledger.get(op.operation_id).state == 'prepared'
+    _server=adapter.build_server(ledger_path=str(db_path), principal='host')
+    assert ledger.get(op.operation_id).state == 'cancelled'
+    assert journal.list_intents() == []
+
+
+def test_corrupt_cancel_journal_blocks_server_startup(adapter, tmp_path):
+    """Fail closed: do not launch a server while recovery journal is corrupt."""
+    from verified_execution.cancellation_journal import CancellationJournal, JournalError
+    path=tmp_path/'refuse.sqlite3'
+    journal=CancellationJournal(tmp_path/'refuse.sqlite3.cancel-intents')
+    record=journal.directory / ('0'*64+'.json')
+    record.write_text('{incomplete',encoding='utf-8')
+    record.chmod(0o600)
+    with pytest.raises(JournalError, match='CORRUPTED_INTENT_FILE'):
+        adapter.build_server(ledger_path=str(path), principal='host')

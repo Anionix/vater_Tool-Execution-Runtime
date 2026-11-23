@@ -1,0 +1,35 @@
+{
+  "contract_version": "1.0.0",
+  "tool": "checked_add",
+  "domains": {
+    "success": {
+      "type": "object",
+      "required": [
+        "result"
+      ],
+      "result": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 4294967295
+      },
+      "mcp_is_error": false
+    },
+    "failure": {
+      "type": "object",
+      "required": [
+        "error_code"
+      ],
+      "error_code": {
+        "enum": [
+          "INVALID_ARGUMENT",
+          "OUT_OF_RANGE",
+          "OVERFLOW",
+          "UNKNOWN_TOOL",
+          "NOT_AUTHORIZED",
+          "TIMEOUT"
+        ]
+      },
+      "mcp_is_error": true
+    }
+  }
+}

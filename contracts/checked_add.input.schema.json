@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/contracts/checked_add.input.schema.json",
+  "title": "checked_add input",
+  "description": "Strict token validation additionally rejects decimal-notation numbers such as 1.0; JSON Schema integer cannot express that distinction.",
+  "type": "object",
+  "properties": {
+    "left": {"type": "integer", "minimum": 0, "maximum": 4294967295},
+    "right": {"type": "integer", "minimum": 0, "maximum": 4294967295}
+  },
+  "required": ["left", "right"],
+  "additionalProperties": false
+}

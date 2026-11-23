@@ -1,0 +1,82 @@
+{
+  "minimum_local_read_only": {
+    "purpose": "Python local single-user read-only checked_add over official MCP stdio",
+    "gates": [
+      "scope",
+      "trust",
+      "contracts",
+      "runtime",
+      "mcp_transport",
+      "authorization",
+      "read_only",
+      "minimum_validation",
+      "minimum_release"
+    ],
+    "extends": null,
+    "release_blockers": [
+      "official Python SDK real stdio client and server",
+      "new/legacy MCP protocol checks",
+      "contract/authorization evidence"
+    ]
+  },
+  "with_model_connectors": {
+    "purpose": "model API use after explicit destination and budget consent",
+    "gates": [
+      "provider_adapters"
+    ],
+    "extends": "minimum_local_read_only"
+  },
+  "with_http": {
+    "purpose": "HTTP interface including authenticated remote operation",
+    "gates": [
+      "http_interface"
+    ],
+    "extends": "minimum_local_read_only"
+  },
+  "with_side_effects": {
+    "purpose": "state-changing execution with approvals and persistent ledger",
+    "gates": [
+      "durable_operations",
+      "testing",
+      "operations"
+    ],
+    "extends": "minimum_local_read_only"
+  },
+  "with_webmcp": {
+    "purpose": "browser integration",
+    "gates": [
+      "optional_webmcp"
+    ],
+    "extends": "minimum_local_read_only"
+  },
+  "with_untrusted_code": {
+    "purpose": "isolated extension code",
+    "gates": [
+      "optional_webassembly"
+    ],
+    "extends": "minimum_local_read_only"
+  },
+  "with_webgpu": {
+    "purpose": "accelerated parallel computation after benchmarks",
+    "gates": [
+      "optional_webgpu"
+    ],
+    "extends": "minimum_local_read_only"
+  },
+  "with_extra_protocols": {
+    "purpose": "GraphQL, gRPC, agent protocols and events",
+    "gates": [
+      "http_interface",
+      "provider_adapters",
+      "optional_more_protocols"
+    ],
+    "extends": "minimum_local_read_only"
+  },
+  "with_formal_verified_rust": {
+    "purpose": "Optional selective Python-to-Rust port with additional Lean/Kani proofs; not required for Python base release",
+    "extends": "minimum_local_read_only",
+    "gates": [
+      "formal_verification"
+    ]
+  }
+}

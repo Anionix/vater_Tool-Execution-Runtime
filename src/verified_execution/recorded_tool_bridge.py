@@ -1,0 +1,54 @@
+"""Offline-testable MCP application adapter; no SDK objects are imported.
+
+Machine contracts:
+  BRIDGE-001: the caller controls request_key but never principal or permissions.
+  BRIDGE-002: only exactly request_key, left, right are accepted.
+  BRIDGE-003: all execution goes through RecordedCalculator authorization and ledger.
+  BRIDGE-004: successful replay comes from the durable result, never re-execution.
+
+The request key identifies a client-intended logical operation. JSON-RPC request
+IDs are not globally stable across new sessions and MUST NOT be used as durable
+idempotency keys. Host sets identity by trusted local process configuration.
+"""
+from __future__ import annotations
+from dataclasses import dataclass
+from typing import Any
+
+from .core import LocalAuthority
+from .ledger import OperationLedger
+from .recorded_calculator import RecordedCalculator, RecordedResult
+
+RECORDED_TOOL_NAME = "checked_add_recorded"
+
+@dataclass(frozen=True)
+class BridgeResult:
+    ok: bool
+    value: int | None
+    operation_id: str | None
+    replayed: bool
+    error_code: str | None
+
+
+class RecordedToolBridge:
+    def __init__(self, ledger: OperationLedger, *, principal: str, authority: LocalAuthority):
+        self._service = RecordedCalculator(ledger, principal=principal, authority=authority)
+
+    def call(self, name: str, arguments: Any) -> BridgeResult:
+        if name != RECORDED_TOOL_NAME:
+            return BridgeResult(False, None, None, False, "UNKNOWN_TOOL")
+        if type(arguments) is not dict or set(arguments) != {"request_key", "left", "right"}:
+            return BridgeResult(False, None, None, False, "INVALID_ARGUMENT")
+        key = arguments["request_key"]
+        if type(key) is not str or not key or "\x00" in key:
+            return BridgeResult(False, None, None, False, "INVALID_REQUEST_KEY")
+        try:
+            key_bytes = key.encode("utf-8")
+        except UnicodeError:
+            return BridgeResult(False, None, None, False, "INVALID_REQUEST_KEY")
+        if len(key_bytes) > 256:
+            return BridgeResult(False, None, None, False, "INVALID_REQUEST_KEY")
+        outcome: RecordedResult = self._service.execute(
+            request_key=key, name="checked_add",
+            arguments={"left": arguments["left"], "right": arguments["right"]})
+        return BridgeResult(outcome.ok, outcome.value, outcome.operation_id,
+                            outcome.replayed, outcome.error_code)
