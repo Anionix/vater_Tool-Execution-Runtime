@@ -2,12 +2,13 @@
 """Task ledger structure and evidence-check proof, not Rust/MCP runtime verification."""
 from pathlib import Path
 import json, collections
-P=Path(__file__).parent
+P=Path(__file__).resolve().parent
+REPOSITORY_ROOT=P.parent
 items=[json.loads(x) for x in (P/'tasks.jsonl').read_text(encoding='utf-8').splitlines() if x]
 ids=[x['task_id'] for x in items]
 assert len(ids)==len(set(ids)), 'duplicate task identifier'
 all_ids=set(ids)
-sources={json.loads(x)['source_id'] for x in (P/'sources.jsonl').read_text(encoding='utf-8').splitlines() if x}
+sources={json.loads(x)['source_id'] for x in (REPOSITORY_ROOT/'docs'/'sources.jsonl').read_text(encoding='utf-8').splitlines() if x}
 for task in items:
     assert task['task_id'].startswith(('task.','gate.'))
     assert len(task['acceptance_criteria'])>=8 and len(task['title'])>=4
@@ -18,7 +19,7 @@ for task in items:
     assert task['status'] in ['not_started','in_progress','blocked','review','done']
     assert task['verification_status'] in ['not_executed','failed','passed','not_applicable']
     if task['verification_status'] in ['passed','not_applicable']:
-        assert task['evidence_paths'] and all((P/e).is_file() for e in task['evidence_paths']), task['task_id']
+        assert task['evidence_paths'] and all((REPOSITORY_ROOT/e).resolve().is_relative_to(REPOSITORY_ROOT.resolve()) and (REPOSITORY_ROOT/e).is_file() for e in task['evidence_paths']), task['task_id']
     if task['status']=='done':
         assert task['verification_status'] in ['passed','not_applicable']
 # detect dependency cycles by depth first search
