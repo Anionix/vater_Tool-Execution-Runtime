@@ -19,11 +19,11 @@
       "findings": 0
     },
     "static_policy_tests": {
-      "passed": 22,
+      "passed": 23,
       "failed": 0
     },
     "offline_contracts": {
-      "passed": 164,
+      "passed": 165,
       "failed": 0
     },
     "durable_state": {
@@ -38,7 +38,7 @@
   },
   "source_blobs": {
     "scripts/check_static_policy.py": "17b87e7e40e6d8c0951e871a2a05ac8ced641a55",
-    "tests/test_static_policy.py": "05ca8af7cc0759f59a642b0e3b9e24f439dd93a0",
+    "tests/test_static_policy.py": "8e2d3ae23f1ba4beee797962e612c4d57e8d5f63",
     ".github/workflows/python-verification.yml": "cfe3070b35f6bcf1356ae7cf3eab43d0bcd9e29e"
   },
   "caveats": [
@@ -48,5 +48,6 @@
     "Official MCP real transport and fully hashed dependency lock are unverified"
   ],
   "source_of_truth": "backlog/tasks.jsonl",
-  "confidence": "local execution evidence only"
+  "confidence": "local execution evidence only",
+  "new_negative_end_to_end_check": "STATIC-CLI-001: synthetic unsafe production file -> CLI exit code 1 and structured finding, without executing unsafe code"
 }
