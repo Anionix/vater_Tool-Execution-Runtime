@@ -55,10 +55,17 @@ class Operation:
 
 
 def _text(name: str, value: Any, max_bytes: int = 256) -> str:
-    if type(value) is not str or not value or len(value.encode("utf-8")) > max_bytes:
-        raise LedgerError("INVALID_" + name.upper())
-    if "\x00" in value:
-        raise LedgerError("INVALID_" + name.upper())
+    # TEXT-001: every malformed caller-controlled identifier fails with a
+    # stable LedgerError, never a raw UnicodeEncodeError containing input.
+    code = "INVALID_" + name.upper()
+    if type(value) is not str or not value or "\x00" in value:
+        raise LedgerError(code)
+    try:
+        encoded = value.encode("utf-8", errors="strict")
+    except UnicodeError:
+        raise LedgerError(code) from None
+    if len(encoded) > max_bytes:
+        raise LedgerError(code)
     return value
 
 
