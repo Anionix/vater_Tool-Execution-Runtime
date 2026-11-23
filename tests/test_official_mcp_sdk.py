@@ -195,7 +195,11 @@ def test_sdk_recorded_tool_stdio_modern(tmp_path):
             malformed = await client.call_tool("checked_add_recorded", {
                 "request_key": "logical-002", "left": 1, "right": 2, "extra": 3})
             assert malformed.is_error
-        assert OperationLedger(database).history(operation_id).count("dispatched") == 1
+        # MCP-LEDGER-001: default recorded mode is lease-fenced, not legacy dispatch.
+        # Exact history also proves replay did not cause another dispatch.
+        assert OperationLedger(database).history(operation_id) == [
+            "reserved", "leased_dispatch", "leased_completed",
+        ]
     anyio.run(run)
 
 
@@ -236,7 +240,11 @@ def test_sdk_recorded_tool_guarded_stdio(tmp_path):
                 "request_key": "guard-001", "left": 20, "right": 22})
             assert not response.is_error and response.structured_content["result"] == 42
             operation_id = response.structured_content["operation_id"]
-        assert OperationLedger(database).history(operation_id).count("dispatched") == 1
+        # MCP-LEDGER-001: default recorded mode is lease-fenced, not legacy dispatch.
+        # Exact history also proves replay did not cause another dispatch.
+        assert OperationLedger(database).history(operation_id) == [
+            "reserved", "leased_dispatch", "leased_completed",
+        ]
     anyio.run(run)
 
 
