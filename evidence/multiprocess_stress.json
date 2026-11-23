@@ -1,0 +1,54 @@
+{
+  "report_identifier": "STRESS-010",
+  "generated_at_utc": "2026-11-23T10:31:10.496624+00:00",
+  "kind": "finite_local_multiprocess_test_not_soak_test",
+  "outcomes": [
+    {
+      "trial": 0,
+      "workers": 6,
+      "requests_per_worker": 60,
+      "request_total": 360,
+      "distinct_operations_expected": 30,
+      "distinct_operations_actual": 30,
+      "success_or_replay": 360,
+      "in_progress": 0,
+      "errors": [],
+      "sqlite_integrity": "ok",
+      "dispatch_counts_exact": true,
+      "elapsed_seconds": 2.2123,
+      "status": "PASS"
+    },
+    {
+      "trial": 1,
+      "workers": 6,
+      "requests_per_worker": 60,
+      "request_total": 360,
+      "distinct_operations_expected": 30,
+      "distinct_operations_actual": 30,
+      "success_or_replay": 360,
+      "in_progress": 0,
+      "errors": [],
+      "sqlite_integrity": "ok",
+      "dispatch_counts_exact": true,
+      "elapsed_seconds": 2.0469,
+      "status": "PASS"
+    },
+    {
+      "trial": 2,
+      "workers": 6,
+      "requests_per_worker": 60,
+      "request_total": 360,
+      "distinct_operations_expected": 30,
+      "distinct_operations_actual": 30,
+      "success_or_replay": 360,
+      "in_progress": 0,
+      "errors": [],
+      "sqlite_integrity": "ok",
+      "dispatch_counts_exact": true,
+      "elapsed_seconds": 1.9225,
+      "status": "PASS"
+    }
+  ],
+  "total_requests": 1080,
+  "overall": "PASS"
+}
