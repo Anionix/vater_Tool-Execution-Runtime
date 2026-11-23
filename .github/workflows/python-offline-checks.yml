@@ -1,0 +1,47 @@
+name: Verify Python prototype (offline subset)
+
+# This workflow tests source and task-ledger consistency. It does not
+# certify MCP protocol interoperability or production security.
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-verification:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install prototype and test dependencies
+        run: |
+          python -m pip install -e '.[test]'
+      - name: Verify 351 stable task identifiers
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          records = [json.loads(line) for line in
+                     Path("backlog/tasks.jsonl").read_text(encoding="utf-8").splitlines()
+                     if line.strip()]
+          identifiers = [record["task_id"] for record in records]
+          assert len(records) == 351, len(records)
+          assert len(set(identifiers)) == 351, "Duplicate task identifiers"
+          assert sum(item.startswith("gate.") for item in identifiers) == 19
+          assert sum(item.startswith("task.") for item in identifiers) == 332
+          print("351 unique task records; 332 tasks and 19 phase gates")
+          PY
+      - name: Local tests — not official MCP interoperability
+        run: |
+          python -m pytest -q \
+            tests/test_core.py \
+            tests/test_contracts.py \
+            tests/test_recorded_calculator.py \
+            tests/test_issue_import.py \
+            tests/test_recorded_tool_bridge.py \
+            tests/test_cancellation_journal.py
