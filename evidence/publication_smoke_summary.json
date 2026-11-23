@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0.0",
+  "artifact": "vater-python-source-publication-local-smoke",
+  "date_utc": "2026-11-23",
+  "verification_environment": "local container (not GitHub Actions)",
+  "python_version": "3.13.5",
+  "repository": "https://github.com/Anionix/vater_Tool-Execution-Runtime",
+  "github_ref_last_verified": "75e6bd05b148bf4d190143eb4889946dd6564269",
+  "validation_command": "PYTHONPATH=src python -m pytest -q tests/test_core.py tests/test_contracts.py tests/test_recorded_calculator.py tests/test_issue_import.py tests/test_recorded_tool_bridge.py tests/test_cancellation_journal.py",
+  "tests": {
+    "tests": 93,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "artifact_sha256": {
+    "backlog/tasks.jsonl": "099fd59d8065ef26aae4e1567835d35432495010fafea4a8dcca3297eac433fe",
+    "backlog/github_issues.jsonl": "9bfd13508d692444e5877b7995a80fb62004b933b4b5cdc16a6dc0a580fe048f",
+    "scripts/import_github_issues.py": "bdfd566961fedeb1c666b015f48d39dba9a89c07c4208c7f5817da5a77a0db22",
+    "tests/test_issue_import.py": "398702dbe9305908cffab8e406e1c8443d8daee26a485f2eb388c88c235db840",
+    "src/verified_execution/core.py": "0c90494f53a0bfc6b8a2b06992e9d182059a13d170950dccd9edf23c9063cc3e",
+    "config/limits.json": "f10b9be0d6b196cb58aa5175dcd7a7ee45b481087c24834743408b60b387b20f",
+    "contracts/expected_cases.jsonl": "8185d1a22a038e10517f76887cde19f348ab0dbdd4d6ed20734b9b41c37e7a34"
+  },
+  "limits": [
+    "Not official MCP client/server interoperability",
+    "Not a production security audit",
+    "GitHub checkout was inspected via remote API; tests run against equivalent source package plus restored missing files"
+  ]
+}
