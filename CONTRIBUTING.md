@@ -10,4 +10,4 @@ For each change, include:
 
 **State contract:** `not_started -> in_progress -> review -> done`; the final transition requires successful, relevant, reproducible evidence. A passing mock test is not proof of real protocol interoperability.
 
-No license has been selected, so do not assume permission to redistribute third-party contributions.
+The repository is distributed under the [MIT License](LICENSE). Only contribute code and dependencies you have the right to publish under their applicable licenses.
