@@ -33,6 +33,14 @@ To run the broader offline checks:
 
 Some tests require the official Python MCP package, are explicitly skipped when unavailable, and **must not** be counted as protocol validation. Transitive dependencies still lack an accepted hash-pinned lock. The [candidate generation and clean-install workflow](docs/DEPENDENCY_LOCK_WORKFLOW.md) is implemented, but its official MCP verification is **not yet confirmed**. Until an accepted lock is committed, the official MCP job intentionally fails closed.
 
+## Official MCP verification paths
+
+- [Diagnostic smoke test](.github/workflows/official-mcp-smoke.yml): installs the selected SDK in a temporary GitHub Actions environment and attempts real client/server tests. Diagnostic only; no release approval.
+- [Dependency-lock candidate](.github/workflows/dependency-lock-candidate.yml): generates and verifies a candidate with package hashes.
+- [Release-oriented verification](.github/workflows/python-verification.yml): requires an accepted hash-pinned dependency lock and rejects skipped official MCP tests.
+
+**The diagnostic workflow has been committed, but its execution result has not yet been verified.** A passing diagnostic alone is not a production release gate.
+
 ## GitHub Issues
 
 Issue registration is **complete for all 351 stable task identifiers** (332 tasks and 19 phase gates). There are also seven closed duplicate Issues. Track the canonical GitHub Issue number using [the checked Issue index](backlog/ISSUE_INDEX.jsonl) and [registration checkpoint](backlog/ISSUE_IMPORT_STATUS.md). Additional Issues can be prepared and checked without writing to GitHub:
