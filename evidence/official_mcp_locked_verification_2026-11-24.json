@@ -1,0 +1,47 @@
+{
+  "record_id": "vater.verified.2026-11-24.official-mcp-and-locked-runtime",
+  "verification_time_zone": "Asia/Tokyo",
+  "verification_status": "passed",
+  "executed": true,
+  "project_version": "0.11.0",
+  "python_version": "3.13.18",
+  "official_mcp_sdk_version": "2.3.0",
+  "platform": "GitHub-hosted Linux x86-64",
+  "source_commit": "bf838f5c82db31b646d8253d4345c0852c516028",
+  "source_test_commit": "1be2d5704a06aadb5544213f579c82e03867f2bc",
+  "dependency_lock": {
+    "path": "requirements-py313.lock",
+    "blob_sha": "804466bbea18c0889a3704b7b67895696711a61a",
+    "sha256": "cc651303afe6b684a979e14fdd9d1ca8b73d7bda0ea6e1d0480a20ae792de51c",
+    "packages": 33,
+    "artifact_sha256_count": 485,
+    "provenance_run": "https://github.com/Anionix/vater_Tool-Execution-Runtime/actions/runs/45277761135",
+    "clean_hash_checked_install": "success"
+  },
+  "real_official_mcp": {
+    "run_id": 45278396997,
+    "job_id": 138056084742,
+    "run_url": "https://github.com/Anionix/vater_Tool-Execution-Runtime/actions/runs/45278396997",
+    "tests_passed": 14,
+    "tests_failed": 0,
+    "tests_skipped": 0,
+    "tests_errored": 0,
+    "report_validator": "passed",
+    "tools_list": true,
+    "tools_call": true,
+    "modern_protocol": "2026-07-28",
+    "legacy_protocol": true,
+    "transport": "stdio, guarded stdio and in-process"
+  },
+  "independent_jobs": {
+    "offline_contracts": "success",
+    "durable_state": "success"
+  },
+  "machine_contract": "SOURCE_VERIFIED -> LOCK_VERIFIED -> REAL_SDK_TEST_PASSED -> TASK_REVIEW; RELEASE_GATE_NOT_PROVEN",
+  "limitations": [
+    "This is an integration suite, not the official full conformance suite.",
+    "Other supported operating systems and runtimes are not proven.",
+    "Phase gates and remaining 351-task security/operations backlog are not satisfied.",
+    "GitHub Actions workflow status and logs provide evidence for this commit only."
+  ]
+}
