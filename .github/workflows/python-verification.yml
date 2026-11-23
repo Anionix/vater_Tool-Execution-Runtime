@@ -40,6 +40,7 @@ jobs:
           tests/test_policy_config.py
           tests/test_static_policy.py
           tests/test_dependency_lock.py
+          tests/test_test_report_gate.py
 
   durable-state:
     runs-on: ubuntu-latest
@@ -86,4 +87,6 @@ jobs:
       - name: Refuse tests if the real official SDK is missing
         run: python -c "from importlib.metadata import version; assert version('mcp') == '2.3.0'"
       - name: Run real official SDK integration separately
-        run: python -m pytest -q -rs tests/test_official_mcp_sdk.py
+        run: python -m pytest -q -rs --junitxml=official-mcp-report.xml tests/test_official_mcp_sdk.py
+      - name: Require all official MCP integration cases to execute and pass
+        run: python scripts/check_test_report.py official-mcp-report.xml --minimum 14
