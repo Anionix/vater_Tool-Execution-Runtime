@@ -59,5 +59,7 @@ This table is the import checkpoint. Before importing another batch, search for 
 
 - GitHub Issues: 38 created / 351 planned
 - Implementation task ledger: 17 officially completed / 351 planned in the last verified snapshot
-- Source code publication: pending full import and public review
+- Source code publication: Python sources, tests, contracts and the full backlog imported; independent public review still pending
 - Release readiness: **not approved**
+- Issue proposal data: all 351 records available in `backlog/github_issues.jsonl`; 313 not yet published as GitHub Issues
+- Import safety: `scripts/import_github_issues.py` detects prior Issues using stable task identifiers, not mutable issue titles
