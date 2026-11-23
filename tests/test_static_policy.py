@@ -74,3 +74,20 @@ def test_cli_machine_readable_output(capsys):
 def test_line_numbers_and_stable_rule():
     found = module.inspect_python("x = 1\nexec('pass')\n", file="x.py", core=True)
     assert [(f.line, f.rule) for f in found] == [(2, "STATIC-002-DANGEROUS-CALL")]
+
+
+def test_cli_rejects_real_source_violation(tmp_path, capsys):
+    """STATIC-CLI-001: a real production violation must fail the process gate."""
+    module_path = tmp_path / "src" / "verified_execution" / "core.py"
+    module_path.parent.mkdir(parents=True)
+    module_path.write_text("import os\nos.system('never execute this')\n", encoding="utf-8")
+    (tmp_path / "server_mcp.py").write_text("pass\n", encoding="utf-8")
+    assert module.main(["--root", str(tmp_path)]) == 1
+    import json
+    report = json.loads(capsys.readouterr().out)
+    assert report["state"] == "fail"
+    assert report["files_scanned"] == 2
+    assert report["findings"] == [{
+        "file": "src/verified_execution/core.py", "line": 2,
+        "rule": "STATIC-002-DANGEROUS-CALL",
+    }]
