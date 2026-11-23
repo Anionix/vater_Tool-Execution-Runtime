@@ -30,6 +30,9 @@ def check_report(path: Path, *, minimum: int) -> dict[str, int]:
         raise ValueError("INVALID_XML") from exc
     if root.tag not in {"testsuite", "testsuites"}:
         raise ValueError("INVALID_REPORT_ROOT")
+    suites = list(root.iter("testsuite"))
+    if not suites:
+        raise ValueError("MISSING_TEST_SUITE")
     cases = list(root.iter("testcase"))
     if len(cases) < minimum:
         raise ValueError("INSUFFICIENT_TESTS")
@@ -40,7 +43,7 @@ def check_report(path: Path, *, minimum: int) -> dict[str, int]:
     skipped = sum(len(case.findall("skipped")) for case in cases)
     if failures or errors or skipped:
         raise ValueError("NOT_ALL_TESTS_PASSED")
-    for suite in root.iter("testsuite"):
+    for suite in suites:
         # Fail closed if pytest's recorded totals disagree with emitted cases.
         children = list(suite.iter("testcase"))
         for attribute, actual in (("tests", len(children)), ("failures", 0), ("errors", 0), ("skipped", 0)):
