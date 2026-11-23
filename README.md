@@ -1,35 +1,53 @@
 # VATER — Verifiable Agent Tool Execution Runtime
 
-**Python-first experimental tool execution runtime for AI agents and other clients.**
+**Experimental Python-first tool execution runtime** for AI agents and other clients. Its current components validate inputs, enforce host-owned authorization, record operation state, and test cancellation. **MCP is the first planned protocol adapter, not the only possible interface.**
 
-The core checks inputs and authorization, tracks durable operation state, and handles cancellation. MCP is the first protocol adapter; other interfaces are future options.
+> **Not production-ready.** The official Python MCP client/server interoperability tests have not been run successfully in the original environment. Offline Python test results do not establish protocol compliance or a complete security guarantee.
 
-> **Development status: experimental — not production-ready.** Official MCP client/server interoperability remains unverified. Passing local Python tests is not proof of protocol compliance or full security.
+## Repository guide
 
-## Design
+- [Python runtime](src/verified_execution/) and [MCP adapter](server_mcp.py)
+- [Local tests](tests/) and [verification scripts](scripts/)
+- [Tool contracts](contracts/) and [runtime limits](config/limits.json)
+- [Original 351-task ledger](backlog/tasks.jsonl) — 332 individual tasks + 19 phase completion gates
+- [Human-readable backlog](backlog/TASKS.md) and [release roadmap](docs/ROADMAP.md)
+- [Local verification evidence](evidence/) and [provenance limitations](docs/PROVENANCE.md)
+- [GitHub Issue import checkpoint](backlog/ISSUE_IMPORT_STATUS.md) and [prepared Issue proposals](backlog/github_issues.jsonl)
 
-1. Define tool input/output contracts.
-2. Validate the request and enforce host-owned permissions.
-3. Execute the tool and record its result or uncertainty.
-4. Test both success and failure, preserving reproducible evidence.
-5. Port only justified performance/security-critical components to Rust; use formal verification where useful.
+The last audited planning snapshot records **17/351 tasks completed**, but this is a historical count. GitHub Issue publication is tracked separately from implementation progress.
 
-## Project tracking
+## Quick local verification
 
-The Python-first plan has **351 records**: 332 tasks and 19 phase completion gates. The last audited ledger marked 17 completed; this is a historical snapshot, not an assertion that production readiness has been achieved.
+Requires **Python 3.13 or later** and locally installed test dependencies (see [pyproject.toml](pyproject.toml)).
 
-- [Phase-level work and issues](../../issues)
-- [Project status and planned import](../../issues?q=is%3Aissue)
-- See the backlog and full source package maintained with the project; source import may be incremental.
+```bash
+python -m pip install -e '.[test]'
+python -m pytest -q tests/test_core.py tests/test_contracts.py tests/test_recorded_calculator.py
+```
 
-## Security and availability
+To run the broader offline checks:
 
-Do **not** expose the prototype to untrusted remote callers or privileged credentials. Authentication, official MCP interoperability, and external-side-effect reconciliation have not passed production gates.
+```bash
+./scripts/run_offline_checks.sh
+```
 
-## License
+Some tests require the official Python MCP package, are explicitly skipped when unavailable, and **must not** be counted as protocol validation. The development package is currently unpinned for transitive dependencies; see [dependency status](docs/DEPENDENCY_LOCK_STATUS.md).
 
-**No open-source license has been selected.** Public visibility does not imply permission to redistribute or reuse the software.
+## GitHub Issues
 
-## Name
+**38 of 351 planned Issues** are registered. Additional Issues can be prepared and checked without writing to GitHub:
 
-**VATER** stands for **Verifiable Agent Tool Execution Runtime**.
+```bash
+python scripts/import_github_issues.py --repo Anionix/vater_Tool-Execution-Runtime --all
+```
+
+Importing with `--execute` performs remote writes and requires the separately installed GitHub command-line tool and account access. The script deduplicates by immutable task identifier, never closes completed tasks automatically, and creates only a limited batch by default.
+
+[Current Issues](https://github.com/Anionix/vater_Tool-Execution-Runtime/issues)
+
+## Security and legal
+
+- Do **not** expose this prototype to untrusted remote callers or privileged credentials.
+- Read [SECURITY.md](SECURITY.md) for current limitations.
+- Rust, Lean, Kani, and other interface adapters are optional later stages.
+- **No open-source license has been selected.** A public repository does not automatically grant redistribution permission.
