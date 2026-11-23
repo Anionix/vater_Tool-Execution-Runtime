@@ -31,11 +31,11 @@ To run the broader offline checks:
 ./scripts/run_offline_checks.sh
 ```
 
-Some tests require the official Python MCP package, are explicitly skipped when unavailable, and **must not** be counted as protocol validation. The development package is currently unpinned for transitive dependencies; see [dependency status](docs/DEPENDENCY_LOCK_STATUS.md).
+Some tests require the official Python MCP package, are explicitly skipped when unavailable, and **must not** be counted as protocol validation. Transitive dependencies still lack an accepted hash-pinned lock. The [candidate generation and clean-install workflow](docs/DEPENDENCY_LOCK_WORKFLOW.md) is implemented, but its official MCP verification is **not yet confirmed**. Until an accepted lock is committed, the official MCP job intentionally fails closed.
 
 ## GitHub Issues
 
-Issue registration is incremental. The original plan has **351 stable task identifiers**. For the live registered count, open [all Issues](https://github.com/Anionix/vater_Tool-Execution-Runtime/issues?q=is%3Aissue) (including closed Issues); the historical first batch is recorded in [the import checkpoint](backlog/ISSUE_IMPORT_STATUS.md). Additional Issues can be prepared and checked without writing to GitHub:
+Issue registration is **complete for all 351 stable task identifiers** (332 tasks and 19 phase gates). There are also seven closed duplicate Issues. Track the canonical GitHub Issue number using [the checked Issue index](backlog/ISSUE_INDEX.jsonl) and [registration checkpoint](backlog/ISSUE_IMPORT_STATUS.md). Additional Issues can be prepared and checked without writing to GitHub:
 
 ```bash
 python scripts/import_github_issues.py --repo Anionix/vater_Tool-Execution-Runtime --all
