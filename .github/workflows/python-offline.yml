@@ -1,0 +1,38 @@
+name: Python offline verification
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: offline-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  offline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install offline test dependencies
+        run: python -m pip install -e '.[test]'
+      - name: Validate 351 task records
+        run: python backlog/validate_tasks.py
+      - name: Run offline regression checks
+        run: >-
+          python -m pytest -q -o addopts=''
+          tests/test_core.py
+          tests/test_contracts.py
+          tests/test_ledger.py
+          tests/test_recorded_calculator.py
+          tests/test_recorded_tool_bridge.py
+          tests/test_request_cancellation.py
+          tests/test_worker_leases.py
+          tests/test_sqlite_cancel_wait.py
