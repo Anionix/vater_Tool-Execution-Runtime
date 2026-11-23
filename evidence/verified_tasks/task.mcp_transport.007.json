@@ -1,0 +1,25 @@
+{
+  "verification_status": "passed",
+  "executed": true,
+  "run_url": "https://github.com/Anionix/vater_Tool-Execution-Runtime/actions/runs/45278396997",
+  "commit_sha": "bf838f5c82db31b646d8253d4345c0852c516028",
+  "official_sdk": "mcp==2.3.0",
+  "python": "3.13.18",
+  "system": "GitHub-hosted Linux x86-64",
+  "official_sdk_tests": {
+    "passed": 14,
+    "failed": 0,
+    "skipped": 0,
+    "errors": 0
+  },
+  "dependency_lock": {
+    "packages": 33,
+    "sha256": "cc651303afe6b684a979e14fdd9d1ca8b73d7bda0ea6e1d0480a20ae792de51c",
+    "hash_pinned_install": "success"
+  },
+  "limits": "A passing integration test does not prove production safety or complete official conformance.",
+  "machine_contract": "NOT_STARTED/IN_PROGRESS/BLOCKED -> EVIDENCE_PASSED -> REVIEW; do not mark DONE while phase gates remain open.",
+  "task_id": "task.mcp_transport.007",
+  "claim": "Real official Python client tools/call returned structured successful checked_add results; invalid payloads produced errors.",
+  "source_summary": "evidence/official_mcp_locked_verification_2026-11-24.json"
+}
