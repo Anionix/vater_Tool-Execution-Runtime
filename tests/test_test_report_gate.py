@@ -74,3 +74,10 @@ def test_large_report_rejected(tmp_path):
     p.write_bytes(b"x" * 8_000_001)
     with pytest.raises(ValueError, match="REPORT_TOO_LARGE"):
         m.check_report(p, minimum=14)
+
+
+def test_rejects_orphan_testcases_without_suite(tmp_path):
+    p = tmp_path / "orphan.xml"
+    p.write_text("<testsuites>" + "<testcase classname=\"fake\" name=\"case\"/>" * 14 + "</testsuites>")
+    with pytest.raises(ValueError, match="MISSING_TEST_SUITE"):
+        m.check_report(p, minimum=14)
