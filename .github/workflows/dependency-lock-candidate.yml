@@ -9,6 +9,10 @@ on:
       - pyproject.toml
       - scripts/check_dependency_lock.py
       - tests/test_dependency_lock.py
+      - tests/test_official_mcp_sdk.py
+      - server_mcp.py
+      - scripts/check_test_report.py
+      - src/verified_execution/**
       - .github/workflows/dependency-lock-candidate.yml
 
 permissions:
