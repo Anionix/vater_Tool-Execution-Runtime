@@ -287,3 +287,36 @@ def test_corrupt_cancel_journal_blocks_server_startup(adapter, tmp_path):
     record.chmod(0o600)
     with pytest.raises(JournalError, match='CORRUPTED_INTENT_FILE'):
         adapter.build_server(ledger_path=str(path), principal='host')
+
+
+def test_server_startup_uses_validated_policy_fields(adapter):
+    """CONFIG-INTEGRATION-001: regression for dict-to-typed policy migration.
+
+    This verifies Python server construction using SDK stubs; it is not an
+    official MCP wire test. The runtime must not subscript a frozen dataclass.
+    """
+    from verified_execution.policy_config import LocalPolicyConfiguration
+
+    assert isinstance(adapter._LIMITS, LocalPolicyConfiguration)
+    assert adapter._READONLY_POLICY.timeout_ms == adapter._LIMITS.readonly_request_timeout_ms
+    assert adapter._READONLY_POLICY.max_concurrent == adapter._LIMITS.readonly_max_concurrent
+    assert adapter._READONLY_POLICY.timeout_ms <= 2000
+    assert adapter._READONLY_POLICY.max_concurrent == 1
+
+
+def test_server_startup_rejects_invalid_host_owned_policy(adapter, monkeypatch):
+    """CONFIG-INTEGRATION-002: failed host policy must prevent server import.
+
+    State transition: UNVALIDATED -> REJECTED; never -> SERVER_READY.
+    The SDK remains stubbed: this is a startup-boundary test, not MCP proof.
+    """
+    from verified_execution import policy_config
+
+    def reject(_path):
+        raise policy_config.PolicyConfigurationError("INVALID_POLICY_FIELDS")
+
+    monkeypatch.setattr(policy_config, "load_local_policy", reject)
+    spec = util.spec_from_file_location("adapter_stub_invalid_host_policy", ROOT / "server_mcp.py")
+    loaded = util.module_from_spec(spec)
+    with pytest.raises(policy_config.PolicyConfigurationError, match="INVALID_POLICY_FIELDS"):
+        spec.loader.exec_module(loaded)
