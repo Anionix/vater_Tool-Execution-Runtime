@@ -1,0 +1,37 @@
+{
+  "task_id": "task.mcp_transport.002",
+  "verification_status": "passed",
+  "executed": true,
+  "source_commit": "2b759a65bb32797ebdde5325040f27623f2ed4a2",
+  "run_id": 45362252380,
+  "run_url": "https://github.com/Anionix/vater_Tool-Execution-Runtime/actions/runs/45362252380",
+  "job_results": {
+    "offline_contracts": "success",
+    "durable_state": "success",
+    "official_mcp": "success"
+  },
+  "official_sdk_tests": {
+    "passed": 14,
+    "failed": 0,
+    "skipped": 0,
+    "errors": 0
+  },
+  "launcher_tests": [
+    "test_launcher_uses_host_owned_bounds",
+    "test_launcher_does_not_inherit_environment",
+    "test_invalid_policy_fails_closed",
+    "test_arguments_cannot_replace_child_command",
+    "test_exec_failure_returns_stable_status"
+  ],
+  "source_blobs": {
+    "scripts/run_local_mcp.py": "ba10fc29c026ab0fa71f43453cb4b29e61938f89",
+    "tests/test_local_mcp_launcher.py": "91f287bc037836390c60477b0a07c50ec84541de",
+    "tests/test_official_mcp_sdk.py": "d7f13eae0de6bb1ee58121c0159af0641a0f83b1"
+  },
+  "machine_contract": "HOST_POLICY -> VALIDATED -> GUARDED_PROCESS | REJECTED",
+  "limitations": [
+    "Official SDK client/server integration and launcher checks on Linux/Python 3.13.",
+    "Fresh environment is not an operating-system sandbox.",
+    "Upstream runtime phase gate remains open."
+  ]
+}
