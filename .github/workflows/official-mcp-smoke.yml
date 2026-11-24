@@ -8,6 +8,9 @@ on:
   push:
     paths:
       - server_mcp.py
+      - scripts/run_local_mcp.py
+      - scripts/guarded_stdio.py
+      - config/limits.json
       - pyproject.toml
       - src/verified_execution/**
       - tests/test_official_mcp_sdk.py
