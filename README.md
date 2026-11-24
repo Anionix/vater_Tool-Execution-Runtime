@@ -4,6 +4,12 @@
 
 > **Not production-ready.** Official Python MCP 2.3.0 client/server integration tests now pass **14/14 with zero skipped** in a GitHub-hosted Linux/Python 3.13 environment using a SHA-256 hash-pinned dependency lock. This scoped result does not prove full specification conformance, production safety or other platforms.
 
+## Initial release scope
+
+**目的：Pythonの純粋な計算を権限と入力境界の内側で安全に実行し、公式MCPのローカル標準入出力から呼び出せるようにする。**
+
+See [scope contract](docs/SCOPE_CONTRACT.md). Only local single-user pure arithmetic belongs to the initial release; recorded operations are an explicit later profile.
+
 ## Repository guide
 
 - [Python runtime](src/verified_execution/) and [MCP adapter](server_mcp.py)
