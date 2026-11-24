@@ -39,6 +39,16 @@ To run the broader offline checks:
 
 Some tests require the official Python MCP package, are explicitly skipped when unavailable, and **must not** be counted as protocol validation. The Python 3.13 Linux transitive dependencies are now recorded in [requirements-py313.lock](requirements-py313.lock): **33 pinned packages with 485 artifact hashes**. The [candidate resolver](docs/DEPENDENCY_LOCK_WORKFLOW.md) and [locked end-to-end test run](https://github.com/Anionix/vater_Tool-Execution-Runtime/actions/runs/45278396997) both passed. Local environments without the official MCP SDK still skip the integration tests and must not claim protocol validation.
 
+## Minimum local launch (Linux/POSIX)
+
+Run the fixed read-only profile with the installed Python environment:
+
+```bash
+python -I scripts/run_local_mcp.py
+```
+
+This launcher reads the host's validated limits, starts the existing guarded standard-input/output transport and passes a fresh allowlisted environment. It does not inherit the recorded-tool environment switch or API keys. Direct execution of server_mcp.py is a development/extension entry point, not the minimum release launch command. This is **not** an operating-system sandbox or remote authentication.
+
 ## Official MCP verification paths
 
 - [Diagnostic smoke test](.github/workflows/official-mcp-smoke.yml): installs the selected SDK in a temporary GitHub Actions environment and attempts real client/server tests. Diagnostic only; no release approval.
