@@ -11,6 +11,9 @@ on:
       - tests/test_dependency_lock.py
       - tests/test_official_mcp_sdk.py
       - server_mcp.py
+      - scripts/run_local_mcp.py
+      - scripts/guarded_stdio.py
+      - config/limits.json
       - scripts/check_test_report.py
       - src/verified_execution/**
       - .github/workflows/dependency-lock-candidate.yml
