@@ -128,19 +128,19 @@ def test_sdk_access_denied():
     anyio.run(run)
 
 @pytest.mark.parametrize("era", ["2026-07-28", "legacy"])
-def test_sdk_guarded_real_stdio(era):
-    """Real SDK client -> input guard process -> real SDK server subprocess."""
+def test_sdk_guarded_real_stdio(era, tmp_path):
+    """Real client -> fixed release launcher -> guard -> official server."""
+    database = tmp_path / "must-not-exist.sqlite"
     import anyio
     from mcp import Client, StdioServerParameters
 
     async def run():
         params = StdioServerParameters(
             command=sys.executable,
-            args=["-u", str(ROOT / "scripts" / "guarded_stdio.py"),
-                  "--max-bytes", "4096", "--", sys.executable, "-u",
-                  str(ROOT / "server_mcp.py")],
+            args=["-I", "-u", str(ROOT / "scripts" / "run_local_mcp.py")],
             cwd=ROOT,
-            env={"PYTHONPATH": str(ROOT / "src")},
+            env={"VERIFIED_EXECUTION_LEDGER_PATH": str(database),
+                 "OPENAI_API_KEY": "synthetic-test-secret"},
         )
         async with Client(params, mode=era) as client:
             if era == "legacy":
@@ -150,6 +150,7 @@ def test_sdk_guarded_real_stdio(era):
             await verify_contract(client)
 
     anyio.run(run)
+    assert not database.exists()
 
 
 def test_sdk_guarded_rejects_raw_duplicate_before_sdk():
