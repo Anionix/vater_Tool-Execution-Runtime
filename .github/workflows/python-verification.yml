@@ -43,6 +43,7 @@ jobs:
           tests/test_test_report_gate.py
           tests/test_ci_workflow_contracts.py
           tests/test_unicode_input_validation.py
+          tests/test_local_mcp_launcher.py
 
   durable-state:
     runs-on: ubuntu-latest
