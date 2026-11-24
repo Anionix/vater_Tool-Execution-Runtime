@@ -5,7 +5,7 @@
 - **351 / 351 unique task identifiers have GitHub Issues.**
 - 332 individual task records and 19 phase gates.
 - 358 GitHub Issues in total: **351 canonical records + 7 closed duplicate Issues**.
-- Implementation status is independent: **17 done / 351 total**, 334 unfinished; 19 phase gates are not passed.
+- Implementation status is independent: **19 done / 351 total**, 332 unfinished; 18 phase gates remain open.
 - Initial release still requires validation of 168 mandatory items; production readiness is **BLOCKED**.
 
 Canonical ledger: [tasks.jsonl](tasks.jsonl) · Generated full issue-number mapping: [ISSUE_INDEX.jsonl](ISSUE_INDEX.jsonl).
@@ -56,4 +56,4 @@ These 7 extras were closed as duplicates. Keep the earliest Issue as the canonic
 - Issue creation does **not** prove implementation, security, compatibility or conformance with the official MCP SDK.
 - A future change to the task ledger requires a new reconciliation before calling this checkpoint current.
 
-**Ledger blob SHA:** `0066939b800ce243fe2773f2a80aa78b6f4db837`.
+**Ledger blob SHA:** `47fc8193cf775dbb7dfeae91c3cb84c3f8952ae4`.

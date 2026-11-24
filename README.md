@@ -20,7 +20,7 @@ See [scope contract](docs/SCOPE_CONTRACT.md). Only local single-user pure arithm
 - [Local verification evidence](evidence/) and [provenance limitations](docs/PROVENANCE.md)
 - [GitHub Issue import checkpoint](backlog/ISSUE_IMPORT_STATUS.md) and [prepared Issue proposals](backlog/github_issues.jsonl)
 
-The last audited planning snapshot records **17/351 tasks completed**, but this is a historical count. GitHub Issue publication is tracked separately from implementation progress.
+The last audited planning snapshot records **19/351 tasks completed**, but this is a historical count. GitHub Issue publication is tracked separately from implementation progress.
 
 ## Quick local verification
 
