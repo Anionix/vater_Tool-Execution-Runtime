@@ -1,0 +1,101 @@
+{
+  "task_id": "gate.scope.completed",
+  "verification_status": "passed",
+  "executed": true,
+  "verification_date": "2026-11-24",
+  "source_commit": "6efc1972414bd6c993f61bf2f9c7e7efc2d012f9",
+  "acceptance_criteria": "同段階の全作業について、実物・独立した合格判定・証拠の所在がある",
+  "checks": {
+    "scope_task_count": 18,
+    "prior_completed": 17,
+    "remaining_scope_task": "task.scope.015",
+    "all_evidence_records_read_and_matched": true,
+    "current_scope_reconciliation_checks_passed": 13,
+    "current_scope_reconciliation_checks_total": 13,
+    "dependency_packages": 33,
+    "artifact_hashes": 485,
+    "official_mcp_integration_passed": 14,
+    "official_mcp_integration_skipped": 0
+  },
+  "prerequisite_evidence": [
+    {
+      "task_id": "task.scope.001",
+      "path": "evidence/scope_tasks/task.scope.001.json"
+    },
+    {
+      "task_id": "task.scope.002",
+      "path": "evidence/tasks/task.scope.002.json"
+    },
+    {
+      "task_id": "task.scope.003",
+      "path": "evidence/scope_tasks/task.scope.003.json"
+    },
+    {
+      "task_id": "task.scope.004",
+      "path": "evidence/scope_tasks/task.scope.004.json"
+    },
+    {
+      "task_id": "task.scope.005",
+      "path": "evidence/tasks/task.scope.005.json"
+    },
+    {
+      "task_id": "task.scope.006",
+      "path": "evidence/scope_tasks/task.scope.006.json"
+    },
+    {
+      "task_id": "task.scope.007",
+      "path": "evidence/tasks/task.scope.007.json"
+    },
+    {
+      "task_id": "task.scope.008",
+      "path": "evidence/tasks/task.scope.008.json"
+    },
+    {
+      "task_id": "task.scope.009",
+      "path": "evidence/scope_tasks/task.scope.009.json"
+    },
+    {
+      "task_id": "task.scope.010",
+      "path": "evidence/scope_tasks/task.scope.010.json"
+    },
+    {
+      "task_id": "task.scope.011",
+      "path": "evidence/scope_tasks/task.scope.011.json"
+    },
+    {
+      "task_id": "task.scope.012",
+      "path": "evidence/scope_tasks/task.scope.012.json"
+    },
+    {
+      "task_id": "task.scope.013",
+      "path": "evidence/tasks/task.scope.013.json"
+    },
+    {
+      "task_id": "task.scope.014",
+      "path": "evidence/scope_tasks/task.scope.014.json"
+    },
+    {
+      "task_id": "task.scope.015",
+      "path": "evidence/verified_tasks/task.scope.015.json"
+    },
+    {
+      "task_id": "task.scope.016",
+      "path": "evidence/tasks/task.scope.016.json"
+    },
+    {
+      "task_id": "task.scope.017",
+      "path": "evidence/tasks/task.scope.017.json"
+    },
+    {
+      "task_id": "task.scope.018",
+      "path": "evidence/scope_tasks/task.scope.018.json"
+    }
+  ],
+  "source_blobs": {
+    "README.md": "624bd04eff8abeb8fa7d7f05d082aadb7708ee3d",
+    "docs/SCOPE_CONTRACT.md": "e9450d1eaded3202c821bfbe3a5ab55feb7e5b56",
+    "requirements-py313.lock": "804466bbea18c0889a3704b7b67895696711a61a"
+  },
+  "integration_run": "https://github.com/Anionix/vater_Tool-Execution-Runtime/actions/runs/45278396997",
+  "limitation": "Scope acceptance and structural reconciliation of historical evidence. Not a rerun of all original scope checks, independent human review, security proof or production approval. Remaining mandatory release gates remain open."
+}
