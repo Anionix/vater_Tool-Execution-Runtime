@@ -14,10 +14,17 @@
     ],
     "extends": null,
     "release_blockers": [
-      "official Python SDK real stdio client and server",
-      "new/legacy MCP protocol checks",
-      "contract/authorization evidence"
-    ]
+      "remaining mandatory phase gates (see backlog/tasks.jsonl)",
+      "contract/authorization evidence",
+      "default guarded-stdio deployment verification"
+    ],
+    "verified_scope": {
+      "platform": "Linux x86-64 / Python 3.13",
+      "official_mcp": "2.3.0",
+      "integration_cases_passed": 14,
+      "skipped": 0,
+      "evidence": "evidence/official_mcp_locked_verification_2026-11-24.json"
+    }
   },
   "with_model_connectors": {
     "purpose": "model API use after explicit destination and budget consent",
