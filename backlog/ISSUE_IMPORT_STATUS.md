@@ -57,3 +57,14 @@ These 7 extras were closed as duplicates. Keep the earliest Issue as the canonic
 - A future change to the task ledger requires a new reconciliation before calling this checkpoint current.
 
 **Ledger blob SHA:** `b49a8287eb90e03e4ca4335f81f646cb27296cd7`.
+
+## Sync completed Issues
+
+GitHub Actions checks the current default branch when the ledger or issue index changes.
+It validates the ledger and the canonical issue identifiers before closing open
+issues for completed tasks. A rerun skips issues already closed.
+
+Preview with `python scripts/sync_completed_issues.py --repo Anionix/vater_Tool-Execution-Runtime`.
+The workflow can also be run manually from the default branch.
+
+[GitHub issue update documentation](https://docs.github.com/en/rest/issues/issues#update-an-issue)
