@@ -1,0 +1,16 @@
+{
+  "task_id": "task.trust.012",
+  "acceptance_criteria": "無許可の外部送信が不可能",
+  "scope": "Empty destination set and no outbound handler in the minimum tool interface; package installation and host networking are separate.",
+  "verification_status": "passed",
+  "executed": true,
+  "verified_on": "2026-11-25",
+  "test_cases": [
+    "tests/test_adapter_boundary.py::test_every_registered_tool_has_a_risk_class",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[launch_guarded_mcp.py-2026-07-28]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[launch_guarded_mcp.py-legacy]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[run_local_mcp.py-2026-07-28]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[run_local_mcp.py-legacy]"
+  ],
+  "report_path": "evidence/gates/trust-tests.xml"
+}

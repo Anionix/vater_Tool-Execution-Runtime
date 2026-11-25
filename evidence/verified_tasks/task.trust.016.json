@@ -1,0 +1,19 @@
+{
+  "task_id": "task.trust.016",
+  "acceptance_criteria": "対象版が変わった反例を持つ",
+  "scope": "An approval for a different resource revision cannot start a local reservation. Actual external target version enforcement is outside this scope.",
+  "verification_status": "passed",
+  "executed": true,
+  "verified_on": "2026-11-25",
+  "test_cases": [
+    "tests/test_ledger.py::test_mismatched_approval_rejected[change0]",
+    "tests/test_ledger.py::test_mismatched_approval_rejected[change1]",
+    "tests/test_ledger.py::test_mismatched_approval_rejected[change2]",
+    "tests/test_ledger.py::test_mismatched_approval_rejected[change3]",
+    "tests/test_ledger.py::test_request_reuse_with_changed_intent_rejected[change0]",
+    "tests/test_ledger.py::test_request_reuse_with_changed_intent_rejected[change1]",
+    "tests/test_ledger.py::test_request_reuse_with_changed_intent_rejected[change2]",
+    "tests/test_ledger.py::test_request_reuse_with_changed_intent_rejected[change3]"
+  ],
+  "report_path": "evidence/gates/trust-tests.xml"
+}

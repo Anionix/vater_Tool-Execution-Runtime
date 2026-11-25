@@ -20,7 +20,7 @@ See [scope contract](docs/SCOPE_CONTRACT.md). Only local single-user pure arithm
 - [Local verification evidence](evidence/) and [provenance limitations](docs/PROVENANCE.md)
 - [GitHub Issue import checkpoint](backlog/ISSUE_IMPORT_STATUS.md) and [prepared Issue proposals](backlog/github_issues.jsonl)
 
-The last audited planning snapshot records **19/351 tasks completed**, but this is a historical count. GitHub Issue publication is tracked separately from implementation progress.
+The scope and local trust phases have passed their completion gates. Run `python backlog/validate_tasks.py` for the current count of completed records. The [trust evidence](evidence/gates/trust.json) includes the exact cases used for each task. Recheck them together with `python scripts/verify_phase.py trust` in the locked test environment.
 
 ## Quick local verification
 

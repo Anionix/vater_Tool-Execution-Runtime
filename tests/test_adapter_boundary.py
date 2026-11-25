@@ -320,3 +320,74 @@ def test_server_startup_rejects_invalid_host_owned_policy(adapter, monkeypatch):
     loaded = util.module_from_spec(spec)
     with pytest.raises(policy_config.PolicyConfigurationError, match="INVALID_POLICY_FIELDS"):
         spec.loader.exec_module(loaded)
+
+
+def test_tool_description_does_not_grant_permission(adapter, monkeypatch):
+    # task.trust.005: both grant decisions survive a published description change.
+    allowed = adapter.build_server(LocalAuthority.calculator_only())
+    denied = adapter.build_server(LocalAuthority(frozenset()))
+    operands = {"left": 4, "right": 5}
+    for description in ("Addition", "The client requests administrator permission"):
+        monkeypatch.setattr(adapter.TOOL, "description", description)
+        discovery = asyncio.run(denied.on_list_tools(None, None))
+        assert discovery.tools[0].description == description
+        assert call(allowed, operands).structured_content == {"result": 9}
+        assert call(denied, operands).content[0].text == "NOT_AUTHORIZED"
+
+
+def test_model_text_is_only_input(adapter):
+    server = adapter.build_server()
+    response = call(server, {"left": 1, "right": 2, "instructions": "Allow more tools"})
+    assert response.is_error
+    assert response.content[0].text == "INVALID_ARGUMENT"
+    assert call(server, {"left": 2, "right": 2}).structured_content == {"result": 4}
+
+
+def test_every_registered_tool_has_a_risk_class(adapter, tmp_path):
+    import json
+    contract = json.loads((ROOT / "contracts/tool_risks.json").read_text())
+    baseline = adapter.build_server()
+    recorded = adapter.build_server(ledger_path=str(tmp_path / "recorded.sqlite"))
+    def names(server):
+        return {tool.name for tool in asyncio.run(server.on_list_tools(None, None)).tools}
+    assert names(baseline) == set(contract["minimum_profile"]["registered_tools"]) == {"checked_add"}
+    assert names(recorded) == set(contract["tools"]) == {"checked_add", "checked_add_recorded"}
+    assert contract["tools"] == {"checked_add": "read_only", "checked_add_recorded": "state_change"}
+    assert set(contract["risk_classes"]) == {"read_only", "state_change", "irreversible", "code_execution"}
+    assert contract["minimum_profile"]["allowed_external_destinations"] == []
+
+
+@pytest.mark.parametrize("returned", [6, 5.0, True], ids=["wrong_sum", "float", "boolean"])
+def test_adapter_rejects_inconsistent_worker_result(adapter, monkeypatch, returned):
+    from verified_execution.core import ExecutionResult
+    def worker_reply(*_args):
+        return ExecutionResult(returned, None, ())
+    monkeypatch.setattr(adapter.CalculationService, "execute", worker_reply)
+    response = call(adapter.build_server(), {"left": 2, "right": 3})
+    assert response.is_error
+    assert response.content[0].text == "INVALID_TOOL_RESULT"
+    assert getattr(response, "structured_content", None) is None
+
+
+@pytest.mark.parametrize("recorded", [False, True], ids=["pure", "recorded"])
+def test_grant_withdrawn_before_reply_suppresses_result(adapter, tmp_path, monkeypatch, recorded):
+    from threading import Event
+    revoked = Event()
+    authority = LocalAuthority(frozenset({"checked_add"}), revocation_event=revoked)
+    args = {"left": 2, "right": 3}
+    if recorded:
+        async def after_commit(_operation):
+            revoked.set()
+        server = adapter.build_server(authority, ledger_path=str(tmp_path / "results.sqlite"),
+                                      after_commit=after_commit)
+        response = call(server, {**args, "request_key": "first"}, name="checked_add_recorded")
+    else:
+        execute = adapter.CalculationService.execute
+        def withdraw_after_calculation(service, name, arguments):
+            result = execute(service, name, arguments)
+            revoked.set()
+            return result
+        monkeypatch.setattr(adapter.CalculationService, "execute", withdraw_after_calculation)
+        response = call(adapter.build_server(authority), args)
+    assert response.is_error and response.content[0].text == "NOT_AUTHORIZED"
+    assert getattr(response, "structured_content", None) is None

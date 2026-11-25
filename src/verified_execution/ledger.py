@@ -207,7 +207,7 @@ class OperationLedger:
 
     def reserve(self, *, principal: str, request_key: str, tool_name: str,
                 target_id: str | None, resource_version: str | None,
-                arguments: Any, requires_approval: bool) -> Operation:
+                arguments: Any, requires_approval: bool = True) -> Operation:
         """Create one prepared operation; same request key+fingerprint replays a record.
 
         Reservation does NOT authorize dispatch and does NOT execute side effects.
@@ -285,8 +285,9 @@ class OperationLedger:
         Only a remote idempotency key + reconciliation can provide stronger claims.
         """
         operation_id = _text("operation_id", operation_id)
-        now = self._now()
         with self._transaction() as connection:
+            # task.trust.015: check approval expiry after acquiring the writer lock.
+            now = self._now()
             self._guard_legacy_write(connection, operation_id)
             op = self._get(connection, operation_id)
             if op.state != "prepared" or op.cancel_requested:

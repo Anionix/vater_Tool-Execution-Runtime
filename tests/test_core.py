@@ -102,3 +102,9 @@ def test_strict_integer_validation_with_pydantic():
     for invalid in (True, 1.0, "1"):
         with pytest.raises(ValidationError):
             Arguments(left=invalid, right=2)
+
+
+@pytest.mark.parametrize("deadline", [False, -1, 1.5])
+def test_invalid_host_grant_deadline_is_rejected(deadline):
+    with pytest.raises(ValueError):
+        LocalAuthority(frozenset({"checked_add"}), expires_at_monotonic_ns=deadline)

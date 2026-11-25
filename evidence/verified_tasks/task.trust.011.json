@@ -1,0 +1,28 @@
+{
+  "task_id": "task.trust.011",
+  "acceptance_criteria": "期限切れ・権限剥奪で返さない",
+  "scope": "Process-local grant expiry or revocation before replay, during lookup, or before MCP result handoff. No recall of a delivered response or distributed revocation guarantee.",
+  "verification_status": "passed",
+  "executed": true,
+  "verified_on": "2026-11-25",
+  "test_cases": [
+    "tests/test_adapter_boundary.py::test_grant_withdrawn_before_reply_suppresses_result[pure]",
+    "tests/test_adapter_boundary.py::test_grant_withdrawn_before_reply_suppresses_result[recorded]",
+    "tests/test_core.py::test_invalid_host_grant_deadline_is_rejected[-1]",
+    "tests/test_core.py::test_invalid_host_grant_deadline_is_rejected[1.5]",
+    "tests/test_core.py::test_invalid_host_grant_deadline_is_rejected[False]",
+    "tests/test_recorded_tool_bridge.py::test_replay_requires_live_host_grant[before_request-expired-asynchronous]",
+    "tests/test_recorded_tool_bridge.py::test_replay_requires_live_host_grant[before_request-expired-leased]",
+    "tests/test_recorded_tool_bridge.py::test_replay_requires_live_host_grant[before_request-expired-recorded]",
+    "tests/test_recorded_tool_bridge.py::test_replay_requires_live_host_grant[before_request-revoked-asynchronous]",
+    "tests/test_recorded_tool_bridge.py::test_replay_requires_live_host_grant[before_request-revoked-leased]",
+    "tests/test_recorded_tool_bridge.py::test_replay_requires_live_host_grant[before_request-revoked-recorded]",
+    "tests/test_recorded_tool_bridge.py::test_replay_requires_live_host_grant[during_read-expired-asynchronous]",
+    "tests/test_recorded_tool_bridge.py::test_replay_requires_live_host_grant[during_read-expired-leased]",
+    "tests/test_recorded_tool_bridge.py::test_replay_requires_live_host_grant[during_read-expired-recorded]",
+    "tests/test_recorded_tool_bridge.py::test_replay_requires_live_host_grant[during_read-revoked-asynchronous]",
+    "tests/test_recorded_tool_bridge.py::test_replay_requires_live_host_grant[during_read-revoked-leased]",
+    "tests/test_recorded_tool_bridge.py::test_replay_requires_live_host_grant[during_read-revoked-recorded]"
+  ],
+  "report_path": "evidence/gates/trust-tests.xml"
+}

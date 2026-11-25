@@ -1,0 +1,13 @@
+{
+  "task_id": "task.trust.006",
+  "acceptance_criteria": "権限規則を文章で上書きできない",
+  "scope": "Free-form request text cannot change the host grant.",
+  "verification_status": "passed",
+  "executed": true,
+  "verified_on": "2026-11-25",
+  "test_cases": [
+    "tests/test_adapter_boundary.py::test_model_text_is_only_input",
+    "tests/test_core.py::test_authority_not_accepted_as_tool_argument"
+  ],
+  "report_path": "evidence/gates/trust-tests.xml"
+}

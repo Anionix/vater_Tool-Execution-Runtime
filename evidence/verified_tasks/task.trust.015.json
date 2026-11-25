@@ -1,0 +1,20 @@
+{
+  "task_id": "task.trust.015",
+  "acceptance_criteria": "削除・送信・購入が既定で承認必須",
+  "scope": "Delete, send and purchase are unavailable via minimum stdio. Privileged ledger reservations default to requiring approval; explicit dispatch checks current approval under the database writer lock.",
+  "verification_status": "passed",
+  "executed": true,
+  "verified_on": "2026-11-25",
+  "test_cases": [
+    "tests/test_ledger.py::test_approval_uses_time_after_acquiring_dispatch_lock",
+    "tests/test_ledger.py::test_expired_approval_rejected",
+    "tests/test_ledger.py::test_high_impact_reservation_defaults_to_approval[delete]",
+    "tests/test_ledger.py::test_high_impact_reservation_defaults_to_approval[purchase]",
+    "tests/test_ledger.py::test_high_impact_reservation_defaults_to_approval[send]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[launch_guarded_mcp.py-2026-07-28]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[launch_guarded_mcp.py-legacy]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[run_local_mcp.py-2026-07-28]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[run_local_mcp.py-legacy]"
+  ],
+  "report_path": "evidence/gates/trust-tests.xml"
+}

@@ -355,3 +355,31 @@ def test_parameterized_sql_does_not_execute_injected_text(ledger):
 
 def test_bad_timeout_rejected(tmp_path):
     fails("INVALID_TIMEOUT", OperationLedger, tmp_path / "bad.db", timeout_seconds=0)
+
+
+@pytest.mark.parametrize("action", ["delete", "send", "purchase"])
+def test_high_impact_reservation_defaults_to_approval(ledger, action):
+    op = ledger.reserve(principal="local-user", request_key="one", tool_name=action,
+                        target_id="example", resource_version="1", arguments={})
+    assert op.requires_approval
+    fails("INVALID_APPROVAL_ID", ledger.begin_dispatch, op.operation_id)
+    assert ledger.get(op.operation_id).state == "prepared"
+
+
+def test_approval_uses_time_after_acquiring_dispatch_lock(ledger, monkeypatch):
+    from contextlib import contextmanager
+    op = reserve(ledger, requires_approval=True)
+    current = [10]
+    monkeypatch.setattr(ledger, "_now", lambda: current[0])
+    ledger.issue_approval(approval_id="approval-1", principal=op.principal,
+                          tool_name=op.tool_name, target_id=op.target_id,
+                          resource_version=op.resource_version, arguments=BASE_ARGUMENTS, expires_at_ms=20)
+    original = ledger._transaction
+    @contextmanager
+    def acquired_later():
+        with original() as connection:
+            current[0] = 20
+            yield connection
+    monkeypatch.setattr(ledger, "_transaction", acquired_later)
+    fails("APPROVAL_INVALID", ledger.begin_dispatch, op.operation_id, approval_id="approval-1")
+    assert ledger.get(op.operation_id).state == "prepared"

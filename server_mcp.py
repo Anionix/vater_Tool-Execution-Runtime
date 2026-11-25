@@ -33,12 +33,13 @@ from mcp.types import (
     Tool,
 )
 
-from verified_execution.core import CalculationService, LocalAuthority
+from verified_execution.client_result import read_checked_add_result
+from verified_execution.core import CalculationService, LocalAuthority, OperationError
 from verified_execution.ledger import OperationLedger
 from verified_execution.worker_leases import LeasedLedger, LeasedToolBridge
 from verified_execution.cancellable_bridge import CancellableLeasedToolBridge, Checkpoint
 from verified_execution.cancellation_journal import CancellationJournal
-from verified_execution.recorded_tool_bridge import RECORDED_TOOL_NAME, RecordedToolBridge
+from verified_execution.recorded_tool_bridge import BridgeResult, RECORDED_TOOL_NAME, RecordedToolBridge
 from verified_execution.request_limits import ReadOnlyPolicy, BoundedReadOnlyExecutor
 from verified_execution.policy_config import load_local_policy
 
@@ -92,6 +93,31 @@ RECORDED_TOOL = Tool(
 )
 
 
+def _tool_error(code: str) -> CallToolResult:
+    return CallToolResult(content=[TextContent(type="text", text=code)], is_error=True)
+
+
+def _calculation_reply(authority: LocalAuthority, arguments: object, value: int | None,
+                       recorded: BridgeResult | None = None) -> CallToolResult:
+    # task.trust.007 / task.trust.011: verify the worker result and live grant at handoff.
+    if not authority.permits("checked_add"):
+        return _tool_error("NOT_AUTHORIZED")
+    if not isinstance(arguments, dict):
+        return _tool_error("INVALID_TOOL_RESULT")
+    payload: dict[str, object] = {"result": value}
+    try:
+        result = read_checked_add_result(left=arguments.get("left"), right=arguments.get("right"),
+                                         is_error=False, structured_content=payload)
+    except OperationError:
+        return _tool_error("INVALID_TOOL_RESULT")
+    if recorded is not None:
+        if type(recorded.operation_id) is not str or not recorded.operation_id or type(recorded.replayed) is not bool:
+            return _tool_error("INVALID_TOOL_RESULT")
+        payload.update(operation_id=recorded.operation_id, replayed=recorded.replayed)
+    return CallToolResult(content=[TextContent(type="text", text=str(result))],
+                          structured_content=payload)
+
+
 def build_server(authority: LocalAuthority | None = None, *,
                  ledger_path: str | None = None,
                  principal: str = "local-process",
@@ -136,33 +162,17 @@ def build_server(authority: LocalAuthority | None = None, *,
                 # Local migration path only, without request-scoped cancellation.
                 outcome_recorded = bridge.call(params.name, params.arguments)
             if outcome_recorded.ok:
-                assert outcome_recorded.value is not None and outcome_recorded.operation_id is not None
-                return CallToolResult(
-                    content=[TextContent(type="text", text=str(outcome_recorded.value))],
-                    structured_content={"result": outcome_recorded.value,
-                                        "operation_id": outcome_recorded.operation_id,
-                                        "replayed": outcome_recorded.replayed})
-            return CallToolResult(
-                content=[TextContent(type="text", text=outcome_recorded.error_code or "EXECUTION_FAILED")],
-                is_error=True)
+                return _calculation_reply(authority, params.arguments, outcome_recorded.value, outcome_recorded)
+            return _tool_error(outcome_recorded.error_code or "EXECUTION_FAILED")
         # POLICY-011: bounded *elapsed response time* for the pure calculator.
         # No untrusted code or external side effects execute in this branch.
         try:
             outcome = await bounded_readonly.run(service.execute, params.name, params.arguments)
         except TimeoutError:
-            return CallToolResult(
-                content=[TextContent(type="text", text="TIMEOUT")], is_error=True)
+            return _tool_error("TIMEOUT")
         if outcome.succeeded:
-            assert outcome.result is not None
-            return CallToolResult(
-                content=[TextContent(type="text", text=str(outcome.result))],
-                structured_content={"result": outcome.result},
-            )
-        # Machine-readable, stable, non-sensitive failure classification.
-        return CallToolResult(
-            content=[TextContent(type="text", text=outcome.error_code or "EXECUTION_FAILED")],
-            is_error=True,
-        )
+            return _calculation_reply(authority, params.arguments, outcome.result)
+        return _tool_error(outcome.error_code or "EXECUTION_FAILED")
 
     return Server("verified-calculator", version="0.11.0", on_list_tools=list_tools, on_call_tool=call_tool)
 

@@ -1,0 +1,21 @@
+{
+  "task_id": "task.trust.002",
+  "acceptance_criteria": "Pythonの入力検証、ホスト権限、SQLite、MCPアダプターを区別し、全入力経路を列挙する",
+  "scope": "Runtime entry inventory, host configuration, both public launcher names, direct and in-process adapters, developer commands, and durable control inputs.",
+  "verification_status": "passed",
+  "executed": true,
+  "verified_on": "2026-11-25",
+  "test_cases": [
+    "tests/test_cli.py::test_real_subprocess_good_bad_and_recovery",
+    "tests/test_contracts.py::test_trust_inventory[entries]",
+    "tests/test_guarded_stdio.py::test_real_subprocess_boundary_and_recovery",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[launch_guarded_mcp.py-2026-07-28]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[launch_guarded_mcp.py-legacy]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[run_local_mcp.py-2026-07-28]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[run_local_mcp.py-legacy]",
+    "tests/test_official_mcp_sdk.py::test_sdk_in_process_request_cancellation_after_dispatch[2026-07-28]",
+    "tests/test_official_mcp_sdk.py::test_sdk_in_process_request_cancellation_after_dispatch[legacy]",
+    "tests/test_recorded_cli.py::test_real_process_unauthorized_client_cannot_supply_identity"
+  ],
+  "report_path": "evidence/gates/trust-tests.xml"
+}

@@ -24,6 +24,7 @@ pytestmark = pytest.mark.skipif(not installed_sdk_v2(), reason="official MCP Pyt
 
 async def verify_contract(client):
     from mcp.types import TextContent
+    from verified_execution.client_result import read_checked_add_result
 
     tools = await client.list_tools()
     names = [tool.name for tool in tools.tools]
@@ -41,7 +42,8 @@ async def verify_contract(client):
     for args, value in cases:
         response = await client.call_tool("checked_add", args)
         assert not response.is_error, (args, response)
-        assert response.structured_content == {"result": value}
+        assert read_checked_add_result(**args, is_error=response.is_error,
+                                       structured_content=response.structured_content) == value
         text_blocks = [block.text for block in response.content if isinstance(block, TextContent)]
         assert str(value) in text_blocks, (args, text_blocks)
 
@@ -128,7 +130,8 @@ def test_sdk_access_denied():
     anyio.run(run)
 
 @pytest.mark.parametrize("era", ["2026-07-28", "legacy"])
-def test_sdk_guarded_real_stdio(era, tmp_path):
+@pytest.mark.parametrize("launcher", ["run_local_mcp.py", "launch_guarded_mcp.py"])
+def test_sdk_guarded_real_stdio(era, launcher, tmp_path):
     """Real client -> fixed release launcher -> guard -> official server."""
     database = tmp_path / "must-not-exist.sqlite"
     import anyio
@@ -137,7 +140,7 @@ def test_sdk_guarded_real_stdio(era, tmp_path):
     async def run():
         params = StdioServerParameters(
             command=sys.executable,
-            args=["-I", "-u", str(ROOT / "scripts" / "run_local_mcp.py")],
+            args=["-I", "-u", str(ROOT / "scripts" / launcher)],
             cwd=ROOT,
             env={"VERIFIED_EXECUTION_LEDGER_PATH": str(database),
                  "OPENAI_API_KEY": "synthetic-test-secret"},
@@ -148,6 +151,9 @@ def test_sdk_guarded_real_stdio(era, tmp_path):
             else:
                 assert client.protocol_version == "2026-07-28"
             await verify_contract(client)
+            for name in ("write_file", "send", "delete", "purchase"):
+                denied = await client.call_tool(name, {})
+                assert denied.is_error and denied.structured_content is None
 
     anyio.run(run)
     assert not database.exists()

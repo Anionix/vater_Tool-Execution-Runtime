@@ -1,0 +1,26 @@
+{
+  "task_id": "task.trust.007",
+  "acceptance_criteria": "応答型と意味の検証がある",
+  "scope": "Strict shape, integer type, range and arithmetic meaning at the reference client and result handoff of the supported calculator. Remote provider semantics are outside this profile.",
+  "verification_status": "passed",
+  "executed": true,
+  "verified_on": "2026-11-25",
+  "test_cases": [
+    "tests/test_adapter_boundary.py::test_adapter_rejects_inconsistent_worker_result[boolean]",
+    "tests/test_adapter_boundary.py::test_adapter_rejects_inconsistent_worker_result[float]",
+    "tests/test_adapter_boundary.py::test_adapter_rejects_inconsistent_worker_result[wrong_sum]",
+    "tests/test_contracts.py::test_untrusted_calculation_reply[array]",
+    "tests/test_contracts.py::test_untrusted_calculation_reply[boolean]",
+    "tests/test_contracts.py::test_untrusted_calculation_reply[error]",
+    "tests/test_contracts.py::test_untrusted_calculation_reply[extra_field]",
+    "tests/test_contracts.py::test_untrusted_calculation_reply[float]",
+    "tests/test_contracts.py::test_untrusted_calculation_reply[missing]",
+    "tests/test_contracts.py::test_untrusted_calculation_reply[text]",
+    "tests/test_contracts.py::test_untrusted_calculation_reply[wrong_sum]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[launch_guarded_mcp.py-2026-07-28]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[launch_guarded_mcp.py-legacy]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[run_local_mcp.py-2026-07-28]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[run_local_mcp.py-legacy]"
+  ],
+  "report_path": "evidence/gates/trust-tests.xml"
+}

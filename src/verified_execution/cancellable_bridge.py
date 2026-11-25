@@ -77,7 +77,7 @@ class CancellableLeasedToolBridge:
                                                'right': arguments['right']})
         except OperationError as exc:
             return BridgeResult(False, None, None, False, exc.code)
-        if 'checked_add' not in self.authority.allowed_tools:
+        if not self.authority.permits('checked_add'):
             return BridgeResult(False, None, None, False, 'NOT_AUTHORIZED')
 
         op: Operation | None = None
@@ -98,6 +98,8 @@ class CancellableLeasedToolBridge:
                 saved = await self._database(self.ledger.read_calculation,
                                              op.operation_id, principal=self.principal)
                 await anyio.lowlevel.checkpoint()
+                if not self.authority.permits("checked_add"):
+                    return BridgeResult(False, None, None, False, "NOT_AUTHORIZED")
                 if saved is not None:
                     return BridgeResult(True, saved, op.operation_id, True, None)
                 reason = {'prepared': 'IN_PROGRESS', 'dispatched': 'IN_PROGRESS',

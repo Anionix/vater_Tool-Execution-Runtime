@@ -53,7 +53,7 @@ class RecordedCalculator:
             return RecordedResult(False, None, exc.code, None, None)
 
         # INTEGRATION-002: never reserve or dispatch an unauthorized tool.
-        if name not in self.authority.allowed_tools:
+        if not self.authority.permits(name):
             return RecordedResult(False, None, "NOT_AUTHORIZED", None, None)
 
         try:
@@ -65,6 +65,8 @@ class RecordedCalculator:
                 # REPLAY-002: never redispatch. Return only committed, principal-scoped
                 # successful output. Old deployments have no saved output and fail closed.
                 saved = self.ledger.read_calculation(op.operation_id, principal=self.principal)
+                if not self.authority.permits(name):
+                    return RecordedResult(False, None, "NOT_AUTHORIZED", None, None)
                 if saved is not None:
                     return RecordedResult(True, saved, None, op.operation_id,
                                           "succeeded", replayed=True)

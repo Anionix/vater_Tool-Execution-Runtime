@@ -281,7 +281,7 @@ class LeasedCalculator:
             left,right = validated_arguments(arguments)
         except OperationError as exc:
             return RecordedResult(False,None,exc.code,None,None)
-        if name not in self.authority.allowed_tools:
+        if not self.authority.permits(name):
             return RecordedResult(False,None,'NOT_AUTHORIZED',None,None)
         if cancellation is not None and cancellation.cancelled:
             return RecordedResult(False,None,'CANCELLED',None,None)
@@ -291,6 +291,8 @@ class LeasedCalculator:
                     arguments={'left':left,'right':right},requires_approval=False)
             if op.replayed:
                 saved=self.ledger.read_calculation(op.operation_id,principal=self.principal)
+                if not self.authority.permits(name):
+                    return RecordedResult(False, None, "NOT_AUTHORIZED", None, None)
                 if saved is not None:
                     return RecordedResult(True,saved,None,op.operation_id,'succeeded',True)
                 code={'prepared':'IN_PROGRESS','dispatched':'IN_PROGRESS','unknown':'OUTCOME_UNKNOWN'}.get(op.state,'ALREADY_RECORDED')
@@ -356,7 +358,7 @@ class LeasedToolBridge:
             validated_arguments({'left': arguments['left'], 'right': arguments['right']})
         except OperationError as exc:
             return BridgeResult(False,None,None,False,exc.code)
-        if 'checked_add' not in self.authority.allowed_tools:
+        if not self.authority.permits('checked_add'):
             return BridgeResult(False,None,None,False,'NOT_AUTHORIZED')
         if cancellation is not None and cancellation.cancelled:
             return BridgeResult(False,None,None,False,'CANCELLED')

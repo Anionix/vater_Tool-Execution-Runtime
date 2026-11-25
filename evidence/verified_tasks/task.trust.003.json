@@ -12,5 +12,11 @@
     "クライアント",
     "ツール"
   ],
-  "scope": "Documentation coverage only"
+  "scope": "Actor permissions in the local profile and an actual host-side denial.",
+  "verified_on": "2026-11-25",
+  "test_cases": [
+    "tests/test_contracts.py::test_trust_inventory[actors]",
+    "tests/test_official_mcp_sdk.py::test_sdk_access_denied"
+  ],
+  "report_path": "evidence/gates/trust-tests.xml"
 }

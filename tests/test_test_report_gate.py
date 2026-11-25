@@ -81,3 +81,16 @@ def test_rejects_orphan_testcases_without_suite(tmp_path):
     p.write_text("<testsuites>" + "<testcase classname=\"fake\" name=\"case\"/>" * 14 + "</testsuites>")
     with pytest.raises(ValueError, match="MISSING_TEST_SUITE"):
         m.check_report(p, minimum=14)
+
+
+@pytest.mark.parametrize("names", [["other", "other"], ["target", "target"]], ids=["missing", "duplicate"])
+def test_phase_requires_each_named_case_exactly_once(tmp_path, monkeypatch, names):
+    monkeypatch.syspath_prepend(str(ROOT / "scripts"))
+    from verify_phase import verify_report
+    path = tmp_path / "phase.xml"
+    suite = ET.Element("testsuite", tests="2", failures="0", errors="0", skipped="0")
+    for name in names:
+        ET.SubElement(suite, "testcase", classname="tests.test_scope", name=name)
+    ET.ElementTree(suite).write(path)
+    with pytest.raises(ValueError, match="Missing or repeated required case"):
+        verify_report(path, {"one-task": ["tests/test_scope.py::target"]})

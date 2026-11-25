@@ -11,8 +11,10 @@ user authentication and must never be represented as one.
 """
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum
+from threading import Event
+from time import monotonic_ns
 from typing import Any, Mapping
 
 UNSIGNED_32_MAX = 2**32 - 1
@@ -64,6 +66,21 @@ class ExecutionTrace:
 class LocalAuthority:
     """Server-configured local capability, never read from untrusted tool input."""
     allowed_tools: frozenset[str]
+    expires_at_monotonic_ns: int | None = field(default=None, kw_only=True)
+    revocation_event: Event | None = field(default=None, kw_only=True, repr=False)
+
+    def __post_init__(self) -> None:
+        deadline = self.expires_at_monotonic_ns
+        if deadline is not None and (type(deadline) is not int or deadline < 0):
+            raise ValueError("invalid host grant deadline")
+
+    def permits(self, tool_name: str) -> bool:
+        """task.trust.011: consult the live, process-local host grant."""
+        return (
+            tool_name in self.allowed_tools
+            and (self.revocation_event is None or not self.revocation_event.is_set())
+            and (self.expires_at_monotonic_ns is None or monotonic_ns() < self.expires_at_monotonic_ns)
+        )
 
     @classmethod
     def calculator_only(cls) -> "LocalAuthority":
@@ -128,7 +145,7 @@ class CalculationService:
 
         trace.move(State.VALIDATED)
         # AUTHORIZATION-001: only the server-supplied authority is consulted.
-        if name not in self.authority.allowed_tools:
+        if not self.authority.permits(name):
             trace.move(State.REJECTED)
             return ExecutionResult(None, "NOT_AUTHORIZED", tuple(s.value for s in trace.states))
 

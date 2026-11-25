@@ -1,0 +1,14 @@
+{
+  "task_id": "task.trust.010",
+  "acceptance_criteria": "要求本文の自称識別子を採用しない",
+  "scope": "Host principal used for request and ledger isolation in single-user local operation.",
+  "verification_status": "passed",
+  "executed": true,
+  "verified_on": "2026-11-25",
+  "test_cases": [
+    "tests/test_official_mcp_sdk.py::test_sdk_recorded_tool_unauthorized_in_process",
+    "tests/test_recorded_cli.py::test_real_process_unauthorized_client_cannot_supply_identity",
+    "tests/test_recorded_tool_bridge.py::test_bridge_principal_isolated"
+  ],
+  "report_path": "evidence/gates/trust-tests.xml"
+}

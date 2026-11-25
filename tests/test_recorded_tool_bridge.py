@@ -162,3 +162,56 @@ def test_inflight_replay_is_explicit_and_not_redispatched(tmp_path, monkeypatch)
     from_cache = call(tool)
     assert from_cache.ok and from_cache.replayed and from_cache.value == 13
     assert db.history(final.operation_id).count("dispatched") == 1
+
+
+@pytest.mark.parametrize("mode", ["recorded", "leased", "asynchronous"])
+@pytest.mark.parametrize("loss", ["expired", "revoked"])
+@pytest.mark.parametrize("when", ["before_request", "during_read"])
+def test_replay_requires_live_host_grant(tmp_path, monkeypatch, mode, loss, when):
+    from threading import Event
+    import anyio
+    from verified_execution import core
+    from verified_execution.cancellable_bridge import CancellableLeasedToolBridge
+    from verified_execution.worker_leases import LeasedLedger, LeasedToolBridge
+
+    clock = [10]
+    monkeypatch.setattr(core, "monotonic_ns", lambda: clock[0])
+    revoked = Event()
+    authority = LocalAuthority(frozenset({"checked_add"}), expires_at_monotonic_ns=11,
+                               revocation_event=revoked)
+    db_type = OperationLedger if mode == "recorded" else LeasedLedger
+    db = db_type(tmp_path / "records.sqlite")
+    def lose_grant():
+        if loss == "expired":
+            clock[0] = 11  # At the exact deadline, the grant has expired.
+        else:
+            revoked.set()
+
+    async def run():
+        bridge_type = {"recorded": RecordedToolBridge, "leased": LeasedToolBridge,
+                       "asynchronous": CancellableLeasedToolBridge}[mode]
+        bridge = bridge_type(db, principal="host-user", authority=authority)
+        async def request():
+            args = {"left": 2, "right": 3, "request_key": "stable"}
+            if mode == "asynchronous":
+                return await bridge.acall("checked_add_recorded", args)
+            return bridge.call("checked_add_recorded", args)
+        first = await request()
+        assert first.ok and first.value == 5
+        replay = await request()
+        assert replay.ok and replay.replayed and replay.operation_id == first.operation_id
+        history = db.history(first.operation_id)
+        if when == "during_read":
+            read = db.read_calculation
+            def read_then_lose(*args, **kwargs):
+                value = read(*args, **kwargs)
+                lose_grant()
+                return value
+            monkeypatch.setattr(db, "read_calculation", read_then_lose)
+        else:
+            lose_grant()
+        denied = await request()
+        assert denied.error_code == "NOT_AUTHORIZED"
+        assert not denied.ok and denied.value is None and denied.operation_id is None
+        assert db.history(first.operation_id) == history
+    anyio.run(run)

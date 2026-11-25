@@ -1,0 +1,14 @@
+{
+  "task_id": "task.trust.014",
+  "acceptance_criteria": "ルール不在の操作が拒否される",
+  "scope": "Denial of a known tool without a grant and rejection of unregistered tools.",
+  "verification_status": "passed",
+  "executed": true,
+  "verified_on": "2026-11-25",
+  "test_cases": [
+    "tests/test_core.py::test_service_denies_even_read_tool_without_authority",
+    "tests/test_core.py::test_unknown_tool",
+    "tests/test_official_mcp_sdk.py::test_sdk_access_denied"
+  ],
+  "report_path": "evidence/gates/trust-tests.xml"
+}

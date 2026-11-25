@@ -1,0 +1,17 @@
+{
+  "task_id": "task.trust.013",
+  "acceptance_criteria": "全ツールへ危険度が付く",
+  "scope": "Both registered tools are classified against the read-only, state-changing, irreversible and code-execution taxonomy.",
+  "verification_status": "passed",
+  "executed": true,
+  "verified_on": "2026-11-25",
+  "test_cases": [
+    "tests/test_adapter_boundary.py::test_every_registered_tool_has_a_risk_class",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[launch_guarded_mcp.py-2026-07-28]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[launch_guarded_mcp.py-legacy]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[run_local_mcp.py-2026-07-28]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[run_local_mcp.py-legacy]",
+    "tests/test_official_mcp_sdk.py::test_sdk_recorded_tool_stdio_modern"
+  ],
+  "report_path": "evidence/gates/trust-tests.xml"
+}

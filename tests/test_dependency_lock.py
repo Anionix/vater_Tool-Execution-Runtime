@@ -95,3 +95,25 @@ def test_file_size_limit(tmp_path):
     path.write_bytes(b"x" * 1_048_577)
     with pytest.raises(lock.LockRejected, match="LOCK-TOO-LARGE"):
         lock.verify_file(path)
+
+
+def test_installed_distribution_origins_and_digests_match_lock():
+    import json
+    from urllib.parse import urlsplit
+    evidence = json.loads((ROOT / "evidence/verified_tasks/task.trust.018.json").read_text())
+    lock_path = ROOT / "requirements-py313.lock"
+    versions = lock.verify_file(lock_path)
+    artifacts = {}
+    for tokens in lock._logical_records(lock_path.read_text()):
+        name = lock.canonical_name(tokens[0].split("==")[0])
+        artifacts[name] = {token.removeprefix("--hash=sha256:") for token in tokens[1:]}
+    installed = evidence["distributions"]
+    assert evidence["index_url"] == "https://pypi.org/simple"
+    assert len(installed) == len(versions)
+    assert {lock.canonical_name(row["name"]) for row in installed} == set(versions)
+    for row in installed:
+        name = lock.canonical_name(row["name"])
+        source = urlsplit(row["url"])
+        assert (source.scheme, source.netloc) == ("https", "files.pythonhosted.org")
+        assert source.path.endswith(".whl")
+        assert row["version"] == versions[name] and row["sha256"] in artifacts[name]

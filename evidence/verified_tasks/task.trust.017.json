@@ -1,0 +1,14 @@
+{
+  "task_id": "task.trust.017",
+  "acceptance_criteria": "無条件再試行を禁止している",
+  "scope": "Indeterminate operations remain recorded; replay does not perform a second dispatch.",
+  "verification_status": "passed",
+  "executed": true,
+  "verified_on": "2026-11-25",
+  "test_cases": [
+    "tests/test_ledger.py::test_real_crash_after_dispatch_recovers_as_unknown",
+    "tests/test_ledger.py::test_reread_does_not_auto_retry_unknown",
+    "tests/test_recorded_tool_bridge.py::test_unknown_never_autoretries"
+  ],
+  "report_path": "evidence/gates/trust-tests.xml"
+}

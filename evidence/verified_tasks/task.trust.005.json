@@ -1,0 +1,12 @@
+{
+  "task_id": "task.trust.005",
+  "acceptance_criteria": "説明文変更でも権限判断が変わらない",
+  "scope": "Two published descriptions with both host allow and host deny decisions.",
+  "verification_status": "passed",
+  "executed": true,
+  "verified_on": "2026-11-25",
+  "test_cases": [
+    "tests/test_adapter_boundary.py::test_tool_description_does_not_grant_permission"
+  ],
+  "report_path": "evidence/gates/trust-tests.xml"
+}

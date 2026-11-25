@@ -11,5 +11,11 @@
     "操作履歴",
     "機密入力"
   ],
-  "scope": "Documentation coverage only"
+  "scope": "Four protected asset classes in the architecture inventory.",
+  "verified_on": "2026-11-25",
+  "test_cases": [
+    "tests/test_contracts.py::test_trust_inventory[assets]",
+    "tests/test_local_mcp_launcher.py::test_launcher_does_not_inherit_environment"
+  ],
+  "report_path": "evidence/gates/trust-tests.xml"
 }

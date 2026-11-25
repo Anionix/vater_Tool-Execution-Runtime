@@ -1,0 +1,13 @@
+{
+  "scope": "Host policy specification for locally registered tools",
+  "risk_classes": ["read_only", "state_change", "irreversible", "code_execution"],
+  "tools": {
+    "checked_add": "read_only",
+    "checked_add_recorded": "state_change"
+  },
+  "minimum_profile": {
+    "registered_tools": ["checked_add"],
+    "allowed_external_destinations": []
+  },
+  "actions_requiring_approval_if_enabled": ["delete", "send", "purchase"]
+}

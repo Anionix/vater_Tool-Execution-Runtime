@@ -1,0 +1,16 @@
+{
+  "task_id": "task.trust.004",
+  "acceptance_criteria": "ローカル標準入出力にHTTP認可方式を誤適用しない",
+  "scope": "Real local stdio sessions under both supported protocol modes; HTTP authorization belongs to a separate profile.",
+  "verification_status": "passed",
+  "executed": true,
+  "verified_on": "2026-11-25",
+  "test_cases": [
+    "tests/test_official_mcp_sdk.py::test_sdk_access_denied",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[launch_guarded_mcp.py-2026-07-28]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[launch_guarded_mcp.py-legacy]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[run_local_mcp.py-2026-07-28]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[run_local_mcp.py-legacy]"
+  ],
+  "report_path": "evidence/gates/trust-tests.xml"
+}
