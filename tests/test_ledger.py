@@ -66,6 +66,23 @@ def test_same_request_same_fingerprint_returns_same_id(ledger):
     assert ledger.history(first.operation_id) == ["reserved"]
 
 
+def test_approval_binds_equivalent_argument_encodings(ledger):
+    operation = reserve(ledger, arguments={"right": 2, "left": 1}, requires_approval=True)
+    approve(ledger, operation, arguments={"left": 1, "right": 2})
+    dispatched = ledger.begin_dispatch(operation.operation_id, approval_id="approval-1")
+    assert dispatched.state == "dispatched"
+
+
+def test_fingerprint_uses_sorted_compact_utf8_json():
+    from hashlib import sha256
+
+    expected = sha256('{"nested":{"a":true,"z":null},"題":[2,1]}'.encode("utf-8")).hexdigest()
+    spaced = json.loads(r'{ "\u984c": [2, 1], "nested": { "z": null, "a": true } }')
+    assert fingerprint(spaced) == expected
+    assert fingerprint({"nested": {"a": True, "z": None}, "題": [2, 1]}) == expected
+    assert fingerprint({"nested": {"a": True, "z": None}, "題": [1, 2]}) != expected
+
+
 @pytest.mark.parametrize("change", [
     {"arguments": {"left": 2, "right": 2}},
     {"target_id": "resource-2"},

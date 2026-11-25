@@ -1,0 +1,20 @@
+{
+  "task_id": "task.contracts.004",
+  "acceptance_criteria": "通信再試行で値が変わらない",
+  "scope": "Replaying the same principal, request key, and intent returns the existing operation identifier.",
+  "verified_on": "2026-11-25",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_ledger.py::test_same_request_same_fingerprint_returns_same_id",
+    "tests/test_recorded_calculator.py::test_repeated_request_cannot_run_again"
+  ],
+  "report_path": "evidence/contracts-batch-tests.xml",
+  "report_sha256": "334b95a2d6f6b1225cb19bb019f07183b3050a16bd2445585355793c299b7236",
+  "source_sha256": {
+    "src/verified_execution/ledger.py": "bdbb5f8ba92a3e286042df7ddc98597bccf8960929466d93d648efc1aa555540",
+    "src/verified_execution/recorded_calculator.py": "8a17aef6125a0109c1c96c1dc1f6e0b31ebc66e618a9bf077eadeb9786fdb4f8",
+    "tests/test_ledger.py": "d4cf3c38949e718558d35bfb63eeb2d39cced84010b74d6ffc1befc4f1105770",
+    "tests/test_recorded_calculator.py": "35cbed27d1dff0770ca7b3780ca244b3b7f0582ed8f39812038d596720fb38cc"
+  }
+}
