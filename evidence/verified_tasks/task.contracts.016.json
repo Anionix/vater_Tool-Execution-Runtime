@@ -1,0 +1,18 @@
+{
+  "task_id": "task.contracts.016",
+  "acceptance_criteria": "同じ操作は一定のダイジェストになる",
+  "scope": "The ledger binds approval to normalized argument data plus separate principal, tool, target and version fields.",
+  "verified_on": "2026-11-25",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_ledger.py::test_approval_binds_equivalent_argument_encodings",
+    "tests/test_ledger.py::test_mismatched_approval_rejected[change3]"
+  ],
+  "report_path": "evidence/contracts-batch-tests.xml",
+  "report_sha256": "334b95a2d6f6b1225cb19bb019f07183b3050a16bd2445585355793c299b7236",
+  "source_sha256": {
+    "src/verified_execution/ledger.py": "bdbb5f8ba92a3e286042df7ddc98597bccf8960929466d93d648efc1aa555540",
+    "tests/test_ledger.py": "d4cf3c38949e718558d35bfb63eeb2d39cced84010b74d6ffc1befc4f1105770"
+  }
+}

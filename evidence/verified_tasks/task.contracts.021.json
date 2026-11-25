@@ -1,0 +1,29 @@
+{
+  "task_id": "task.contracts.021",
+  "acceptance_criteria": "契約サンプルと反例が検査できる",
+  "scope": "Draft 2020-12 checks the input schema and positive and negative examples. Runtime examples also exercise the stricter Python integer boundary.",
+  "verified_on": "2026-11-25",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_contracts.py::test_json_schema_contract",
+    "tests/test_contracts.py::test_expected_case[CALC-001]",
+    "tests/test_contracts.py::test_expected_case[CALC-002]",
+    "tests/test_contracts.py::test_expected_case[CALC-003]",
+    "tests/test_contracts.py::test_expected_case[CALC-004]",
+    "tests/test_contracts.py::test_expected_case[CALC-005]",
+    "tests/test_contracts.py::test_expected_case[CALC-006]",
+    "tests/test_contracts.py::test_expected_case[CALC-007]",
+    "tests/test_contracts.py::test_expected_case[CALC-008]",
+    "tests/test_contracts.py::test_expected_case[CALC-009]",
+    "tests/test_contracts.py::test_expected_case[CALC-010]"
+  ],
+  "report_path": "evidence/contracts-batch-tests.xml",
+  "report_sha256": "334b95a2d6f6b1225cb19bb019f07183b3050a16bd2445585355793c299b7236",
+  "source_sha256": {
+    "contracts/checked_add.input.schema.json": "d9cbeeff8d08fff5c2a9886c20b7aef93c4db3879be256e7c4f60f717eefa41d",
+    "contracts/expected_cases.jsonl": "8185d1a22a038e10517f76887cde19f348ab0dbdd4d6ed20734b9b41c37e7a34",
+    "src/verified_execution/core.py": "64f7df62326f24b975129193840fa25e45737cc4d717257c9391f9b715b84028",
+    "tests/test_contracts.py": "9a6aaab898921fe3dafb081eca4ceb45c7f96ad7ac08130a920d7d6ae4167077"
+  }
+}

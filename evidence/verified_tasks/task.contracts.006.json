@@ -1,0 +1,23 @@
+{
+  "task_id": "task.contracts.006",
+  "acceptance_criteria": "承認対象と一意に紐付く",
+  "scope": "A local approval binds principal, tool, target, version and argument digest, and can be consumed once.",
+  "verified_on": "2026-11-25",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_ledger.py::test_bound_approval_is_consumed_and_dispatches",
+    "tests/test_ledger.py::test_approval_cannot_be_reused_across_operations",
+    "tests/test_ledger.py::test_duplicate_approval_identifier_rejected",
+    "tests/test_ledger.py::test_mismatched_approval_rejected[change0]",
+    "tests/test_ledger.py::test_mismatched_approval_rejected[change1]",
+    "tests/test_ledger.py::test_mismatched_approval_rejected[change2]",
+    "tests/test_ledger.py::test_mismatched_approval_rejected[change3]"
+  ],
+  "report_path": "evidence/contracts-batch-tests.xml",
+  "report_sha256": "334b95a2d6f6b1225cb19bb019f07183b3050a16bd2445585355793c299b7236",
+  "source_sha256": {
+    "src/verified_execution/ledger.py": "bdbb5f8ba92a3e286042df7ddc98597bccf8960929466d93d648efc1aa555540",
+    "tests/test_ledger.py": "d4cf3c38949e718558d35bfb63eeb2d39cced84010b74d6ffc1befc4f1105770"
+  }
+}

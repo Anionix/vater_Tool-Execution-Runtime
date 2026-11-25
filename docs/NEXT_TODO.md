@@ -1,5 +1,10 @@
 # 次の作業
 
+契約段階の完了済み項目は `python scripts/verify_phase.py contracts --completed-only` で再検証できる。対象データの版（`task.contracts.007`）は、保存済みの版同士を比較できる。実行直前の対象の最新版を取得して照合する経路の証拠は未確認。
+
+- 正規化の基礎仕様は [RFC 8259](https://www.rfc-editor.org/rfc/rfc8259.html)。キー順、空白、ダイジェスト計算は Vater のローカル契約として試験する。
+- 入力形式は [JSON Schema Draft 2020-12](https://json-schema.org/draft/2020-12) の検証器で試験する。
+
 「目的と境界」と「脅威・信頼境界」の完了判定を通過した。次の段階は「契約とデータの意味」。各項目の合格条件と前提は [作業台帳](../backlog/tasks.jsonl) が正本。
 
 ## 進捗と検証

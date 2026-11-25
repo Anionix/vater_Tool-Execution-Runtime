@@ -21,7 +21,7 @@ from check_test_report import check_report
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def phase_cases(phase: str) -> dict[str, list[str]]:
+def phase_cases(phase: str, *, completed_only: bool = False) -> dict[str, list[str]]:
     rows = [json.loads(line) for line in (ROOT / "backlog/tasks.jsonl").read_text().splitlines()]
     tasks = {row["task_id"]: row for row in rows}
     if len(rows) != len(tasks):
@@ -30,6 +30,10 @@ def phase_cases(phase: str) -> dict[str, list[str]]:
     members = {key for key, row in tasks.items() if row["phase"] == phase and key.startswith("task.")}
     if not gate or not members or members != set(gate["depends_on"]):
         raise ValueError(f"Phase membership does not match gate dependencies: {phase}")
+    if completed_only:
+        members = {key for key in members if tasks[key]["status"] == "done"}
+        if not members:
+            raise ValueError(f"No completed tasks: {phase}")
     inventory = {}
     for key in sorted(members):
         row = tasks[key]
@@ -97,9 +101,13 @@ def main() -> int:
     reports.add_argument("--report", type=Path, help="verify an existing passing JUnit report")
     reports.add_argument("--snapshot", action="store_true", help="check the recorded file hashes and their archived report")
     reports.add_argument("--junitxml", type=Path, help="retain the report from a new run")
+    parser.add_argument("--completed-only", action="store_true",
+                        help="check completed tasks without asserting phase completion")
     args = parser.parse_args()
+    if args.completed_only and args.snapshot:
+        parser.error("--snapshot requires a full phase gate")
     try:
-        inventory = phase_cases(args.phase)
+        inventory = phase_cases(args.phase, completed_only=args.completed_only)
         with TemporaryDirectory() as tmp:
             if args.snapshot:
                 report = archived_report(args.phase)
@@ -111,7 +119,8 @@ def main() -> int:
                                 f"--junitxml={report}", "--", *cases], cwd=ROOT, check=True)
             else:
                 report = args.report
-            print(json.dumps({"phase": args.phase, **verify_report(report, inventory)}, sort_keys=True))
+            print(json.dumps({"phase": args.phase, "completed_only": args.completed_only,
+                              **verify_report(report, inventory)}, sort_keys=True))
     except (KeyError, OSError, TypeError, ValueError, subprocess.CalledProcessError) as error:
         print(str(error), file=sys.stderr)
         return 1
