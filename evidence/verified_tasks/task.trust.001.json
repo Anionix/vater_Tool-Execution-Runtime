@@ -1,0 +1,15 @@
+{
+  "task_id": "task.trust.001",
+  "executed": true,
+  "verification_status": "passed",
+  "source_commit": "355f74280529d64c7b7824efc554e28222de35b3",
+  "source_path": "docs/ARCHITECTURE.md",
+  "acceptance_criteria": "ファイル・認証情報・作業履歴・機密入力を記載する",
+  "checked_table_rows": [
+    "実行ファイル",
+    "認証情報",
+    "操作履歴",
+    "機密入力"
+  ],
+  "scope": "Documentation coverage only"
+}
