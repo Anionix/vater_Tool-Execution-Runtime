@@ -4,9 +4,12 @@
   "version": "1.1.0",
   "sha256": {
     "src/verified_execution/__init__.py": "94d39425d41ecda83611f635e1ea690a6492d008b0957726973b3ecd031e16d9",
-    "src/verified_execution/core.py": "54cfd0f06fc9cc0e4519da3bd66515186ea1269648bf59d86dc6f244a6a2742e",
-    "server_mcp.py": "e64ea42c483ecbc127be068bb815470c330c6f568c38ffae19f453ea9824b8e9",
+    "src/verified_execution/core.py": "300c8210fc16fe60f98fe79b4d70c2643d3ea44ee1e7660950797c19f3b814a3",
+    "src/verified_execution/runtime.py": "d45a789b96e193aae2ca7311b4292e18fc501195f990dce770aa79af4ebe6563",
+    "src/verified_execution/tools.py": "475440f7b24f0073455a281bf671898b5cb2f84aa55d1af5a8e367b8a6e08265",
+    "server_mcp.py": "9b0f79375091dc4d5271df051ec75a99d61061c64de711e8b628faa083338f14",
     "contracts/checked_add.input.schema.json": "d9cbeeff8d08fff5c2a9886c20b7aef93c4db3879be256e7c4f60f717eefa41d",
-    "contracts/checked_add.output.contract.json": "fc44dbe5bbae215503356ab16f03d5c8b122aa473928dfed11d54aa4e0ea5145"
+    "contracts/checked_add.output.contract.json": "fc44dbe5bbae215503356ab16f03d5c8b122aa473928dfed11d54aa4e0ea5145",
+    "contracts/tool_risks.json": "f7a6d4db772ed7c8247906cdc19eb7b15b560c63db8283fe017e70a2c5882a4b"
   }
 }
