@@ -182,6 +182,7 @@ def test_version_one_contract_remains_compatible(tmp_path):
     assert re.fullmatch(r"1\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)", contract["contract_version"])
     with running_server(tmp_path) as exchange:
         tool = exchange(1, "tools/list", {})["result"]["tools"][0]
+    assert tool["inputSchema"] == json.loads((ROOT / "contracts/checked_add.input.schema.json").read_text())
     assert tool["_meta"]["io.github.anionix/contract"]["version"] == contract["contract_version"]
     assert tool["outputSchema"] == {"type": "object", "required": ["result"], "additionalProperties": False,
                                    "properties": {"result": {"type": "integer", "minimum": 0, "maximum": 4294967295}}}
