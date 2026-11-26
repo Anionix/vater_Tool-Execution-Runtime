@@ -1,0 +1,16 @@
+{
+  "task_id": "task.authorization.002",
+  "acceptance_criteria": "両者の識別子が異なる",
+  "scope": "The ledger user and the service publisher have separate identifiers, and collisions are refused.",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_adapter_boundary.py::test_host_call_budget_blocks_execution_before_reservation"
+  ],
+  "report_path": "evidence/authorization-gate-tests.xml",
+  "report_sha256": "ba03242350e57854ec4b155c787fccb7b5c2ae58a1a9f276d90fe250b5f7f25d",
+  "source_sha256": {
+    "tests/test_adapter_boundary.py": "4c5b04e4d233f88079fb204f1f27a7b14fbd810f6aa336ba283b1f78003d6ac3"
+  }
+}

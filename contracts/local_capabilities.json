@@ -8,7 +8,7 @@
   "error_categories": {
     "input": ["INVALID_ARGUMENT", "OUT_OF_RANGE", "OVERFLOW"],
     "authentication": ["INVALID_PRINCIPAL"],
-    "authorization": ["NOT_AUTHORIZED", "APPROVAL_INVALID"],
+    "authorization": ["NOT_AUTHORIZED", "APPROVAL_INVALID", "BUDGET_EXCEEDED"],
     "contract": ["UNKNOWN_TOOL", "INVALID_TOOL_RESULT", "UNSUPPORTED_OPERATION", "RESOURCE_VERSION_CHANGED"],
     "external": ["TIMEOUT"],
     "unknown": ["OUTCOME_UNKNOWN"]
