@@ -59,6 +59,11 @@ class FakeGitHub:
                 raise TransportError("TimeoutError")
             if step == "server_error_after_create":
                 return HttpReply(500, {}, None)
+            if step == "empty_success_body":
+                return HttpReply(201, {}, None)
+            if step == "edited_before_read":
+                self.issues[-1] = {**issue, "title": "edited by someone", "updated_at": "2026-11-26T00:01:00Z"}
+                return HttpReply(201, {}, issue)
             if step == "wrong_title":
                 return HttpReply(201, {}, {**issue, "title": "someone else's issue"})
             return HttpReply(201, {}, issue)
@@ -295,3 +300,29 @@ def test_succeeded_ledger_without_a_stored_result_is_recovered_by_lookup(host, g
     assert (again.ok, again.value, again.replayed) == (True, 1, True)
     assert restarted.store.get(first.operation_id)["status"] == "reconciled"
     assert github.posts == 1
+
+
+# --- Codex review on #382: one snapshot per version; unreadable success ------
+
+def test_version_fields_come_from_one_snapshot(host, github):
+    result = host.create()
+    version = host.store.get(result.operation_id)["version"]
+    snapshot = github.issues[0]
+    assert version["etag"] == 'W/"etag-1"' and version["updated_at"] == snapshot["updated_at"]
+    assert version["content_sha256"] == GitHubIssueDestination.version(snapshot, None)["content_sha256"]
+
+
+def test_issue_edited_before_the_version_read_is_a_target_mismatch(host, github):
+    github.script = ["edited_before_read"]
+    result = host.create()
+    assert result.error_code == "TARGET_MISMATCH"
+    assert host.store.get(result.operation_id)["status"] == "human_required"
+    assert host.state(result.operation_id) == "unknown" and github.posts == 1
+
+
+def test_success_without_a_readable_body_is_reconciled_not_failed(host, github):
+    github.script = ["empty_success_body"]
+    result = host.create()
+    assert (result.ok, result.value) == (True, 1)
+    assert host.store.get(result.operation_id)["status"] == "reconciled"
+    assert host.state(result.operation_id) == "succeeded" and github.posts == 1

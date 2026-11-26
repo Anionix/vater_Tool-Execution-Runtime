@@ -201,6 +201,9 @@ class GitHubIssueDestination:
             return SendOutcome("unknown", detail=f"no reply: {error}")
         if reply.status == 201 and isinstance(reply.body, Mapping):
             return SendOutcome("confirmed", obj=reply.body)
+        if 200 <= reply.status < 300:
+            # Success without a usable body: the issue may exist. Reconcile, never resend.
+            return SendOutcome("unknown", detail=f"HTTP {reply.status} without a usable body")
         wait = self._rate_limit_wait(reply)
         if wait is not None:
             return SendOutcome("not_executed", wait_seconds=wait, detail=f"rate limited: HTTP {reply.status}")
@@ -249,17 +252,22 @@ class GitHubIssueDestination:
                 and type(obj.get("number")) is int and obj["number"] > 0
                 and self.marker(operation_id) in str(obj.get("body") or "").splitlines())
 
-    def version(self, obj: Mapping[str, Any]) -> dict[str, Any]:
+    def snapshot(self, number: int) -> tuple[Mapping[str, Any] | None, str | None]:
+        """One GET of the issue: its body and the ETag of that same response."""
+        try:
+            reply = self.transport.request("GET", f"/issues/{number}")
+        except TransportError:
+            return None, None
+        if reply.status != 200 or not isinstance(reply.body, Mapping):
+            return None, None
+        return reply.body, reply.headers.get("etag")
+
+    @staticmethod
+    def version(obj: Mapping[str, Any], etag: str | None) -> dict[str, Any]:
+        """Version fields of ONE snapshot; etag must come from the response that returned obj."""
         labels = sorted(label.get("name") for label in obj.get("labels") or [] if isinstance(label, Mapping))
         canonical = json.dumps({"title": obj.get("title"), "body": obj.get("body"), "labels": labels},
                                sort_keys=True, separators=(",", ":"), ensure_ascii=False)
-        etag = None
-        try:
-            reply = self.transport.request("GET", f"/issues/{obj['number']}")
-            if reply.status == 200:
-                etag = reply.headers.get("etag")
-        except TransportError:
-            pass
         return {"number": obj.get("number"), "node_id": obj.get("node_id"), "updated_at": obj.get("updated_at"),
                 "etag": etag, "content_sha256": sha256(canonical.encode("utf-8")).hexdigest()}
 
@@ -406,12 +414,18 @@ class ExternalChangeExecutor:
     def _confirm(self, op: Operation, request: IssueRequest, obj: Mapping[str, Any],
                  *, replayed: bool, reconciled: bool = False) -> BridgeResult:
         state = self.ledger.get(op.operation_id).state
-        if not self.destination.check(op.operation_id, request.title, obj):
+        # EXTERNAL-021: the version is taken from one fresh snapshot, which must
+        # itself still match the request; without a snapshot, no ETag is claimed.
+        current, etag = (self.destination.snapshot(obj["number"])
+                         if type(obj.get("number")) is int else (None, None))
+        verified = current if current is not None else obj
+        if not (self.destination.check(op.operation_id, request.title, obj)
+                and self.destination.check(op.operation_id, request.title, verified)):
             if state == "dispatched":
                 self.ledger.mark_unknown(op.operation_id)
             self.store.record(op.operation_id, "human_required", detail="TARGET_MISMATCH")
             return _error("TARGET_MISMATCH", op, replayed=replayed)
-        version = self.destination.version(obj)
+        version = self.destination.version(verified, etag if current is not None else None)
         # The result is stored BEFORE the ledger claims success, so a crash in
         # between can never leave a succeeded operation without its result. A
         # ledger operation already unknown or succeeded is not rewritten.
