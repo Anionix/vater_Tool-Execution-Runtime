@@ -18,6 +18,11 @@ State: received -> validated -> authorized -> running -> completed
 from __future__ import annotations
 
 import json
+import logging
+import os
+import select
+from time import monotonic_ns
+from uuid import UUID, uuid4
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -34,13 +39,13 @@ from mcp.types import (
 )
 
 from verified_execution.client_result import read_checked_add_result
-from verified_execution.core import CalculationService, LocalAuthority, OperationError
-from verified_execution.ledger import OperationLedger
+from verified_execution.core import LOCAL_PUBLISHER, CalculationService, LocalAuthority, OperationError
+from verified_execution.ledger import HostPrincipal, OperationLedger
 from verified_execution.worker_leases import LeasedLedger, LeasedToolBridge
 from verified_execution.cancellable_bridge import CancellableLeasedToolBridge, Checkpoint
 from verified_execution.cancellation_journal import CancellationJournal
 from verified_execution.recorded_tool_bridge import BridgeResult, RECORDED_TOOL_NAME, RecordedToolBridge
-from verified_execution.request_limits import ReadOnlyPolicy, BoundedReadOnlyExecutor
+from verified_execution.request_limits import BoundedReadOnlyExecutor, ReadOnlyPolicy
 from verified_execution.policy_config import load_local_policy
 
 ROOT = Path(__file__).resolve().parent
@@ -51,15 +56,22 @@ _READONLY_POLICY = ReadOnlyPolicy(
     max_concurrent=_LIMITS.readonly_max_concurrent,
 )
 INPUT_SCHEMA = json.loads((ROOT / "contracts" / "checked_add.input.schema.json").read_text(encoding="utf-8"))
+OUTPUT_CONTRACT = json.loads((ROOT / "contracts" / "checked_add.output.contract.json").read_text(encoding="utf-8"))
+CAPABILITIES = json.loads((ROOT / "contracts" / "local_capabilities.json").read_text(encoding="utf-8"))
+ERROR_CATEGORY = {code: category for category, codes in CAPABILITIES["error_categories"].items()
+                  for code in codes}
+SUCCESS = OUTPUT_CONTRACT["domains"]["success"]
 OUTPUT_SCHEMA = {
-    "type": "object",
-    "properties": {"result": {"type": "integer", "minimum": 0, "maximum": 4294967295}},
-    "required": ["result"],
+    "type": SUCCESS["type"],
+    "properties": {"result": SUCCESS["result"]},
+    "required": SUCCESS["required"],
     "additionalProperties": False,
 }
 TOOL = Tool(
     name="checked_add",
     description="Add unsigned 32-bit integers without overflow or side effects.",
+    meta={"io.github.anionix/contract": {"publisher": LOCAL_PUBLISHER,
+                                       "version": OUTPUT_CONTRACT["contract_version"]}},
     input_schema=INPUT_SCHEMA,
     output_schema=OUTPUT_SCHEMA,
 )
@@ -88,6 +100,7 @@ RECORDED_OUTPUT_SCHEMA = {
 RECORDED_TOOL = Tool(
     name=RECORDED_TOOL_NAME,
     description="Durable, strict unsigned 32-bit addition; requires stable request_key.",
+    meta={"io.github.anionix/contract": {"publisher": LOCAL_PUBLISHER}},
     input_schema=RECORDED_INPUT_SCHEMA,
     output_schema=RECORDED_OUTPUT_SCHEMA,
 )
@@ -115,7 +128,7 @@ def _calculation_reply(authority: LocalAuthority, arguments: object, value: int 
             return _tool_error("INVALID_TOOL_RESULT")
         payload.update(operation_id=recorded.operation_id, replayed=recorded.replayed)
     return CallToolResult(content=[TextContent(type="text", text=str(result))],
-                          structured_content=payload)
+                          structured_content=payload, meta={"io.github.anionix/source": "local_calculator"})
 
 
 def build_server(authority: LocalAuthority | None = None, *,
@@ -126,6 +139,7 @@ def build_server(authority: LocalAuthority | None = None, *,
                  after_dispatch: Checkpoint | None = None,
                  after_commit: Checkpoint | None = None) -> Server:
     """Host chooses principal, authority and database. Never use caller-provided identity."""
+    identity = HostPrincipal(principal)
     if authority is None:
         authority = LocalAuthority.calculator_only()
     service = CalculationService(authority)
@@ -140,18 +154,18 @@ def build_server(authority: LocalAuthority | None = None, *,
             journal = CancellationJournal(intent_path)
             journal.replay(ledger)
             bridge = CancellableLeasedToolBridge(
-                ledger, principal=principal, authority=authority,
+                ledger, principal=identity.name, authority=authority,
                 before_dispatch=before_dispatch, after_dispatch=after_dispatch,
                 after_commit=after_commit, cancellation_journal=journal)
         else:
             # Local legacy mode only; don't mix with leased workers in production.
             bridge = RecordedToolBridge(OperationLedger(ledger_path),
-                                        principal=principal,authority=authority)
+                                        principal=identity.name, authority=authority)
 
     async def list_tools(_context: ServerRequestContext, _params: PaginatedRequestParams | None) -> ListToolsResult:
         return ListToolsResult(tools=[TOOL, RECORDED_TOOL] if bridge is not None else [TOOL])
 
-    async def call_tool(_context: ServerRequestContext, params: CallToolRequestParams) -> CallToolResult:
+    async def execute_tool(params: CallToolRequestParams) -> CallToolResult:
         if bridge is not None and params.name == RECORDED_TOOL_NAME:
             if isinstance(bridge, CancellableLeasedToolBridge):
                 # The SDK owns request identity, notification dispatch and
@@ -174,12 +188,44 @@ def build_server(authority: LocalAuthority | None = None, *,
             return _calculation_reply(authority, params.arguments, outcome.result)
         return _tool_error(outcome.error_code or "EXECUTION_FAILED")
 
+    trace_id = str(uuid4())
+
+    async def call_tool(_context: ServerRequestContext, params: CallToolRequestParams) -> CallToolResult:
+        # task.contracts.005 / .008: one host trace per server and one attempt per delivery.
+        # Only host-generated identifiers and fixed status values cross the audit boundary.
+        event = {"source": "mcp.tools.call", "trace_id": trace_id, "attempt_id": str(uuid4()),
+                 "outcome": "interrupted"}
+        started = monotonic_ns()
+        try:
+            reply = await execute_tool(params)
+            if getattr(reply, "is_error", False):
+                code = reply.content[0].text
+                event["outcome"] = "denied" if code == "NOT_AUTHORIZED" else "rejected"
+                event["error_category"] = ERROR_CATEGORY.get(code, "unknown")
+            else:
+                event["outcome"] = "succeeded"
+                identifier = reply.structured_content.get("operation_id")
+                if identifier is not None:
+                    # The durable ledger issues UUIDs. Never log arbitrary strings from a worker.
+                    try:
+                        event["operation_id"] = str(UUID(identifier))
+                    except (TypeError, ValueError, AttributeError):
+                        pass
+            return reply
+        finally:
+            event["elapsed_ns"] = monotonic_ns() - started
+            # A slow or disconnected diagnostics pipe must not stop protocol replies.
+            try:
+                if select.select([], [2], [], 0)[1]:
+                    os.write(2, (json.dumps(event, separators=(",", ":")) + "\n").encode("ascii"))
+            except OSError:
+                pass
+
     return Server("verified-calculator", version="0.11.0", on_list_tools=list_tools, on_call_tool=call_tool)
 
 
 # The optional recorded tool is enabled only by a trusted host-side environment.
 # Never obtain the database path or principal from MCP tool arguments.
-import os
 server = build_server(ledger_path=os.environ.get("VERIFIED_EXECUTION_LEDGER_PATH"))
 
 
@@ -189,4 +235,6 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
+    logging.getLogger("mcp").addHandler(logging.NullHandler())
+    logging.getLogger("mcp").propagate = False
     anyio.run(main)

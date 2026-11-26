@@ -39,8 +39,8 @@ class WorkerSession:
 
 
 class LeasedLedger(OperationLedger):
-    def __init__(self, path, *, timeout_seconds: float = 5.0):
-        super().__init__(path, timeout_seconds=timeout_seconds)
+    def __init__(self, path, *, timeout_seconds: float = 5.0, read_resource=None):
+        super().__init__(path, timeout_seconds=timeout_seconds, read_resource=read_resource)
         with self._open() as conn:
             conn.executescript("""
                 CREATE TABLE IF NOT EXISTS worker_sessions (
@@ -103,7 +103,8 @@ class LeasedLedger(OperationLedger):
             """, (expiry, token, now))
         return WorkerSession(token, expiry)
 
-    def start(self, operation_id: str, *, token: str, duration_ms: int = DEFAULT_LEASE_MS):
+    def start(self, operation_id: str, *, token: str, duration_ms: int = DEFAULT_LEASE_MS,
+              authority: LocalAuthority | None = None):
         """Transactional PREPARED -> DISPATCHED with a fenced lease. No approvals.
 
         Caller must run business policy before invoking this trusted operation.
@@ -111,15 +112,16 @@ class LeasedLedger(OperationLedger):
         operation_id = _text("operation_id", operation_id)
         token = _text("session_token", token)
         self._lease_duration(duration_ms)
-        now = self._now()
         with self._transaction() as conn:
-            self._assert_live_session(conn, token, now)
-            session_exp = conn.execute("SELECT expiry_ms FROM worker_sessions WHERE session_token=?", (token,)).fetchone()[0]
             op = self._get(conn, operation_id)
             if op.state != 'prepared' or op.cancel_requested:
                 raise LedgerError("NOT_PREPARED")
             if op.requires_approval or op.tool_name != 'checked_add':
                 raise LedgerError("UNSUPPORTED_OPERATION")
+            self._check_dispatch_grant(op, authority)
+            now = self._now()
+            self._assert_live_session(conn, token, now)
+            session_exp = conn.execute("SELECT expiry_ms FROM worker_sessions WHERE session_token=?", (token,)).fetchone()[0]
             expiry = min(session_exp, now + duration_ms)
             conn.execute(
                 "INSERT INTO operation_leases(operation_id,session_token,expiry_ms) VALUES (?,?,?)",
@@ -250,7 +252,8 @@ class LeasedLedger(OperationLedger):
     def recover_interrupted(self):
         return self.legacy_recovery()
 
-    def begin_dispatch(self, operation_id: str, *, approval_id: str | None = None):
+    def begin_dispatch(self, operation_id: str, *, approval_id: str | None = None,
+                       authority: LocalAuthority | None = None):
         """Old API is incompatible with fenced multi-worker execution."""
         raise LedgerError('OWNER_REQUIRED')
 
@@ -303,7 +306,7 @@ class LeasedCalculator:
                 if cancellation.cancelled:
                     return RecordedResult(False, None, 'CANCELLED',
                                           op.operation_id, 'cancelled')
-            self.ledger.start(op.operation_id,token=self.session.token)
+            self.ledger.start(op.operation_id, token=self.session.token, authority=self.authority)
         except LedgerError as exc:
             if cancellation is not None and cancellation.cancelled:
                 return RecordedResult(False,None,'CANCELLED',

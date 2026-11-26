@@ -1,0 +1,15 @@
+{
+  "task_id": "task.contracts.003",
+  "acceptance_criteria": "要求と応答だけを結び付ける",
+  "scope": "Responses echo the transport identifier, while audit and operation identifiers are independent.",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_local_contracts.py::test_protocol_routes_do_not_execute_query_or_model_requests",
+    "tests/test_local_contracts.py::test_trace_correlates_retries_without_recording_private_input"
+  ],
+  "report_path": "evidence/local-acceptance-tests.xml",
+  "report_sha256": "aee610ea687fad7318783b452bc188e2eb4ae4fefb82ad3a62eb527963a98395",
+  "source_commit": "010094ae1a77bdd8442740047d9c75225113c9dc"
+}

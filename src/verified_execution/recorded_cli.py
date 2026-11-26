@@ -13,18 +13,12 @@ from typing import Any
 
 from .core import LocalAuthority
 from .ledger import OperationLedger
-from .local_cli import MAX_MESSAGE_BYTES, InputFormatError, reject_nonfinite, unique_fields
+from .local_cli import MAX_MESSAGE_BYTES, InputFormatError, decode_request_object
 from .recorded_calculator import RecordedCalculator
 
 
 def decode_recorded_request(raw: bytes) -> dict[str, Any]:
-    if len(raw) > MAX_MESSAGE_BYTES:
-        raise InputFormatError("message too large")
-    try:
-        value = json.loads(raw.decode("utf-8"),
-                           object_pairs_hook=unique_fields, parse_constant=reject_nonfinite)
-    except (TypeError, ValueError, UnicodeError) as exc:
-        raise InputFormatError("invalid JSON") from exc
+    value = decode_request_object(raw)
     if not isinstance(value, dict) or set(value) != {"request_key", "name", "arguments"}:
         raise InputFormatError("invalid request fields")
     if type(value["name"]) is not str or type(value["request_key"]) is not str:

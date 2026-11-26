@@ -77,7 +77,7 @@ class RecordedCalculator:
                     op.state, "ALREADY_RECORDED")
                 return RecordedResult(False, None, code, op.operation_id,
                                       op.state, replayed=True)
-            self.ledger.begin_dispatch(op.operation_id)
+            self.ledger.begin_dispatch(op.operation_id, authority=self.authority)
         except LedgerError as exc:
             return RecordedResult(False, None, exc.code, None, None)
 

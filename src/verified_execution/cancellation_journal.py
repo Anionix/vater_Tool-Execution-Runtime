@@ -22,6 +22,8 @@ import stat
 from typing import Any
 from uuid import uuid4
 
+from .json_bounds import check_json_depth
+
 from .ledger import LedgerError, _text
 from .worker_leases import LeasedLedger
 
@@ -101,7 +103,13 @@ class CancellationJournal:
                         raise JournalError('CORRUPTED_INTENT_FILE')
                     out[key] = value
                 return out
-            data = json.loads(path.read_bytes(), object_pairs_hook=no_duplicates)
+            with path.open("rb") as source:
+                payload = source.read(2049)
+            if len(payload) > 2048:
+                raise JournalError("CORRUPTED_INTENT_FILE")
+            text = payload.decode("utf-8")
+            check_json_depth(text, 1)
+            data = json.loads(text, object_pairs_hook=no_duplicates)
         except (ValueError, UnicodeError, json.JSONDecodeError) as exc:
             raise JournalError('CORRUPTED_INTENT_FILE') from exc
         if (type(data) is not dict or set(data) != {'schema_version','operation_id','principal','intent'}

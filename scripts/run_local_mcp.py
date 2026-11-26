@@ -9,11 +9,41 @@ Run with python -I to ignore ambient Python import configuration on startup.
 """
 from __future__ import annotations
 
+import hashlib
+import json
 import os
 from pathlib import Path
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def verify_local_tool(root: Path) -> None:
+    """Check the approved built-in before importing the runtime package."""
+    approval = json.loads((root / "config/local_tool.json").read_text(encoding="utf-8"))
+    required = {"src/verified_execution/__init__.py", "src/verified_execution/core.py",
+                "server_mcp.py", "contracts/checked_add.input.schema.json",
+                "contracts/checked_add.output.contract.json"}
+    if (approval["publisher"] != "Anionix/vater_Tool-Execution-Runtime"
+            or approval["name"] != "checked_add" or set(approval["sha256"]) != required):
+        raise ValueError("INVALID_LOCAL_TOOL")
+    for relative in required:
+        with (root / relative).open("rb") as source:
+            if hashlib.file_digest(source, "sha256").hexdigest() != approval["sha256"][relative]:
+                raise ValueError("LOCAL_TOOL_CHANGED")
+    contract = json.loads((root / "contracts/checked_add.output.contract.json").read_text(encoding="utf-8"))
+    if contract["contract_version"] != approval["version"] or contract["tool"] != approval["name"]:
+        raise ValueError("INVALID_LOCAL_TOOL_VERSION")
+
+
+if __name__ == "__main__":
+    # task.authorization.140: host-owned registration -> verify -> import -> serve.
+    try:
+        verify_local_tool(ROOT)
+    except (OSError, KeyError, TypeError, ValueError):
+        print("LOCAL_TOOL_REJECTED", file=sys.stderr)
+        raise SystemExit(1)
+
 sys.path.insert(0, str(ROOT / "src"))
 from verified_execution.policy_config import PolicyConfigurationError, load_local_policy
 

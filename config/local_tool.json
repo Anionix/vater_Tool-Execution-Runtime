@@ -1,0 +1,12 @@
+{
+  "publisher": "Anionix/vater_Tool-Execution-Runtime",
+  "name": "checked_add",
+  "version": "1.1.0",
+  "sha256": {
+    "src/verified_execution/__init__.py": "94d39425d41ecda83611f635e1ea690a6492d008b0957726973b3ecd031e16d9",
+    "src/verified_execution/core.py": "54cfd0f06fc9cc0e4519da3bd66515186ea1269648bf59d86dc6f244a6a2742e",
+    "server_mcp.py": "7dfb5490d142590776c6251f365557935d881804f706eac4825b37642cc4eeab",
+    "contracts/checked_add.input.schema.json": "d9cbeeff8d08fff5c2a9886c20b7aef93c4db3879be256e7c4f60f717eefa41d",
+    "contracts/checked_add.output.contract.json": "fc44dbe5bbae215503356ab16f03d5c8b122aa473928dfed11d54aa4e0ea5145"
+  }
+}

@@ -114,7 +114,7 @@ class CancellableLeasedToolBridge:
             # A completed start() transaction is never forgotten: its result
             # is awaited before cancellation is acted on at the next checkpoint.
             await self._database(self.ledger.start, op.operation_id,
-                                 token=session.token, duration_ms=self.duration_ms)
+                                 token=session.token, duration_ms=self.duration_ms, authority=self.authority)
             dispatched = True
             await anyio.lowlevel.checkpoint()
             if self._after_dispatch is not None:
