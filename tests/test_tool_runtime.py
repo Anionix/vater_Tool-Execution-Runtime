@@ -1,19 +1,18 @@
 """Shared ToolSpec / ToolRegistry / ToolRuntime used by every protocol adapter."""
 import asyncio
 from dataclasses import replace
-from importlib import util
 import json
 from pathlib import Path
 
 import pytest
 
+from adapter_drivers import TOKEN, asgi, load_mcp_adapter, with_sdk_client
 from verified_execution.core import CalculationService, LocalAuthority, OperationError, UNSIGNED_32_MAX
 from verified_execution.runtime import ToolRuntime
 from verified_execution.tools import ToolRegistry, ToolSpec, default_registry, load_registry, thaw
 
 ROOT = Path(__file__).resolve().parents[1]
 CONTRACTS = ROOT / "contracts"
-TOKEN = "testOnlyCredential" * 3
 
 
 def _validate_value(arguments):
@@ -147,20 +146,9 @@ def test_release_rechecks_grant_and_result():
 @pytest.fixture
 def mcp_adapter():
     pytest.importorskip("mcp")
-    spec = util.spec_from_file_location("server_mcp_runtime_test", ROOT / "server_mcp.py")
-    module = util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
+    return load_mcp_adapter("server_mcp_runtime_test")
 
 
-def with_sdk_client(server, scenario):
-    """Real official SDK client, in-process dispatch (no wire framing)."""
-    from mcp import Client
-
-    async def run():
-        async with Client(server, mode="2026-07-28") as client:
-            return await scenario(client)
-    return asyncio.run(run())
 
 
 def test_mcp_serves_a_new_tool_without_adapter_changes(mcp_adapter):
@@ -186,25 +174,6 @@ def test_mcp_advertises_the_registry_spec(mcp_adapter):
     assert published == json.loads((CONTRACTS / "checked_add.input.schema.json").read_text())
 
 
-async def _asgi(app, method, path, body=b""):
-    messages = [{"type": "http.request", "body": body, "more_body": False}]
-    sent = []
-
-    async def receive():
-        return messages.pop(0) if messages else {"type": "http.disconnect"}
-
-    async def send(message):
-        sent.append(message)
-
-    await app({"type": "http", "asgi": {"version": "3.0"}, "http_version": "1.1", "method": method,
-               "scheme": "http", "path": path, "raw_path": path.encode(), "query_string": b"",
-               "root_path": "", "server": ("127.0.0.1", 80), "client": ("127.0.0.1", 1),
-               "headers": [(b"authorization", f"Bearer {TOKEN}".encode()),
-                           (b"content-type", b"application/json"),
-                           (b"content-length", str(len(body)).encode())]}, receive, send)
-    status = next(m["status"] for m in sent if m["type"] == "http.response.start")
-    payload = b"".join(m.get("body", b"") for m in sent if m["type"] == "http.response.body")
-    return status, json.loads(payload)
 
 
 def test_http_serves_a_new_tool_without_adapter_changes():
@@ -214,15 +183,15 @@ def test_http_serves_a_new_tool_without_adapter_changes():
     app = create_app(TOKEN, authority("double"), registry=both_tools(), tool="double")
 
     async def scenario():
-        status, spec = await _asgi(app, "GET", "/openapi.json")
+        status, spec = await asgi(app, "GET", "/openapi.json")
         assert status == 200
         schema = spec["paths"]["/jobs"]["post"]["requestBody"]["content"]["application/json"]["schema"]
         assert schema == thaw(double_spec().input_schema)
-        assert (await _asgi(app, "POST", "/jobs", b'{"left": 1, "right": 2}'))[0] == 400
-        status, started = await _asgi(app, "POST", "/jobs", b'{"value": 21}')
+        assert (await asgi(app, "POST", "/jobs", b'{"left": 1, "right": 2}'))[0] == 400
+        status, started = await asgi(app, "POST", "/jobs", b'{"value": 21}')
         assert status == 202
         for _ in range(200):
-            status, job = await _asgi(app, "GET", f"/jobs/{started['job_id']}")
+            status, job = await asgi(app, "GET", f"/jobs/{started['job_id']}")
             if job["state"] not in {"prepared", "running"}:
                 break
             await asyncio.sleep(0.01)
@@ -236,7 +205,7 @@ def test_http_openapi_uses_contract_schema():
     from verified_execution.http_local import create_app
 
     async def scenario():
-        _, spec = await _asgi(create_app(TOKEN), "GET", "/openapi.json")
+        _, spec = await asgi(create_app(TOKEN), "GET", "/openapi.json")
         return spec["paths"]["/jobs"]["post"]["requestBody"]["content"]["application/json"]["schema"]
 
     assert asyncio.run(scenario()) == json.loads((CONTRACTS / "checked_add.input.schema.json").read_text())

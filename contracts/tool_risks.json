@@ -3,7 +3,8 @@
   "risk_classes": ["read_only", "state_change", "irreversible", "code_execution"],
   "tools": {
     "checked_add": "read_only",
-    "checked_add_recorded": "state_change"
+    "checked_add_recorded": "state_change",
+    "checked_multiply": "read_only"
   },
   "minimum_profile": {
     "registered_tools": ["checked_add"],

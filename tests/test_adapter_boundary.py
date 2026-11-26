@@ -353,8 +353,12 @@ def test_every_registered_tool_has_a_risk_class(adapter, tmp_path):
     def names(server):
         return {tool.name for tool in asyncio.run(server.on_list_tools(None, None)).tools}
     assert names(baseline) == set(contract["minimum_profile"]["registered_tools"]) == {"checked_add"}
-    assert names(recorded) == set(contract["tools"]) == {"checked_add", "checked_add_recorded"}
-    assert contract["tools"] == {"checked_add": "read_only", "checked_add_recorded": "state_change"}
+    assert names(recorded) == {"checked_add", "checked_add_recorded"}
+    # Every tool any profile can serve has a host risk class; opt-in tools
+    # such as checked_multiply are classified even though not served here.
+    assert names(recorded) <= set(contract["tools"])
+    assert contract["tools"] == {"checked_add": "read_only", "checked_add_recorded": "state_change",
+                                 "checked_multiply": "read_only"}
     assert set(contract["risk_classes"]) == {"read_only", "state_change", "irreversible", "code_execution"}
     assert contract["minimum_profile"]["allowed_external_destinations"] == []
 
