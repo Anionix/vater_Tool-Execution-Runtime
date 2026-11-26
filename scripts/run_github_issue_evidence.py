@@ -99,6 +99,12 @@ def main() -> int:
                 found = destination.lookup(operation_id, int(time.time() * 1000) - 600_000)
             except Exception as error:  # report, never hide
                 found = f"lookup failed: {error}"
+            if isinstance(found, list):
+                # Anything positively identified by a marker is cleaned up, whether
+                # or not its scenario passed.
+                for issue in found:
+                    if issue.get("number") not in report["issues"]:
+                        report["issues"].append(issue.get("number"))
             if expect is None or (isinstance(found, list) and len(found) == expect) or time.time() >= deadline:
                 return found
             time.sleep(3)
@@ -119,7 +125,7 @@ def main() -> int:
     first = call(executor, f"{run}-normal", title)
     stored = executor.result(first.operation_id) if first.operation_id else None
     issue = transport.request("GET", f"/issues/{first.value}") if first.ok else None
-    if first.ok:
+    if first.ok and first.value not in report["issues"]:
         report["issues"].append(first.value)
     record("normal", ["task.durable_operations.011", "task.durable_operations.012", "task.durable_operations.021"],
            "created once; ledger reserved->dispatched->definitive_succeeded; stored result and version",
@@ -154,7 +160,7 @@ def main() -> int:
         time.sleep(10)  # the list may lag; a replay looks up again and never resends
         lost = call(executor, f"{run}-lost", lost_title)
     matches = marked(lost.operation_id, expect=1) if lost.operation_id else "no operation"
-    if lost.ok:
+    if lost.ok and lost.value not in report["issues"]:
         report["issues"].append(lost.value)
     record("lost_reply", ["task.durable_operations.011", "task.durable_operations.016",
                           "task.durable_operations.017"],

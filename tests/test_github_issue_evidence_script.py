@@ -91,3 +91,36 @@ def test_evidence_checks_wait_for_a_lagging_list_without_resending(tmp_path, mon
     report = json.loads(output.read_text())
     assert all(all(s["checks"].values()) for s in report["scenarios"])
     assert fake.posts == 2 and len(fake.issues) == 2  # waiting never turned into a resend
+
+
+class SelectivelyLaggingRepository(FakeRepository):
+    """Hides recent issues only on chosen list reads (1-based)."""
+
+    def __init__(self, hidden):
+        super().__init__()
+        self.hidden, self.reads = set(hidden), 0
+
+    def request(self, method, path, *, json_body=None, query=None):
+        if method == "GET" and path == "/issues":
+            self.reads += 1
+            if self.reads in self.hidden:
+                return HttpReply(200, {}, [])
+        return super().request(method, path, json_body=json_body, query=query)
+
+
+def test_issues_found_only_by_the_harness_are_still_closed(tmp_path, monkeypatch):
+    # Reads 2 and 3 are the executor's two lookups in lost_reply; read 4 is the
+    # harness's own check, which sees the issue (Codex review on #382).
+    script = load_script()
+    fake = SelectivelyLaggingRepository(hidden={2, 3})
+    monkeypatch.setattr(script, "UrllibTransport", lambda repository, token: fake)
+    monkeypatch.setattr(script.time, "sleep", lambda _seconds: None)
+    monkeypatch.setenv("GITHUB_REPOSITORY", "example/repository")
+    monkeypatch.setenv("GITHUB_TOKEN", "dummy-token-for-the-fake")
+    output = tmp_path / "report.json"
+    monkeypatch.setattr("sys.argv", ["run_github_issue_evidence.py", "--output", str(output)])
+
+    assert script.main() == 1  # the failed scenario stays a failure
+    report = json.loads(output.read_text())
+    assert {s["name"]: s["passed"] for s in report["scenarios"]}["lost_reply"] is False
+    assert len(fake.issues) == 2 and sorted(fake.closed) == [1, 2]

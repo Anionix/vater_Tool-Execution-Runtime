@@ -31,7 +31,7 @@
     "task.durable_operations.023"
   ],
   "report_path": "evidence/gates/durable-operations-tests.xml",
-  "report_sha256": "928dc7f4a9fe06a1cb8440c3ff5a5eb23c2340a603ce93d059efeab97891ec76",
+  "report_sha256": "6accf789af9b92005acb171095ceb47ad466aa4d4b36ac24bde6411756e52f11",
   "source_sha256": {
     "contracts/external_change_release.json": "a20e107b4ec71d82c95d591287187ed8e5a1ab59510ddedf60d345281c601567",
     "contracts/github_issue_destination.json": "5e4a26da1713c877c59462421d8d1be44abbea1a64308660ab4bdb993899d2b5",
