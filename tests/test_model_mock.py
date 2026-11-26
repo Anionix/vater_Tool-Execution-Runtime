@@ -81,3 +81,46 @@ def test_provider_format_design_examples(task, root, items, result_reference):
     else:
         assert request["systemInstruction"]["parts"][0]["text"]
         assert request[root][0]["parts"][0]["text"]
+
+
+def test_host_approval_and_common_authorization_are_both_required():
+    from verified_execution.core import LocalAuthority
+    from verified_execution.model_mock import execute_approved_proposal
+
+    proposal = ToolProposal("checked_add", '{"left":2,"right":3}', "call_1")
+    grant = LocalAuthority.calculator_only()
+    different = ToolProposal("checked_add", '{"left":2,"right":4}', "call_1")
+    for approval in (None, different):
+        with pytest.raises(ModelContractError, match="host approval"):
+            execute_approved_proposal(proposal, approved=approval, authority=grant)
+    denied = execute_approved_proposal(proposal, approved=proposal, authority=LocalAuthority(frozenset()))
+    assert denied.error_code == "NOT_AUTHORIZED"
+    assert execute_approved_proposal(proposal, approved=proposal, authority=grant).result == 5
+    write = ToolProposal("write_file", '{}', "call_2")
+    assert execute_approved_proposal(write, approved=write, authority=grant).error_code == "UNKNOWN_TOOL"
+
+
+def test_destination_and_budget_fail_before_fixture():
+    from dataclasses import replace
+
+    calls = []
+    adapter = OfflineResponses(lambda payload: calls.append(payload) or {"output": []}, call_budget=1)
+    for request in (replace(REQUEST, destination="remote"), replace(REQUEST, processing_region="other")):
+        with pytest.raises(ModelContractError, match="destination"):
+            adapter.respond(request)
+    assert not calls
+    assert adapter.respond(REQUEST) == ()
+    with pytest.raises(ModelContractError, match="budget exhausted"):
+        adapter.respond(REQUEST)
+    assert len(calls) == 1
+
+
+def test_fragment_order_and_end_are_checked():
+    from verified_execution.model_mock import TextFragment, collect_fixture_stream
+
+    first, last = TextFragment(0, "four"), TextFragment(1, "!", final=True)
+    assert collect_fixture_stream(iter((first, last))) == ModelText("four!")
+    for fragments in ((first,), (last, first), (first, first, last),
+                      (first, TextFragment(2, "!", final=True)), (first, last, last)):
+        with pytest.raises(ModelContractError):
+            collect_fixture_stream(iter(fragments))
