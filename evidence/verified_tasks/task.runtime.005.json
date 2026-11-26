@@ -1,0 +1,33 @@
+{
+  "task_id": "task.runtime.005",
+  "acceptance_criteria": "正常終了・入力不正・未許可・計算失敗・結果不明を明確に区別する型がある",
+  "scope": "Separate outcomes cover success, malformed input, denied access, computation failure, and unknown effect.",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_core.py::test_arithmetic[0-0-0]",
+    "tests/test_core.py::test_arithmetic[100-200-300]",
+    "tests/test_core.py::test_arithmetic[4294967295-0-4294967295]",
+    "tests/test_core.py::test_arithmetic[1-1-2]",
+    "tests/test_core.py::test_bad_arguments[None]",
+    "tests/test_core.py::test_bad_arguments[1]",
+    "tests/test_core.py::test_bad_arguments[arguments2]",
+    "tests/test_core.py::test_bad_arguments[arguments3]",
+    "tests/test_core.py::test_bad_arguments[arguments4]",
+    "tests/test_core.py::test_bad_arguments[arguments5]",
+    "tests/test_core.py::test_bad_arguments[arguments6]",
+    "tests/test_core.py::test_bad_arguments[arguments7]",
+    "tests/test_core.py::test_bad_arguments[arguments8]",
+    "tests/test_core.py::test_bad_arguments[arguments9]",
+    "tests/test_core.py::test_service_denies_even_read_tool_without_authority",
+    "tests/test_core.py::test_overflow_fails_after_authorization",
+    "tests/test_request_cancellation.py::test_cancel_after_dispatch_is_unknown_and_no_redispatch"
+  ],
+  "report_path": "evidence/runtime-completion-tests.xml",
+  "report_sha256": "0d4499455d702a8008e3479ead8745dc54c68b2e65ec3df134c3301305d2d8fc",
+  "source_sha256": {
+    "tests/test_core.py": "62ac8e13dda70e4326db20016887330bd2fd223e49dfe2a3f2d84e30f489b9b2",
+    "tests/test_request_cancellation.py": "ee242fa5bb960b88fe551e6ebb57bf21d3c32372431b8076bb8442a445a6b03d"
+  }
+}

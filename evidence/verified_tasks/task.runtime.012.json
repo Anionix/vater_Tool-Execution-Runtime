@@ -1,0 +1,21 @@
+{
+  "task_id": "task.runtime.012",
+  "acceptance_criteria": "取消し要求を副作用の撤回と誤認せず、SQLite待機中もイベントループを止めない",
+  "scope": "Cancellation remains responsive and preserves already established effects.",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_sqlite_cancel_wait.py::test_real_sqlite_write_lock_does_not_block_event_loop",
+    "tests/test_sqlite_cancel_wait.py::test_cancel_during_dispatch_worker_does_not_misclassify",
+    "tests/test_sqlite_cancel_wait.py::test_cancel_during_result_commit_preserves_definitive_success",
+    "tests/test_official_mcp_sdk.py::test_sdk_cancels_dispatched_call_over_stdio[2026-07-28]",
+    "tests/test_official_mcp_sdk.py::test_sdk_cancels_dispatched_call_over_stdio[legacy]"
+  ],
+  "report_path": "evidence/runtime-completion-tests.xml",
+  "report_sha256": "0d4499455d702a8008e3479ead8745dc54c68b2e65ec3df134c3301305d2d8fc",
+  "source_sha256": {
+    "tests/test_official_mcp_sdk.py": "1e065bdf2c1b046739419aaac2e96784101f1b2573c5fb4d9c73a3505b9cf99c",
+    "tests/test_sqlite_cancel_wait.py": "2178eca869a58f35aa46a0d66daec1e89382ad0a01ca7268c070c4896647d840"
+  }
+}
