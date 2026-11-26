@@ -1,0 +1,20 @@
+{
+  "task_id": "task.mcp_transport.003",
+  "acceptance_criteria": "JSON-RPCの要求分配と互換処理を独自実装で置き換えず、前段の入力保護とは分離する",
+  "scope": "The guard handles framing before official SDK dispatch.",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[run_local_mcp.py-2026-07-28]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[run_local_mcp.py-legacy]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[launch_guarded_mcp.py-2026-07-28]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[launch_guarded_mcp.py-legacy]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_rejects_raw_duplicate_before_sdk"
+  ],
+  "report_path": "evidence/authorization-gate-tests.xml",
+  "report_sha256": "ba03242350e57854ec4b155c787fccb7b5c2ae58a1a9f276d90fe250b5f7f25d",
+  "source_sha256": {
+    "tests/test_official_mcp_sdk.py": "1e065bdf2c1b046739419aaac2e96784101f1b2573c5fb4d9c73a3505b9cf99c"
+  }
+}

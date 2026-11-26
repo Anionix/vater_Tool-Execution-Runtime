@@ -1,7 +1,7 @@
 # Python先行版 — 元の351件の実装作業一覧
 
 - 元の識別子を変えず、Python版の条件に置き換えた台帳。
-- [x] が付くのは、前提条件と合格証拠がそろった105件。
+- [x] が付くのは、前提条件と合格証拠がそろった124件。
 - 実装機能と作業の合格は別。契約を変更した項目の古い合格証拠は無効。
 
 ## 目的・非目標・境界
@@ -187,45 +187,45 @@
 ## 公式Python MCPの入出力と互換性
 作業 20件・完了判定 1件 / 初期必須：はい
 
-- [ ] `task.mcp_transport.001` 公式Python MCP開発キットを固定して採用する — 実施中または要再検証
+- [x] `task.mcp_transport.001` 公式Python MCP開発キットを固定して採用する — 正式完了
   - 合格：公式Python開発キットの採用版・パッケージ検査値・互換対象を記録する
-- [ ] `task.mcp_transport.002` 公式Python MCPサーバーを標準入出力で起動する — 実施中または要再検証
+- [x] `task.mcp_transport.002` 公式Python MCPサーバーを標準入出力で起動する — 正式完了
   - 合格：実インストールした公式開発キットから起動し、標準出力に通信以外が混ざらない
-- [ ] `task.mcp_transport.003` JSON-RPC処理は公式Python MCP開発キットへ任せる — 実施中または要再検証
+- [x] `task.mcp_transport.003` JSON-RPC処理は公式Python MCP開発キットへ任せる — 正式完了
   - 合格：JSON-RPCの要求分配と互換処理を独自実装で置き換えず、前段の入力保護とは分離する
-- [ ] `task.mcp_transport.004` 初期公開一覧には読み取り専用加算ツールだけを載せる — 実施中または要再検証
+- [x] `task.mcp_transport.004` 初期公開一覧には読み取り専用加算ツールだけを載せる — 正式完了
   - 合格：公式クライアントのtools/listにchecked_addだけが表示され、記録付き・変更操作は既定で公開されない
-- [ ] `task.mcp_transport.005` Pythonのツール説明と入力仕様を登録する — 実施中または要再検証
+- [x] `task.mcp_transport.005` Pythonのツール説明と入力仕様を登録する — 正式完了
   - 合格：公式クライアントで取得できる入力仕様とPython実装の厳密検証が一致する
-- [ ] `task.mcp_transport.006` 公式Pythonクライアントでtools/listを試験する — 実施中または要再検証
+- [x] `task.mcp_transport.006` 公式Pythonクライアントでtools/listを試験する — 正式完了
   - 合格：実クライアントで一覧を取得し、名前・入力仕様・並びを検証する
-- [ ] `task.mcp_transport.007` 公式Pythonクライアントでtools/callを試験する — 実施中または要再検証
+- [x] `task.mcp_transport.007` 公式Pythonクライアントでtools/callを試験する — 正式完了
   - 合格：実クライアントから成功要求を呼び、結果の構造化応答と値を検証する
-- [ ] `task.mcp_transport.008` 公式Pythonサーバーで未登録ツールを拒否する — 実施中または要再検証
+- [x] `task.mcp_transport.008` 公式Pythonサーバーで未登録ツールを拒否する — 正式完了
   - 合格：未知の名前で中核計算やSQLiteの副作用が発生しない
-- [ ] `task.mcp_transport.009` 公式Pythonサーバーで不足した引数を拒否する — 実施中または要再検証
+- [x] `task.mcp_transport.009` 公式Pythonサーバーで不足した引数を拒否する — 正式完了
   - 合格：実クライアントから引数欠損を送り、Pythonの中核が計算を行わない
-- [ ] `task.mcp_transport.010` 公式Python標準入出力で不正JSONを拒否する — 実施中または要再検証
+- [x] `task.mcp_transport.010` 公式Python標準入出力で不正JSONを拒否する — 正式完了
   - 合格：不正JSONの後にも正常要求を処理できることを実プロセスで確認する
-- [ ] `task.mcp_transport.011` 公式Python標準入出力で巨大入力を解析前に制限する — 実施中または要再検証
+- [x] `task.mcp_transport.011` 公式Python標準入出力で巨大入力を解析前に制限する — 正式完了
   - 合格：実開発キットへの入力をバイト上限で保護し、上限突破が到達しないことを実測する
-- [ ] `task.mcp_transport.012` 公式Pythonクライアントで2026-07-28版を試験する — 実施中または要再検証
+- [x] `task.mcp_transport.012` 公式Pythonクライアントで2026-07-28版を試験する — 正式完了
   - 合格：該当版の初期化と呼び出しを実接続で検証し、模擬試験と区別する
-- [ ] `task.mcp_transport.013` 公式Pythonクライアントで新版の結果型とエラーを試験する — 実施中または要再検証
+- [x] `task.mcp_transport.013` 公式Pythonクライアントで新版の結果型とエラーを試験する — 正式完了
   - 合格：構造化内容・失敗応答・要求単位の取消し条件が実通信で一致する
-- [ ] `task.mcp_transport.014` 公式Pythonクライアントで旧版互換性を試験する — 実施中または要再検証
+- [x] `task.mcp_transport.014` 公式Pythonクライアントで旧版互換性を試験する — 正式完了
   - 合格：legacy初期化とツール応答を新版と別の通し試験で検査する
-- [ ] `task.mcp_transport.015` 公式Pythonの新旧MCP試験の証拠を分離する — 実施中または要再検証
+- [x] `task.mcp_transport.015` 公式Pythonの新旧MCP試験の証拠を分離する — 正式完了
   - 合格：2026-07-28と旧版それぞれの実接続結果・環境・失敗理由を記録する
-- [ ] `task.mcp_transport.016` Pythonの標準入出力子プロセスの終了処理を試験する — 実施中または要再検証
+- [x] `task.mcp_transport.016` Pythonの標準入出力子プロセスの終了処理を試験する — 正式完了
   - 合格：実接続中の正常終了・切断・停止で子孫プロセスが残らない
-- [ ] `task.mcp_transport.017` Pythonの認可とツール可視性の分離方針を記録する — 実施中または要再検証
+- [x] `task.mcp_transport.017` Pythonの認可とツール可視性の分離方針を記録する — 正式完了
   - 合格：説明文と一覧だけを権限とせず、呼び出し時にホスト権限を再検証する
-- [ ] `task.mcp_transport.018` HTTPの認証はPythonのMCP標準入出力から分離する — 実施中または要再検証
+- [x] `task.mcp_transport.018` HTTPの認証はPythonのMCP標準入出力から分離する — 正式完了
   - 合格：認証付き遠隔公開は後続であり、ローカル計算だけでは認証済み遠隔アクセスを主張しない
 - [ ] `task.mcp_transport.019` 公式Python MCP適合性試験を実行する — 未着手
   - 合格：採用した公式の適合検査器を実行し、実施日時・版・失敗条件を記録する
-- [ ] `task.mcp_transport.020` PythonのMCPログから機密入力を除外する — 実施中または要再検証
+- [x] `task.mcp_transport.020` PythonのMCPログから機密入力を除外する — 正式完了
   - 合格：生会話・秘密トークン・未信頼内容が標準エラーと保存ログに含まれない
 - [ ] `gate.mcp_transport.completed` MCPの入出力と互換性の全作業を完了判定する — 未着手
   - 合格：同段階の全作業について、実物・独立した合格判定・証拠の所在がある
