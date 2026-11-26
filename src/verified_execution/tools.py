@@ -62,10 +62,17 @@ class ToolSpec:
     run: Callable[[Any], Any] = field(repr=False)
     verify_result: Callable[[Any, Any], None] = field(repr=False)
     contract_version: str | None = None
+    # Name of the host grant that permits this tool; defaults to the tool name.
+    # A durable variant of an operation can share the grant of its pure form.
+    grant: str | None = None
 
     def __post_init__(self) -> None:
         if type(self.name) is not str or not self.name or not self.name.isascii():
             raise ValueError("tool name must be a non-empty ASCII string")
+        if self.grant is None:
+            object.__setattr__(self, "grant", self.name)
+        if type(self.grant) is not str or not self.grant or not self.grant.isascii():
+            raise ValueError("tool grant must be a non-empty ASCII string")
         if self.risk not in RISK_CLASSES:
             raise ValueError(f"unknown risk class for {self.name}: {self.risk!r}")
         object.__setattr__(self, "input_schema", _frozen(self.input_schema))
