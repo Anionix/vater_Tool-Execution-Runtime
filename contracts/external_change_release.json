@@ -1,0 +1,29 @@
+{
+  "task_id": "task.durable_operations.023",
+  "release_profile": "with_side_effects",
+  "required_completed_gates": [
+    "gate.minimum_release.completed",
+    "gate.durable_operations.completed",
+    "gate.testing.completed",
+    "gate.operations.completed"
+  ],
+  "required_service_evidence": {
+    "task.durable_operations.011": "送信前の準備記録が、プロセス停止後も同じ操作識別子で読める。",
+    "task.durable_operations.012": "送信先の確定結果が同じ操作識別子で照会できる。",
+    "task.durable_operations.015": "送信先の重複排除キーの適用範囲、保持期間、同じキーで引数が異なる場合の扱いを確認する。",
+    "task.durable_operations.016": "結果照会の仕様を確認し、照会不能または結果不明の場合は人による照合へ進む。",
+    "task.durable_operations.017": "同じ操作識別子を使い、送信先で重複排除が有効な範囲でだけ再送する。",
+    "task.durable_operations.021": "送信先が返した変更後の対象の版を、結果と同じ操作識別子に記録する。"
+  },
+  "evidence_scope": "公開候補の接続実装と、実際に対応する送信先の組み合わせごとに確認する。",
+  "state_transitions": {
+    "blocked": "証拠が欠ける、失敗する、または公開候補の版と一致しない間は公開できない。",
+    "eligible_for_release_review": "すべての完了判定と送信先ごとの試験証拠が揃えば公開審査に進める。",
+    "blocked_after_change": "接続実装、対象サービスの契約、公開設定が変わり、既存証拠の対象から外れた場合は再び公開を止める。"
+  },
+  "sources": {
+    "sqlite_transaction_control": "https://www.sqlite.org/lang_transaction.html",
+    "sqlite_atomic_commit": "https://www.sqlite.org/atomiccommit.html",
+    "model_context_protocol_tools": "https://modelcontextprotocol.io/specification/2025-11-25/server/tools"
+  }
+}
