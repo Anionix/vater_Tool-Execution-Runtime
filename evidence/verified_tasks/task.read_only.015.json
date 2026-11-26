@@ -1,0 +1,18 @@
+{
+  "task_id": "task.read_only.015",
+  "acceptance_criteria": "再現可能な基準版のハッシュがある",
+  "scope": "The fixed launcher checks the baseline source hashes and refuses a changed tool.",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_local_contracts.py::test_fixed_server_recovers_measures_input_and_reaps_child",
+    "tests/test_runtime_contracts.py::test_same_named_local_tool_with_different_contents_fails_before_import"
+  ],
+  "report_path": "evidence/authorization-gate-tests.xml",
+  "report_sha256": "ba03242350e57854ec4b155c787fccb7b5c2ae58a1a9f276d90fe250b5f7f25d",
+  "source_sha256": {
+    "tests/test_local_contracts.py": "da7c256bd5ced166122723d6e9a8fe2913a95a96f2a41938878e93c3837d4de7",
+    "tests/test_runtime_contracts.py": "0999ababce47875e64d2bd06b02db2dc7fdf51f6ce3668005681e0cacd4c8019"
+  }
+}

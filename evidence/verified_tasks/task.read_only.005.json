@@ -1,0 +1,23 @@
+{
+  "task_id": "task.read_only.005",
+  "acceptance_criteria": "32ビット符号なし整数の加算で検査対象外のファイルと外部通信に触れない",
+  "scope": "Pure unsigned arithmetic is checked alongside static file and network restrictions and the fixed process boundary.",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_core.py::test_seeded_full_unsigned_range",
+    "tests/test_static_policy.py::test_real_project_has_no_rule_violations",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[run_local_mcp.py-2026-07-28]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[run_local_mcp.py-legacy]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[launch_guarded_mcp.py-2026-07-28]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[launch_guarded_mcp.py-legacy]"
+  ],
+  "report_path": "evidence/authorization-gate-tests.xml",
+  "report_sha256": "ba03242350e57854ec4b155c787fccb7b5c2ae58a1a9f276d90fe250b5f7f25d",
+  "source_sha256": {
+    "tests/test_core.py": "2a851784e79de34dfccf00a3acf34ffc6961053bb2ae8118721dc185113c5b66",
+    "tests/test_official_mcp_sdk.py": "1e065bdf2c1b046739419aaac2e96784101f1b2573c5fb4d9c73a3505b9cf99c",
+    "tests/test_static_policy.py": "632f69b8b92f4bea3bb29ca990e54c535da5a9d2c0d13367af4f4f445d999ef8"
+  }
+}

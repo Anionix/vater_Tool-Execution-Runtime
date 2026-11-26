@@ -1,0 +1,18 @@
+{
+  "task_id": "task.read_only.007",
+  "acceptance_criteria": "許可していない要求は計算しない",
+  "scope": "The core stops in rejection without executing the calculation.",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_core.py::test_service_denies_even_read_tool_without_authority",
+    "tests/test_official_mcp_sdk.py::test_sdk_access_denied"
+  ],
+  "report_path": "evidence/authorization-gate-tests.xml",
+  "report_sha256": "ba03242350e57854ec4b155c787fccb7b5c2ae58a1a9f276d90fe250b5f7f25d",
+  "source_sha256": {
+    "tests/test_core.py": "2a851784e79de34dfccf00a3acf34ffc6961053bb2ae8118721dc185113c5b66",
+    "tests/test_official_mcp_sdk.py": "1e065bdf2c1b046739419aaac2e96784101f1b2573c5fb4d9c73a3505b9cf99c"
+  }
+}

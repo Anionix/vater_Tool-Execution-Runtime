@@ -103,3 +103,5 @@ jobs:
         run: python scripts/verify_phase.py authorization
       - name: Verify all transport tasks
         run: python scripts/verify_phase.py mcp_transport
+      - name: Verify all read-only tasks
+        run: python scripts/verify_phase.py read_only
