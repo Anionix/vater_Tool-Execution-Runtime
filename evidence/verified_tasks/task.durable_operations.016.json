@@ -5,14 +5,14 @@
   "verification_status": "passed",
   "executed": true,
   "report_path": "evidence/external-change-tests.xml",
-  "report_sha256": "0de06beb27691dbd0089dded976313a046b331f589acec10c068f052ff34285c",
+  "report_sha256": "e970258da20b0e76137ba6060a1c410537dbec5e9fe0fbfbb85d20c06d184d42",
   "source_sha256": {
     ".github/workflows/external-change-evidence.yml": "ab1134f3503415c92ee3cce27037f73752839bbb4084b0f73759a5f0e6b671c1",
     "contracts/github_issue_destination.json": "5e4a26da1713c877c59462421d8d1be44abbea1a64308660ab4bdb993899d2b5",
     "evidence/external/github-issues-run-45839952764.json": "75f5480aeca6f769fc99c4cd89d116cbef449f4002cd837a5c708d3e22e66e53",
-    "scripts/run_github_issue_evidence.py": "07c75652773e595a399fc1cfd76b80ce72631579d82e368614ddb39a6959a808",
-    "src/verified_execution/external_change.py": "79ee469e9fa5d76708d08e5899e04a6d2b81cb8331277fc2b533291e52bc38b9",
-    "tests/test_external_change.py": "8f0a6c5787ba20facadca782eab83ebb09fec466223abd958de2a89080995bac",
+    "scripts/run_github_issue_evidence.py": "56ed2b8c0c0dc71adb4950624e1407169a251472547b453b32a14ed81fda2e7d",
+    "src/verified_execution/external_change.py": "59a3d39415b62337b3a39bb00e7ce31aa36072f5abeafeba8dd4725082828b02",
+    "tests/test_external_change.py": "418b0ca6c70a6798829ec38652d785094840c6911c01782d86405c9a0d3839a3",
     "tests/test_external_evidence_record.py": "d810d9ed3b03690ccfb09115791aede1cbe5a7bb85af6805f8eda8b8a0ad43fe"
   },
   "scope": "When the outcome cannot be established, the operation stays unknown and HUMAN_RECONCILIATION_REQUIRED is returned. Live, this happened twice: after the crash, and when GitHub's issue list lagged behind a real create (a replay ten seconds later reconciled it). Live evidence: run 45839952764 of .github/workflows/external-change-evidence.yml against this repository's GitHub Issues (issues #385 and #386, both closed), archived in evidence/external/github-issues-run-45839952764.json. Unit tests against an in-memory fake cover the executor's branches that a live run cannot force.",

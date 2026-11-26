@@ -401,16 +401,23 @@ class ExternalChangeExecutor:
         except LedgerError as exc:
             return _error("IN_PROGRESS" if exc.code == "NOT_PREPARED" else exc.code, op)
         self.store.dispatched(op.operation_id, self.destination.name, int(time.time() * 1000))
+        revoked = False
         for attempt in range(1, self.max_attempts + 1):
             outcome = self.destination.send(op.operation_id, request.title)
             if outcome.kind != "not_executed" or attempt == self.max_attempts:
                 break
             # EXTERNAL-017: the destination proved the request did not execute.
             self.sleep(outcome.wait_seconds)
+            # The grant may have expired or been revoked while waiting; a resend
+            # is a new external effect and needs the live grant again.
+            if not self.authority.permits(TOOL_NAME):
+                revoked = True
+                break
         if outcome.kind == "confirmed":
             return self._confirm(op, request, outcome.obj, replayed=False)
         if outcome.kind in ("not_executed", "rejected"):
-            code = "RATE_LIMITED" if outcome.kind == "not_executed" else "REJECTED_BY_DESTINATION"
+            code = ("NOT_AUTHORIZED" if revoked else "RATE_LIMITED" if outcome.kind == "not_executed"
+                    else "REJECTED_BY_DESTINATION")
             # Store first: a crash before the ledger write leaves the ledger
             # dispatched (unknown after restart), never a ledger claim without a record.
             self.store.record(op.operation_id, "failed", detail=code)

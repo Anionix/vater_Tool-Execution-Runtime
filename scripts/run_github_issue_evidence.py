@@ -44,6 +44,7 @@ class Paced:
 
     def __init__(self, inner):
         self.inner, self.posts, self.mode = inner, 0, "pass"
+        self.created = []  # every issue number a create reply named, even a dropped reply
 
     def request(self, method, path, *, json_body=None, query=None):
         if method in ("POST", "PATCH"):
@@ -53,6 +54,8 @@ class Paced:
                 raise Crash()
             self.posts += 1
             reply = self.inner.request(method, path, json_body=json_body, query=query)
+            if reply.status == 201 and isinstance(reply.body, dict) and type(reply.body.get("number")) is int:
+                self.created.append(reply.body["number"])
             if self.mode == "drop_reply":
                 raise TransportError("reply dropped by the evidence harness after a real create")
             return reply
@@ -117,110 +120,127 @@ def main() -> int:
     def call(executor, key, title):
         return executor.call(TOOL_NAME, {"request_key": key, "title": title})
 
-    ensure_label(transport)
-
-    # normal + replay ---------------------------------------------------------
-    ledger, executor = host()
-    title = f"VATER evidence {run} normal"
-    first = call(executor, f"{run}-normal", title)
-    stored = executor.result(first.operation_id) if first.operation_id else None
-    issue = transport.request("GET", f"/issues/{first.value}") if first.ok else None
-    if first.ok and first.value not in report["issues"]:
-        report["issues"].append(first.value)
-    record("normal", ["task.durable_operations.011", "task.durable_operations.012", "task.durable_operations.021"],
-           "created once; ledger reserved->dispatched->definitive_succeeded; stored result and version",
-           {"ok": first.ok, "error": first.error_code, "issue": first.value,
-            "history": ledger.history(first.operation_id) if first.operation_id else None,
-            "stored": stored, "live_etag": issue.headers.get("etag") if issue else None},
-           {"created": first.ok, "stored_succeeded": stored and stored["status"] == "succeeded",
-            "version_etag_stored": stored and stored["version"] and stored["version"]["etag"],
-            "ledger_history": first.operation_id and ledger.history(first.operation_id)
-            == ["reserved", "dispatched", "definitive_succeeded"],
-            "target_matches": issue is not None and destination.check(first.operation_id, title, issue.body)})
-    posts_before = transport.posts
-    again = call(executor, f"{run}-normal", title)
-    matches = marked(first.operation_id, expect=1) if first.operation_id else "no operation"
-    record("replay", ["task.durable_operations.015", "task.durable_operations.017"],
-           "same request_key: stored result returned, no new POST, exactly one issue with the marker",
-           {"ok": again.ok, "replayed": again.replayed, "issue": again.value,
-            "new_posts": transport.posts - posts_before,
-            "issues_with_marker": len(matches) if isinstance(matches, list) else matches},
-           {"ok": again.ok, "replayed": again.replayed, "same_issue": again.value == first.value,
-            "no_new_post": transport.posts == posts_before,
-            "exactly_one_issue": isinstance(matches, list) and len(matches) == 1})
-
-    # lost reply -----------------------------------------------------------------
-    transport.mode = "drop_reply"
-    lost_title = f"VATER evidence {run} lost reply"
-    lost = call(executor, f"{run}-lost", lost_title)
-    transport.mode = "pass"
-    posts_after_lost = transport.posts
-    stored_lost = executor.result(lost.operation_id) if lost.operation_id else None
-    if not lost.ok:
-        time.sleep(10)  # the list may lag; a replay looks up again and never resends
-        lost = call(executor, f"{run}-lost", lost_title)
-    matches = marked(lost.operation_id, expect=1) if lost.operation_id else "no operation"
-    if lost.ok and lost.value not in report["issues"]:
-        report["issues"].append(lost.value)
-    record("lost_reply", ["task.durable_operations.011", "task.durable_operations.016",
-                          "task.durable_operations.017"],
-           "real create with the reply dropped: one POST only, reconciled by lookup (directly or after a "
-           "replay), exactly one issue with the marker",
-           {"ok": lost.ok, "error": lost.error_code, "issue": lost.value,
-            "first_store_status": stored_lost and stored_lost["status"],
-            "posts": posts_after_lost - posts_before, "posts_after_replay": transport.posts - posts_before,
-            "issues_with_marker": len(matches) if isinstance(matches, list) else matches},
-           {"reconciled": lost.ok, "one_post_only": transport.posts - posts_before == 1,
-            "exactly_one_issue": isinstance(matches, list) and len(matches) == 1})
-
-    # crash before the request leaves ------------------------------------------------
-    transport.mode = "crash_before_send"
-    crashed_key = f"{run}-crash"
     try:
-        call(executor, crashed_key, f"VATER evidence {run} crash")
-        crashed_cleanly = False
-    except Crash:
-        crashed_cleanly = True
-    transport.mode = "pass"
-    ledger, executor = host()  # a restarted process
-    recovered = ledger.recover_interrupted()
-    posts_before_crash_replay = transport.posts
-    after = call(executor, crashed_key, f"VATER evidence {run} crash")
-    time.sleep(10)  # give a lagging list time to show anything that might exist
-    matches = marked(after.operation_id) if after.operation_id else "no operation"
-    record("crash", ["task.durable_operations.011", "task.durable_operations.016"],
-           "dispatched survives the crash and becomes unknown on restart; replay looks up, finds nothing, "
-           "sends nothing and requires human reconciliation",
-           {"crashed": crashed_cleanly, "recovered_operations": recovered, "error": after.error_code,
-            "ledger_state": ledger.get(after.operation_id).state if after.operation_id else None,
-            "new_posts": transport.posts - posts_before_crash_replay,
-            "issues_with_marker": len(matches) if isinstance(matches, list) else matches},
-           {"crashed": crashed_cleanly, "recovered_as_unknown": recovered == 1,
-            "human_reconciliation": after.error_code == "HUMAN_RECONCILIATION_REQUIRED",
-            "no_new_post": transport.posts == posts_before_crash_replay, "no_issue_exists": matches == []})
+        ensure_label(transport)
 
-    # target check on a real object ---------------------------------------------------
-    if first.ok and issue is not None:
-        own = destination.check(first.operation_id, title, issue.body)
-        foreign = destination.check(after.operation_id or "other-operation", title, issue.body)
-        renamed = destination.check(first.operation_id, "another title", issue.body)
-        record("target_check", ["task.durable_operations.021"],
-               "the real issue matches its own operation only; another operation or title is refused",
-               {"own": own, "other_operation": foreign, "other_title": renamed},
-               {"own_matches": own, "other_operation_refused": not foreign, "other_title_refused": not renamed})
+        # normal + replay ---------------------------------------------------------
+        ledger, executor = host()
+        title = f"VATER evidence {run} normal"
+        first = call(executor, f"{run}-normal", title)
+        stored = executor.result(first.operation_id) if first.operation_id else None
+        if first.ok and first.value not in report["issues"]:
+            report["issues"].append(first.value)  # registered before any further request
+        issue = transport.request("GET", f"/issues/{first.value}") if first.ok else None
+        record("normal", ["task.durable_operations.011", "task.durable_operations.012", "task.durable_operations.021"],
+               "created once; ledger reserved->dispatched->definitive_succeeded; stored result and version",
+               {"ok": first.ok, "error": first.error_code, "issue": first.value,
+                "history": ledger.history(first.operation_id) if first.operation_id else None,
+                "stored": stored, "live_etag": issue.headers.get("etag") if issue else None},
+               {"created": first.ok, "stored_succeeded": stored and stored["status"] == "succeeded",
+                "version_etag_stored": stored and stored["version"] and stored["version"]["etag"],
+                "ledger_history": first.operation_id and ledger.history(first.operation_id)
+                == ["reserved", "dispatched", "definitive_succeeded"],
+                "target_matches": issue is not None and destination.check(first.operation_id, title, issue.body)})
+        posts_before = transport.posts
+        again = call(executor, f"{run}-normal", title)
+        matches = marked(first.operation_id, expect=1) if first.operation_id else "no operation"
+        record("replay", ["task.durable_operations.015", "task.durable_operations.017"],
+               "same request_key: stored result returned, no new POST, exactly one issue with the marker",
+               {"ok": again.ok, "replayed": again.replayed, "issue": again.value,
+                "new_posts": transport.posts - posts_before,
+                "issues_with_marker": len(matches) if isinstance(matches, list) else matches},
+               {"ok": again.ok, "replayed": again.replayed, "same_issue": again.value == first.value,
+                "no_new_post": transport.posts == posts_before,
+                "exactly_one_issue": isinstance(matches, list) and len(matches) == 1})
 
-    # cleanup ------------------------------------------------------------------------
+        # lost reply -----------------------------------------------------------------
+        transport.mode = "drop_reply"
+        lost_title = f"VATER evidence {run} lost reply"
+        lost = call(executor, f"{run}-lost", lost_title)
+        transport.mode = "pass"
+        posts_after_lost = transport.posts
+        stored_lost = executor.result(lost.operation_id) if lost.operation_id else None
+        if not lost.ok:
+            time.sleep(10)  # the list may lag; a replay looks up again and never resends
+            lost = call(executor, f"{run}-lost", lost_title)
+        if lost.ok and lost.value not in report["issues"]:
+            report["issues"].append(lost.value)
+        matches = marked(lost.operation_id, expect=1) if lost.operation_id else "no operation"
+        record("lost_reply", ["task.durable_operations.011", "task.durable_operations.016",
+                              "task.durable_operations.017"],
+               "real create with the reply dropped: one POST only, reconciled by lookup (directly or after a "
+               "replay), exactly one issue with the marker",
+               {"ok": lost.ok, "error": lost.error_code, "issue": lost.value,
+                "first_store_status": stored_lost and stored_lost["status"],
+                "posts": posts_after_lost - posts_before, "posts_after_replay": transport.posts - posts_before,
+                "issues_with_marker": len(matches) if isinstance(matches, list) else matches},
+               {"reconciled": lost.ok, "one_post_only": transport.posts - posts_before == 1,
+                "exactly_one_issue": isinstance(matches, list) and len(matches) == 1})
+
+        # crash before the request leaves ------------------------------------------------
+        transport.mode = "crash_before_send"
+        crashed_key = f"{run}-crash"
+        try:
+            call(executor, crashed_key, f"VATER evidence {run} crash")
+            crashed_cleanly = False
+        except Crash:
+            crashed_cleanly = True
+        transport.mode = "pass"
+        ledger, executor = host()  # a restarted process
+        recovered = ledger.recover_interrupted()
+        posts_before_crash_replay = transport.posts
+        after = call(executor, crashed_key, f"VATER evidence {run} crash")
+        time.sleep(10)  # give a lagging list time to show anything that might exist
+        matches = marked(after.operation_id) if after.operation_id else "no operation"
+        record("crash", ["task.durable_operations.011", "task.durable_operations.016"],
+               "dispatched survives the crash and becomes unknown on restart; replay looks up, finds nothing, "
+               "sends nothing and requires human reconciliation",
+               {"crashed": crashed_cleanly, "recovered_operations": recovered, "error": after.error_code,
+                "ledger_state": ledger.get(after.operation_id).state if after.operation_id else None,
+                "new_posts": transport.posts - posts_before_crash_replay,
+                "issues_with_marker": len(matches) if isinstance(matches, list) else matches},
+               {"crashed": crashed_cleanly, "recovered_as_unknown": recovered == 1,
+                "human_reconciliation": after.error_code == "HUMAN_RECONCILIATION_REQUIRED",
+                "no_new_post": transport.posts == posts_before_crash_replay, "no_issue_exists": matches == []})
+
+        # target check on a real object ---------------------------------------------------
+        if first.ok and issue is not None:
+            own = destination.check(first.operation_id, title, issue.body)
+            foreign = destination.check(after.operation_id or "other-operation", title, issue.body)
+            renamed = destination.check(first.operation_id, "another title", issue.body)
+            record("target_check", ["task.durable_operations.021"],
+                   "the real issue matches its own operation only; another operation or title is refused",
+                   {"own": own, "other_operation": foreign, "other_title": renamed},
+                   {"own_matches": own, "other_operation_refused": not foreign, "other_title_refused": not renamed})
+
+    except Exception as error:  # a scenario failed hard: still clean up and report
+        report["error"] = f"{type(error).__name__}: {error}"
+    finally:
+        finish(transport, report, args.output)
+    return 0 if report["all_passed"] else 1
+
+
+def finish(transport, report, output: Path) -> None:
+    """Close every issue this run created or found, then write the report.
+    Runs even when a scenario raised, so a transient failure leaves nothing open."""
+    for number in transport.created:
+        if number not in report["issues"]:
+            report["issues"].append(number)
     for number in report["issues"]:
-        reply = transport.request("PATCH", f"/issues/{number}",
-                                  json_body={"state": "closed", "state_reason": "not_planned"})
+        try:
+            reply = transport.request("PATCH", f"/issues/{number}",
+                                      json_body={"state": "closed", "state_reason": "not_planned"})
+        except Exception as error:  # keep closing the rest; the report shows what stayed open
+            report.setdefault("cleanup_errors", []).append(f"#{number}: {type(error).__name__}: {error}")
+            continue
         if reply.status == 200:
             report["closed"].append(number)
-    report["all_passed"] = (len(report["scenarios"]) == 5 and all(s["passed"] for s in report["scenarios"])
+    report["all_passed"] = ("error" not in report and len(report["scenarios"]) == 5
+                            and all(s["passed"] for s in report["scenarios"])
                             and sorted(report["closed"]) == sorted(report["issues"]))
-    args.output.write_text(json.dumps(report, indent=2, ensure_ascii=False, default=str) + "\n", encoding="utf-8")
+    output.write_text(json.dumps(report, indent=2, ensure_ascii=False, default=str) + "\n", encoding="utf-8")
     # The full report goes to the job log too, so it is readable without the artifact.
     print(json.dumps(report, indent=2, ensure_ascii=False, default=str))
-    return 0 if report["all_passed"] else 1
 
 
 def ensure_label(transport) -> None:

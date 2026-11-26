@@ -212,6 +212,20 @@ def test_resends_are_bounded(host, github):
     assert github.posts == 2
 
 
+def test_grant_revoked_during_the_rate_limit_wait_stops_the_resend(tmp_path, github):
+    # Codex review on #382: the live grant is checked again before a resend.
+    from threading import Event
+    revoked = Event()
+    host = Host(tmp_path / "ledger.sqlite3", github)
+    host.executor.authority = LocalAuthority(frozenset({TOOL_NAME}), revocation_event=revoked)
+    host.executor.sleep = lambda _seconds: revoked.set()
+    github.script = ["rate_limited", "ok"]
+    result = host.create()
+    assert result.error_code == "NOT_AUTHORIZED" and github.posts == 1 and github.issues == []
+    assert host.state(result.operation_id) == "failed"
+    assert host.store.get(result.operation_id)["detail"] == "NOT_AUTHORIZED"
+
+
 def test_rejection_is_final(host, github):
     github.script = ["reject"]
     assert host.create().error_code == "REJECTED_BY_DESTINATION" and github.posts == 1

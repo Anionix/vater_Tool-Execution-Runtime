@@ -8,7 +8,7 @@ import json
 from pathlib import Path
 
 from test_external_change import FakeGitHub
-from verified_execution.external_change import HttpReply
+from verified_execution.external_change import HttpReply, TransportError
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -124,3 +124,36 @@ def test_issues_found_only_by_the_harness_are_still_closed(tmp_path, monkeypatch
     report = json.loads(output.read_text())
     assert {s["name"]: s["passed"] for s in report["scenarios"]}["lost_reply"] is False
     assert len(fake.issues) == 2 and sorted(fake.closed) == [1, 2]
+
+
+class FlakyReadRepository(FakeRepository):
+    """Fails only the second GET of /issues/1: the harness's own verification
+    read right after the executor's snapshot (Codex review on #382)."""
+
+    def __init__(self):
+        super().__init__()
+        self.reads = 0
+
+    def request(self, method, path, *, json_body=None, query=None):
+        if method == "GET" and path == "/issues/1":
+            self.reads += 1
+            if self.reads == 2:
+                raise TransportError("ConnectionResetError")
+        return super().request(method, path, json_body=json_body, query=query)
+
+
+def test_a_scenario_that_raises_still_closes_its_issues_and_writes_the_report(tmp_path, monkeypatch):
+    script = load_script()
+    fake = FlakyReadRepository()
+    monkeypatch.setattr(script, "UrllibTransport", lambda repository, token: fake)
+    monkeypatch.setattr(script.time, "sleep", lambda _seconds: None)
+    monkeypatch.setenv("GITHUB_REPOSITORY", "example/repository")
+    monkeypatch.setenv("GITHUB_TOKEN", "dummy-token-for-the-fake")
+    output = tmp_path / "report.json"
+    monkeypatch.setattr("sys.argv", ["run_github_issue_evidence.py", "--output", str(output)])
+
+    assert script.main() == 1
+    report = json.loads(output.read_text())
+    assert report["all_passed"] is False and "TransportError" in report["error"]
+    assert len(fake.issues) == 1 and fake.closed == [1] and report["closed"] == [1]
+    assert all(issue["state"] == "closed" for issue in fake.issues)
