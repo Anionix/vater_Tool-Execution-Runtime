@@ -1,0 +1,19 @@
+Lean (version 4.19.0, x86_64-unknown-linux-gnu, commit 6caaee842e94, Release)
+'VaterLocal.checkedAdd_sound' does not depend on any axioms
+'VaterLocal.checkedAdd_complete' depends on axioms: [propext, Quot.sound]
+'VaterLocal.checkedAdd_overflow' depends on axioms: [propext, Quot.sound]
+'VaterLocal.noDispatchWithoutApproval' does not depend on any axioms
+'VaterLocal.noDispatchWithoutLiveGrant' does not depend on any axioms
+replaying VaterLocal
+adding defnDecl VaterLocal.dispatchAllowed
+adding defnDecl VaterLocal.maxUnsigned32
+adding defnDecl VaterLocal.checkedAdd
+adding thmDecl VaterLocal.checkedAdd.eq_1
+adding thmDecl VaterLocal.checkedAdd_overflow._proof_1
+adding thmDecl VaterLocal.checkedAdd_overflow
+adding thmDecl VaterLocal.checkedAdd_complete._proof_1
+adding thmDecl VaterLocal.checkedAdd_sound
+adding thmDecl VaterLocal.noDispatchWithoutApproval
+adding thmDecl VaterLocal.checkedAdd_complete._proof_2
+adding thmDecl VaterLocal.checkedAdd_complete
+adding thmDecl VaterLocal.noDispatchWithoutLiveGrant

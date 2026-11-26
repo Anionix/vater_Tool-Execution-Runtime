@@ -1,0 +1,22 @@
+{
+  "task_id": "task.durable_operations.023",
+  "acceptance_criteria": "全ての安全性試験の証拠が必要",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/lean-and-external-release-tests.xml",
+  "report_sha256": "f11fa242863ca20a8db7e0d7a9ab2665e674835e0bf396a41b02d57a8186d6bb",
+  "source_sha256": {
+    "contracts/external_change_release.json": "a20e107b4ec71d82c95d591287187ed8e5a1ab59510ddedf60d345281c601567",
+    "docs/RELEASE_PROFILES.json": "5d42355ee436ca6f2840b7bf33b777d83d60379391f9ec3ccc637cfc0bb890a7",
+    "server_mcp.py": "e64ea42c483ecbc127be068bb815470c330c6f568c38ffae19f453ea9824b8e9",
+    "tests/test_external_change_release_contract.py": "5ae80fd6ecbca744aec7799de0c5fe0cbc9e927bc48193878bc668c4a2c5154c",
+    "tests/test_local_contracts.py": "da7c256bd5ced166122723d6e9a8fe2913a95a96f2a41938878e93c3837d4de7"
+  },
+  "scope": "The release contract defines the evidence required for admission to release review. Tests check its coverage against the task ledger and verify the implemented local catalog still exposes only checked_add. No external service is authorized by this evidence.",
+  "test_cases": [
+    "tests/test_external_change_release_contract.py::test_external_change_release_requires_all_gates_and_service_evidence",
+    "tests/test_local_contracts.py::test_protocol_routes_do_not_execute_query_or_model_requests"
+  ],
+  "policy_path": "contracts/external_change_release.json"
+}

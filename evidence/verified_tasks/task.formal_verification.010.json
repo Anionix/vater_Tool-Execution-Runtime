@@ -1,0 +1,30 @@
+{
+  "task_id": "task.formal_verification.010",
+  "acceptance_criteria": "利用可能な検査器で再検査できる",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/lean-and-external-release-tests.xml",
+  "report_sha256": "f11fa242863ca20a8db7e0d7a9ab2665e674835e0bf396a41b02d57a8186d6bb",
+  "source_sha256": {
+    "evidence/formal/SHA256SUMS": "8ef2ba3aa49396daae5ad2aa3c119c104b04cb49735e3aa47dd5e3aa5e009181",
+    "evidence/formal/lean-4.19.0.log": "763ab60100c677d75c1674b113166df06e030e59d7f71c4a2fb43f0d2565c6c0",
+    "evidence/formal/lean4lean-4.19.0.txt": "89fae3cc7072e475b2b1fe232027efc3cee527313bad128fb6622c8896556969",
+    "formal/VaterLocal.lean": "8b0ca4933fcedc02612fae5344b2c63213a1b05198afd3aaaf2c674d62a44c23",
+    "scripts/verify_vater_lean_model.sh": "cb77e3d493595868dfd32fef297560a877fbd6a1c0f09ac81911ae0b02be81d0",
+    "src/verified_execution/core.py": "54cfd0f06fc9cc0e4519da3bd66515186ea1269648bf59d86dc6f244a6a2742e",
+    "tests/test_core.py": "2a851784e79de34dfccf00a3acf34ffc6961053bb2ae8118721dc185113c5b66"
+  },
+  "scope": "Lean4Lean rechecked the module's declarations, including all five named theorems. This alternate checker uses the imported Lean library and shares design with the original kernel. Python cases are supporting implementation checks.",
+  "test_cases": [
+    "tests/test_core.py::test_all_256_eight_bit_pairs_and_boundary",
+    "tests/test_core.py::test_host_permission_truth_table"
+  ],
+  "checker_report": "evidence/formal/lean4lean-4.19.0.txt",
+  "checker_repository": "https://github.com/digama0/lean4lean",
+  "checker_commit": "f8cd3d35aef16051be87af9a13721ed1863ea1a0",
+  "checker_dependency_commit": "f5d04a9c4973d401c8c92500711518f7c656f034",
+  "checker_build_command": "lake build lean4lean",
+  "recheck_command": "scripts/verify_vater_lean_model.sh /path/to/lean4lean/.lake/build/bin/lean4lean",
+  "lean_version": "4.19.0"
+}
