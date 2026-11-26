@@ -391,3 +391,30 @@ def test_grant_withdrawn_before_reply_suppresses_result(adapter, tmp_path, monke
         response = call(adapter.build_server(authority), args)
     assert response.is_error and response.content[0].text == "NOT_AUTHORIZED"
     assert getattr(response, "structured_content", None) is None
+
+
+def test_permission_denial_logs_only_fixed_fields(adapter, capfd, tmp_path):
+    import json
+    from uuid import UUID
+
+    secret = "synthetic-private-request-key"
+    server = adapter.build_server(
+        LocalAuthority(frozenset()), ledger_path=str(tmp_path / "history.sqlite3")
+    )
+    result = call(
+        server, {"left": 2, "right": 3, "request_key": secret}, name="checked_add_recorded"
+    )
+    assert result.is_error
+    assert result.content[0].text == "NOT_AUTHORIZED"
+    captured = capfd.readouterr()
+    assert captured.out == ""
+    assert secret not in captured.err
+    event = json.loads(captured.err)
+    assert UUID(event.pop("trace_id")).version == 4
+    assert UUID(event.pop("attempt_id")).version == 4
+    assert event.pop("elapsed_ns") >= 0
+    assert event == {
+        "source": "mcp.tools.call",
+        "outcome": "denied",
+        "error_category": "authorization",
+    }

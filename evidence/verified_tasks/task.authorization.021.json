@@ -1,0 +1,16 @@
+{
+  "task_id": "task.authorization.021",
+  "acceptance_criteria": "公式MCP・ネットワーク・SQLiteと無関係に権限の真理値表と拒否既定を試験できる",
+  "scope": "The pure permission predicate matches all 32 combinations of registration, publisher, destination, revocation and expiry.",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_core.py::test_host_permission_truth_table"
+  ],
+  "report_path": "evidence/authorization-completion-tests.xml",
+  "report_sha256": "6408305e8e1e1e961092dc4aafa21b61af89109d21121b1ef9418d5649493bb0",
+  "source_sha256": {
+    "tests/test_core.py": "2a851784e79de34dfccf00a3acf34ffc6961053bb2ae8118721dc185113c5b66"
+  }
+}
