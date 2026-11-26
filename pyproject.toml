@@ -29,3 +29,7 @@ verified_execution_contracts = ["*.json", "*.jsonl"]
 testpaths = ["tests"]
 pythonpath = ["src"]
 addopts = "-q"
+# Tests attach measurements with record_property (task.read_only.014 relies on
+# input_bytes and response_elapsed_ns in the archived reports). Per-test
+# properties are valid in xunit1 and invalid in pytest's default xunit2.
+junit_family = "xunit1"
