@@ -1,0 +1,17 @@
+{
+  "task_id": "task.durable_operations.007",
+  "acceptance_criteria": "主キー・外部キー・一意制約がある",
+  "scope": "The SQLite schema defines primary, foreign and unique keys and is checked after live transactions.",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_ledger.py::test_sqlite_integrity_check_after_concurrent_writes",
+    "tests/test_ledger.py::test_duplicate_approval_identifier_rejected"
+  ],
+  "report_path": "evidence/minimum-validation-tests.xml",
+  "report_sha256": "9800d0ae6c5623c88f9841db61eac5956d9c506bd547db3c2e3d32c12d931647",
+  "source_sha256": {
+    "tests/test_ledger.py": "d4cf3c38949e718558d35bfb63eeb2d39cced84010b74d6ffc1befc4f1105770"
+  }
+}

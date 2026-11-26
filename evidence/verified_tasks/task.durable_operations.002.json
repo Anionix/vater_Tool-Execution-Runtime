@@ -1,0 +1,21 @@
+{
+  "task_id": "task.durable_operations.002",
+  "acceptance_criteria": "状態定義に全て存在",
+  "scope": "The local ledger distinguishes preparation, dispatch, success, failure and uncertainty.",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_ledger.py::test_reservation_and_history",
+    "tests/test_ledger.py::test_definitive_failure_must_be_dispatched",
+    "tests/test_ledger.py::test_cancel_after_dispatch_does_not_mean_undone",
+    "tests/test_recorded_calculator.py::test_success_is_durable",
+    "tests/test_recorded_calculator.py::test_overflow_is_definitive_failure"
+  ],
+  "report_path": "evidence/minimum-validation-tests.xml",
+  "report_sha256": "9800d0ae6c5623c88f9841db61eac5956d9c506bd547db3c2e3d32c12d931647",
+  "source_sha256": {
+    "tests/test_ledger.py": "d4cf3c38949e718558d35bfb63eeb2d39cced84010b74d6ffc1befc4f1105770",
+    "tests/test_recorded_calculator.py": "35cbed27d1dff0770ca7b3780ca244b3b7f0582ed8f39812038d596720fb38cc"
+  }
+}
