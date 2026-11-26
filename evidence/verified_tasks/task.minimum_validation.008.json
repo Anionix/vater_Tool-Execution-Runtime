@@ -1,0 +1,22 @@
+{
+  "task_id": "task.minimum_validation.008",
+  "acceptance_criteria": "要求本文の自称利用者・権限で計算許可を偽装できないことを確認する",
+  "scope": "Caller-supplied identity or authority cannot grant permission.",
+  "environment_record": "evidence/minimum-validation-environment.json",
+  "official_conformance_record": "evidence/verified_tasks/task.mcp_transport.019.json",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_core.py::test_authority_not_accepted_as_tool_argument",
+    "tests/test_recorded_cli.py::test_real_process_unauthorized_client_cannot_supply_identity",
+    "tests/test_adapter_boundary.py::test_model_text_is_only_input"
+  ],
+  "report_path": "evidence/minimum-validation-tests.xml",
+  "report_sha256": "9800d0ae6c5623c88f9841db61eac5956d9c506bd547db3c2e3d32c12d931647",
+  "source_sha256": {
+    "tests/test_adapter_boundary.py": "4c5b04e4d233f88079fb204f1f27a7b14fbd810f6aa336ba283b1f78003d6ac3",
+    "tests/test_core.py": "2a851784e79de34dfccf00a3acf34ffc6961053bb2ae8118721dc185113c5b66",
+    "tests/test_recorded_cli.py": "e944d7b08c5b4e2d46303f1b94065e19f02613f1c1a506a58c1bd3d94bc98144"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "task_id": "task.minimum_validation.003",
+  "acceptance_criteria": "型・整形・静的解析の結果を対象ソース版と一緒に記録する",
+  "scope": "The linked tool log records typing, formatting differences, static results, and the exact source revision.",
+  "environment_record": "evidence/minimum-validation-environment.json",
+  "official_conformance_record": "evidence/verified_tasks/task.mcp_transport.019.json",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_static_policy.py::test_real_project_has_no_rule_violations",
+    "tests/test_static_policy.py::test_cli_rejects_real_source_violation"
+  ],
+  "report_path": "evidence/minimum-validation-tests.xml",
+  "report_sha256": "9800d0ae6c5623c88f9841db61eac5956d9c506bd547db3c2e3d32c12d931647",
+  "source_sha256": {
+    "tests/test_static_policy.py": "632f69b8b92f4bea3bb29ca990e54c535da5a9d2c0d13367af4f4f445d999ef8"
+  }
+}

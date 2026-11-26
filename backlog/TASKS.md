@@ -1,7 +1,7 @@
 # Python先行版 — 元の351件の実装作業一覧
 
 - 元の識別子を変えず、Python版の条件に置き換えた台帳。
-- [x] が付くのは、前提条件と合格証拠がそろった142件。
+- [x] が付くのは、前提条件と合格証拠がそろった158件。
 - 実装機能と作業の合格は別。契約を変更した項目の古い合格証拠は無効。
 
 ## 目的・非目標・境界
@@ -319,37 +319,37 @@
 ## Python初期版の独立検証
 作業 15件・完了判定 1件 / 初期必須：はい
 
-- [ ] `task.minimum_validation.001` Pythonの隔離試験環境を用意する — 未着手
+- [x] `task.minimum_validation.001` Pythonの隔離試験環境を用意する — 正式完了
   - 合格：Pythonの版と仮想環境を記録し、オフライン中核試験を再実行できる
-- [ ] `task.minimum_validation.002` Pythonパッケージを構築・インストールする — 未着手
+- [x] `task.minimum_validation.002` Pythonパッケージを構築・インストールする — 正式完了
   - 合格：Python中核パッケージをクリーンな環境でビルドし、テストを実行できる
-- [ ] `task.minimum_validation.003` Pythonの静的検査を実行する — 未着手
+- [x] `task.minimum_validation.003` Pythonの静的検査を実行する — 正式完了
   - 合格：型・整形・静的解析の結果を対象ソース版と一緒に記録する
-- [ ] `task.minimum_validation.004` Python MCP標準出力へのログ混入を検査する — 実施中または要再検証
+- [x] `task.minimum_validation.004` Python MCP標準出力へのログ混入を検査する — 正式完了
   - 合格：実サーバーでstdoutがJSON-RPC通信だけでありstderrにログが出る
-- [ ] `task.minimum_validation.005` Python加算の正常系と異常系を実行する — 実施中または要再検証
+- [x] `task.minimum_validation.005` Python加算の正常系と異常系を実行する — 正式完了
   - 合格：仕様サンプルと境界値を独立の期待値に照合する
-- [ ] `task.minimum_validation.006` Python中核と公式MCPで未知ツールを拒否する — 実施中または要再検証
+- [x] `task.minimum_validation.006` Python中核と公式MCPで未知ツールを拒否する — 正式完了
   - 合格：未登録の名前が共通権限境界を越えず、実通信でも拒否される
-- [ ] `task.minimum_validation.007` Python中核と公式MCPで不正引数を拒否する — 実施中または要再検証
+- [x] `task.minimum_validation.007` Python中核と公式MCPで不正引数を拒否する — 正式完了
   - 合格：型違い・不足・余分な項目を実クライアントとPython単体試験で拒否する
-- [ ] `task.minimum_validation.008` Pythonのホスト所有権を検査する — 実施中または要再検証
+- [x] `task.minimum_validation.008` Pythonのホスト所有権を検査する — 正式完了
   - 合格：要求本文の自称利用者・権限で計算許可を偽装できないことを確認する
-- [ ] `task.minimum_validation.009` Pythonの境界値・引数正規化を独立検証する — 未着手
+- [x] `task.minimum_validation.009` Pythonの境界値・引数正規化を独立検証する — 正式完了
   - 合格：独立した期待値で算術境界・整数型・未知の引数を検証し、入力全域の形式証明とは区別する
-- [ ] `task.minimum_validation.010` Pythonの認可不変条件を独立検証する — 未着手
+- [x] `task.minimum_validation.010` Pythonの認可不変条件を独立検証する — 正式完了
   - 合格：読み取り専用加算について許可・未許可を独立期待表と比較する。書き込み承認は後続段階の試験とする
-- [ ] `task.minimum_validation.011` Pythonのローカル取消し境界を検証する — 未着手
+- [x] `task.minimum_validation.011` Pythonのローカル取消し境界を検証する — 正式完了
   - 合格：取消し時の応答抑止と実行中断を区別して試験する。副作用の再実行防止とSQLiteは後続の拡張段階とする
-- [ ] `task.minimum_validation.012` 公式Python MCP適合性試験を実行する — 未着手
+- [x] `task.minimum_validation.012` 公式Python MCP適合性試験を実行する — 正式完了
   - 合格：公式の実装と検査器で対象版の適合結果が残り、モック結果で代用しない
-- [ ] `task.minimum_validation.013` 公式Python MCP新旧クライアントで互換試験する — 実施中または要再検証
+- [x] `task.minimum_validation.013` 公式Python MCP新旧クライアントで互換試験する — 正式完了
   - 合格：新版と旧版を別途起動し、対応範囲と成功・失敗を記録する
-- [ ] `task.minimum_validation.014` Pythonと公式MCPの異常入力資源制限を検証する — 実施中または要再検証
+- [x] `task.minimum_validation.014` Pythonと公式MCPの異常入力資源制限を検証する — 正式完了
   - 合格：最大入出力・深さ・時間の制限が実際の接続環境で機能することを確認する
-- [ ] `task.minimum_validation.015` Pythonの独立試験証拠を保存する — 実施中または要再検証
+- [x] `task.minimum_validation.015` Pythonの独立試験証拠を保存する — 正式完了
   - 合格：ソースの検査値、試験名、実行環境、結果、スキップを含む追跡可能な記録がある
-- [ ] `gate.minimum_validation.completed` 初期版の独立検証の全作業を完了判定する — 未着手
+- [x] `gate.minimum_validation.completed` 初期版の独立検証の全作業を完了判定する — 正式完了
   - 合格：同段階の全作業について、実物・独立した合格判定・証拠の所在がある
 
 ## Python初期版の配布判定

@@ -1,0 +1,22 @@
+{
+  "task_id": "task.minimum_validation.010",
+  "acceptance_criteria": "読み取り専用加算について許可・未許可を独立期待表と比較する。書き込み承認は後続段階の試験とする",
+  "scope": "An independent truth table verifies read-only allowance and refusal.",
+  "environment_record": "evidence/minimum-validation-environment.json",
+  "official_conformance_record": "evidence/verified_tasks/task.mcp_transport.019.json",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_core.py::test_host_permission_truth_table",
+    "tests/test_core.py::test_service_denies_even_read_tool_without_authority",
+    "tests/test_core.py::test_service_valid_call_trace",
+    "tests/test_official_mcp_sdk.py::test_sdk_access_denied"
+  ],
+  "report_path": "evidence/minimum-validation-tests.xml",
+  "report_sha256": "9800d0ae6c5623c88f9841db61eac5956d9c506bd547db3c2e3d32c12d931647",
+  "source_sha256": {
+    "tests/test_core.py": "2a851784e79de34dfccf00a3acf34ffc6961053bb2ae8118721dc185113c5b66",
+    "tests/test_official_mcp_sdk.py": "1e065bdf2c1b046739419aaac2e96784101f1b2573c5fb4d9c73a3505b9cf99c"
+  }
+}

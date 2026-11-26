@@ -1,0 +1,23 @@
+{
+  "task_id": "task.minimum_validation.014",
+  "acceptance_criteria": "最大入出力・深さ・時間の制限が実際の接続環境で機能することを確認する",
+  "scope": "Process-boundary tests exercise byte and depth limits and output deadlines.",
+  "environment_record": "evidence/minimum-validation-environment.json",
+  "official_conformance_record": "evidence/verified_tasks/task.mcp_transport.019.json",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_local_contracts.py::test_fixed_server_recovers_measures_input_and_reaps_child",
+    "tests/test_process_lifecycle.py::test_nonblocking_output_stall_deadline_is_enforced",
+    "tests/test_process_lifecycle.py::test_output_total_budget_is_enforced",
+    "tests/test_output_boundary.py::test_oversized_output_rejected_before_any_forward"
+  ],
+  "report_path": "evidence/minimum-validation-tests.xml",
+  "report_sha256": "9800d0ae6c5623c88f9841db61eac5956d9c506bd547db3c2e3d32c12d931647",
+  "source_sha256": {
+    "tests/test_local_contracts.py": "da7c256bd5ced166122723d6e9a8fe2913a95a96f2a41938878e93c3837d4de7",
+    "tests/test_output_boundary.py": "e2a3ef6c73a9c93b137ccae6e6ec48581dfe9cddd753f79d5aa1df56c6c74aee",
+    "tests/test_process_lifecycle.py": "4c894a552989a90e0915148a2106517441dd6cc0cea073ac39e21255877cd50b"
+  }
+}

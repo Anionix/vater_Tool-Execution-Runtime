@@ -1,0 +1,23 @@
+{
+  "task_id": "task.minimum_validation.015",
+  "acceptance_criteria": "ソースの検査値、試験名、実行環境、結果、スキップを含む追跡可能な記録がある",
+  "scope": "The gate combines the source digest inventory, exact test names and the report with environment and skip counts.",
+  "environment_record": "evidence/minimum-validation-environment.json",
+  "official_conformance_record": "evidence/verified_tasks/task.mcp_transport.019.json",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[run_local_mcp.py-2026-07-28]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[run_local_mcp.py-legacy]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[launch_guarded_mcp.py-2026-07-28]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[launch_guarded_mcp.py-legacy]",
+    "tests/test_runtime_contracts.py::test_core_import_and_python_version_in_isolation"
+  ],
+  "report_path": "evidence/minimum-validation-tests.xml",
+  "report_sha256": "9800d0ae6c5623c88f9841db61eac5956d9c506bd547db3c2e3d32c12d931647",
+  "source_sha256": {
+    "tests/test_official_mcp_sdk.py": "1e065bdf2c1b046739419aaac2e96784101f1b2573c5fb4d9c73a3505b9cf99c",
+    "tests/test_runtime_contracts.py": "0999ababce47875e64d2bd06b02db2dc7fdf51f6ce3668005681e0cacd4c8019"
+  }
+}

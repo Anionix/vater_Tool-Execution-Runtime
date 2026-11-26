@@ -1,0 +1,51 @@
+{
+  "verified_on": "2026-11-26",
+  "source_commit": "4765032e4b890f555b1e1e60c85d4e58b1c5b2be",
+  "platform": "Linux x86_64",
+  "python": "3.13.5",
+  "pytest": "9.2.0",
+  "official_mcp": "2.3.0",
+  "lock_sha256": "cc651303afe6b684a979e14fdd9d1ca8b73d7bda0ea6e1d0480a20ae792de51c",
+  "wheel": {
+    "filename": "verified_execution_prototype-0.11.0-py3-none-any.whl",
+    "sha256": "22f2087b3ed98c83b16d00df1b2d520748f753638998a5df789b9c46bae1ad7c",
+    "isolated_core_tests_passed": 38,
+    "build": "uv build --wheel"
+  },
+  "typing": {
+    "command": "mypy --ignore-missing-imports --follow-imports=silent src/verified_execution/core.py",
+    "version": "1.18.2",
+    "exit_status": 0,
+    "result": "Success: no issues found in 1 source file"
+  },
+  "format": {
+    "command": "ruff format --check src/verified_execution server_mcp.py",
+    "version": "0.14.8",
+    "exit_status": 1,
+    "details": [
+      "Would reformat: server_mcp.py",
+      "Would reformat: src/verified_execution/__init__.py",
+      "Would reformat: src/verified_execution/cancellable_bridge.py",
+      "Would reformat: src/verified_execution/cancellation.py",
+      "Would reformat: src/verified_execution/cancellation_journal.py",
+      "Would reformat: src/verified_execution/client_result.py",
+      "Would reformat: src/verified_execution/core.py",
+      "Would reformat: src/verified_execution/ledger.py",
+      "Would reformat: src/verified_execution/local_cli.py",
+      "Would reformat: src/verified_execution/policy_config.py",
+      "Would reformat: src/verified_execution/recorded_calculator.py",
+      "Would reformat: src/verified_execution/recorded_cli.py",
+      "Would reformat: src/verified_execution/recorded_tool_bridge.py",
+      "Would reformat: src/verified_execution/request_limits.py",
+      "Would reformat: src/verified_execution/worker_leases.py",
+      "15 files would be reformatted, 1 file already formatted"
+    ]
+  },
+  "static": {
+    "command": "python scripts/check_static_policy.py",
+    "exit_status": 0,
+    "files_scanned": 16,
+    "findings": []
+  },
+  "conformance_scope": "Official tools-list scenario and wire schema subset over local standard input and output, for 2025-11-25 and 2026-07-28."
+}
