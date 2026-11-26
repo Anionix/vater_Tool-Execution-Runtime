@@ -18,6 +18,7 @@ Do NOT expose ledger methods as unauthenticated network or MCP tools.
 """
 from __future__ import annotations
 
+from collections.abc import Callable
 from contextlib import contextmanager
 from dataclasses import dataclass
 import hashlib
@@ -25,11 +26,18 @@ import json
 from pathlib import Path
 import sqlite3
 import time
-from typing import Any, Iterator, Literal
+from typing import Any, Iterator, Literal, NamedTuple
 from uuid import uuid4
+
+from .core import LocalAuthority
 
 STATES = frozenset({"prepared", "dispatched", "succeeded", "failed", "unknown", "cancelled"})
 TERMINAL = frozenset({"succeeded", "failed", "cancelled"})
+
+
+class ResourceSnapshot(NamedTuple):
+    owner: str
+    version: str
 
 
 class LedgerError(Exception):
@@ -67,6 +75,15 @@ def _text(name: str, value: Any, max_bytes: int = 256) -> str:
     if len(encoded) > max_bytes:
         raise LedgerError(code)
     return value
+
+
+@dataclass(frozen=True)
+class HostPrincipal:
+    """A local host binding. The public request schema never accepts this object."""
+    name: str
+
+    def __post_init__(self) -> None:
+        _text("principal", self.name)
 
 
 def _optional_text(name: str, value: Any) -> str:
@@ -108,7 +125,9 @@ def fingerprint(arguments: Any) -> str:
 
 
 class OperationLedger:
-    def __init__(self, path: str | Path, *, timeout_seconds: float = 5.0):
+    def __init__(self, path: str | Path, *, timeout_seconds: float = 5.0,
+                 read_resource: Callable[[str], ResourceSnapshot | None] | None = None):
+        self.read_resource = read_resource
         self.path = str(path)
         if self.path == ":memory:":
             raise LedgerError("FILE_DATABASE_REQUIRED")
@@ -278,7 +297,29 @@ class OperationLedger:
         ).fetchone():
             raise LedgerError('OWNER_REQUIRED')
 
-    def begin_dispatch(self, operation_id: str, *, approval_id: str | None = None) -> Operation:
+    def revoke_approval(self, approval_id: str) -> bool:
+        """Expire an unused host approval. Keep its identifier reserved across restarts."""
+        approval_id = _text("approval_id", approval_id)
+        with self._transaction() as connection:
+            changed = connection.execute("""
+                UPDATE approvals SET expires_at_ms=0
+                WHERE approval_id=? AND consumed_by IS NULL AND expires_at_ms>0
+            """, (approval_id,))
+            return changed.rowcount == 1
+
+    def _check_dispatch_grant(self, operation: Operation, authority: LocalAuthority | None) -> None:
+        # task.contracts.007: under the dispatch lock, before consuming approval.
+        if self.read_resource is not None and operation.target_id:
+            current = self.read_resource(operation.target_id)
+            if current is None or current.owner != operation.principal:
+                raise LedgerError("NOT_AUTHORIZED")
+            if not operation.resource_version or current.version != operation.resource_version:
+                raise LedgerError("RESOURCE_VERSION_CHANGED")
+        if authority is not None and not authority.permits(operation.tool_name):
+            raise LedgerError("NOT_AUTHORIZED")
+
+    def begin_dispatch(self, operation_id: str, *, approval_id: str | None = None,
+                       authority: LocalAuthority | None = None) -> Operation:
         """Durable PREPARED -> DISPATCHED; call *before* external action.
 
         Dispatch may happen zero times even after this transition (process crash).
@@ -286,12 +327,13 @@ class OperationLedger:
         """
         operation_id = _text("operation_id", operation_id)
         with self._transaction() as connection:
-            # task.trust.015: check approval expiry after acquiring the writer lock.
-            now = self._now()
             self._guard_legacy_write(connection, operation_id)
             op = self._get(connection, operation_id)
             if op.state != "prepared" or op.cancel_requested:
                 raise LedgerError("NOT_PREPARED")
+            self._check_dispatch_grant(op, authority)
+            # Compare expiry after acquiring the writer lock and reading the target version.
+            now = self._now()
             if op.requires_approval:
                 approval_id = _text("approval_id", approval_id)
                 record = connection.execute("""

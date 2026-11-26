@@ -331,3 +331,52 @@ def test_sdk_in_process_cancel_after_commit_keeps_result(tmp_path, era):
         assert db.read_calculation(row[0], principal='local-process')==42
 
     anyio.run(run)
+
+
+@pytest.mark.parametrize("era", ["2026-07-28", "legacy"])
+def test_sdk_cancels_dispatched_call_over_stdio(tmp_path, era):
+    import sqlite3
+    import anyio
+    from mcp import Client, StdioServerParameters
+
+    database = tmp_path / "wire.sqlite3"
+    # Only the test process installs this host checkpoint. The client uses real stdio.
+    child = """
+import sys, anyio
+from mcp.server.stdio import stdio_server
+from server_mcp import build_server
+async def hold(operation):
+    await anyio.sleep_forever()
+async def main():
+    server = build_server(ledger_path=sys.argv[1], after_dispatch=hold)
+    async with stdio_server() as (reader, writer):
+        await server.run(reader, writer, server.create_initialization_options())
+anyio.run(main)
+"""
+    def operation_state():
+        if database.exists():
+            with sqlite3.connect(database) as connection:
+                return connection.execute("SELECT state FROM operations WHERE request_key='one'").fetchone()
+        return None
+
+    async def run():
+        params = StdioServerParameters(command=sys.executable, args=["-u", "-c", child, str(database)],
+                                       cwd=ROOT, env={"PYTHONPATH": str(ROOT / "src")})
+        async with Client(params, mode=era) as client:
+            scope = anyio.CancelScope()
+            responses = []
+            async def send():
+                with scope:
+                    responses.append(await client.call_tool("checked_add_recorded", {
+                        "request_key": "one", "left": 1, "right": 2}))
+            with anyio.fail_after(6):
+                async with anyio.create_task_group() as group:
+                    group.start_soon(send)
+                    while await anyio.to_thread.run_sync(operation_state) != ("dispatched",):
+                        await anyio.sleep(0.01)
+                    scope.cancel()
+                while await anyio.to_thread.run_sync(operation_state) != ("unknown",):
+                    await anyio.sleep(0.01)
+                assert not responses
+                assert (await client.call_tool("checked_add", {"left": 1, "right": 2})).structured_content == {"result": 3}
+    anyio.run(run)

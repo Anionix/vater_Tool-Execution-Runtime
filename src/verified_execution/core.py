@@ -17,6 +17,7 @@ from threading import Event
 from time import monotonic_ns
 from typing import Any, Mapping
 
+LOCAL_PUBLISHER = "Anionix/vater_Tool-Execution-Runtime"
 UNSIGNED_32_MAX = 2**32 - 1
 
 
@@ -66,6 +67,7 @@ class ExecutionTrace:
 class LocalAuthority:
     """Server-configured local capability, never read from untrusted tool input."""
     allowed_tools: frozenset[str]
+    allowed_destinations: frozenset[str] = field(default_factory=frozenset, kw_only=True)
     expires_at_monotonic_ns: int | None = field(default=None, kw_only=True)
     revocation_event: Event | None = field(default=None, kw_only=True, repr=False)
 
@@ -74,10 +76,13 @@ class LocalAuthority:
         if deadline is not None and (type(deadline) is not int or deadline < 0):
             raise ValueError("invalid host grant deadline")
 
-    def permits(self, tool_name: str) -> bool:
+    def permits(self, tool_name: str, *, publisher: str = LOCAL_PUBLISHER,
+                destination: str | None = None) -> bool:
         """task.trust.011: consult the live, process-local host grant."""
         return (
-            tool_name in self.allowed_tools
+            publisher == LOCAL_PUBLISHER
+            and tool_name in self.allowed_tools
+            and (destination is None or destination in self.allowed_destinations)
             and (self.revocation_event is None or not self.revocation_event.is_set())
             and (self.expires_at_monotonic_ns is None or monotonic_ns() < self.expires_at_monotonic_ns)
         )

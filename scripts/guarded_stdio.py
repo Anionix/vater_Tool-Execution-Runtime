@@ -34,17 +34,17 @@ import signal
 import subprocess
 import sys
 import threading
+from pathlib import Path
 import time
 from contextlib import nullcontext
 from typing import Any, BinaryIO, Iterable
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+from verified_execution.json_bounds import WireInputRejected, check_json_depth
+
 DEFAULT_MAX_BYTES = 4096
 DEFAULT_MAX_DEPTH = 32
 DEFAULT_MAX_OUTPUT_BYTES = 65536
-
-
-class WireInputRejected(ValueError):
-    pass
 
 
 class WireOutputRejected(ValueError):
@@ -73,34 +73,6 @@ def _nonfinite(_value: str) -> None:
     raise WireInputRejected("non-finite JSON number")
 
 
-def _check_json_depth(text: str, limit: int) -> None:
-    """Count JSON structure nesting without confusing delimiters in strings."""
-    depth = 0
-    inside = False
-    escape = False
-    for char in text:
-        if inside:
-            if escape:
-                escape = False
-            elif char == "\\":
-                escape = True
-            elif char == '"':
-                inside = False
-            continue
-        if char == '"':
-            inside = True
-        elif char in "{[":
-            depth += 1
-            if depth > limit:
-                raise WireInputRejected("JSON nesting too deep")
-        elif char in "}]":
-            depth -= 1
-            if depth < 0:
-                raise WireInputRejected("unexpected JSON delimiter")
-    if depth != 0 or inside:
-        raise WireInputRejected("incomplete JSON structure")
-
-
 def validate_json_line(raw: bytes, *, max_bytes: int = DEFAULT_MAX_BYTES,
                        max_depth: int = DEFAULT_MAX_DEPTH) -> bytes:
     """Check a full NDJSON request while preserving exact accepted bytes."""
@@ -114,7 +86,7 @@ def validate_json_line(raw: bytes, *, max_bytes: int = DEFAULT_MAX_BYTES,
         raise WireInputRejected("invalid UTF-8") from exc
     if text.startswith("\ufeff"):
         raise WireInputRejected("byte order mark forbidden")
-    _check_json_depth(text, max_depth)
+    check_json_depth(text, max_depth)
     try:
         obj = json.loads(text, object_pairs_hook=_unique_json_members, parse_constant=_nonfinite)
     except (ValueError, RecursionError) as exc:

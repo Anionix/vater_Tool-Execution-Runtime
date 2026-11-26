@@ -1,0 +1,16 @@
+{
+  "publisher": "Anionix/vater_Tool-Execution-Runtime",
+  "model": null,
+  "entrypoints": {
+    "minimum_stdio": {"tools/list": true, "tools/call": ["checked_add"], "sampling/createMessage": false},
+    "recorded_stdio": {"tools/list": true, "tools/call": ["checked_add", "checked_add_recorded"], "sampling/createMessage": false}
+  },
+  "error_categories": {
+    "input": ["INVALID_ARGUMENT", "OUT_OF_RANGE", "OVERFLOW"],
+    "authentication": ["INVALID_PRINCIPAL"],
+    "authorization": ["NOT_AUTHORIZED", "APPROVAL_INVALID"],
+    "contract": ["UNKNOWN_TOOL", "INVALID_TOOL_RESULT", "UNSUPPORTED_OPERATION", "RESOURCE_VERSION_CHANGED"],
+    "external": ["TIMEOUT"],
+    "unknown": ["OUTCOME_UNKNOWN"]
+  }
+}

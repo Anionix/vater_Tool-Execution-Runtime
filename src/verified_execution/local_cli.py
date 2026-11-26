@@ -8,6 +8,7 @@ from __future__ import annotations
 import json
 import sys
 from typing import Any
+from .json_bounds import check_json_depth
 from .core import CalculationService, LocalAuthority
 
 MAX_MESSAGE_BYTES = 4096
@@ -30,15 +31,19 @@ def reject_nonfinite(name: str) -> None:
     raise InputFormatError("non-finite numeric constant")
 
 
-def decode_line(raw: bytes) -> dict[str, Any]:
-    # TRANSPORT-001: reject oversize before JSON parsing / arbitrary allocation.
+def decode_request_object(raw: bytes) -> Any:
     if len(raw) > MAX_MESSAGE_BYTES:
         raise InputFormatError("message too large")
     try:
-        result = json.loads(raw.decode("utf-8"),
-                            object_pairs_hook=unique_fields, parse_constant=reject_nonfinite)
+        text = raw.decode("utf-8")
+        check_json_depth(text, 32)
+        return json.loads(text, object_pairs_hook=unique_fields, parse_constant=reject_nonfinite)
     except (ValueError, UnicodeError, TypeError) as exc:
         raise InputFormatError("invalid JSON") from exc
+
+
+def decode_line(raw: bytes) -> dict[str, Any]:
+    result = decode_request_object(raw)
     if not isinstance(result, dict) or set(result) != {"name", "arguments"}:
         raise InputFormatError("expected name and arguments")
     if not isinstance(result["name"], str):

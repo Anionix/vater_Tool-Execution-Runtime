@@ -13,6 +13,8 @@ import json
 from pathlib import Path
 from typing import Any
 
+from .json_bounds import check_json_depth, WireInputRejected
+
 EXPECTED_FIELDS = frozenset({
     "policy_version", "request_input_max_bytes", "request_output_max_bytes",
     "json_max_depth", "readonly_request_timeout_ms", "readonly_max_concurrent",
@@ -84,11 +86,13 @@ def load_local_policy(path: str | Path) -> LocalPolicyConfiguration:
             data = source.read(4097)
         if len(data) > 4096:
             raise PolicyConfigurationError("POLICY_TOO_LARGE")
+        text = data.decode("utf-8", errors="strict")
+        check_json_depth(text, 1)
         raw = json.loads(
-            data.decode("utf-8", errors="strict"),
+            text,
             object_pairs_hook=_reject_duplicate_keys,
             parse_constant=_reject_nonfinite,
         )
-    except (OSError, UnicodeDecodeError, json.JSONDecodeError, RecursionError) as exc:
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, RecursionError, WireInputRejected) as exc:
         raise PolicyConfigurationError("INVALID_POLICY_FILE") from exc
     return validate_local_policy(raw)
