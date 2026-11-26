@@ -1,7 +1,7 @@
 # Python先行版 — 元の351件の実装作業一覧
 
 - 元の識別子を変えず、Python版の条件に置き換えた台帳。
-- [x] が付くのは、前提条件と合格証拠がそろった205件。
+- [x] が付くのは、前提条件と合格証拠がそろった220件。
 - 実装機能と作業の合格は別。契約を変更した項目の古い合格証拠は無効。
 
 ## 目的・非目標・境界
@@ -379,23 +379,23 @@
 ## 後続任意：Rust移植・LeanとKaniによる形式検証
 作業 20件・完了判定 1件 / 初期必須：いいえ
 
-- [ ] `task.formal_verification.001` Python基準実装から形式仕様・Rust移植候補への対応表を作る — 実施中または要再検証
+- [x] `task.formal_verification.001` Python基準実装から形式仕様・Rust移植候補への対応表を作る — 正式完了
   - 合格：Pythonの検証済み関数と、選んだRust移植関数・形式命題の対応を記録する
-- [ ] `task.formal_verification.002` 重要操作は未承認で実行できない命題を定義する — 実施中または要再検証
+- [x] `task.formal_verification.002` 重要操作は未承認で実行できない命題を定義する — 正式完了
   - 合格：明確な前提と結論がある
-- [ ] `task.formal_verification.003` 権限が無効なら実行できない命題を定義する — 実施中または要再検証
+- [x] `task.formal_verification.003` 権限が無効なら実行できない命題を定義する — 正式完了
   - 合格：明確な前提と結論がある
-- [ ] `task.formal_verification.004` 操作内容変更で承認が無効になる命題を定義する — 実施中または要再検証
+- [x] `task.formal_verification.004` 操作内容変更で承認が無効になる命題を定義する — 正式完了
   - 合格：引数と対象版が含まれる
-- [ ] `task.formal_verification.005` 不正な状態遷移を禁止する命題を定義する — 実施中または要再検証
+- [x] `task.formal_verification.005` 不正な状態遷移を禁止する命題を定義する — 正式完了
   - 合格：禁止状態が列挙されている
-- [ ] `task.formal_verification.006` LeanでPython中核の数学的仕様を表現する — 実施中または要再検証
+- [x] `task.formal_verification.006` LeanでPython中核の数学的仕様を表現する — 正式完了
   - 合格：Pythonの動作前提と形式モデルの型・関数が対応することを示す
-- [ ] `task.formal_verification.007` Leanの任意形式証明を実行する — 実施中または要再検証
+- [x] `task.formal_verification.007` Leanの任意形式証明を実行する — 正式完了
   - 合格：選択した命題のLean証明を実際に実行し、未証明を未完了にする
-- [ ] `task.formal_verification.008` Leanで未証明の穴を禁止する — 実施中または要再検証
+- [x] `task.formal_verification.008` Leanで未証明の穴を禁止する — 正式完了
   - 合格：sorryAxが対象定理に含まれない
-- [ ] `task.formal_verification.009` 追加公理の依存関係を記録する — 実施中または要再検証
+- [x] `task.formal_verification.009` 追加公理の依存関係を記録する — 正式完了
   - 合格：定理ごとに公理一覧が残る
 - [ ] `task.formal_verification.010` Leanの独立検査を行う — 未着手
   - 合格：利用可能な検査器で再検査できる
@@ -405,19 +405,19 @@
   - 合格：実際のRust関数を権限と承認の組合せで検査し、Pythonの認可判定と別の証拠を残す
 - [ ] `task.formal_verification.013` Kaniの仮定が検証対象を消していないか監査する — 実施中または要再検証
   - 合格：各仮定に正当化がある
-- [ ] `task.formal_verification.014` Kaniの検証対象と未対応領域を記録する — 実施中または要再検証
+- [x] `task.formal_verification.014` Kaniの検証対象と未対応領域を記録する — 正式完了
   - 合格：Rustを採用しない場合は適用外、採用時は上限と仮定を記録する
 - [ ] `task.formal_verification.015` PythonとRustの独立した期待値を人が定義する — 実施中または要再検証
   - 合格：実装式をコピーしない同じ入力集合でPythonと移植後Rustを比較する
-- [ ] `task.formal_verification.016` Lean仕様とPython・必要ならRustの境界値を比較する — 実施中または要再検証
+- [x] `task.formal_verification.016` Lean仕様とPython・必要ならRustの境界値を比較する — 正式完了
   - 合格：Lean命題とPython実測を突き合わせ、Rust移植をした場合だけRustも一致させる
-- [ ] `task.formal_verification.017` Kaniで証明しないPython並行処理を未証明と記録する — 実施中または要再検証
+- [x] `task.formal_verification.017` Kaniで証明しないPython並行処理を未証明と記録する — 正式完了
   - 合格：SQLiteや非同期取消しについて証明済みと実試験済みの範囲を混同しない
-- [ ] `task.formal_verification.018` PythonとRustの証明対象ソースをハッシュで記録する — 実施中または要再検証
+- [x] `task.formal_verification.018` PythonとRustの証明対象ソースをハッシュで記録する — 正式完了
   - 合格：証明した対象の版変更で古い証拠を自動失効できる
-- [ ] `task.formal_verification.019` Python実装・Rust移植・命題の追跡表を更新する — 実施中または要再検証
+- [x] `task.formal_verification.019` Python実装・Rust移植・命題の追跡表を更新する — 正式完了
   - 合格：証明対象と実際の呼び出し経路を同じ識別子で追える
-- [ ] `task.formal_verification.020` 任意形式証明が保証しない範囲を記録する — 実施中または要再検証
+- [x] `task.formal_verification.020` 任意形式証明が保証しない範囲を記録する — 正式完了
   - 合格：Python実行系、コンパイラ、SQLite、MCP、外部サービスの未証明前提が明記される
 - [ ] `gate.formal_verification.completed` 形式証明とコードの接続の全作業を完了判定する — 未着手
   - 合格：同段階の全作業について、実物・独立した合格判定・証拠の所在がある
