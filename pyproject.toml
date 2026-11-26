@@ -16,6 +16,15 @@ mcp = ["mcp==2.3.0"]
 [project.scripts]
 verified-execution = "verified_execution.local_cli:main"
 
+[tool.setuptools]
+# The host contract files stay at the repository root (the single source of
+# truth) and are shipped inside installs as verified_execution_contracts.
+packages = ["verified_execution", "verified_execution_contracts"]
+package-dir = {"" = "src", "verified_execution_contracts" = "contracts"}
+
+[tool.setuptools.package-data]
+verified_execution_contracts = ["*.json", "*.jsonl"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]

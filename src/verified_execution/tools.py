@@ -23,7 +23,24 @@ from typing import Any, Callable, Iterator, Mapping
 from .core import OperationError, UNSIGNED_32_MAX, checked_add, require_unsigned_32, validated_arguments
 
 RISK_CLASSES = frozenset({"read_only", "state_change", "irreversible", "code_execution"})
-DEFAULT_CONTRACTS_DIR = Path(__file__).resolve().parents[2] / "contracts"
+
+
+def _default_contracts_dir():
+    """Contract files for this code: the checkout's, or the installed copy.
+
+    Running from a source checkout (src layout, editable install or
+    PYTHONPATH=src) reads the repository's contracts/. An installed wheel
+    reads the copy shipped as the verified_execution_contracts package.
+    """
+    here = Path(__file__).resolve()
+    checkout = here.parents[2] / "contracts"
+    if here.parents[1].name == "src" and checkout.is_dir():
+        return checkout
+    from importlib.resources import files
+    return files("verified_execution_contracts")
+
+
+DEFAULT_CONTRACTS_DIR = _default_contracts_dir()
 
 
 def _frozen(value: Any) -> Any:

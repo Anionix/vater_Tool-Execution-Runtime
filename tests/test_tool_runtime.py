@@ -276,3 +276,24 @@ def test_http_rejects_inconsistent_tool_selection():
         create_app(TOKEN, registry=both_tools(), tools=["double"], default_tool="checked_add")
     # Opting out of the version-1 route is explicit.
     create_app(TOKEN, registry=both_tools(), tools=["checked_add"], default_tool=None)
+
+
+def test_installs_ship_every_contract_the_registry_reads():
+    """Non-editable installs read contracts from the verified_execution_contracts package."""
+    import fnmatch
+    import tomllib
+
+    config = tomllib.loads((ROOT / "pyproject.toml").read_text())["tool"]["setuptools"]
+    assert "verified_execution_contracts" in config["packages"]
+    assert config["package-dir"]["verified_execution_contracts"] == "contracts"
+    patterns = config["package-data"]["verified_execution_contracts"]
+    read_by_specs = {"checked_add.input.schema.json", "checked_add.output.contract.json", "tool_risks.json",
+                     "checked_multiply.input.schema.json", "checked_multiply.output.contract.json",
+                     "checked_add_recorded.input.schema.json", "checked_add_recorded.output.contract.json"}
+    for name in read_by_specs | {path.name for path in CONTRACTS.iterdir() if path.is_file()}:
+        assert any(fnmatch.fnmatch(name, pattern) for pattern in patterns), name
+
+
+def test_source_checkout_reads_the_repository_contracts():
+    from verified_execution.tools import DEFAULT_CONTRACTS_DIR
+    assert Path(DEFAULT_CONTRACTS_DIR) == CONTRACTS.resolve()
