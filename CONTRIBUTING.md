@@ -27,3 +27,13 @@ Run the following checks separately from the repository root.
 | Completed phase using the same report | `.venv/bin/python scripts/verify_phase.py contracts --report /tmp/vater-tests.xml` |
 
 A checked-out source tree supplies the standard-I/O launcher and the contract files. The wheel supplies the Python computation package. See [the fixed local launcher](scripts/run_local_mcp.py).
+
+## Reproduce the official standard-I/O conformance subset
+
+With the Python environment above, clone [the official conformance suite](https://github.com/modelcontextprotocol/conformance), check out commit `96a6f9478b7f2e125cf0360a213383cf57533893`, and run `npm ci` in the checkout. With Node.js 24, run from the Vater root:
+
+```sh
+node --import /path/to/conformance/node_modules/tsx/dist/loader.mjs scripts/check_stdio_conformance.mjs /path/to/conformance .venv/bin/python
+```
+
+The runner uses the upstream tools-list scenario and message schemas over the actual standard-I/O launcher for revisions 2025-11-25 and 2026-07-28. The stock upstream server command uses a web endpoint. This run covers tool listing and message shape, including successful and rejected calculator calls. The web transport and the rest of the upstream suite have separate acceptance conditions.

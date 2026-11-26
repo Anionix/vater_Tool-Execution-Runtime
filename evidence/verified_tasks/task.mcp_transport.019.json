@@ -1,0 +1,29 @@
+{
+  "upstream_version": "0.2.0-alpha.12",
+  "upstream_commit": "96a6f9478b7f2e125cf0360a213383cf57533893",
+  "upstream": "https://github.com/modelcontextprotocol/conformance",
+  "upstream_result": "evidence/stdio-conformance-results.jsonl",
+  "upstream_result_sha256": "08322b13708c2adfb6020cfbcb9c2662747f45e6191543556702e792f2c7e7b1",
+  "failure_conditions": [
+    "The stock server CLI requires --url. The local runner calls the unmodified upstream scenario and validator over stdin/stdout.",
+    "Invalid schema, mismatched request identifier, rejected scenario check, unexpected tool outcome, or process failure makes the runner fail.",
+    "The ordering check emits INFO for a one-tool catalog. HTTP and other upstream scenarios are outside this run."
+  ],
+  "task_id": "task.mcp_transport.019",
+  "acceptance_criteria": "採用した公式の適合検査器を実行し、実施日時・版・失敗条件を記録する",
+  "scope": "The adopted upstream tools-list scenario and wire schema checker ran on native standard I/O for both revisions. The linked run records exact scope and failure conditions.",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[run_local_mcp.py-2026-07-28]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[run_local_mcp.py-legacy]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[launch_guarded_mcp.py-2026-07-28]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[launch_guarded_mcp.py-legacy]"
+  ],
+  "report_path": "evidence/authorization-gate-tests.xml",
+  "report_sha256": "ba03242350e57854ec4b155c787fccb7b5c2ae58a1a9f276d90fe250b5f7f25d",
+  "source_sha256": {
+    "tests/test_official_mcp_sdk.py": "1e065bdf2c1b046739419aaac2e96784101f1b2573c5fb4d9c73a3505b9cf99c"
+  }
+}
