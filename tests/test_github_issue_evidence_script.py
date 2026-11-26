@@ -60,3 +60,34 @@ def test_evidence_script_runs_all_scenarios_and_closes_what_it_created(tmp_path,
     assert sorted(fake.closed) == sorted(report["closed"]) == sorted(report["issues"]) == [1, 2]
     assert "vater-external-evidence" in fake.labels
     assert "dummy-token" not in output.read_text()
+
+
+class LaggingRepository(FakeRepository):
+    """The list endpoint hides recent issues for its first few reads, as a
+    destination without read-after-write consistency may (seen live in run 1)."""
+
+    def __init__(self, hidden_reads):
+        super().__init__()
+        self.hidden_reads = hidden_reads
+
+    def request(self, method, path, *, json_body=None, query=None):
+        if method == "GET" and path == "/issues" and self.hidden_reads > 0:
+            self.hidden_reads -= 1
+            return HttpReply(200, {}, [])
+        return super().request(method, path, json_body=json_body, query=query)
+
+
+def test_evidence_checks_wait_for_a_lagging_list_without_resending(tmp_path, monkeypatch):
+    script = load_script()
+    fake = LaggingRepository(hidden_reads=3)
+    monkeypatch.setattr(script, "UrllibTransport", lambda repository, token: fake)
+    monkeypatch.setattr(script.time, "sleep", lambda _seconds: None)
+    monkeypatch.setenv("GITHUB_REPOSITORY", "example/repository")
+    monkeypatch.setenv("GITHUB_TOKEN", "dummy-token-for-the-fake")
+    output = tmp_path / "report.json"
+    monkeypatch.setattr("sys.argv", ["run_github_issue_evidence.py", "--output", str(output)])
+
+    assert script.main() == 0
+    report = json.loads(output.read_text())
+    assert all(all(s["checks"].values()) for s in report["scenarios"])
+    assert fake.posts == 2 and len(fake.issues) == 2  # waiting never turned into a resend

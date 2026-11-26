@@ -89,15 +89,24 @@ def main() -> int:
                                           target_id=repository, approve=approve)
         return ledger, executor
 
-    def marked(operation_id):
-        try:
-            return destination.lookup(operation_id, int(time.time() * 1000) - 600_000)
-        except Exception as error:  # report, never hide
-            return f"lookup failed: {error}"
+    def marked(operation_id, expect=None, wait_seconds=30):
+        """Issues carrying the marker. The list API is not documented as
+        read-after-write consistent, so when a count is expected, poll for a
+        bounded time until it appears; the expected count itself never changes."""
+        deadline = time.time() + wait_seconds
+        while True:
+            try:
+                found = destination.lookup(operation_id, int(time.time() * 1000) - 600_000)
+            except Exception as error:  # report, never hide
+                found = f"lookup failed: {error}"
+            if expect is None or (isinstance(found, list) and len(found) == expect) or time.time() >= deadline:
+                return found
+            time.sleep(3)
 
-    def record(name, tasks, expected, observed, passed):
-        report["scenarios"].append({"name": name, "tasks": tasks, "expected": expected,
-                                    "observed": observed, "passed": bool(passed)})
+    def record(name, tasks, expected, observed, checks):
+        checks = {key: bool(value) for key, value in checks.items()}
+        report["scenarios"].append({"name": name, "tasks": tasks, "expected": expected, "observed": observed,
+                                    "checks": checks, "passed": all(checks.values())})
 
     def call(executor, key, title):
         return executor.call(TOOL_NAME, {"request_key": key, "title": title})
@@ -117,19 +126,22 @@ def main() -> int:
            {"ok": first.ok, "error": first.error_code, "issue": first.value,
             "history": ledger.history(first.operation_id) if first.operation_id else None,
             "stored": stored, "live_etag": issue.headers.get("etag") if issue else None},
-           first.ok and stored and stored["status"] == "succeeded" and stored["version"]["etag"]
-           and ledger.history(first.operation_id) == ["reserved", "dispatched", "definitive_succeeded"]
-           and destination.check(first.operation_id, title, issue.body))
+           {"created": first.ok, "stored_succeeded": stored and stored["status"] == "succeeded",
+            "version_etag_stored": stored and stored["version"] and stored["version"]["etag"],
+            "ledger_history": first.operation_id and ledger.history(first.operation_id)
+            == ["reserved", "dispatched", "definitive_succeeded"],
+            "target_matches": issue is not None and destination.check(first.operation_id, title, issue.body)})
     posts_before = transport.posts
     again = call(executor, f"{run}-normal", title)
-    matches = marked(first.operation_id) if first.operation_id else "no operation"
+    matches = marked(first.operation_id, expect=1) if first.operation_id else "no operation"
     record("replay", ["task.durable_operations.015", "task.durable_operations.017"],
            "same request_key: stored result returned, no new POST, exactly one issue with the marker",
            {"ok": again.ok, "replayed": again.replayed, "issue": again.value,
             "new_posts": transport.posts - posts_before,
             "issues_with_marker": len(matches) if isinstance(matches, list) else matches},
-           again.ok and again.replayed and again.value == first.value and transport.posts == posts_before
-           and isinstance(matches, list) and len(matches) == 1)
+           {"ok": again.ok, "replayed": again.replayed, "same_issue": again.value == first.value,
+            "no_new_post": transport.posts == posts_before,
+            "exactly_one_issue": isinstance(matches, list) and len(matches) == 1})
 
     # lost reply -----------------------------------------------------------------
     transport.mode = "drop_reply"
@@ -141,7 +153,7 @@ def main() -> int:
     if not lost.ok:
         time.sleep(10)  # the list may lag; a replay looks up again and never resends
         lost = call(executor, f"{run}-lost", lost_title)
-    matches = marked(lost.operation_id) if lost.operation_id else "no operation"
+    matches = marked(lost.operation_id, expect=1) if lost.operation_id else "no operation"
     if lost.ok:
         report["issues"].append(lost.value)
     record("lost_reply", ["task.durable_operations.011", "task.durable_operations.016",
@@ -152,7 +164,8 @@ def main() -> int:
             "first_store_status": stored_lost and stored_lost["status"],
             "posts": posts_after_lost - posts_before, "posts_after_replay": transport.posts - posts_before,
             "issues_with_marker": len(matches) if isinstance(matches, list) else matches},
-           lost.ok and transport.posts - posts_before == 1 and isinstance(matches, list) and len(matches) == 1)
+           {"reconciled": lost.ok, "one_post_only": transport.posts - posts_before == 1,
+            "exactly_one_issue": isinstance(matches, list) and len(matches) == 1})
 
     # crash before the request leaves ------------------------------------------------
     transport.mode = "crash_before_send"
@@ -167,6 +180,7 @@ def main() -> int:
     recovered = ledger.recover_interrupted()
     posts_before_crash_replay = transport.posts
     after = call(executor, crashed_key, f"VATER evidence {run} crash")
+    time.sleep(10)  # give a lagging list time to show anything that might exist
     matches = marked(after.operation_id) if after.operation_id else "no operation"
     record("crash", ["task.durable_operations.011", "task.durable_operations.016"],
            "dispatched survives the crash and becomes unknown on restart; replay looks up, finds nothing, "
@@ -175,8 +189,9 @@ def main() -> int:
             "ledger_state": ledger.get(after.operation_id).state if after.operation_id else None,
             "new_posts": transport.posts - posts_before_crash_replay,
             "issues_with_marker": len(matches) if isinstance(matches, list) else matches},
-           crashed_cleanly and recovered == 1 and after.error_code == "HUMAN_RECONCILIATION_REQUIRED"
-           and transport.posts == posts_before_crash_replay and matches == [])
+           {"crashed": crashed_cleanly, "recovered_as_unknown": recovered == 1,
+            "human_reconciliation": after.error_code == "HUMAN_RECONCILIATION_REQUIRED",
+            "no_new_post": transport.posts == posts_before_crash_replay, "no_issue_exists": matches == []})
 
     # target check on a real object ---------------------------------------------------
     if first.ok and issue is not None:
@@ -185,7 +200,8 @@ def main() -> int:
         renamed = destination.check(first.operation_id, "another title", issue.body)
         record("target_check", ["task.durable_operations.021"],
                "the real issue matches its own operation only; another operation or title is refused",
-               {"own": own, "other_operation": foreign, "other_title": renamed}, own and not foreign and not renamed)
+               {"own": own, "other_operation": foreign, "other_title": renamed},
+               {"own_matches": own, "other_operation_refused": not foreign, "other_title_refused": not renamed})
 
     # cleanup ------------------------------------------------------------------------
     for number in report["issues"]:
@@ -196,8 +212,8 @@ def main() -> int:
     report["all_passed"] = (len(report["scenarios"]) == 5 and all(s["passed"] for s in report["scenarios"])
                             and sorted(report["closed"]) == sorted(report["issues"]))
     args.output.write_text(json.dumps(report, indent=2, ensure_ascii=False, default=str) + "\n", encoding="utf-8")
-    print(json.dumps({"all_passed": report["all_passed"],
-                      "scenarios": {s["name"]: s["passed"] for s in report["scenarios"]}}))
+    # The full report goes to the job log too, so it is readable without the artifact.
+    print(json.dumps(report, indent=2, ensure_ascii=False, default=str))
     return 0 if report["all_passed"] else 1
 
 
