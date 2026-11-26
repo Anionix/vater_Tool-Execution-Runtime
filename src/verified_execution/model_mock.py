@@ -1,9 +1,13 @@
 """Offline fixture for the text subset of the OpenAI Responses contract."""
 
 from dataclasses import dataclass
-from collections.abc import Callable
+from collections.abc import Callable, Iterable
 import json
+from threading import Lock
 from typing import Literal
+
+from .core import CalculationService, ExecutionResult, LocalAuthority
+from .json_bounds import check_json_depth
 
 
 @dataclass(frozen=True)
@@ -15,6 +19,8 @@ class ModelMessage:
 @dataclass(frozen=True)
 class ModelRequest:
     messages: tuple[ModelMessage, ...]
+    destination: str = "local-fixture"
+    processing_region: str = "host-local"
 
 
 @dataclass(frozen=True)
@@ -40,9 +46,14 @@ class ModelTemporarilyUnavailable(RuntimeError):
 class OfflineResponses:
     """Run an injected local fixture, without provider selection or tool dispatch."""
 
-    def __init__(self, fixture: Callable[[dict], dict], *, max_input_bytes: int = 16_384):
+    def __init__(self, fixture: Callable[[dict], dict], *, max_input_bytes: int = 16_384,
+                 call_budget: int | None = None):
         if type(max_input_bytes) is not int or max_input_bytes <= 0:
             raise ValueError("invalid model input byte limit")
+        if call_budget is not None and (type(call_budget) is not int or call_budget < 0):
+            raise ValueError("invalid model call budget")
+        self._remaining_calls = call_budget
+        self._budget_lock = Lock()
         self._fixture = fixture
         self._max_input_bytes = max_input_bytes
 
@@ -50,6 +61,9 @@ class OfflineResponses:
         # task.provider_adapters.003: a typed model request cannot enter tool dispatch.
         if not isinstance(request, ModelRequest) or not request.messages:
             raise ModelContractError("invalid model request")
+        # task.provider_adapters.015: fail closed before providing any data to the fixture.
+        if (request.destination, request.processing_region) != ("local-fixture", "host-local"):
+            raise ModelContractError("unsupported model destination or processing region")
         messages = []
         for message in request.messages:
             if (not isinstance(message, ModelMessage)
@@ -60,6 +74,12 @@ class OfflineResponses:
         payload = {"model": "offline-responses-fixture", "input": messages}
         if len(json.dumps(payload, ensure_ascii=True).encode("ascii")) > self._max_input_bytes:
             raise ModelContractError("model input exceeds byte limit")
+        # task.provider_adapters.016: reserve one fixture call before entering the fixture.
+        with self._budget_lock:
+            if self._remaining_calls == 0:
+                raise ModelContractError("model call budget exhausted")
+            if self._remaining_calls is not None:
+                self._remaining_calls -= 1
         try:
             response = self._fixture(payload)
         except TimeoutError:
@@ -94,3 +114,54 @@ def _read_response(response: dict) -> tuple[ModelText | ToolProposal, ...]:
         else:
             raise ModelContractError("unsupported model output item")
     return tuple(output)
+
+def execute_approved_proposal(
+    proposal: ToolProposal, *, approved: ToolProposal | None, authority: LocalAuthority
+) -> ExecutionResult:
+    """Optional host-only entry for explicitly approved read-only calculator proposals."""
+    # task.provider_adapters.011: approval must match the exact proposal; authorization is live.
+    if approved is None or approved != proposal:
+        raise ModelContractError("tool proposal needs explicit host approval")
+    if len(proposal.arguments.encode("utf-8", errors="surrogatepass")) > 16_384:
+        raise ModelContractError("tool proposal arguments exceed byte limit")
+
+    def unique_fields(pairs):
+        fields = dict(pairs)
+        if len(fields) != len(pairs):
+            raise ModelContractError("duplicate tool proposal field")
+        return fields
+
+    try:
+        check_json_depth(proposal.arguments, 16)
+        arguments = json.loads(proposal.arguments, object_pairs_hook=unique_fields)
+    except ValueError:
+        raise ModelContractError("invalid tool proposal arguments") from None
+    return CalculationService(authority).execute(proposal.name, arguments)
+
+
+@dataclass(frozen=True)
+class TextFragment:
+    sequence: int
+    text: str
+    final: bool = False
+
+
+def collect_fixture_stream(fragments: Iterable[TextFragment]) -> ModelText:
+    """Collect the local fixture's numbered, bounded text fragments."""
+    # task.provider_adapters.020: incomplete -> complete on the single final fragment.
+    text_parts = []
+    total_bytes = 0
+    complete = False
+    for expected, fragment in enumerate(fragments):
+        if (complete or expected >= 1024 or type(fragment.sequence) is not int
+                or fragment.sequence != expected or type(fragment.final) is not bool
+                or not isinstance(fragment.text, str)):
+            raise ModelContractError("invalid model stream sequence")
+        total_bytes += len(fragment.text.encode("utf-8", errors="surrogatepass"))
+        if total_bytes > 16_384:
+            raise ModelContractError("model stream exceeds byte limit")
+        text_parts.append(fragment.text)
+        complete = fragment.final
+    if not complete:
+        raise ModelContractError("model stream ended before final fragment")
+    return ModelText("".join(text_parts))

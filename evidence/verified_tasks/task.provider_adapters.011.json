@@ -1,0 +1,16 @@
+{
+  "task_id": "task.provider_adapters.011",
+  "acceptance_criteria": "承認を経由した実行だけが可能",
+  "scope": "The host confirms exact proposal, then its live permission is evaluated by the common calculator.",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_model_mock.py::test_host_approval_and_common_authorization_are_both_required"
+  ],
+  "report_path": "evidence/provider-adapter-tests.xml",
+  "report_sha256": "9a60fd650cc1456864bb00f20f28e52c946b26e63ab928ce83f1b2059e618424",
+  "source_sha256": {
+    "tests/test_model_mock.py": "66b4d0b4424e4c72ba9af9358b7d846972f7096dc0bd6d56fce9d5274feeaea4"
+  }
+}

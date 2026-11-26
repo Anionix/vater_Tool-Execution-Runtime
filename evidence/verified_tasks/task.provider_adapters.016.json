@@ -1,0 +1,17 @@
+{
+  "task_id": "task.provider_adapters.016",
+  "acceptance_criteria": "設定上限で停止する",
+  "scope": "The offline profile has zero external cost and enforces call and serialized input byte budgets before delivery.",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_model_mock.py::test_destination_and_budget_fail_before_fixture",
+    "tests/test_model_mock.py::test_byte_limit_and_request_type_are_checked_before_the_fixture"
+  ],
+  "report_path": "evidence/provider-adapter-tests.xml",
+  "report_sha256": "9a60fd650cc1456864bb00f20f28e52c946b26e63ab928ce83f1b2059e618424",
+  "source_sha256": {
+    "tests/test_model_mock.py": "66b4d0b4424e4c72ba9af9358b7d846972f7096dc0bd6d56fce9d5274feeaea4"
+  }
+}
