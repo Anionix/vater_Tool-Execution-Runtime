@@ -368,7 +368,9 @@ class ExternalChangeExecutor:
             return BridgeResult(True, int(saved["object_id"]), op.operation_id, True, None)
         if op.state == "dispatched":
             return _error("IN_PROGRESS", op)  # another attempt may be in flight
-        if op.state == "unknown":
+        if op.state == "unknown" or (op.state == "succeeded" and (saved or {}).get("status") != "failed"):
+            # A succeeded ledger entry without a stored result (written by an
+            # older order, or lost) is recovered by lookup, never resent.
             return self._reconcile(op, request, replayed=True)
         return _error((saved or {}).get("detail") or "ALREADY_RECORDED", op, replayed=True)
 
@@ -393,8 +395,10 @@ class ExternalChangeExecutor:
             return self._confirm(op, request, outcome.obj, replayed=False)
         if outcome.kind in ("not_executed", "rejected"):
             code = "RATE_LIMITED" if outcome.kind == "not_executed" else "REJECTED_BY_DESTINATION"
-            self.ledger.record_definitive_result(op.operation_id, "failed")
+            # Store first: a crash before the ledger write leaves the ledger
+            # dispatched (unknown after restart), never a ledger claim without a record.
             self.store.record(op.operation_id, "failed", detail=code)
+            self.ledger.record_definitive_result(op.operation_id, "failed")
             return _error(code, op)
         # EXTERNAL-015: no destination idempotency, so never send again.
         return self._reconcile(op, request, replayed=False)
@@ -408,12 +412,13 @@ class ExternalChangeExecutor:
             self.store.record(op.operation_id, "human_required", detail="TARGET_MISMATCH")
             return _error("TARGET_MISMATCH", op, replayed=replayed)
         version = self.destination.version(obj)
-        if state == "dispatched":
-            self.ledger.record_definitive_result(op.operation_id, "succeeded")
-        # A ledger operation already marked unknown stays unknown; the store
-        # records how it was reconciled, never a rewritten ledger claim.
+        # The result is stored BEFORE the ledger claims success, so a crash in
+        # between can never leave a succeeded operation without its result. A
+        # ledger operation already unknown or succeeded is not rewritten.
         self.store.record(op.operation_id, "reconciled" if reconciled else "succeeded",
                           object_id=str(obj["number"]), version=version)
+        if state == "dispatched":
+            self.ledger.record_definitive_result(op.operation_id, "succeeded")
         return BridgeResult(True, obj["number"], op.operation_id, replayed, None)
 
     def _reconcile(self, op: Operation, request: IssueRequest, *, replayed: bool) -> BridgeResult:

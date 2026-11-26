@@ -262,3 +262,36 @@ def test_issue_payload_is_marked_and_labelled():
     payload = GitHubIssueDestination(FakeGitHub()).payload("op-1", "T")
     assert payload["labels"] == [EVIDENCE_LABEL]
     assert payload["body"].splitlines()[-1] == "vater-operation-id: op-1"
+
+
+# --- crash points around the success transition (Codex review on #382) -------
+
+def test_crash_between_result_store_and_ledger_success_keeps_the_result(host, github, monkeypatch):
+    def die(*_args, **_kwargs):
+        raise Crash()
+    monkeypatch.setattr(host.ledger, "record_definitive_result", die)
+    with pytest.raises(Crash):
+        host.create()
+    restarted = Host(host.path, github)
+    assert restarted.ledger.recover_interrupted() == 1
+    result = restarted.create()
+    assert (result.ok, result.value, result.replayed) == (True, 1, True)
+    assert github.posts == 1
+
+
+def test_succeeded_ledger_without_a_stored_result_is_recovered_by_lookup(host, github, monkeypatch):
+    original = host.store.record
+
+    def lose_success(operation_id, status, **kwargs):
+        if status == "succeeded":
+            return None  # simulate a result write that never landed
+        return original(operation_id, status, **kwargs)
+    monkeypatch.setattr(host.store, "record", lose_success)
+    first = host.create()
+    assert first.ok and host.state(first.operation_id) == "succeeded"
+    assert host.store.get(first.operation_id)["status"] == "dispatched"
+    restarted = Host(host.path, github)
+    again = restarted.create()
+    assert (again.ok, again.value, again.replayed) == (True, 1, True)
+    assert restarted.store.get(first.operation_id)["status"] == "reconciled"
+    assert github.posts == 1

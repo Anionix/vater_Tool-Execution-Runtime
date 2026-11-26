@@ -5,14 +5,14 @@
   "verification_status": "passed",
   "executed": true,
   "report_path": "evidence/external-change-tests.xml",
-  "report_sha256": "2021da44358aafd60b0c8de890a0b768a8c672a98abcfe91cefbf134e379b7e8",
+  "report_sha256": "ae37267a482d1d466cfeec5697d0c6877559acb0d572acae2e8fcd3f1b7f4d7d",
   "source_sha256": {
     ".github/workflows/external-change-evidence.yml": "ab1134f3503415c92ee3cce27037f73752839bbb4084b0f73759a5f0e6b671c1",
     "contracts/github_issue_destination.json": "5e4a26da1713c877c59462421d8d1be44abbea1a64308660ab4bdb993899d2b5",
     "evidence/external/github-issues-run-45839952764.json": "75f5480aeca6f769fc99c4cd89d116cbef449f4002cd837a5c708d3e22e66e53",
     "scripts/run_github_issue_evidence.py": "e9b896373482ada3eb7f81e5310294ad7dc7a3a81423bfb1165f7da5f22761e0",
-    "src/verified_execution/external_change.py": "8875cb1e5e8aca0a37c8e2bdd8bc41a0040c6e2713b72e1accaf07e7e97f3582",
-    "tests/test_external_change.py": "fe35641dc31842430cf82624fc9d08d9d038eee003e5752d1e49a983c1ed5614",
+    "src/verified_execution/external_change.py": "9ffe0c48aed8b025173c6b1c841fda397e9f6cbe5b35cfa00000d6c89f4558ff",
+    "tests/test_external_change.py": "04806a0b582580219f99ed62b845c53d9b6154bbf2ce93630b3c4862ce86731a",
     "tests/test_external_evidence_record.py": "d810d9ed3b03690ccfb09115791aede1cbe5a7bb85af6805f8eda8b8a0ad43fe"
   },
   "scope": "When the outcome cannot be established, the operation stays unknown and HUMAN_RECONCILIATION_REQUIRED is returned. Live, this happened twice: after the crash, and when GitHub's issue list lagged behind a real create (a replay ten seconds later reconciled it). Live evidence: run 45839952764 of .github/workflows/external-change-evidence.yml against this repository's GitHub Issues (issues #385 and #386, both closed), archived in evidence/external/github-issues-run-45839952764.json. Unit tests against an in-memory fake cover the executor's branches that a live run cannot force.",
