@@ -1,0 +1,23 @@
+{
+  "task_id": "task.durable_operations.020",
+  "acceptance_criteria": "期限判定を単一の信頼できる時計に寄せる",
+  "scope": "The architecture documents the shared single-host ledger clock and its limits. Dispatch checks time after lock acquisition.",
+  "policy_path": "docs/ARCHITECTURE.md",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_ledger.py::test_approval_uses_time_after_acquiring_dispatch_lock",
+    "tests/test_ledger.py::test_expired_approval_rejected",
+    "tests/test_worker_leases.py::test_expired_owner_cannot_heartbeat_or_dispatch"
+  ],
+  "report_path": "evidence/minimum-validation-tests.xml",
+  "report_sha256": "9800d0ae6c5623c88f9841db61eac5956d9c506bd547db3c2e3d32c12d931647",
+  "source_sha256": {
+    "docs/ARCHITECTURE.md": "d3ab1705ad2e23508bc6a2297b61d83e4a1d2996ffa59a94d0fc5bf053da2526",
+    "src/verified_execution/ledger.py": "3d8ba058dd5dd23957e70e87cf3a053514dd417a3ca05b35ba9410ebb3305a42",
+    "src/verified_execution/worker_leases.py": "3a328d1fe8043b51059c1c7e9e912a706136fb487ca896e4827cb3dd63a33b72",
+    "tests/test_ledger.py": "d4cf3c38949e718558d35bfb63eeb2d39cced84010b74d6ffc1befc4f1105770",
+    "tests/test_worker_leases.py": "8c41cb3ccd882d010c47590262714cf0f22d6d42c978dc9e45706922fc2d0967"
+  }
+}
