@@ -1,0 +1,16 @@
+{
+  "task_id": "task.authorization.022",
+  "acceptance_criteria": "必要最小限の監査情報が残る",
+  "scope": "The existing handler records a fixed authorization category, timing and host identifiers without raw request data.",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_adapter_boundary.py::test_permission_denial_logs_only_fixed_fields"
+  ],
+  "report_path": "evidence/authorization-completion-tests.xml",
+  "report_sha256": "6408305e8e1e1e961092dc4aafa21b61af89109d21121b1ef9418d5649493bb0",
+  "source_sha256": {
+    "tests/test_adapter_boundary.py": "072797e9b30223222fe214602718076b9527393a710bde433fd7d2ae69b728b8"
+  }
+}

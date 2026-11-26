@@ -108,3 +108,28 @@ def test_strict_integer_validation_with_pydantic():
 def test_invalid_host_grant_deadline_is_rejected(deadline):
     with pytest.raises(ValueError):
         LocalAuthority(frozenset({"checked_add"}), expires_at_monotonic_ns=deadline)
+
+
+def test_host_permission_truth_table(monkeypatch):
+    from itertools import product
+    from threading import Event
+    from verified_execution import core
+
+    monkeypatch.setattr(core, "monotonic_ns", lambda: 10)
+    for registered, publisher_matches, destination_allowed, active, current in product(
+        (False, True), repeat=5
+    ):
+        revoked = Event()
+        if not active:
+            revoked.set()
+        grant = core.LocalAuthority(
+            frozenset({"checked_add"}) if registered else frozenset(),
+            allowed_destinations=frozenset({"local"}) if destination_allowed else frozenset(),
+            revocation_event=revoked,
+            expires_at_monotonic_ns=11 if current else 10,
+        )
+        assert grant.permits(
+            "checked_add",
+            publisher=core.LOCAL_PUBLISHER if publisher_matches else "other",
+            destination="local",
+        ) == all((registered, publisher_matches, destination_allowed, active, current))
