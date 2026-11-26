@@ -88,12 +88,20 @@ class UrllibTransport:
             "User-Agent": "vater-tool-execution-runtime",
             **({"Content-Type": "application/json"} if data is not None else {}),
         })
+        import http.client
+        # Any failure while sending OR while reading a reply (including a body cut
+        # off mid-read, http.client.IncompleteRead) means no usable reply arrived:
+        # the request may or may not have executed.
+        unreadable = (urllib.error.URLError, OSError, TimeoutError, http.client.HTTPException)
         try:
             with urllib.request.urlopen(request, timeout=self._timeout) as response:
                 return HttpReply(response.status, _lower(response.headers), _json(response.read()))
         except urllib.error.HTTPError as error:
-            return HttpReply(error.code, _lower(error.headers), _json(error.read()))
-        except (urllib.error.URLError, OSError, TimeoutError) as error:
+            try:
+                return HttpReply(error.code, _lower(error.headers), _json(error.read()))
+            except unreadable as read_error:
+                raise TransportError(type(read_error).__name__) from None
+        except unreadable as error:
             raise TransportError(type(error).__name__) from None
 
 

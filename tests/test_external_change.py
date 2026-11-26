@@ -326,3 +326,47 @@ def test_success_without_a_readable_body_is_reconciled_not_failed(host, github):
     assert (result.ok, result.value) == (True, 1)
     assert host.store.get(result.operation_id)["status"] == "reconciled"
     assert host.state(result.operation_id) == "succeeded" and github.posts == 1
+
+
+# --- Codex review on #382: truncated replies are uncertain, not crashes -------
+
+def test_truncated_reply_bodies_become_transport_errors(monkeypatch):
+    import http.client
+    import io
+    import urllib.error
+    import urllib.request
+    from verified_execution.external_change import UrllibTransport
+
+    class Truncated:
+        status, headers = 201, {}
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_exc):
+            return False
+
+        def read(self):
+            raise http.client.IncompleteRead(b'{"number": 1', 40)
+
+    transport = UrllibTransport("example/repository", "dummy-token")
+    monkeypatch.setattr(urllib.request, "urlopen", lambda *_a, **_k: Truncated())
+    with pytest.raises(TransportError):
+        transport.request("POST", "/issues", json_body={})
+
+    class TruncatedError(io.BytesIO):
+        def read(self, *_args):
+            raise http.client.IncompleteRead(b"", 10)
+
+    def error_reply(*_args, **_kwargs):
+        raise urllib.error.HTTPError("https://api.github.com", 502, "Bad Gateway", {}, TruncatedError())
+    monkeypatch.setattr(urllib.request, "urlopen", error_reply)
+    with pytest.raises(TransportError):
+        transport.request("POST", "/issues", json_body={})
+
+
+def test_truncated_create_reply_is_reconciled_by_lookup(host, github):
+    github.script = ["drop_reply"]  # what a TransportError from a truncated body becomes
+    result = host.create()
+    assert (result.ok, result.value) == (True, 1)
+    assert host.store.get(result.operation_id)["status"] == "reconciled" and github.posts == 1

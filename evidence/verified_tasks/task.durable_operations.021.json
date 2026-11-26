@@ -5,14 +5,14 @@
   "verification_status": "passed",
   "executed": true,
   "report_path": "evidence/external-change-tests.xml",
-  "report_sha256": "f0ec91f66b8b16590abbdce4e20fa74518aa1e4587b4a2436352dc99fca57384",
+  "report_sha256": "0de06beb27691dbd0089dded976313a046b331f589acec10c068f052ff34285c",
   "source_sha256": {
     ".github/workflows/external-change-evidence.yml": "ab1134f3503415c92ee3cce27037f73752839bbb4084b0f73759a5f0e6b671c1",
     "contracts/github_issue_destination.json": "5e4a26da1713c877c59462421d8d1be44abbea1a64308660ab4bdb993899d2b5",
     "evidence/external/github-issues-run-45839952764.json": "75f5480aeca6f769fc99c4cd89d116cbef449f4002cd837a5c708d3e22e66e53",
     "scripts/run_github_issue_evidence.py": "07c75652773e595a399fc1cfd76b80ce72631579d82e368614ddb39a6959a808",
-    "src/verified_execution/external_change.py": "ad8276563cc1d2e1b2d35930e9e411ac727925541bf24a51250214dd48f8e050",
-    "tests/test_external_change.py": "697f35d863acc2466c82431c1465931dfe6f849d2044d2f382f14d50fd7ec0c5",
+    "src/verified_execution/external_change.py": "79ee469e9fa5d76708d08e5899e04a6d2b81cb8331277fc2b533291e52bc38b9",
+    "tests/test_external_change.py": "8f0a6c5787ba20facadca782eab83ebb09fec466223abd958de2a89080995bac",
     "tests/test_external_evidence_record.py": "d810d9ed3b03690ccfb09115791aede1cbe5a7bb85af6805f8eda8b8a0ad43fe"
   },
   "scope": "The issue's ETag, updated_at, node_id and content digest are stored with the operation id, and the stored ETag matched the live one. Live, the real issue matched only its own operation and title; a mismatching object is refused as TARGET_MISMATCH. Live evidence: run 45839952764 of .github/workflows/external-change-evidence.yml against this repository's GitHub Issues (issues #385 and #386, both closed), archived in evidence/external/github-issues-run-45839952764.json. Unit tests against an in-memory fake cover the executor's branches that a live run cannot force.",
