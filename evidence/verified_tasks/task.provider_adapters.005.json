@@ -1,0 +1,19 @@
+{
+  "task_id": "task.provider_adapters.005",
+  "acceptance_criteria": "公式サンプルに対応",
+  "scope": "The offline conversion uses the documented text-only Responses input shape.",
+  "policy_path": "docs/ARCHITECTURE.md",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_model_mock.py::test_fixture_preserves_message_order_and_keeps_proposals_inert"
+  ],
+  "report_path": "evidence/model-mock-tests.xml",
+  "report_sha256": "39cc3911d596611d086e50d3def0999572372041a572559c6f4cc31ffabf08e0",
+  "source_sha256": {
+    "docs/ARCHITECTURE.md": "d8e45d71ec98f1ac7d9fe55eae9ce5c718edbd5fae86af47478ac9998c280953",
+    "src/verified_execution/model_mock.py": "f9be7947c58a9693048f0d2c0c603dcf337bf86ca67eb329ecff55aca3806676",
+    "tests/test_model_mock.py": "699db4a3ecd6f4a52f5d1774e4c5e00505f94d7e740d6e4071b2cb7f96046a87"
+  }
+}

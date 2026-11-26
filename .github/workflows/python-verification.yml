@@ -111,3 +111,5 @@ jobs:
         run: python scripts/verify_phase.py minimum_release
       - name: Recheck completed durable operation tasks
         run: python scripts/verify_phase.py durable_operations --completed-only
+      - name: Recheck completed model adapter tasks
+        run: python scripts/verify_phase.py provider_adapters --completed-only

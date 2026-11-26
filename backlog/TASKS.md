@@ -1,7 +1,7 @@
 # Python先行版 — 元の351件の実装作業一覧
 
 - 元の識別子を変えず、Python版の条件に置き換えた台帳。
-- [x] が付くのは、前提条件と合格証拠がそろった184件。
+- [x] が付くのは、前提条件と合格証拠がそろった197件。
 - 実装機能と作業の合格は別。契約を変更した項目の古い合格証拠は無効。
 
 ## 目的・非目標・境界
@@ -425,15 +425,15 @@
 ## 各社モデルへの接続
 作業 20件・完了判定 1件 / 初期必須：いいえ
 
-- [ ] `task.provider_adapters.001` 利用する提供元を1社だけ選ぶ — 未着手
+- [x] `task.provider_adapters.001` 利用する提供元を1社だけ選ぶ — 正式完了
   - 合格：開発用の無料または模擬経路がある
-- [ ] `task.provider_adapters.002` 最初の接続は模擬応答で実装する — 未着手
+- [x] `task.provider_adapters.002` 最初の接続は模擬応答で実装する — 正式完了
   - 合格：有料の外部送信なしで契約試験可能
-- [ ] `task.provider_adapters.003` モデル推論要求を型として定義する — 未着手
+- [x] `task.provider_adapters.003` モデル推論要求を型として定義する — 正式完了
   - 合格：ツール実行要求と混同しない
-- [ ] `task.provider_adapters.004` 入力テキストの構造を保持する — 実施中または要再検証
+- [x] `task.provider_adapters.004` 入力テキストの構造を保持する — 正式完了
   - 合格：役割・順序・内容が保存される
-- [ ] `task.provider_adapters.005` Responses形式の送信変換を設計する — 実施中または要再検証
+- [x] `task.provider_adapters.005` Responses形式の送信変換を設計する — 正式完了
   - 合格：公式サンプルに対応
 - [ ] `task.provider_adapters.006` Chat Completions形式の送信変換を設計する — 実施中または要再検証
   - 合格：形式差を明示できる
@@ -441,27 +441,27 @@
   - 合格：ツール利用と内容ブロックの差を記録
 - [ ] `task.provider_adapters.008` Gemini形式の送信変換を後続候補とする — 実施中または要再検証
   - 合格：対応機能の明示がある
-- [ ] `task.provider_adapters.009` 各形式の応答から文章を抽出する — 未着手
+- [x] `task.provider_adapters.009` 各形式の応答から文章を抽出する — 正式完了
   - 合格：出力の種類を混同しない
-- [ ] `task.provider_adapters.010` ツール実行要求を一般回答と区別する — 実施中または要再検証
+- [x] `task.provider_adapters.010` ツール実行要求を一般回答と区別する — 正式完了
   - 合格：モデルの要求で直接副作用を開始しない
 - [ ] `task.provider_adapters.011` ツール要求は必ず共通認可に戻す — 実施中または要再検証
   - 合格：承認を経由した実行だけが可能
-- [ ] `task.provider_adapters.012` 提供元ごとの対応機能表を作る — 実施中または要再検証
+- [x] `task.provider_adapters.012` 提供元ごとの対応機能表を作る — 正式完了
   - 合格：モデル・入口ごとに機能を記録
-- [ ] `task.provider_adapters.013` 未対応機能で明確に失敗させる — 未着手
+- [x] `task.provider_adapters.013` 未対応機能で明確に失敗させる — 正式完了
   - 合格：黙って代替・省略しない
-- [ ] `task.provider_adapters.014` 別会社への自動切替を初期状態で禁止する — 実施中または要再検証
+- [x] `task.provider_adapters.014` 別会社への自動切替を初期状態で禁止する — 正式完了
   - 合格：利用者の事前承認が必要
 - [ ] `task.provider_adapters.015` データの取り扱い地域と送信先を記録する — 実施中または要再検証
   - 合格：送信前に接続先を確認
 - [ ] `task.provider_adapters.016` 費用と送信バイト数の上限を設ける — 実施中または要再検証
   - 合格：設定上限で停止する
-- [ ] `task.provider_adapters.017` 一時障害と契約違反を別エラーにする — 未着手
+- [x] `task.provider_adapters.017` 一時障害と契約違反を別エラーにする — 正式完了
   - 合格：再試行してよいか判断できる
-- [ ] `task.provider_adapters.018` モデル出力を権限の根拠にしない — 実施中または要再検証
+- [x] `task.provider_adapters.018` モデル出力を権限の根拠にしない — 正式完了
   - 合格：不正な文章で実行許可が変わらない
-- [ ] `task.provider_adapters.019` ログから認証情報を除く — 未着手
+- [x] `task.provider_adapters.019` ログから認証情報を除く — 正式完了
   - 合格：秘密トークンが保存されない
 - [ ] `task.provider_adapters.020` 模擬提供元でストリームの分割と順序を試験する — 未着手
   - 合格：欠損や逆転を検出できる
