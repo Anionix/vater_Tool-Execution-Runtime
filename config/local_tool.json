@@ -6,7 +6,7 @@
     "src/verified_execution/__init__.py": "94d39425d41ecda83611f635e1ea690a6492d008b0957726973b3ecd031e16d9",
     "src/verified_execution/core.py": "300c8210fc16fe60f98fe79b4d70c2643d3ea44ee1e7660950797c19f3b814a3",
     "src/verified_execution/runtime.py": "41ad00eb06ab2f19acb1996d19929ee64077a553eb453be2604737f1bfe3df67",
-    "src/verified_execution/tools.py": "6c156b51b06122b9973c9d243566367c778d5b5696b57820e9b349f0d91e7f18",
+    "src/verified_execution/tools.py": "f8ff37460f9a57913e18e709ed55c6f771ecd4ccb11e815a39ca8cd343a2f48a",
     "server_mcp.py": "4445686917724617d7be5ebc8ae316417b1d0c029f6a8ff904251c1779ccc877",
     "contracts/checked_add.input.schema.json": "d9cbeeff8d08fff5c2a9886c20b7aef93c4db3879be256e7c4f60f717eefa41d",
     "contracts/checked_add.output.contract.json": "fc44dbe5bbae215503356ab16f03d5c8b122aa473928dfed11d54aa4e0ea5145",
