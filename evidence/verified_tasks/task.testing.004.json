@@ -5,14 +5,14 @@
   "verification_status": "passed",
   "executed": true,
   "report_path": "evidence/attack-reproduction-tests.xml",
-  "report_sha256": "8390f9a0afe3f1fac065811110a21d803d9b1579a8c34d1b884b2ad6b941cf90",
+  "report_sha256": "ba7e6a675e91742483df8f3aa1b0aa47212819d883e95fab1e7cac4827df5a55",
   "source_sha256": {
     "server_mcp.py": "4445686917724617d7be5ebc8ae316417b1d0c029f6a8ff904251c1779ccc877",
     "src/verified_execution/http_local.py": "b85e7d0c2d90f26d3fad5215a31f3b64c523385ede842a87064e989b5ab4663d",
     "src/verified_execution/runtime.py": "41ad00eb06ab2f19acb1996d19929ee64077a553eb453be2604737f1bfe3df67",
     "tests/test_attack_reproduction.py": "6145c67968f9657f966dfe6304342f29a8776ba4529522a8f567f9e6de66da0c"
   },
-  "scope": "HTTP requests without exactly one valid host bearer credential (missing, wrong, lowercase or other scheme, duplicated header) get 401 and the tool runs zero times. The local MCP stdio adapter has no network authentication; identity claims placed in tool arguments are rejected as INVALID_ARGUMENT and never authenticate. Status stays review: prerequisite gate.durable_operations.completed is open because it needs evidence from a real external service.",
+  "scope": "HTTP requests without exactly one valid host bearer credential (missing, wrong, lowercase or other scheme, duplicated header) get 401 and the tool runs zero times. The local MCP stdio adapter has no network authentication; identity claims placed in tool arguments are rejected as INVALID_ARGUMENT and never authenticate.",
   "test_cases": [
     "tests/test_attack_reproduction.py::test_http_unauthenticated_request_never_executes[missing]",
     "tests/test_attack_reproduction.py::test_http_unauthenticated_request_never_executes[wrong_token]",

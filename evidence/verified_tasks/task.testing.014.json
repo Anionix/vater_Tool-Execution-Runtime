@@ -5,14 +5,14 @@
   "verification_status": "passed",
   "executed": true,
   "report_path": "evidence/attack-reproduction-tests.xml",
-  "report_sha256": "8390f9a0afe3f1fac065811110a21d803d9b1579a8c34d1b884b2ad6b941cf90",
+  "report_sha256": "ba7e6a675e91742483df8f3aa1b0aa47212819d883e95fab1e7cac4827df5a55",
   "source_sha256": {
     "src/verified_execution/http_local.py": "b85e7d0c2d90f26d3fad5215a31f3b64c523385ede842a87064e989b5ab4663d",
     "src/verified_execution/json_bounds.py": "eb77d5730eedddc3ac540101f123288c21acd4bb62d8584febd713e693672bd4",
     "tests/test_attack_reproduction.py": "6145c67968f9657f966dfe6304342f29a8776ba4529522a8f567f9e6de66da0c",
     "tests/test_local_contracts.py": "da7c256bd5ced166122723d6e9a8fe2913a95a96f2a41938878e93c3837d4de7"
   },
-  "scope": "JSON nested deeper than the configured 32 levels is rejected by HTTP before json.loads runs, and the developer stdio inputs share the same pre-parse depth limit. Status stays review: prerequisite gate.durable_operations.completed is open because it needs evidence from a real external service.",
+  "scope": "JSON nested deeper than the configured 32 levels is rejected by HTTP before json.loads runs, and the developer stdio inputs share the same pre-parse depth limit.",
   "test_cases": [
     "tests/test_attack_reproduction.py::test_http_too_deep_json_is_rejected_before_parsing",
     "tests/test_local_contracts.py::test_developer_inputs_share_the_preparse_depth_limit"
