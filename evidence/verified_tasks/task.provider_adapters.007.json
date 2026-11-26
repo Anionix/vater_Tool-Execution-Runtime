@@ -1,0 +1,19 @@
+{
+  "task_id": "task.provider_adapters.007",
+  "acceptance_criteria": "ツール利用と内容ブロックの差を記録",
+  "scope": "Messages example specifies system placement, text blocks, and tool-result references.",
+  "policy_path": "contracts/model_format_designs.json",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_model_mock.py::test_provider_format_design_examples[007-messages-content-tool_use_id]"
+  ],
+  "report_path": "evidence/model-format-design-tests.xml",
+  "report_sha256": "ec53d55e0e1fee66df18ad052de9272a26fd240bf6f5962f3b77a2f835b181db",
+  "source_sha256": {
+    "contracts/model_format_designs.json": "cfa21fdc71ef5da74db4df4d809c3c4c7ab6947f8c217f13580d2a8b7c002592",
+    "src/verified_execution/model_mock.py": "f9be7947c58a9693048f0d2c0c603dcf337bf86ca67eb329ecff55aca3806676",
+    "tests/test_model_mock.py": "6ff1ac63abdea6267db32c2f69f1bc1079d1453580f6a5a3838c281bafefc4b4"
+  }
+}

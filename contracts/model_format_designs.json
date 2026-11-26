@@ -1,0 +1,32 @@
+{
+  "task.provider_adapters.006": {
+    "format": "OpenAI Chat Completions",
+    "status": "design_only",
+    "source": "https://developers.openai.com/api/reference/resources/chat/subresources/completions/methods/create",
+    "text_request": {"model": "MODEL", "messages": [{"role": "developer", "content": "Be concise."}, {"role": "user", "content": "What is 2 + 2?"}]},
+    "response_items_at": "choices[0].message",
+    "tool_proposal_at": "choices[0].message.tool_calls",
+    "tool_result_reference": "tool_call_id",
+    "conversion_rule": "Keep message order and role. Reject a target model that cannot preserve the developer role. Require one choice before decoding. In Responses the request uses input and tool calls are separate output items."
+  },
+  "task.provider_adapters.007": {
+    "format": "Anthropic Messages",
+    "status": "design_only",
+    "source": "https://platform.claude.com/docs/en/api/typescript/messages/create",
+    "text_request": {"model": "MODEL", "max_tokens": 128, "system": "Be concise.", "messages": [{"role": "user", "content": [{"type": "text", "text": "What is 2 + 2?"}]}]},
+    "response_items_at": "content",
+    "tool_proposal_at": "content[type=tool_use]",
+    "tool_result_reference": "tool_use_id",
+    "conversion_rule": "Only a single leading system message maps to system. Reject developer roles and other system placements instead of reordering. Tool proposals carry an object input. Tool results go into user-message tool_result blocks referencing the proposal identifier."
+  },
+  "task.provider_adapters.008": {
+    "format": "Gemini generateContent",
+    "status": "deferred",
+    "source": "https://ai.google.dev/api/generate-content",
+    "text_request": {"systemInstruction": {"parts": [{"text": "Be concise."}]}, "contents": [{"role": "user", "parts": [{"text": "What is 2 + 2?"}]}]},
+    "response_items_at": "candidates[0].content.parts",
+    "tool_proposal_at": "candidates[0].content.parts[].functionCall",
+    "tool_result_reference": "functionResponse",
+    "conversion_rule": "The model is selected in the endpoint. Map assistant to model and preserve parts order. Reject unsupported instruction placements. Text parts, functionCall and functionResponse are candidates for future support. Streaming and live transport remain disabled."
+  }
+}
