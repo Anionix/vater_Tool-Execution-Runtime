@@ -1,0 +1,30 @@
+{
+  "task_id": "task.authorization.020",
+  "acceptance_criteria": "古い権限の結果を返さない",
+  "scope": "Live and replayed results are withheld if the grant is withdrawn.",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_adapter_boundary.py::test_grant_withdrawn_before_reply_suppresses_result[pure]",
+    "tests/test_adapter_boundary.py::test_grant_withdrawn_before_reply_suppresses_result[recorded]",
+    "tests/test_recorded_tool_bridge.py::test_replay_requires_live_host_grant[before_request-expired-recorded]",
+    "tests/test_recorded_tool_bridge.py::test_replay_requires_live_host_grant[before_request-expired-leased]",
+    "tests/test_recorded_tool_bridge.py::test_replay_requires_live_host_grant[before_request-expired-asynchronous]",
+    "tests/test_recorded_tool_bridge.py::test_replay_requires_live_host_grant[before_request-revoked-recorded]",
+    "tests/test_recorded_tool_bridge.py::test_replay_requires_live_host_grant[before_request-revoked-leased]",
+    "tests/test_recorded_tool_bridge.py::test_replay_requires_live_host_grant[before_request-revoked-asynchronous]",
+    "tests/test_recorded_tool_bridge.py::test_replay_requires_live_host_grant[during_read-expired-recorded]",
+    "tests/test_recorded_tool_bridge.py::test_replay_requires_live_host_grant[during_read-expired-leased]",
+    "tests/test_recorded_tool_bridge.py::test_replay_requires_live_host_grant[during_read-expired-asynchronous]",
+    "tests/test_recorded_tool_bridge.py::test_replay_requires_live_host_grant[during_read-revoked-recorded]",
+    "tests/test_recorded_tool_bridge.py::test_replay_requires_live_host_grant[during_read-revoked-leased]",
+    "tests/test_recorded_tool_bridge.py::test_replay_requires_live_host_grant[during_read-revoked-asynchronous]"
+  ],
+  "report_path": "evidence/runtime-completion-tests.xml",
+  "report_sha256": "0d4499455d702a8008e3479ead8745dc54c68b2e65ec3df134c3301305d2d8fc",
+  "source_sha256": {
+    "tests/test_adapter_boundary.py": "64937e2c1cd43f51aa2a1bfbebe8f9548447a014875130dd59092e101645ea82",
+    "tests/test_recorded_tool_bridge.py": "ff8ca14407eadd7aafd1ee24e94359489b3e703525882e23f4ced93fd996607d"
+  }
+}

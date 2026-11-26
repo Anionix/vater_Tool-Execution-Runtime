@@ -1,0 +1,17 @@
+{
+  "task_id": "task.authorization.019",
+  "acceptance_criteria": "期限後の再利用を拒否",
+  "scope": "Dispatch evaluates expiry after acquiring the writer lock.",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_ledger.py::test_expired_approval_rejected",
+    "tests/test_ledger.py::test_approval_uses_time_after_acquiring_dispatch_lock"
+  ],
+  "report_path": "evidence/runtime-completion-tests.xml",
+  "report_sha256": "0d4499455d702a8008e3479ead8745dc54c68b2e65ec3df134c3301305d2d8fc",
+  "source_sha256": {
+    "tests/test_ledger.py": "d4cf3c38949e718558d35bfb63eeb2d39cced84010b74d6ffc1befc4f1105770"
+  }
+}

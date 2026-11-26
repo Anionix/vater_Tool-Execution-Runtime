@@ -1,0 +1,16 @@
+{
+  "task_id": "task.authorization.001",
+  "acceptance_criteria": "要求本文の自称主体を受け付けない",
+  "scope": "The process refuses identity supplied in the request.",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_recorded_cli.py::test_real_process_unauthorized_client_cannot_supply_identity"
+  ],
+  "report_path": "evidence/runtime-completion-tests.xml",
+  "report_sha256": "0d4499455d702a8008e3479ead8745dc54c68b2e65ec3df134c3301305d2d8fc",
+  "source_sha256": {
+    "tests/test_recorded_cli.py": "e944d7b08c5b4e2d46303f1b94065e19f02613f1c1a506a58c1bd3d94bc98144"
+  }
+}
