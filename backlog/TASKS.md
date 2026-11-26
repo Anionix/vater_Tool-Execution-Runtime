@@ -1,7 +1,7 @@
 # Python先行版 — 元の351件の実装作業一覧
 
 - 元の識別子を変えず、Python版の条件に置き換えた台帳。
-- [x] が付くのは、前提条件と合格証拠がそろった220件。
+- [x] が付くのは、前提条件と合格証拠がそろった238件。
 - 実装機能と作業の合格は別。契約を変更した項目の古い合格証拠は無効。
 
 ## 目的・非目標・境界
@@ -471,41 +471,41 @@
 ## RESTとOpenAPI
 作業 17件・完了判定 1件 / 初期必須：いいえ
 
-- [ ] `task.http_interface.001` HTTP入口が必要な利用者と用途を確定する — 実施中または要再検証
+- [x] `task.http_interface.001` HTTP入口が必要な利用者と用途を確定する — 正式完了
   - 合格：理由がない場合はこの段階を延期
-- [ ] `task.http_interface.002` 起動時の待受アドレスをローカル限定にする — 未着手
+- [x] `task.http_interface.002` 起動時の待受アドレスをローカル限定にする — 正式完了
   - 合格：既定で外部公開されない
-- [ ] `task.http_interface.003` 作業開始用のHTTP操作を定義する — 実施中または要再検証
+- [x] `task.http_interface.003` 作業開始用のHTTP操作を定義する — 正式完了
   - 合格：POSTの要求契約がある
-- [ ] `task.http_interface.004` 作業状態取得用のHTTP操作を定義する — 実施中または要再検証
+- [x] `task.http_interface.004` 作業状態取得用のHTTP操作を定義する — 正式完了
   - 合格：GETが状態を返す
-- [ ] `task.http_interface.005` 中断用のHTTP操作を定義する — 実施中または要再検証
+- [x] `task.http_interface.005` 中断用のHTTP操作を定義する — 正式完了
   - 合格：中断と外部副作用取消しを区別
-- [ ] `task.http_interface.006` OpenAPI仕様書を生成する — 未着手
+- [x] `task.http_interface.006` OpenAPI仕様書を生成する — 正式完了
   - 合格：機械読取可能な文書がある
-- [ ] `task.http_interface.007` OpenAPI仕様と実サーバーを比較する — 未着手
+- [x] `task.http_interface.007` OpenAPI仕様と実サーバーを比較する — 正式完了
   - 合格：ルートと応答コードが一致
-- [ ] `task.http_interface.008` HTTP認証の必要性を条件ごとに定義する — 実施中または要再検証
+- [x] `task.http_interface.008` HTTP認証の必要性を条件ごとに定義する — 正式完了
   - 合格：遠隔版を無認証で開かない
-- [ ] `task.http_interface.009` 認証情報から主体を構築する — 未着手
+- [x] `task.http_interface.009` 認証情報から主体を構築する — 正式完了
   - 合格：クライアント本文の自称情報を採用しない
-- [ ] `task.http_interface.010` リクエスト本文にバイト数の上限を設ける — 未着手
+- [x] `task.http_interface.010` リクエスト本文にバイト数の上限を設ける — 正式完了
   - 合格：超過で解析前に拒否
-- [ ] `task.http_interface.011` JSON解析の深さに上限を設ける — 未着手
+- [x] `task.http_interface.011` JSON解析の深さに上限を設ける — 正式完了
   - 合格：深すぎる入力で停止しない
-- [ ] `task.http_interface.012` 誤ったメディアタイプを拒否する — 未着手
+- [x] `task.http_interface.012` 誤ったメディアタイプを拒否する — 正式完了
   - 合格：規定外のContent-Typeを拒否
-- [ ] `task.http_interface.013` レスポンスへ機密情報を含めない — 未着手
+- [x] `task.http_interface.013` レスポンスへ機密情報を含めない — 正式完了
   - 合格：エラー本文に秘密情報がない
-- [ ] `task.http_interface.014` HTTP標準のキャッシュ制御を正しく設定する — 未着手
+- [x] `task.http_interface.014` HTTP標準のキャッシュ制御を正しく設定する — 正式完了
   - 合格：非公開応答が共有キャッシュに残らない
-- [ ] `task.http_interface.015` レスポンス中断と処理継続を定義する — 実施中または要再検証
+- [x] `task.http_interface.015` レスポンス中断と処理継続を定義する — 正式完了
   - 合格：接続終了だけで外部処理を再実行しない
-- [ ] `task.http_interface.016` MCPとRESTで同じ権限関数を呼ぶ — 実施中または要再検証
+- [x] `task.http_interface.016` MCPとRESTで同じ権限関数を呼ぶ — 正式完了
   - 合格：一方だけ検査が抜けない
-- [ ] `task.http_interface.017` ローカルHTTP接続の統合試験を実行する — 未着手
+- [x] `task.http_interface.017` ローカルHTTP接続の統合試験を実行する — 正式完了
   - 合格：リクエストの全経路で成功
-- [ ] `gate.http_interface.completed` RESTとOpenAPIの全作業を完了判定する — 未着手
+- [x] `gate.http_interface.completed` RESTとOpenAPIの全作業を完了判定する — 正式完了
   - 合格：同段階の全作業について、実物・独立した合格判定・証拠の所在がある
 
 ## 変更操作と永続的な実行記録
