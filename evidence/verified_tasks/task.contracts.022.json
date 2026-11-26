@@ -1,0 +1,16 @@
+{
+  "task_id": "task.contracts.022",
+  "acceptance_criteria": "生成物を直接編集しない",
+  "scope": "The server publishes schemas derived from the canonical contract files at startup.",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_local_contracts.py::test_version_one_contract_remains_compatible"
+  ],
+  "report_path": "evidence/contract-completion-tests.xml",
+  "report_sha256": "66bba61ba6c75625adccdd91081be4e22a2c2329571d54b0e84c0978ec73a3af",
+  "source_sha256": {
+    "tests/test_local_contracts.py": "da7c256bd5ced166122723d6e9a8fe2913a95a96f2a41938878e93c3837d4de7"
+  }
+}

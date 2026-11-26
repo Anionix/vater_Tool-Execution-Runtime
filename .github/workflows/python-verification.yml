@@ -95,5 +95,5 @@ jobs:
         run: python scripts/check_test_report.py official-mcp-report.xml --minimum 14
       - name: Verify trust phase using the same locked environment
         run: python scripts/verify_phase.py trust
-      - name: Recheck completed contract tasks
-        run: python scripts/verify_phase.py contracts --completed-only
+      - name: Verify all contract tasks
+        run: python scripts/verify_phase.py contracts

@@ -1,0 +1,27 @@
+{
+  "task_id": "task.contracts.012",
+  "acceptance_criteria": "型のない結果を拒否できる",
+  "scope": "Untyped and inconsistent worker results are rejected before success.",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_contracts.py::test_untrusted_calculation_reply[error]",
+    "tests/test_contracts.py::test_untrusted_calculation_reply[missing]",
+    "tests/test_contracts.py::test_untrusted_calculation_reply[array]",
+    "tests/test_contracts.py::test_untrusted_calculation_reply[boolean]",
+    "tests/test_contracts.py::test_untrusted_calculation_reply[float]",
+    "tests/test_contracts.py::test_untrusted_calculation_reply[text]",
+    "tests/test_contracts.py::test_untrusted_calculation_reply[wrong_sum]",
+    "tests/test_contracts.py::test_untrusted_calculation_reply[extra_field]",
+    "tests/test_adapter_boundary.py::test_adapter_rejects_inconsistent_worker_result[wrong_sum]",
+    "tests/test_adapter_boundary.py::test_adapter_rejects_inconsistent_worker_result[float]",
+    "tests/test_adapter_boundary.py::test_adapter_rejects_inconsistent_worker_result[boolean]"
+  ],
+  "report_path": "evidence/contract-completion-tests.xml",
+  "report_sha256": "66bba61ba6c75625adccdd91081be4e22a2c2329571d54b0e84c0978ec73a3af",
+  "source_sha256": {
+    "tests/test_adapter_boundary.py": "64937e2c1cd43f51aa2a1bfbebe8f9548447a014875130dd59092e101645ea82",
+    "tests/test_contracts.py": "9a6aaab898921fe3dafb081eca4ceb45c7f96ad7ac08130a920d7d6ae4167077"
+  }
+}

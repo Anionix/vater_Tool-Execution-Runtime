@@ -1,0 +1,18 @@
+{
+  "task_id": "task.contracts.024",
+  "acceptance_criteria": "新型に権限分類と試験が必須",
+  "scope": "The documented registration procedure requires classification and acceptance tests, and the live registry is checked against the risk contract.",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_adapter_boundary.py::test_every_registered_tool_has_a_risk_class",
+    "tests/test_local_contracts.py::test_protocol_routes_do_not_execute_query_or_model_requests"
+  ],
+  "report_path": "evidence/contract-completion-tests.xml",
+  "report_sha256": "66bba61ba6c75625adccdd91081be4e22a2c2329571d54b0e84c0978ec73a3af",
+  "source_sha256": {
+    "tests/test_adapter_boundary.py": "64937e2c1cd43f51aa2a1bfbebe8f9548447a014875130dd59092e101645ea82",
+    "tests/test_local_contracts.py": "da7c256bd5ced166122723d6e9a8fe2913a95a96f2a41938878e93c3837d4de7"
+  }
+}
