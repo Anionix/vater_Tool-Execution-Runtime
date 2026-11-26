@@ -1,0 +1,16 @@
+{
+  "task_id": "task.http_interface.002",
+  "acceptance_criteria": "既定で外部公開されない",
+  "scope": "The live integration binds to IPv4 loopback and the launcher fixes the same address.",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_http_local.py::test_real_http_routes_match_contract"
+  ],
+  "report_path": "evidence/http-local-tests.xml",
+  "report_sha256": "5c8726d11b8ec5e4051012e1eec896dae5cf298dbefc88eaf0dbf85fe533d12b",
+  "source_sha256": {
+    "tests/test_http_local.py": "f5517f5395f65db5f21d1d61c9ed71927b6353a7911ac3647d0f4e0c76ff1fd9"
+  }
+}

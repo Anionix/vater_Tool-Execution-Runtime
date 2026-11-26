@@ -117,3 +117,5 @@ jobs:
         run: sha256sum -c evidence/formal/SHA256SUMS
       - name: Recheck implementation tests linked to formal evidence
         run: python scripts/verify_phase.py formal_verification --completed-only
+      - name: Verify all local HTTP tasks
+        run: python scripts/verify_phase.py http_interface
