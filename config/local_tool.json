@@ -10,6 +10,6 @@
     "server_mcp.py": "9b0f79375091dc4d5271df051ec75a99d61061c64de711e8b628faa083338f14",
     "contracts/checked_add.input.schema.json": "d9cbeeff8d08fff5c2a9886c20b7aef93c4db3879be256e7c4f60f717eefa41d",
     "contracts/checked_add.output.contract.json": "fc44dbe5bbae215503356ab16f03d5c8b122aa473928dfed11d54aa4e0ea5145",
-    "contracts/tool_risks.json": "f7a6d4db772ed7c8247906cdc19eb7b15b560c63db8283fe017e70a2c5882a4b"
+    "contracts/tool_risks.json": "fb9aebded8480569d3e7afde6a95aad1ab0885d29b814396c678b76dd08ce1a9"
   }
 }
