@@ -1,0 +1,18 @@
+{
+  "task_id": "task.mcp_transport.011",
+  "acceptance_criteria": "実開発キットへの入力をバイト上限で保護し、上限突破が到達しないことを実測する",
+  "scope": "Boundary tests measure frames and prove oversize input is rejected before dispatch.",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_local_contracts.py::test_fixed_server_recovers_measures_input_and_reaps_child",
+    "tests/test_guarded_stdio.py::test_max_message_size_is_exact"
+  ],
+  "report_path": "evidence/authorization-gate-tests.xml",
+  "report_sha256": "ba03242350e57854ec4b155c787fccb7b5c2ae58a1a9f276d90fe250b5f7f25d",
+  "source_sha256": {
+    "tests/test_guarded_stdio.py": "1a7a76a30d283e0538d2072286826f9cd06a52f9cf140d7c4cb9ca35289e5cc3",
+    "tests/test_local_contracts.py": "da7c256bd5ced166122723d6e9a8fe2913a95a96f2a41938878e93c3837d4de7"
+  }
+}

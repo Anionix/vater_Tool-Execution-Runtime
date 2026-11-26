@@ -1,25 +1,19 @@
 {
+  "task_id": "task.mcp_transport.007",
+  "acceptance_criteria": "実クライアントから成功要求を呼び、結果の構造化応答と値を検証する",
+  "scope": "The official client checks structured results and their values.",
+  "verified_on": "2026-11-26",
   "verification_status": "passed",
   "executed": true,
-  "run_url": "https://github.com/Anionix/vater_Tool-Execution-Runtime/actions/runs/45278396997",
-  "commit_sha": "bf838f5c82db31b646d8253d4345c0852c516028",
-  "official_sdk": "mcp==2.3.0",
-  "python": "3.13.18",
-  "system": "GitHub-hosted Linux x86-64",
-  "official_sdk_tests": {
-    "passed": 14,
-    "failed": 0,
-    "skipped": 0,
-    "errors": 0
-  },
-  "dependency_lock": {
-    "packages": 33,
-    "sha256": "cc651303afe6b684a979e14fdd9d1ca8b73d7bda0ea6e1d0480a20ae792de51c",
-    "hash_pinned_install": "success"
-  },
-  "limits": "A passing integration test does not prove production safety or complete official conformance.",
-  "machine_contract": "NOT_STARTED/IN_PROGRESS/BLOCKED -> EVIDENCE_PASSED -> REVIEW; do not mark DONE while phase gates remain open.",
-  "task_id": "task.mcp_transport.007",
-  "claim": "Real official Python client tools/call returned structured successful checked_add results; invalid payloads produced errors.",
-  "source_summary": "evidence/official_mcp_locked_verification_2026-11-24.json"
+  "test_cases": [
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[run_local_mcp.py-2026-07-28]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[run_local_mcp.py-legacy]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[launch_guarded_mcp.py-2026-07-28]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[launch_guarded_mcp.py-legacy]"
+  ],
+  "report_path": "evidence/authorization-gate-tests.xml",
+  "report_sha256": "ba03242350e57854ec4b155c787fccb7b5c2ae58a1a9f276d90fe250b5f7f25d",
+  "source_sha256": {
+    "tests/test_official_mcp_sdk.py": "1e065bdf2c1b046739419aaac2e96784101f1b2573c5fb4d9c73a3505b9cf99c"
+  }
 }

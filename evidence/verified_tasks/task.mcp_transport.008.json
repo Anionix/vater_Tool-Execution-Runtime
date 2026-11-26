@@ -1,0 +1,21 @@
+{
+  "task_id": "task.mcp_transport.008",
+  "acceptance_criteria": "未知の名前で中核計算やSQLiteの副作用が発生しない",
+  "scope": "Unknown names and unsupported routes do not touch the database or execute the calculator.",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[run_local_mcp.py-2026-07-28]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[run_local_mcp.py-legacy]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[launch_guarded_mcp.py-2026-07-28]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[launch_guarded_mcp.py-legacy]",
+    "tests/test_local_contracts.py::test_protocol_routes_do_not_execute_query_or_model_requests"
+  ],
+  "report_path": "evidence/authorization-gate-tests.xml",
+  "report_sha256": "ba03242350e57854ec4b155c787fccb7b5c2ae58a1a9f276d90fe250b5f7f25d",
+  "source_sha256": {
+    "tests/test_local_contracts.py": "da7c256bd5ced166122723d6e9a8fe2913a95a96f2a41938878e93c3837d4de7",
+    "tests/test_official_mcp_sdk.py": "1e065bdf2c1b046739419aaac2e96784101f1b2573c5fb4d9c73a3505b9cf99c"
+  }
+}
