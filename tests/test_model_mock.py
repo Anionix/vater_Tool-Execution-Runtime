@@ -55,3 +55,29 @@ def test_fixture_timeout_has_its_own_error(capsys):
     with pytest.raises(ModelTemporarilyUnavailable, match="^model fixture timeout$"):
         OfflineResponses(unavailable).respond(REQUEST)
     assert capsys.readouterr() == ("", "")
+
+
+@pytest.mark.parametrize("task,root,items,result_reference", [
+    ("006", "messages", "choices[0].message", "tool_call_id"),
+    ("007", "messages", "content", "tool_use_id"),
+    ("008", "contents", "candidates[0].content.parts", "functionResponse"),
+])
+def test_provider_format_design_examples(task, root, items, result_reference):
+    import json
+    from pathlib import Path
+
+    path = Path(__file__).resolve().parents[1] / "contracts/model_format_designs.json"
+    design = json.loads(path.read_text())[f"task.provider_adapters.{task}"]
+    request = design["text_request"]
+    assert request[root]
+    assert design["response_items_at"] == items
+    assert design["tool_result_reference"] == result_reference
+    assert design["status"] == ("deferred" if task == "008" else "design_only")
+    if task == "006":
+        assert [message["role"] for message in request[root]] == ["developer", "user"]
+    elif task == "007":
+        assert request["system"] and request["max_tokens"] > 0
+        assert request[root][0]["content"][0]["type"] == "text"
+    else:
+        assert request["systemInstruction"]["parts"][0]["text"]
+        assert request[root][0]["parts"][0]["text"]

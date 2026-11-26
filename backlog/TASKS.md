@@ -1,7 +1,7 @@
 # Python先行版 — 元の351件の実装作業一覧
 
 - 元の識別子を変えず、Python版の条件に置き換えた台帳。
-- [x] が付くのは、前提条件と合格証拠がそろった197件。
+- [x] が付くのは、前提条件と合格証拠がそろった200件。
 - 実装機能と作業の合格は別。契約を変更した項目の古い合格証拠は無効。
 
 ## 目的・非目標・境界
@@ -435,11 +435,11 @@
   - 合格：役割・順序・内容が保存される
 - [x] `task.provider_adapters.005` Responses形式の送信変換を設計する — 正式完了
   - 合格：公式サンプルに対応
-- [ ] `task.provider_adapters.006` Chat Completions形式の送信変換を設計する — 実施中または要再検証
+- [x] `task.provider_adapters.006` Chat Completions形式の送信変換を設計する — 正式完了
   - 合格：形式差を明示できる
-- [ ] `task.provider_adapters.007` Anthropic Messages形式の送信変換を設計する — 実施中または要再検証
+- [x] `task.provider_adapters.007` Anthropic Messages形式の送信変換を設計する — 正式完了
   - 合格：ツール利用と内容ブロックの差を記録
-- [ ] `task.provider_adapters.008` Gemini形式の送信変換を後続候補とする — 実施中または要再検証
+- [x] `task.provider_adapters.008` Gemini形式の送信変換を後続候補とする — 正式完了
   - 合格：対応機能の明示がある
 - [x] `task.provider_adapters.009` 各形式の応答から文章を抽出する — 正式完了
   - 合格：出力の種類を混同しない
