@@ -55,3 +55,20 @@ def test_test_count_is_grounded_in_collected_sdk_tests():
     assert source.count("def test_sdk_") >= 11
     assert source.count("@pytest.mark.parametrize") >= 3
     assert "pytest.mark.skipif" in source
+
+
+
+def test_external_change_evidence_runs_only_on_a_person_s_request():
+    """It writes issues in this repository, so nothing automatic may start it."""
+    import re
+    text = read("external-change-evidence.yml")
+    triggers = text.split("\non:\n", 1)[1].split("\n\n", 1)[0]
+    assert triggers == "  workflow_dispatch:\n  pull_request:\n    types: [labeled]"
+    assert ("if: github.event_name == 'workflow_dispatch' || "
+            "github.event.label.name == 'run-external-evidence'") in text
+    assert "permissions:\n  contents: read\n  issues: write\n\n" in text
+    assert text.count("permissions:") == 1
+    assert "continue-on-error" not in text and "|| true" not in text
+    assert "persist-credentials: false" in text and "pip install" not in text
+    uses = re.findall(r"uses: ([^@\s]+)@(\S+)", text)
+    assert uses and all(re.fullmatch(r"[0-9a-f]{40}", ref) for _action, ref in uses), uses

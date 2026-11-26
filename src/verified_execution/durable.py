@@ -32,10 +32,8 @@ class RecordedCall(NamedTuple):
     right: int
 
 
-def validate_recorded(arguments: Any) -> RecordedCall:
-    if type(arguments) is not dict or set(arguments) != {"request_key", "left", "right"}:
-        raise OperationError("INVALID_ARGUMENT", "arguments require only request_key, left and right")
-    key = arguments["request_key"]
+def validate_request_key(key: Any) -> str:
+    """A client-chosen idempotency key: non-empty, no NUL, at most 256 UTF-8 bytes."""
     if type(key) is not str or not key or "\x00" in key:
         raise OperationError("INVALID_REQUEST_KEY", "invalid request key")
     try:
@@ -44,6 +42,13 @@ def validate_recorded(arguments: Any) -> RecordedCall:
         raise OperationError("INVALID_REQUEST_KEY", "invalid request key") from None
     if len(encoded) > MAX_REQUEST_KEY_BYTES:
         raise OperationError("INVALID_REQUEST_KEY", "request key too long")
+    return key
+
+
+def validate_recorded(arguments: Any) -> RecordedCall:
+    if type(arguments) is not dict or set(arguments) != {"request_key", "left", "right"}:
+        raise OperationError("INVALID_ARGUMENT", "arguments require only request_key, left and right")
+    key = validate_request_key(arguments["request_key"])
     left, right = validated_arguments({"left": arguments["left"], "right": arguments["right"]})
     return RecordedCall(key, left, right)
 

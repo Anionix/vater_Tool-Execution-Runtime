@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/contracts/github_test_create_issue.input.schema.json",
+  "title": "github_test_create_issue input",
+  "description": "request_key is a client-chosen stable idempotency key of at most 256 UTF-8 bytes without NUL. title must be printable and must not start or end with whitespace; the runtime enforces both.",
+  "type": "object",
+  "properties": {
+    "request_key": {"type": "string", "minLength": 1, "maxLength": 256},
+    "title": {"type": "string", "minLength": 1, "maxLength": 120}
+  },
+  "required": ["request_key", "title"],
+  "additionalProperties": false
+}

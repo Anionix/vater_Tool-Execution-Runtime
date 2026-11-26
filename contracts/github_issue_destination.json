@@ -1,0 +1,48 @@
+{
+  "destination": "github_issues",
+  "contract_version": "1.0.0",
+  "api": "GitHub REST API (X-GitHub-Api-Version 2026-03-10)",
+  "base_url": "https://api.github.com",
+  "operation": {
+    "tool": "github_test_create_issue",
+    "effect": "Creates one issue in the host-chosen repository, labelled vater-external-evidence. The evidence run closes each issue it creates.",
+    "method": "POST",
+    "path": "/repos/{owner}/{repo}/issues",
+    "local_identifier": "The issue body carries the line 'vater-operation-id: {operation_id}'.",
+    "approval": "Every dispatch needs a host-issued ledger approval bound to the exact arguments. In the evidence workflow, a person triggering the run is that approval."
+  },
+  "idempotency": {
+    "supported": false,
+    "evidence": "No idempotency key is documented for creating an issue, and conditional requests are not supported for unsafe methods such as POST unless an endpoint says otherwise.",
+    "consequence": "A create that may have executed is never sent again."
+  },
+  "retry_policy": {
+    "resend_only_when": "The destination answered with a rate-limit error, which means the request did not execute: HTTP 403 or 429 with a retry-after header or x-ratelimit-remaining 0.",
+    "wait": "retry-after seconds when present; else until x-ratelimit-reset when x-ratelimit-remaining is 0; else at least 60 seconds.",
+    "max_attempts": 2,
+    "never_resend_after": ["network error or timeout", "HTTP 5xx", "any reply other than a rate-limit error"],
+    "pacing": "Requests are made serially, and the evidence run waits at least one second between mutating requests."
+  },
+  "result_lookup": {
+    "by_issue_number": "GET /repos/{owner}/{repo}/issues/{number}",
+    "by_operation_id": "GET /repos/{owner}/{repo}/issues?labels=vater-external-evidence&state=all&since={dispatch time minus 300 seconds}&per_page=100, at most 10 pages, skipping pull requests, matched on the exact marker line",
+    "consistency": "GitHub does not document read-after-write consistency for the list endpoint, so zero matches does not prove the issue was not created.",
+    "on_exactly_one_match": "Record the issue as the result of the operation.",
+    "on_zero_or_many_matches_or_lookup_failure": "HUMAN_RECONCILIATION_REQUIRED; the ledger keeps the operation unknown."
+  },
+  "resource_version": {
+    "destination_exposes_version": true,
+    "recorded": "Issue number, node_id, updated_at, the ETag of GET /issues/{number}, and the SHA-256 of title, body and labels, stored with the operation id.",
+    "target_check": "The issue is not a pull request, carries the label, has exactly the requested title and contains the operation's marker line. Any mismatch is TARGET_MISMATCH and requires human reconciliation."
+  },
+  "evidence_status": {
+    "documentation_checked_on": "2026-11-26",
+    "live_runs": "Run by .github/workflows/external-change-evidence.yml with the job's GITHUB_TOKEN (issues: write). Not yet executed.",
+    "required_before_tasks_close": ["task.durable_operations.011", "task.durable_operations.012", "task.durable_operations.015", "task.durable_operations.016", "task.durable_operations.017", "task.durable_operations.021"]
+  },
+  "sources": {
+    "issues_endpoints": "https://docs.github.com/en/rest/issues/issues",
+    "best_practices": "https://docs.github.com/en/rest/using-the-rest-api/best-practices-for-using-the-rest-api",
+    "rate_limits": "https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api"
+  }
+}

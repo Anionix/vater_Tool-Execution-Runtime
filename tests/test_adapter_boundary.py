@@ -358,7 +358,8 @@ def test_every_registered_tool_has_a_risk_class(adapter, tmp_path):
     # such as checked_multiply are classified even though not served here.
     assert names(recorded) <= set(contract["tools"])
     assert contract["tools"] == {"checked_add": "read_only", "checked_add_recorded": "state_change",
-                                 "checked_multiply": "read_only"}
+                                 "checked_multiply": "read_only",
+                                 "github_test_create_issue": "state_change"}
     assert set(contract["risk_classes"]) == {"read_only", "state_change", "irreversible", "code_execution"}
     assert contract["minimum_profile"]["allowed_external_destinations"] == []
 
