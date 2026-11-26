@@ -10,7 +10,7 @@
 | `task.formal_verification.004` | `ledger.OperationLedger.begin_dispatch` | 承認の束縛と差し替えの拒否 | 束縛情報の比較 |
 | `task.formal_verification.005` | `core.ExecutionTrace.move` | 同期計算の状態遷移 | 状態と遷移許可の純粋な判定 |
 
-`task.formal_verification.019` の実際の呼出し経路は、標準入出力の `server_mcp.build_server` から読み取り専用の `CalculationService.execute` へ進む経路と、記録付きの `RecordedCalculator.execute` から台帳へ進む経路。ワーカー付きの入口は `CancellableLeasedToolBridge.acall` と `LeasedLedger.start` を使うため、台帳の承認に関する下記の命題は `OperationLedger.begin_dispatch` の範囲に限る。
+`task.formal_verification.019` の実際の呼出し経路は、標準入出力の `server_mcp.build_server` から読み取り専用の `runtime.ToolRuntime.execute`（旧名 `CalculationService.execute`）へ進み、`tools.ToolSpec` を経て `core.checked_add`・`core.LocalAuthority.permits`・`core.ExecutionTrace.move` を呼ぶ経路と、記録付きの経路。標準入出力からはどちらも `runtime.ToolRuntime.acall` を通る。記録付きの経路は `durable.checked_add_recorded_spec` で入力を検査し、`core.LocalAuthority.permits` で権限を確かめてから、ホストが結び付けた台帳実行（既定は `CancellableLeasedToolBridge.acall`、旧来の経路は `RecordedToolBridge.call` から `RecordedCalculator.execute`）へ進み、結果を返す前に再び権限と和を確認する。ワーカー付きの入口は `CancellableLeasedToolBridge.acall` と `LeasedLedger.start` を使うため、台帳の承認に関する下記の命題は `OperationLedger.begin_dispatch` の範囲に限る。
 
 ## 検証する命題
 

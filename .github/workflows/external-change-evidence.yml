@@ -1,0 +1,44 @@
+name: External change evidence (GitHub Issues)
+
+# Creates (and then closes) labelled test issues in THIS repository, so it runs
+# only when a person asks for it: a manual run, or adding the label
+# run-external-evidence to a pull request. That person is the approver of the
+# issue creations (contracts/github_issue_destination.json).
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [labeled]
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: external-change-evidence
+  cancel-in-progress: false
+
+jobs:
+  github-issues:
+    if: github.event_name == 'workflow_dispatch' || github.event.label.name == 'run-external-evidence'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        with:
+          python-version: "3.13"
+      # Standard library only: no third-party packages are installed for this run.
+      - name: Run live scenarios against this repository's issues
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python -I scripts/run_github_issue_evidence.py --output github-issue-evidence.json
+      - name: Keep the evidence report
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: github-issue-evidence
+          path: github-issue-evidence.json
+          if-no-files-found: warn
+          retention-days: 30

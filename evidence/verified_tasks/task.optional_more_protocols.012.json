@@ -1,0 +1,36 @@
+{
+  "task_id": "task.optional_more_protocols.012",
+  "acceptance_criteria": "変更が原則接続部に閉じる",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/attack-reproduction-tests.xml",
+  "report_sha256": "ba7e6a675e91742483df8f3aa1b0aa47212819d883e95fab1e7cac4827df5a55",
+  "source_sha256": {
+    "server_mcp.py": "4445686917724617d7be5ebc8ae316417b1d0c029f6a8ff904251c1779ccc877",
+    "src/verified_execution/http_local.py": "b85e7d0c2d90f26d3fad5215a31f3b64c523385ede842a87064e989b5ab4663d",
+    "src/verified_execution/runtime.py": "41ad00eb06ab2f19acb1996d19929ee64077a553eb453be2604737f1bfe3df67",
+    "src/verified_execution/tools.py": "f8ff37460f9a57913e18e709ed55c6f771ecd4ccb11e815a39ca8cd343a2f48a",
+    "tests/test_adapter_conformance.py": "8ba34dc8dac2d197e44bd0d85947ba3441d527a175defaa6b592b3e65d365392",
+    "tests/test_adapter_isolation.py": "01e4e4b170036196c29ec5d24621618866d1c9ff267a503f25a6dc795847f32b",
+    "tests/test_tool_runtime.py": "2eba1aae751a3e468ff94c9238389641d4bd298aec5ef13bba9ae5e30d9bb924"
+  },
+  "scope": "The shared core imports no protocol library; the MCP and HTTP adapters hold no tool schema, import no core validation or arithmetic, never consult the raw authority, and name no tool except the host default. A tool added only to the registry is served by both adapters unchanged, so adding a protocol means adding an adapter, not editing the core.",
+  "test_cases": [
+    "tests/test_adapter_isolation.py::test_core_imports_no_protocol_library[core.py]",
+    "tests/test_adapter_isolation.py::test_core_imports_no_protocol_library[tools.py]",
+    "tests/test_adapter_isolation.py::test_core_imports_no_protocol_library[runtime.py]",
+    "tests/test_adapter_isolation.py::test_core_imports_no_protocol_library[durable.py]",
+    "tests/test_adapter_isolation.py::test_core_imports_no_protocol_library[arithmetic.py]",
+    "tests/test_adapter_isolation.py::test_adapters_do_not_reimplement_core_checks[http]",
+    "tests/test_adapter_isolation.py::test_adapters_do_not_reimplement_core_checks[mcp]",
+    "tests/test_adapter_isolation.py::test_adapters_define_no_tool_schema[http]",
+    "tests/test_adapter_isolation.py::test_adapters_define_no_tool_schema[mcp]",
+    "tests/test_adapter_isolation.py::test_adapters_name_no_tool_except_the_host_default[http]",
+    "tests/test_adapter_isolation.py::test_adapters_name_no_tool_except_the_host_default[mcp]",
+    "tests/test_adapter_isolation.py::test_every_adapter_reaches_tools_only_through_the_shared_runtime",
+    "tests/test_tool_runtime.py::test_mcp_serves_a_new_tool_without_adapter_changes",
+    "tests/test_tool_runtime.py::test_http_serves_a_new_tool_without_adapter_changes",
+    "tests/test_adapter_conformance.py::test_vectors_cover_every_registered_tool"
+  ]
+}

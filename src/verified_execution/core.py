@@ -134,32 +134,10 @@ def checked_add(left: int, right: int) -> int:
     return result
 
 
-class CalculationService:
-    def __init__(self, authority: LocalAuthority) -> None:
-        self.authority = authority
-
-    def execute(self, name: str, arguments: Any) -> ExecutionResult:
-        trace = ExecutionTrace()
-        try:
-            if name != "checked_add":
-                raise OperationError("UNKNOWN_TOOL", "tool is not registered")
-            left, right = validated_arguments(arguments)
-        except OperationError as exc:
-            trace.move(State.REJECTED)
-            return ExecutionResult(None, exc.code, tuple(s.value for s in trace.states))
-
-        trace.move(State.VALIDATED)
-        # AUTHORIZATION-001: only the server-supplied authority is consulted.
-        if not self.authority.permits(name):
-            trace.move(State.REJECTED)
-            return ExecutionResult(None, "NOT_AUTHORIZED", tuple(s.value for s in trace.states))
-
-        trace.move(State.AUTHORIZED)
-        trace.move(State.RUNNING)
-        try:
-            total = checked_add(left, right)
-        except OperationError as exc:
-            trace.move(State.FAILED)
-            return ExecutionResult(None, exc.code, tuple(s.value for s in trace.states))
-        trace.move(State.COMPLETED)
-        return ExecutionResult(total, None, tuple(s.value for s in trace.states))
+def __getattr__(name: str) -> Any:
+    # CalculationService is the historical name of the protocol-independent
+    # runtime (runtime.ToolRuntime). Resolved lazily: runtime imports this module.
+    if name == "CalculationService":
+        from .runtime import ToolRuntime
+        return ToolRuntime
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

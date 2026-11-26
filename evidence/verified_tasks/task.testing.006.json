@@ -1,0 +1,17 @@
+{
+  "task_id": "task.testing.006",
+  "acceptance_criteria": "操作開始前に拒否",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/attack-reproduction-tests.xml",
+  "report_sha256": "ba7e6a675e91742483df8f3aa1b0aa47212819d883e95fab1e7cac4827df5a55",
+  "source_sha256": {
+    "src/verified_execution/ledger.py": "3d8ba058dd5dd23957e70e87cf3a053514dd417a3ca05b35ba9410ebb3305a42",
+    "tests/test_ledger.py": "d4cf3c38949e718558d35bfb63eeb2d39cced84010b74d6ffc1befc4f1105770"
+  },
+  "scope": "An approval whose bound arguments differ from the reserved operation is refused at begin_dispatch with APPROVAL_INVALID, and the operation stays prepared: the operation never starts.",
+  "test_cases": [
+    "tests/test_ledger.py::test_mismatched_approval_rejected[change3]"
+  ]
+}

@@ -16,7 +16,20 @@ mcp = ["mcp==2.3.0"]
 [project.scripts]
 verified-execution = "verified_execution.local_cli:main"
 
+[tool.setuptools]
+# The host contract files stay at the repository root (the single source of
+# truth) and are shipped inside installs as verified_execution_contracts.
+packages = ["verified_execution", "verified_execution_contracts"]
+package-dir = {"" = "src", "verified_execution_contracts" = "contracts"}
+
+[tool.setuptools.package-data]
+verified_execution_contracts = ["*.json", "*.jsonl"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]
 addopts = "-q"
+# Tests attach measurements with record_property (task.read_only.014 relies on
+# input_bytes and response_elapsed_ns in the archived reports). Per-test
+# properties are valid in xunit1 and invalid in pytest's default xunit2.
+junit_family = "xunit1"

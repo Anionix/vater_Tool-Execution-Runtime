@@ -9,7 +9,9 @@ Machine contracts:
   MCP-001: wire framing and version negotiation are owned by official SDK.
   INPUT-001: reject unknown tool, missing/extra fields, bool, float, overflow.
   AUTHORIZATION-001: authorization comes only from host-created authority.
-  STATE-001: only the CalculationService may start/finish the computation.
+  STATE-001: only the shared ToolRuntime may start/finish a computation.
+  ADAPTER-001: tool schemas, validation, authorization and result checks come
+               from verified_execution.runtime; this module only translates.
   OUTPUT-001: the structured result contains the exact integer result.
 
 State: received -> validated -> authorized -> running -> completed
@@ -38,14 +40,16 @@ from mcp.types import (
     Tool,
 )
 
-from verified_execution.client_result import read_checked_add_result
-from verified_execution.core import LOCAL_PUBLISHER, CalculationService, LocalAuthority, OperationError
+from verified_execution.core import LOCAL_PUBLISHER, LocalAuthority
+from verified_execution.durable import checked_add_recorded_spec
+from verified_execution.runtime import ToolOutcome, ToolRuntime
+from verified_execution.tools import ToolRegistry, ToolSpec, load_registry, thaw
 from verified_execution.ledger import HostPrincipal, OperationLedger
 from verified_execution.worker_leases import LeasedLedger, LeasedToolBridge
 from verified_execution.cancellable_bridge import CancellableLeasedToolBridge, Checkpoint
 from verified_execution.cancellation_journal import CancellationJournal
-from verified_execution.recorded_tool_bridge import BridgeResult, RECORDED_TOOL_NAME, RecordedToolBridge
-from verified_execution.request_limits import BoundedReadOnlyExecutor, ReadOnlyPolicy
+from verified_execution.recorded_tool_bridge import RECORDED_TOOL_NAME, RecordedToolBridge
+from verified_execution.request_limits import ReadOnlyPolicy
 from verified_execution.policy_config import load_local_policy
 
 ROOT = Path(__file__).resolve().parent
@@ -55,83 +59,44 @@ _READONLY_POLICY = ReadOnlyPolicy(
     timeout_ms=_LIMITS.readonly_request_timeout_ms,
     max_concurrent=_LIMITS.readonly_max_concurrent,
 )
-INPUT_SCHEMA = json.loads((ROOT / "contracts" / "checked_add.input.schema.json").read_text(encoding="utf-8"))
-OUTPUT_CONTRACT = json.loads((ROOT / "contracts" / "checked_add.output.contract.json").read_text(encoding="utf-8"))
+REGISTRY = load_registry(ROOT / "contracts")
 CAPABILITIES = json.loads((ROOT / "contracts" / "local_capabilities.json").read_text(encoding="utf-8"))
 ERROR_CATEGORY = {code: category for category, codes in CAPABILITIES["error_categories"].items()
                   for code in codes}
-SUCCESS = OUTPUT_CONTRACT["domains"]["success"]
-OUTPUT_SCHEMA = {
-    "type": SUCCESS["type"],
-    "properties": {"result": SUCCESS["result"]},
-    "required": SUCCESS["required"],
-    "additionalProperties": False,
-}
-TOOL = Tool(
-    name="checked_add",
-    description="Add unsigned 32-bit integers without overflow or side effects.",
-    meta={"io.github.anionix/contract": {"publisher": LOCAL_PUBLISHER,
-                                       "version": OUTPUT_CONTRACT["contract_version"]}},
-    input_schema=INPUT_SCHEMA,
-    output_schema=OUTPUT_SCHEMA,
-)
 
 
-RECORDED_INPUT_SCHEMA = {
-    "type": "object",
-    "properties": {
-        "request_key": {"type": "string", "minLength": 1, "maxLength": 256},
-        "left": INPUT_SCHEMA["properties"]["left"],
-        "right": INPUT_SCHEMA["properties"]["right"],
-    },
-    "required": ["request_key", "left", "right"],
-    "additionalProperties": False,
-}
-RECORDED_OUTPUT_SCHEMA = {
-    "type": "object",
-    "properties": {
-        "result": OUTPUT_SCHEMA["properties"]["result"],
-        "operation_id": {"type": "string"},
-        "replayed": {"type": "boolean"},
-    },
-    "required": ["result", "operation_id", "replayed"],
-    "additionalProperties": False,
-}
-RECORDED_TOOL = Tool(
-    name=RECORDED_TOOL_NAME,
-    description="Durable, strict unsigned 32-bit addition; requires stable request_key.",
-    meta={"io.github.anionix/contract": {"publisher": LOCAL_PUBLISHER}},
-    input_schema=RECORDED_INPUT_SCHEMA,
-    output_schema=RECORDED_OUTPUT_SCHEMA,
-)
+def to_mcp_tool(spec: ToolSpec) -> Tool:
+    """Translate a protocol-independent ToolSpec into an MCP Tool."""
+    contract = {"publisher": LOCAL_PUBLISHER}
+    if spec.contract_version is not None:
+        contract["version"] = spec.contract_version
+    return Tool(name=spec.name, description=spec.description,
+                meta={"io.github.anionix/contract": contract},
+                input_schema=thaw(spec.input_schema), output_schema=thaw(spec.output_schema))
+
+
+TOOL = to_mcp_tool(REGISTRY.get("checked_add"))
+INPUT_SCHEMA = TOOL.input_schema
+OUTPUT_SCHEMA = TOOL.output_schema
+
+
 
 
 def _tool_error(code: str) -> CallToolResult:
     return CallToolResult(content=[TextContent(type="text", text=code)], is_error=True)
 
 
-def _calculation_reply(authority: LocalAuthority, arguments: object, value: int | None,
-                       recorded: BridgeResult | None = None) -> CallToolResult:
-    # task.trust.007 / task.trust.011: verify the worker result and live grant at handoff.
-    if not authority.permits("checked_add"):
-        return _tool_error("NOT_AUTHORIZED")
-    if not isinstance(arguments, dict):
-        return _tool_error("INVALID_TOOL_RESULT")
-    payload: dict[str, object] = {"result": value}
-    try:
-        result = read_checked_add_result(left=arguments.get("left"), right=arguments.get("right"),
-                                         is_error=False, structured_content=payload)
-    except OperationError:
-        return _tool_error("INVALID_TOOL_RESULT")
-    if recorded is not None:
-        if type(recorded.operation_id) is not str or not recorded.operation_id or type(recorded.replayed) is not bool:
-            return _tool_error("INVALID_TOOL_RESULT")
-        payload.update(operation_id=recorded.operation_id, replayed=recorded.replayed)
-    return CallToolResult(content=[TextContent(type="text", text=str(result))],
-                          structured_content=payload, meta={"io.github.anionix/source": "local_calculator"})
+def _reply(outcome: ToolOutcome) -> CallToolResult:
+    """Translate a verified ToolOutcome into an MCP result. No checks happen here."""
+    if not outcome.ok:
+        return _tool_error(outcome.error_code or "EXECUTION_FAILED")
+    return CallToolResult(content=[TextContent(type="text", text=str(outcome.value))],
+                          structured_content=outcome.structured(),
+                          meta={"io.github.anionix/source": "local_calculator"})
 
 
 def build_server(authority: LocalAuthority | None = None, *,
+                 registry: ToolRegistry | None = None,
                  ledger_path: str | None = None,
                  principal: str = "local-process",
                  leased: bool = True,
@@ -149,9 +114,8 @@ def build_server(authority: LocalAuthority | None = None, *,
     remaining_calls = call_budget
     if authority is None:
         authority = LocalAuthority.calculator_only()
-    service = CalculationService(authority)
-    bounded_readonly = BoundedReadOnlyExecutor(_READONLY_POLICY)
-    bridge = None
+    registry = registry if registry is not None else REGISTRY
+    durable = {}
     if ledger_path is not None:
         if leased:
             # CANCEL-DURABLE-002: startup replay is host-owned, before tools
@@ -166,34 +130,26 @@ def build_server(authority: LocalAuthority | None = None, *,
                 after_commit=after_commit, cancellation_journal=journal)
         else:
             # Local legacy mode only; don't mix with leased workers in production.
+            # No request-scoped cancellation on this path.
             bridge = RecordedToolBridge(OperationLedger(ledger_path),
                                         principal=identity.name, authority=authority)
+        # The optional recorded tool is a registry tool like any other; the host
+        # attaches the ledger executor that performs it.
+        if RECORDED_TOOL_NAME not in registry:
+            registry = registry.with_tools(checked_add_recorded_spec(ROOT / "contracts"))
+        durable[RECORDED_TOOL_NAME] = bridge
+    # POLICY-011: the host's read-only time and concurrency budget.
+    runtime = ToolRuntime(authority, registry, durable=durable, readonly_policy=_READONLY_POLICY)
+    tools = [to_mcp_tool(spec) for spec in runtime.tools()]
 
     async def list_tools(_context: ServerRequestContext, _params: PaginatedRequestParams | None) -> ListToolsResult:
-        return ListToolsResult(tools=[TOOL, RECORDED_TOOL] if bridge is not None else [TOOL])
+        return ListToolsResult(tools=list(tools))
 
     async def execute_tool(params: CallToolRequestParams) -> CallToolResult:
-        if bridge is not None and params.name == RECORDED_TOOL_NAME:
-            if isinstance(bridge, CancellableLeasedToolBridge):
-                # The SDK owns request identity, notification dispatch and
-                # post-cancellation response suppression. This coroutine has
-                # actual cancellation checkpoints and stores state separately.
-                outcome_recorded = await bridge.acall(params.name, params.arguments)
-            else:
-                # Local migration path only, without request-scoped cancellation.
-                outcome_recorded = bridge.call(params.name, params.arguments)
-            if outcome_recorded.ok:
-                return _calculation_reply(authority, params.arguments, outcome_recorded.value, outcome_recorded)
-            return _tool_error(outcome_recorded.error_code or "EXECUTION_FAILED")
-        # POLICY-011: bounded *elapsed response time* for the pure calculator.
-        # No untrusted code or external side effects execute in this branch.
-        try:
-            outcome = await bounded_readonly.run(service.execute, params.name, params.arguments)
-        except TimeoutError:
-            return _tool_error("TIMEOUT")
-        if outcome.succeeded:
-            return _calculation_reply(authority, params.arguments, outcome.result)
-        return _tool_error(outcome.error_code or "EXECUTION_FAILED")
+        # The SDK owns request identity, notification dispatch and
+        # post-cancellation response suppression; cancelling this coroutine
+        # reaches the durable executor's cancellation checkpoints.
+        return _reply(await runtime.acall(params.name, params.arguments))
 
     trace_id = str(uuid4())
 
@@ -207,9 +163,7 @@ def build_server(authority: LocalAuthority | None = None, *,
         try:
             # task.authorization.018: debit before dispatch, with no await between check and debit.
             # Each registered call attempt consumes one unit, including retries and failures.
-            registered = params.name == TOOL.name or (
-                bridge is not None and params.name == RECORDED_TOOL_NAME
-            )
+            registered = runtime.serves(params.name)
             if registered and remaining_calls == 0:
                 reply = _tool_error("BUDGET_EXCEEDED")
             else:

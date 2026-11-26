@@ -68,13 +68,13 @@ def test_real_http_routes_match_contract(serve, monkeypatch):
     request = serve()
     _, specification = request("GET", "/openapi.json")
     paths = specification["paths"]
-    assert set(paths) == {"/jobs", "/jobs/{job_id}"}
-    assert set(paths["/jobs"]) == {"post"}
+    assert set(paths) == {"/jobs", "/tools/checked_add/jobs", "/jobs/{job_id}"}
+    assert set(paths["/jobs"]) == set(paths["/tools/checked_add/jobs"]) == {"post"}
     assert set(paths["/jobs/{job_id}"]) == {"get", "delete"}
 
     def verify(method, path, status, body=None, **kwargs):
         result, content = request(method, path, body, **kwargs)
-        contract_path = path if path == "/jobs" else "/jobs/{job_id}"
+        contract_path = path if path in paths else "/jobs/{job_id}"
         assert result == status
         assert str(status) in paths[contract_path][method.lower()]["responses"]
         return content
@@ -83,7 +83,7 @@ def test_real_http_routes_match_contract(serve, monkeypatch):
         payload = b'{"left":1,"right":2}'
         running = "/jobs/" + verify("POST", "/jobs", 202, payload)["job_id"]
         assert entered.wait(2)
-        queued = "/jobs/" + verify("POST", "/jobs", 202, payload)["job_id"]
+        queued = "/jobs/" + verify("POST", "/tools/checked_add/jobs", 202, payload)["job_id"]
         assert verify("GET", queued, 200)["state"] == "prepared"
         assert verify("DELETE", queued, 200)["state"] == "cancelled"
         verify("DELETE", running, 409)

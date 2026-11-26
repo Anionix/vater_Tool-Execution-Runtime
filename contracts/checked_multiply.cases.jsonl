@@ -1,0 +1,9 @@
+{"case":"MUL-001","name":"checked_multiply","arguments":{"left":6,"right":7},"expected":{"ok":true,"value":42,"error_code":null}}
+{"case":"MUL-002","name":"checked_multiply","arguments":{"left":0,"right":4294967295},"expected":{"ok":true,"value":0,"error_code":null}}
+{"case":"MUL-003","name":"checked_multiply","arguments":{"left":4294967295,"right":1},"expected":{"ok":true,"value":4294967295,"error_code":null}}
+{"case":"MUL-004","name":"checked_multiply","arguments":{"left":65536,"right":65535},"expected":{"ok":true,"value":4294901760,"error_code":null}}
+{"case":"MUL-005","name":"checked_multiply","arguments":{"left":65536,"right":65536},"expected":{"ok":false,"value":null,"error_code":"OVERFLOW"}}
+{"case":"MUL-006","name":"checked_multiply","arguments":{"left":true,"right":2},"expected":{"ok":false,"value":null,"error_code":"INVALID_ARGUMENT"}}
+{"case":"MUL-007","name":"checked_multiply","arguments":{"left":2.0,"right":3},"expected":{"ok":false,"value":null,"error_code":"INVALID_ARGUMENT"}}
+{"case":"MUL-008","name":"checked_multiply","arguments":{"left":-1,"right":3},"expected":{"ok":false,"value":null,"error_code":"OUT_OF_RANGE"}}
+{"case":"MUL-009","name":"checked_multiply","arguments":{"left":2,"right":3,"permission":true},"expected":{"ok":false,"value":null,"error_code":"INVALID_ARGUMENT"}}

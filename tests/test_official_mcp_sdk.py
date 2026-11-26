@@ -354,9 +354,17 @@ async def main():
 anyio.run(main)
 """
     def operation_state():
+        # A modern-era Client adopts the protocol version without a handshake,
+        # so polling can start while the child is still creating the ledger:
+        # the file may exist before its schema is committed. That is "not yet".
         if database.exists():
             with sqlite3.connect(database) as connection:
-                return connection.execute("SELECT state FROM operations WHERE request_key='one'").fetchone()
+                try:
+                    return connection.execute(
+                        "SELECT state FROM operations WHERE request_key='one'").fetchone()
+                except sqlite3.OperationalError as error:
+                    if "no such table" not in str(error):
+                        raise
         return None
 
     async def run():

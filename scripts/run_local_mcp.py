@@ -22,8 +22,9 @@ def verify_local_tool(root: Path) -> None:
     """Check the approved built-in before importing the runtime package."""
     approval = json.loads((root / "config/local_tool.json").read_text(encoding="utf-8"))
     required = {"src/verified_execution/__init__.py", "src/verified_execution/core.py",
+                "src/verified_execution/runtime.py", "src/verified_execution/tools.py",
                 "server_mcp.py", "contracts/checked_add.input.schema.json",
-                "contracts/checked_add.output.contract.json"}
+                "contracts/checked_add.output.contract.json", "contracts/tool_risks.json"}
     if (approval["publisher"] != "Anionix/vater_Tool-Execution-Runtime"
             or approval["name"] != "checked_add" or set(approval["sha256"]) != required):
         raise ValueError("INVALID_LOCAL_TOOL")

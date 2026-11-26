@@ -1,0 +1,21 @@
+{
+  "task_id": "task.testing.013",
+  "acceptance_criteria": "制限内の資源で失敗",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/attack-reproduction-tests.xml",
+  "report_sha256": "ba7e6a675e91742483df8f3aa1b0aa47212819d883e95fab1e7cac4827df5a55",
+  "source_sha256": {
+    "scripts/guarded_stdio.py": "dd0d6532805285f6108f75d24f9a4a0d54769c8e500265b166d8f98dd903aa5f",
+    "src/verified_execution/http_local.py": "b85e7d0c2d90f26d3fad5215a31f3b64c523385ede842a87064e989b5ab4663d",
+    "tests/test_attack_reproduction.py": "6145c67968f9657f966dfe6304342f29a8776ba4529522a8f567f9e6de66da0c",
+    "tests/test_guarded_stdio.py": "1a7a76a30d283e0538d2072286826f9cd06a52f9cf140d7c4cb9ca35289e5cc3"
+  },
+  "scope": "Bodies over the 4096-byte limit get 413 BODY_TOO_LARGE from HTTP, including a stream that never ends; the guarded stdio transport enforces the exact message size and fails closed on an unending oversized stream.",
+  "test_cases": [
+    "tests/test_attack_reproduction.py::test_http_oversized_body_fails_within_the_limit",
+    "tests/test_guarded_stdio.py::test_max_message_size_is_exact",
+    "tests/test_guarded_stdio.py::test_unending_oversize_stream_fails_closed"
+  ]
+}

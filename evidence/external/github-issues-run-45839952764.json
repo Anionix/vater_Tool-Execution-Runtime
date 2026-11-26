@@ -1,0 +1,169 @@
+{
+  "provenance": {
+    "source": "Printed by scripts/run_github_issue_evidence.py to the job log and transcribed here; the same JSON is kept as the run's artifact.",
+    "workflow": ".github/workflows/external-change-evidence.yml",
+    "run_url": "https://github.com/Anionix/vater_Tool-Execution-Runtime/actions/runs/45839952764",
+    "job_id": 139978675822,
+    "head_sha": "ba6333fc827aee6eb8d6821c41366510332e8fa0",
+    "trigger": "label run-external-evidence added to pull request #382 at the repository owner's request",
+    "artifact": {
+      "id": 15126999122,
+      "name": "github-issue-evidence",
+      "zip_sha256_reported_by_actions": "ec2ec8391550fb821cc175ddda578abd345edad5a099e6448e1cb9c21f95af79"
+    },
+    "finished_at": "2026-11-26T14:32:43Z",
+    "earlier_run": {
+      "run_url": "https://github.com/Anionix/vater_Tool-Execution-Runtime/actions/runs/45839389073",
+      "result": "failed: replay scenario; issues #383 and #384 were created once each and closed. The harness counted issues through the list endpoint about one second after creation; the checks were made consistency-aware in ba6333f."
+    }
+  },
+  "report": {
+    "destination": "github_issues",
+    "repository": "Anionix/vater_Tool-Execution-Runtime",
+    "run_id": "45839952764",
+    "contract": "contracts/github_issue_destination.json",
+    "scenarios": [
+      {
+        "name": "normal",
+        "tasks": [
+          "task.durable_operations.011",
+          "task.durable_operations.012",
+          "task.durable_operations.021"
+        ],
+        "expected": "created once; ledger reserved->dispatched->definitive_succeeded; stored result and version",
+        "observed": {
+          "ok": true,
+          "error": null,
+          "issue": 385,
+          "history": [
+            "reserved",
+            "dispatched",
+            "definitive_succeeded"
+          ],
+          "stored": {
+            "operation_id": "361c3adc-4bfc-4ea3-a508-2d30cbd4774c",
+            "destination": "github_issues",
+            "status": "succeeded",
+            "object_id": "385",
+            "version": {
+              "content_sha256": "5123b868203c2c9b7f80c05536a2828fe0196a910f33dc2e8058fce3c2a2eb0a",
+              "etag": "\"2ddba3ae17fe7620228efbfcb088c88d40b1cec97616afb24c73bfbe6547734d\"",
+              "node_id": "I_kwDOV4sCUc8AAAABixxEPA",
+              "number": 385,
+              "updated_at": "2026-11-26T14:32:06Z"
+            },
+            "detail": null,
+            "dispatched_at_ms": 1795703525026
+          },
+          "live_etag": "\"2ddba3ae17fe7620228efbfcb088c88d40b1cec97616afb24c73bfbe6547734d\""
+        },
+        "checks": {
+          "created": true,
+          "stored_succeeded": true,
+          "version_etag_stored": true,
+          "ledger_history": true,
+          "target_matches": true
+        },
+        "passed": true
+      },
+      {
+        "name": "replay",
+        "tasks": [
+          "task.durable_operations.015",
+          "task.durable_operations.017"
+        ],
+        "expected": "same request_key: stored result returned, no new POST, exactly one issue with the marker",
+        "observed": {
+          "ok": true,
+          "replayed": true,
+          "issue": 385,
+          "new_posts": 0,
+          "issues_with_marker": 1
+        },
+        "checks": {
+          "ok": true,
+          "replayed": true,
+          "same_issue": true,
+          "no_new_post": true,
+          "exactly_one_issue": true
+        },
+        "passed": true
+      },
+      {
+        "name": "lost_reply",
+        "tasks": [
+          "task.durable_operations.011",
+          "task.durable_operations.016",
+          "task.durable_operations.017"
+        ],
+        "expected": "real create with the reply dropped: one POST only, reconciled by lookup (directly or after a replay), exactly one issue with the marker",
+        "observed": {
+          "ok": true,
+          "error": null,
+          "issue": 386,
+          "first_store_status": "human_required",
+          "posts": 1,
+          "posts_after_replay": 1,
+          "issues_with_marker": 1
+        },
+        "checks": {
+          "reconciled": true,
+          "one_post_only": true,
+          "exactly_one_issue": true
+        },
+        "passed": true
+      },
+      {
+        "name": "crash",
+        "tasks": [
+          "task.durable_operations.011",
+          "task.durable_operations.016"
+        ],
+        "expected": "dispatched survives the crash and becomes unknown on restart; replay looks up, finds nothing, sends nothing and requires human reconciliation",
+        "observed": {
+          "crashed": true,
+          "recovered_operations": 1,
+          "error": "HUMAN_RECONCILIATION_REQUIRED",
+          "ledger_state": "unknown",
+          "new_posts": 0,
+          "issues_with_marker": 0
+        },
+        "checks": {
+          "crashed": true,
+          "recovered_as_unknown": true,
+          "human_reconciliation": true,
+          "no_new_post": true,
+          "no_issue_exists": true
+        },
+        "passed": true
+      },
+      {
+        "name": "target_check",
+        "tasks": [
+          "task.durable_operations.021"
+        ],
+        "expected": "the real issue matches its own operation only; another operation or title is refused",
+        "observed": {
+          "own": true,
+          "other_operation": false,
+          "other_title": false
+        },
+        "checks": {
+          "own_matches": true,
+          "other_operation_refused": true,
+          "other_title_refused": true
+        },
+        "passed": true
+      }
+    ],
+    "issues": [
+      385,
+      386
+    ],
+    "closed": [
+      385,
+      386
+    ],
+    "all_passed": true
+  }
+}

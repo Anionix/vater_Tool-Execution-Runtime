@@ -1,0 +1,50 @@
+{
+  "contract_version": "1.0.0",
+  "tool": "checked_add_recorded",
+  "domains": {
+    "success": {
+      "type": "object",
+      "required": [
+        "result",
+        "operation_id",
+        "replayed"
+      ],
+      "properties": {
+        "result": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4294967295
+        },
+        "operation_id": {
+          "type": "string"
+        },
+        "replayed": {
+          "type": "boolean"
+        }
+      },
+      "mcp_is_error": false
+    },
+    "failure": {
+      "type": "object",
+      "required": [
+        "error_code"
+      ],
+      "error_code": {
+        "enum": [
+          "INVALID_ARGUMENT",
+          "INVALID_REQUEST_KEY",
+          "OUT_OF_RANGE",
+          "OVERFLOW",
+          "UNKNOWN_TOOL",
+          "NOT_AUTHORIZED",
+          "BUDGET_EXCEEDED",
+          "IN_PROGRESS",
+          "OUTCOME_UNKNOWN",
+          "ALREADY_RECORDED",
+          "INVALID_TOOL_RESULT"
+        ]
+      },
+      "mcp_is_error": true
+    }
+  }
+}

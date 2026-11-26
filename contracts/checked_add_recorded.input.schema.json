@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/contracts/checked_add_recorded.input.schema.json",
+  "title": "checked_add_recorded input",
+  "description": "request_key is a client-chosen stable idempotency key of at most 256 UTF-8 bytes without NUL; JSON Schema maxLength counts characters, so the byte limit is enforced by the runtime.",
+  "type": "object",
+  "properties": {
+    "request_key": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "left": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 4294967295
+    },
+    "right": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 4294967295
+    }
+  },
+  "required": [
+    "request_key",
+    "left",
+    "right"
+  ],
+  "additionalProperties": false
+}

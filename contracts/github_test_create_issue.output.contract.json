@@ -1,0 +1,28 @@
+{
+  "contract_version": "1.0.0",
+  "tool": "github_test_create_issue",
+  "destination_contract": "contracts/github_issue_destination.json",
+  "domains": {
+    "success": {
+      "type": "object",
+      "required": ["result", "operation_id", "replayed"],
+      "properties": {
+        "result": {"type": "integer", "minimum": 1, "description": "The created issue number."},
+        "operation_id": {"type": "string"},
+        "replayed": {"type": "boolean"}
+      },
+      "mcp_is_error": false
+    },
+    "failure": {
+      "type": "object",
+      "required": ["error_code"],
+      "error_code": {
+        "enum": ["INVALID_ARGUMENT", "INVALID_REQUEST_KEY", "UNKNOWN_TOOL", "NOT_AUTHORIZED",
+                 "APPROVAL_REQUIRED", "APPROVAL_INVALID", "IN_PROGRESS", "RATE_LIMITED",
+                 "REJECTED_BY_DESTINATION", "TARGET_MISMATCH", "HUMAN_RECONCILIATION_REQUIRED",
+                 "ALREADY_RECORDED", "INVALID_TOOL_RESULT"]
+      },
+      "mcp_is_error": true
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "task_id": "task.testing.018",
+  "acceptance_criteria": "同時実行しても二重予約されないことを確認",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/attack-reproduction-tests.xml",
+  "report_sha256": "ba7e6a675e91742483df8f3aa1b0aa47212819d883e95fab1e7cac4827df5a55",
+  "source_sha256": {
+    "src/verified_execution/cancellable_bridge.py": "dff23afe49664e163785712d06b31436bc87b3663c40ba71075938b0a3d5d48d",
+    "src/verified_execution/ledger.py": "3d8ba058dd5dd23957e70e87cf3a053514dd417a3ca05b35ba9410ebb3305a42",
+    "src/verified_execution/runtime.py": "41ad00eb06ab2f19acb1996d19929ee64077a553eb453be2604737f1bfe3df67",
+    "tests/test_attack_reproduction.py": "6145c67968f9657f966dfe6304342f29a8776ba4529522a8f567f9e6de66da0c",
+    "tests/test_ledger.py": "d4cf3c38949e718558d35bfb63eeb2d39cced84010b74d6ffc1befc4f1105770"
+  },
+  "scope": "Twelve concurrent recorded calls with one request_key through the shared runtime create one operation with a single leased dispatch, and every successful reply carries the same operation id and value; the ledger returns one id for parallel reservations.",
+  "test_cases": [
+    "tests/test_attack_reproduction.py::test_concurrent_durable_requests_reserve_once",
+    "tests/test_ledger.py::test_parallel_reservations_return_one_id"
+  ]
+}

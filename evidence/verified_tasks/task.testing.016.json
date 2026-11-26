@@ -1,0 +1,25 @@
+{
+  "task_id": "task.testing.016",
+  "acceptance_criteria": "権限無し操作を実行しない",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/attack-reproduction-tests.xml",
+  "report_sha256": "ba7e6a675e91742483df8f3aa1b0aa47212819d883e95fab1e7cac4827df5a55",
+  "source_sha256": {
+    "server_mcp.py": "4445686917724617d7be5ebc8ae316417b1d0c029f6a8ff904251c1779ccc877",
+    "src/verified_execution/http_local.py": "b85e7d0c2d90f26d3fad5215a31f3b64c523385ede842a87064e989b5ab4663d",
+    "src/verified_execution/runtime.py": "41ad00eb06ab2f19acb1996d19929ee64077a553eb453be2604737f1bfe3df67",
+    "tests/test_adapter_boundary.py": "26d6e6e5fa4f93188b4f4322f9fdf6117a4eecc2adc25bb01f96237544749d71",
+    "tests/test_attack_reproduction.py": "6145c67968f9657f966dfe6304342f29a8776ba4529522a8f567f9e6de66da0c"
+  },
+  "scope": "Instructions, permission flags, tool lists and tool names embedded in arguments are rejected by MCP (pure and recorded tools) and HTTP, and naming an unregistered tool gets UNKNOWN_TOOL; the tool runs zero times.",
+  "test_cases": [
+    "tests/test_attack_reproduction.py::test_steering_text_is_rejected_on_every_adapter[instructions]",
+    "tests/test_attack_reproduction.py::test_steering_text_is_rejected_on_every_adapter[permission]",
+    "tests/test_attack_reproduction.py::test_steering_text_is_rejected_on_every_adapter[allowed_tools]",
+    "tests/test_attack_reproduction.py::test_steering_text_is_rejected_on_every_adapter[tool]",
+    "tests/test_attack_reproduction.py::test_steering_text_cannot_name_an_unregistered_tool",
+    "tests/test_adapter_boundary.py::test_model_text_is_only_input"
+  ]
+}

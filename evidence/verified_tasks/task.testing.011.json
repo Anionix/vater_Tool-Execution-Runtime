@@ -1,0 +1,22 @@
+{
+  "task_id": "task.testing.011",
+  "acceptance_criteria": "明確に拒否または固定規則で処理",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/attack-reproduction-tests.xml",
+  "report_sha256": "ba7e6a675e91742483df8f3aa1b0aa47212819d883e95fab1e7cac4827df5a55",
+  "source_sha256": {
+    "scripts/guarded_stdio.py": "dd0d6532805285f6108f75d24f9a4a0d54769c8e500265b166d8f98dd903aa5f",
+    "src/verified_execution/http_local.py": "b85e7d0c2d90f26d3fad5215a31f3b64c523385ede842a87064e989b5ab4663d",
+    "tests/test_attack_reproduction.py": "6145c67968f9657f966dfe6304342f29a8776ba4529522a8f567f9e6de66da0c",
+    "tests/test_guarded_stdio.py": "1a7a76a30d283e0538d2072286826f9cd06a52f9cf140d7c4cb9ca35289e5cc3"
+  },
+  "scope": "Duplicate JSON keys, top-level or nested, are rejected with 400 INVALID_BODY by HTTP and before the MCP SDK by the guarded stdio transport; the tool runs zero times.",
+  "test_cases": [
+    "tests/test_attack_reproduction.py::test_http_duplicate_json_keys_are_rejected[left]",
+    "tests/test_attack_reproduction.py::test_http_duplicate_json_keys_are_rejected[right]",
+    "tests/test_attack_reproduction.py::test_http_duplicate_json_keys_are_rejected[nested]",
+    "tests/test_guarded_stdio.py::test_duplicate_keys_and_nonfinite_are_rejected_in_memory"
+  ]
+}
