@@ -7,7 +7,8 @@ the shared runtime. For each independent vector in contracts/:
   MCP      must equal the runtime exactly (value and error code)
   HTTP     must equal the runtime for every call it executes. A call the
            runtime rejects before execution, HTTP rejects at acceptance:
-           400 INVALID_BODY for input errors, 403 NOT_AUTHORIZED for grants.
+           404 UNKNOWN_TOOL for an unserved name, 400 INVALID_BODY for input
+           errors, 403 NOT_AUTHORIZED for grants.
            This mapping is the HTTP adapter's documented contract
            (docs/LOCAL_HTTP.md): a 400 body carries only {"error"}.
 
@@ -50,11 +51,11 @@ def mcp_server():
 
 
 @pytest.fixture(scope="module")
-def http_apps():
+def http_app():
+    """One HTTP app serving every read-only tool in the registry."""
     pytest.importorskip("starlette")
     from verified_execution.http_local import create_app
-    return {spec.name: create_app(TOKEN, AUTHORITY, registry=REGISTRY, tool=spec.name)
-            for spec in ToolRuntime(AUTHORITY, REGISTRY).tools()}
+    return create_app(TOKEN, AUTHORITY, registry=REGISTRY)
 
 
 def test_vectors_cover_every_registered_tool():
@@ -74,27 +75,36 @@ def test_mcp_matches_runtime(vector, mcp_server):
 
 
 @pytest.mark.parametrize("vector", VECTORS, ids=lambda vector: vector["case"])
-def test_http_matches_runtime(vector, http_apps):
+def test_http_matches_runtime(vector, http_app):
     reference, states = runtime_outcome(ToolRuntime(AUTHORITY, REGISTRY), vector["name"], vector["arguments"])
-    app = http_apps.get(vector["name"])
-    if app is None:
-        # HTTP serves one route per registered tool; an unregistered name
-        # has no route at all, which is stricter than UNKNOWN_TOOL.
-        assert reference.error_code == "UNKNOWN_TOOL"
-        return
-    actual = http_outcome(app, vector["arguments"])
-    if states in ACCEPTANCE_REJECTION:
+    actual = http_outcome(http_app, vector["arguments"], tool=vector["name"])
+    if reference.error_code == "UNKNOWN_TOOL":
+        # /tools/{name}/jobs for a name the host does not serve.
+        assert actual == Outcome(False, None, "UNKNOWN_TOOL", stage="acceptance")
+    elif states in ACCEPTANCE_REJECTION:
         _status, code = ACCEPTANCE_REJECTION[states]
         assert actual == Outcome(False, None, code, stage="acceptance")
     else:
         assert actual == reference
 
 
-def test_http_grant_refusal_matches_runtime(http_apps):
-    """The authorization row of the mapping, exercised through HTTP."""
+@pytest.mark.parametrize("vector", [v for v in VECTORS if v["name"] == "checked_add"],
+                         ids=lambda vector: vector["case"])
+def test_http_version_one_route_matches_named_route(vector, http_app):
+    """POST /jobs keeps serving checked_add exactly like /tools/checked_add/jobs."""
+    assert http_outcome(http_app, vector["arguments"]) == \
+        http_outcome(http_app, vector["arguments"], tool="checked_add")
+
+
+def test_http_grant_refusal_matches_runtime():
+    """The authorization row of the mapping, exercised through HTTP, per tool."""
+    pytest.importorskip("starlette")
     from verified_execution.http_local import create_app
     denied = LocalAuthority(frozenset({"checked_add"}))
     _, states = runtime_outcome(ToolRuntime(denied, REGISTRY), "checked_multiply", {"left": 2, "right": 3})
-    app = create_app(TOKEN, denied, registry=REGISTRY, tool="checked_multiply")
+    app = create_app(TOKEN, denied, registry=REGISTRY)
     assert ACCEPTANCE_REJECTION[states] == (403, "NOT_AUTHORIZED")
-    assert http_outcome(app, {"left": 2, "right": 3}) == Outcome(False, None, "NOT_AUTHORIZED", stage="acceptance")
+    assert http_outcome(app, {"left": 2, "right": 3}, tool="checked_multiply") == \
+        Outcome(False, None, "NOT_AUTHORIZED", stage="acceptance")
+    # The same app still runs the tool the host did grant.
+    assert http_outcome(app, {"left": 2, "right": 3}, tool="checked_add") == Outcome(True, 5, None)

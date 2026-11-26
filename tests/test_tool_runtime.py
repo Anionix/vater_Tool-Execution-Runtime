@@ -180,15 +180,16 @@ def test_http_serves_a_new_tool_without_adapter_changes():
     pytest.importorskip("starlette")
     from verified_execution.http_local import create_app
 
-    app = create_app(TOKEN, authority("double"), registry=both_tools(), tool="double")
+    app = create_app(TOKEN, authority("double"), registry=both_tools(), tools=["double"])
 
     async def scenario():
         status, spec = await asgi(app, "GET", "/openapi.json")
         assert status == 200
-        schema = spec["paths"]["/jobs"]["post"]["requestBody"]["content"]["application/json"]["schema"]
+        assert "/jobs" not in spec["paths"]  # checked_add is not served, so no version-1 route
+        schema = spec["paths"]["/tools/double/jobs"]["post"]["requestBody"]["content"]["application/json"]["schema"]
         assert schema == thaw(double_spec().input_schema)
-        assert (await asgi(app, "POST", "/jobs", b'{"left": 1, "right": 2}'))[0] == 400
-        status, started = await asgi(app, "POST", "/jobs", b'{"value": 21}')
+        assert (await asgi(app, "POST", "/tools/double/jobs", b'{"left": 1, "right": 2}'))[0] == 400
+        status, started = await asgi(app, "POST", "/tools/double/jobs", b'{"value": 21}')
         assert status == 202
         for _ in range(200):
             status, job = await asgi(app, "GET", f"/jobs/{started['job_id']}")
@@ -218,4 +219,60 @@ def test_http_refuses_tools_the_runtime_cannot_execute():
     registry = default_registry().with_tools(double_spec(risk="irreversible", name="drop"))
     for tool in ("drop", "missing"):
         with pytest.raises(ValueError, match="read-only"):
-            create_app(TOKEN, registry=registry, tool=tool)
+            create_app(TOKEN, registry=registry, tools=[tool])
+
+
+def test_http_serves_only_the_tools_the_host_selects():
+    pytest.importorskip("starlette")
+    from verified_execution.http_local import create_app
+
+    app = create_app(TOKEN, authority("checked_add", "double"), registry=both_tools(), tools=["checked_add"])
+
+    async def scenario():
+        _, spec = await asgi(app, "GET", "/openapi.json")
+        assert set(spec["paths"]) == {"/jobs", "/tools/checked_add/jobs", "/jobs/{job_id}"}
+        # Registered and granted, but not selected for HTTP: no route.
+        assert await asgi(app, "POST", "/tools/double/jobs", b'{"value": 1}') == (404, {"error": "UNKNOWN_TOOL"})
+        assert await asgi(app, "POST", "/tools/delete_file/jobs", b'{}') == (404, {"error": "UNKNOWN_TOOL"})
+
+    asyncio.run(scenario())
+
+
+def test_http_unknown_tool_still_requires_the_host_credential():
+    pytest.importorskip("starlette")
+    from verified_execution.http_local import create_app
+
+    app = create_app(TOKEN)
+
+    async def anonymous():
+        sent = []
+        scope = {"type": "http", "asgi": {"version": "3.0"}, "http_version": "1.1", "method": "POST",
+                 "scheme": "http", "path": "/tools/delete_file/jobs", "raw_path": b"/tools/delete_file/jobs",
+                 "query_string": b"", "root_path": "", "server": ("127.0.0.1", 80),
+                 "client": ("127.0.0.1", 1), "headers": [(b"content-type", b"application/json")]}
+
+        async def receive():
+            return {"type": "http.request", "body": b"{}", "more_body": False}
+
+        async def send(message):
+            sent.append(message)
+
+        await app(scope, receive, send)
+        return next(m["status"] for m in sent if m["type"] == "http.response.start")
+
+    # Tool names are not disclosed to callers without the credential.
+    assert asyncio.run(anonymous()) == 401
+
+
+def test_http_rejects_inconsistent_tool_selection():
+    pytest.importorskip("starlette")
+    from verified_execution.http_local import create_app
+
+    with pytest.raises(ValueError, match="distinct"):
+        create_app(TOKEN, registry=both_tools(), tools=["double", "double"])
+    with pytest.raises(ValueError, match="distinct"):
+        create_app(TOKEN, registry=both_tools(), tools=[])
+    with pytest.raises(ValueError, match="default"):
+        create_app(TOKEN, registry=both_tools(), tools=["double"], default_tool="checked_add")
+    # Opting out of the version-1 route is explicit.
+    create_app(TOKEN, registry=both_tools(), tools=["checked_add"], default_tool=None)

@@ -83,9 +83,12 @@ async def asgi(app, method: str, path: str, body: bytes = b"") -> tuple[int, Any
     return status, json.loads(payload)
 
 
-def http_outcome(app, arguments: Any) -> Outcome:
+def http_outcome(app, arguments: Any, tool: str | None = None) -> Outcome:
+    """POST to /tools/{tool}/jobs, or to the version-1 /jobs route without a tool."""
+    path = "/jobs" if tool is None else f"/tools/{tool}/jobs"
+
     async def scenario():
-        status, started = await asgi(app, "POST", "/jobs", json.dumps(arguments).encode())
+        status, started = await asgi(app, "POST", path, json.dumps(arguments).encode())
         if status != 202:
             return Outcome(False, None, started["error"], stage="acceptance")
         for _ in range(500):
