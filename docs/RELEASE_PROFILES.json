@@ -13,17 +13,13 @@
       "minimum_release"
     ],
     "extends": null,
-    "release_blockers": [
-      "remaining mandatory phase gates (see backlog/tasks.jsonl)",
-      "contract/authorization evidence",
-      "default guarded-stdio deployment verification"
-    ],
+    "release_blockers": [],
     "verified_scope": {
-      "platform": "Linux x86-64 / Python 3.13",
+      "platform": "Linux x86-64 / Python 3.13.5",
       "official_mcp": "2.3.0",
-      "integration_cases_passed": 14,
-      "skipped": 0,
-      "evidence": "evidence/official_mcp_locked_verification_2026-11-24.json"
+      "transport": "local standard input and output",
+      "tool": "checked_add",
+      "evidence": "evidence/gates/minimum_release.json"
     }
   },
   "with_model_connectors": {

@@ -1,0 +1,21 @@
+{
+  "task_id": "task.minimum_release.009",
+  "acceptance_criteria": "前段階の必須8ゲートが完了し、公式MCP実通信に成功している。最終の第9ゲートはこの作業の完了後に判定する",
+  "scope": "All eight prerequisite gates were checked against the release profile before evaluation of the ninth. Official standard-I/O calls passed.",
+  "environment_record": "evidence/minimum-validation-environment.json",
+  "official_conformance_record": "evidence/verified_tasks/task.mcp_transport.019.json",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[run_local_mcp.py-2026-07-28]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[run_local_mcp.py-legacy]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[launch_guarded_mcp.py-2026-07-28]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[launch_guarded_mcp.py-legacy]"
+  ],
+  "report_path": "evidence/minimum-validation-tests.xml",
+  "report_sha256": "9800d0ae6c5623c88f9841db61eac5956d9c506bd547db3c2e3d32c12d931647",
+  "source_sha256": {
+    "tests/test_official_mcp_sdk.py": "1e065bdf2c1b046739419aaac2e96784101f1b2573c5fb4d9c73a3505b9cf99c"
+  }
+}

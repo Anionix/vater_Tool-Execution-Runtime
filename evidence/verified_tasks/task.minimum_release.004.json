@@ -1,0 +1,21 @@
+{
+  "task_id": "task.minimum_release.004",
+  "acceptance_criteria": "Rust・Lean・Kani、遠隔操作、外部副作用、MCP未確認を保証済みと誤記しない",
+  "scope": "The release profile and README define the verified local scope and keep remote, formal-proof and side-effect profiles separate.",
+  "environment_record": "evidence/minimum-validation-environment.json",
+  "official_conformance_record": "evidence/verified_tasks/task.mcp_transport.019.json",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_ci_workflow_contracts.py::test_release_workflow_blocks_unlocked_dependencies",
+    "tests/test_ci_workflow_contracts.py::test_smoke_workflow_is_diagnostic_not_release",
+    "tests/test_local_contracts.py::test_protocol_capabilities_and_trusted_publisher"
+  ],
+  "report_path": "evidence/minimum-validation-tests.xml",
+  "report_sha256": "9800d0ae6c5623c88f9841db61eac5956d9c506bd547db3c2e3d32c12d931647",
+  "source_sha256": {
+    "tests/test_ci_workflow_contracts.py": "c2e47c8efd7448a77d34b709d7042de641e136571793d4b7ac95058a1d77b3c1",
+    "tests/test_local_contracts.py": "da7c256bd5ced166122723d6e9a8fe2913a95a96f2a41938878e93c3837d4de7"
+  }
+}
