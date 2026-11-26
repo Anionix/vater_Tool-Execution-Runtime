@@ -1,0 +1,25 @@
+{
+  "task_id": "task.formal_verification.005",
+  "acceptance_criteria": "禁止状態が列挙されている",
+  "scope": "Seven allowed edges and the rest of the seven-state square define the forbidden transitions.",
+  "lean_report": "evidence/formal/lean-4.19.0.log",
+  "proof_digest_manifest": "evidence/formal/SHA256SUMS",
+  "policy_path": "docs/FORMAL_VERIFICATION.md",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_core.py::test_all_states_have_exact_edge_rules"
+  ],
+  "report_path": "evidence/provider-adapter-tests.xml",
+  "report_sha256": "9a60fd650cc1456864bb00f20f28e52c946b26e63ab928ce83f1b2059e618424",
+  "source_sha256": {
+    "docs/FORMAL_VERIFICATION.md": "8ee0e75e94dffdfe99683cff69e8a15b8d947181776fc8229f253ebf8278548b",
+    "evidence/formal/SHA256SUMS": "8ef2ba3aa49396daae5ad2aa3c119c104b04cb49735e3aa47dd5e3aa5e009181",
+    "evidence/formal/lean-4.19.0.log": "763ab60100c677d75c1674b113166df06e030e59d7f71c4a2fb43f0d2565c6c0",
+    "formal/VaterLocal.lean": "8b0ca4933fcedc02612fae5344b2c63213a1b05198afd3aaaf2c674d62a44c23",
+    "src/verified_execution/ledger.py": "3d8ba058dd5dd23957e70e87cf3a053514dd417a3ca05b35ba9410ebb3305a42",
+    "src/verified_execution/worker_leases.py": "3a328d1fe8043b51059c1c7e9e912a706136fb487ca896e4827cb3dd63a33b72",
+    "tests/test_core.py": "2a851784e79de34dfccf00a3acf34ffc6961053bb2ae8118721dc185113c5b66"
+  }
+}
