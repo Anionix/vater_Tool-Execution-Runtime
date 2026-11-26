@@ -12,20 +12,16 @@ from starlette.requests import ClientDisconnect, Request
 from starlette.responses import JSONResponse
 from starlette.routing import Route
 
-from .core import CalculationService, LocalAuthority
+from .core import LocalAuthority, OperationError
 from .json_bounds import check_json_depth
+from .runtime import ToolRuntime
+from .tools import ToolRegistry, thaw
 
 LOOPBACK = "127.0.0.1"
 MAX_BYTES = 4096
 MAX_DEPTH = 32
 MAX_JOBS = 64
-INPUT_SCHEMA = {
-    "type": "object", "additionalProperties": False, "required": ["left", "right"],
-    "properties": {
-        key: {"type": "integer", "minimum": 0, "maximum": 4294967295}
-        for key in ("left", "right")
-    },
-}
+DEFAULT_TOOL = "checked_add"
 
 
 @dataclass
@@ -42,12 +38,22 @@ def response(status: int, **payload) -> JSONResponse:
     return JSONResponse(payload, status_code=status, headers=headers)
 
 
-def create_app(token: str, authority: LocalAuthority | None = None) -> Starlette:
-    """The host's single credential identifies the local operator."""
+def create_app(token: str, authority: LocalAuthority | None = None, *,
+               registry: ToolRegistry | None = None, tool: str = DEFAULT_TOOL) -> Starlette:
+    """The host's single credential identifies the local operator.
+
+    ADAPTER-001: schemas, argument validation, authorization and result checks
+    come from the shared ToolRuntime. This module owns only HTTP concerns:
+    bearer token, media type, body size, JSON framing and the job lifecycle.
+    """
     if not isinstance(token, str) or len(token) < 32 or not token.isascii() or not token.isalnum():
         raise ValueError("a host-configured alphanumeric bearer token of at least 32 characters is required")
     header = f"Bearer {token}".encode("ascii")
-    service = CalculationService(authority if authority is not None else LocalAuthority.calculator_only())
+    service = ToolRuntime(authority if authority is not None else LocalAuthority.calculator_only(), registry)
+    spec = next((candidate for candidate in service.tools() if candidate.name == tool), None)
+    if spec is None:
+        raise ValueError("the HTTP tool must be a registered read-only tool")
+    input_schema = thaw(spec.input_schema)
     jobs: dict[str, Job] = {}
     background: set[asyncio.Task] = set()
     execution_slot = asyncio.Lock()
@@ -65,7 +71,8 @@ def create_app(token: str, authority: LocalAuthority | None = None) -> Starlette
             # prepared -> running -> succeeded or failed. Only prepared -> cancelled is allowed.
             job.state = "running"
             try:
-                outcome = await asyncio.to_thread(service.execute, "checked_add", arguments)
+                outcome = await asyncio.to_thread(service.execute, spec.name, arguments)
+                outcome = service.release(spec.name, arguments, outcome)
                 job.result, job.error = outcome.result, outcome.error_code
             except Exception:
                 job.error = "EXECUTION_FAILED"
@@ -74,7 +81,7 @@ def create_app(token: str, authority: LocalAuthority | None = None) -> Starlette
     async def start(request: Request) -> JSONResponse:
         if not authorized(request):
             return response(401, error="UNAUTHORIZED")
-        if not service.authority.permits("checked_add"):
+        if not service.permits(spec.name):
             return response(403, error="NOT_AUTHORIZED")
         if request.headers.get("content-type", "").split(";", 1)[0].strip().lower() != "application/json":
             return response(415, error="UNSUPPORTED_MEDIA_TYPE")
@@ -100,9 +107,9 @@ def create_app(token: str, authority: LocalAuthority | None = None) -> Starlette
             arguments = json.loads(raw, object_pairs_hook=unique_pairs)
         except ValueError:
             return response(400, error="INVALID_BODY")
-        if type(arguments) is not dict or arguments.keys() != INPUT_SCHEMA["properties"].keys():
-            return response(400, error="INVALID_BODY")
-        if any(type(x) is not int or not 0 <= x <= 4294967295 for x in arguments.values()):
+        try:
+            service.check(spec.name, arguments)
+        except OperationError:
             return response(400, error="INVALID_BODY")
         if len(jobs) >= MAX_JOBS:
             oldest = next((key for key, job in jobs.items() if job.state not in {"prepared", "running"}), None)
@@ -148,7 +155,7 @@ def create_app(token: str, authority: LocalAuthority | None = None) -> Starlette
         }
         if method == "POST":
             description["requestBody"] = {
-                "required": True, "content": {"application/json": {"schema": INPUT_SCHEMA}}
+                "required": True, "content": {"application/json": {"schema": input_schema}}
             }
         else:
             description["parameters"] = [

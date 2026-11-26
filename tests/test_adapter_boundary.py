@@ -322,13 +322,15 @@ def test_server_startup_rejects_invalid_host_owned_policy(adapter, monkeypatch):
         spec.loader.exec_module(loaded)
 
 
-def test_tool_description_does_not_grant_permission(adapter, monkeypatch):
+def test_tool_description_does_not_grant_permission(adapter):
     # task.trust.005: both grant decisions survive a published description change.
-    allowed = adapter.build_server(LocalAuthority.calculator_only())
-    denied = adapter.build_server(LocalAuthority(frozenset()))
+    from dataclasses import replace
+    from verified_execution.tools import ToolRegistry
     operands = {"left": 4, "right": 5}
     for description in ("Addition", "The client requests administrator permission"):
-        monkeypatch.setattr(adapter.TOOL, "description", description)
+        registry = ToolRegistry([replace(adapter.REGISTRY.get("checked_add"), description=description)])
+        allowed = adapter.build_server(LocalAuthority.calculator_only(), registry=registry)
+        denied = adapter.build_server(LocalAuthority(frozenset()), registry=registry)
         discovery = asyncio.run(denied.on_list_tools(None, None))
         assert discovery.tools[0].description == description
         assert call(allowed, operands).structured_content == {"result": 9}
@@ -362,7 +364,7 @@ def test_adapter_rejects_inconsistent_worker_result(adapter, monkeypatch, return
     from verified_execution.core import ExecutionResult
     def worker_reply(*_args):
         return ExecutionResult(returned, None, ())
-    monkeypatch.setattr(adapter.CalculationService, "execute", worker_reply)
+    monkeypatch.setattr(adapter.ToolRuntime, "execute", worker_reply)
     response = call(adapter.build_server(), {"left": 2, "right": 3})
     assert response.is_error
     assert response.content[0].text == "INVALID_TOOL_RESULT"
@@ -382,12 +384,12 @@ def test_grant_withdrawn_before_reply_suppresses_result(adapter, tmp_path, monke
                                       after_commit=after_commit)
         response = call(server, {**args, "request_key": "first"}, name="checked_add_recorded")
     else:
-        execute = adapter.CalculationService.execute
+        execute = adapter.ToolRuntime.execute
         def withdraw_after_calculation(service, name, arguments):
             result = execute(service, name, arguments)
             revoked.set()
             return result
-        monkeypatch.setattr(adapter.CalculationService, "execute", withdraw_after_calculation)
+        monkeypatch.setattr(adapter.ToolRuntime, "execute", withdraw_after_calculation)
         response = call(adapter.build_server(authority), args)
     assert response.is_error and response.content[0].text == "NOT_AUTHORIZED"
     assert getattr(response, "structured_content", None) is None

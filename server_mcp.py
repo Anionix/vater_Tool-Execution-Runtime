@@ -9,7 +9,9 @@ Machine contracts:
   MCP-001: wire framing and version negotiation are owned by official SDK.
   INPUT-001: reject unknown tool, missing/extra fields, bool, float, overflow.
   AUTHORIZATION-001: authorization comes only from host-created authority.
-  STATE-001: only the CalculationService may start/finish the computation.
+  STATE-001: only the shared ToolRuntime may start/finish a computation.
+  ADAPTER-001: tool schemas, validation, authorization and result checks come
+               from verified_execution.runtime; this module only translates.
   OUTPUT-001: the structured result contains the exact integer result.
 
 State: received -> validated -> authorized -> running -> completed
@@ -38,8 +40,9 @@ from mcp.types import (
     Tool,
 )
 
-from verified_execution.client_result import read_checked_add_result
-from verified_execution.core import LOCAL_PUBLISHER, CalculationService, LocalAuthority, OperationError
+from verified_execution.core import LOCAL_PUBLISHER, ExecutionResult, LocalAuthority
+from verified_execution.runtime import ToolRuntime
+from verified_execution.tools import ToolRegistry, ToolSpec, load_registry, thaw
 from verified_execution.ledger import HostPrincipal, OperationLedger
 from verified_execution.worker_leases import LeasedLedger, LeasedToolBridge
 from verified_execution.cancellable_bridge import CancellableLeasedToolBridge, Checkpoint
@@ -55,26 +58,25 @@ _READONLY_POLICY = ReadOnlyPolicy(
     timeout_ms=_LIMITS.readonly_request_timeout_ms,
     max_concurrent=_LIMITS.readonly_max_concurrent,
 )
-INPUT_SCHEMA = json.loads((ROOT / "contracts" / "checked_add.input.schema.json").read_text(encoding="utf-8"))
-OUTPUT_CONTRACT = json.loads((ROOT / "contracts" / "checked_add.output.contract.json").read_text(encoding="utf-8"))
+REGISTRY = load_registry(ROOT / "contracts")
 CAPABILITIES = json.loads((ROOT / "contracts" / "local_capabilities.json").read_text(encoding="utf-8"))
 ERROR_CATEGORY = {code: category for category, codes in CAPABILITIES["error_categories"].items()
                   for code in codes}
-SUCCESS = OUTPUT_CONTRACT["domains"]["success"]
-OUTPUT_SCHEMA = {
-    "type": SUCCESS["type"],
-    "properties": {"result": SUCCESS["result"]},
-    "required": SUCCESS["required"],
-    "additionalProperties": False,
-}
-TOOL = Tool(
-    name="checked_add",
-    description="Add unsigned 32-bit integers without overflow or side effects.",
-    meta={"io.github.anionix/contract": {"publisher": LOCAL_PUBLISHER,
-                                       "version": OUTPUT_CONTRACT["contract_version"]}},
-    input_schema=INPUT_SCHEMA,
-    output_schema=OUTPUT_SCHEMA,
-)
+
+
+def to_mcp_tool(spec: ToolSpec) -> Tool:
+    """Translate a protocol-independent ToolSpec into an MCP Tool."""
+    contract = {"publisher": LOCAL_PUBLISHER}
+    if spec.contract_version is not None:
+        contract["version"] = spec.contract_version
+    return Tool(name=spec.name, description=spec.description,
+                meta={"io.github.anionix/contract": contract},
+                input_schema=thaw(spec.input_schema), output_schema=thaw(spec.output_schema))
+
+
+TOOL = to_mcp_tool(REGISTRY.get("checked_add"))
+INPUT_SCHEMA = TOOL.input_schema
+OUTPUT_SCHEMA = TOOL.output_schema
 
 
 RECORDED_INPUT_SCHEMA = {
@@ -110,28 +112,32 @@ def _tool_error(code: str) -> CallToolResult:
     return CallToolResult(content=[TextContent(type="text", text=code)], is_error=True)
 
 
-def _calculation_reply(authority: LocalAuthority, arguments: object, value: int | None,
-                       recorded: BridgeResult | None = None) -> CallToolResult:
-    # task.trust.007 / task.trust.011: verify the worker result and live grant at handoff.
-    if not authority.permits("checked_add"):
-        return _tool_error("NOT_AUTHORIZED")
-    if not isinstance(arguments, dict):
-        return _tool_error("INVALID_TOOL_RESULT")
-    payload: dict[str, object] = {"result": value}
-    try:
-        result = read_checked_add_result(left=arguments.get("left"), right=arguments.get("right"),
-                                         is_error=False, structured_content=payload)
-    except OperationError:
-        return _tool_error("INVALID_TOOL_RESULT")
+def _reply(runtime: ToolRuntime, name: str, arguments: object, outcome: ExecutionResult,
+           recorded: BridgeResult | None = None) -> CallToolResult:
+    # task.trust.007 / task.trust.011: the shared runtime re-checks the live
+    # grant and the result at handoff; this adapter only translates the outcome.
+    released = runtime.release(name, arguments, outcome)
+    if not released.succeeded:
+        return _tool_error(released.error_code or "EXECUTION_FAILED")
+    payload: dict[str, object] = {"result": released.result}
     if recorded is not None:
         if type(recorded.operation_id) is not str or not recorded.operation_id or type(recorded.replayed) is not bool:
             return _tool_error("INVALID_TOOL_RESULT")
         payload.update(operation_id=recorded.operation_id, replayed=recorded.replayed)
-    return CallToolResult(content=[TextContent(type="text", text=str(result))],
+    return CallToolResult(content=[TextContent(type="text", text=str(released.result))],
                           structured_content=payload, meta={"io.github.anionix/source": "local_calculator"})
 
 
+def _recorded_operands(arguments: object) -> object:
+    # The durable path is a later profile backed by the ledger. Its result is
+    # still released through the read-only checked_add contract.
+    if not isinstance(arguments, dict):
+        return arguments
+    return {key: value for key, value in arguments.items() if key != "request_key"}
+
+
 def build_server(authority: LocalAuthority | None = None, *,
+                 registry: ToolRegistry | None = None,
                  ledger_path: str | None = None,
                  principal: str = "local-process",
                  leased: bool = True,
@@ -149,7 +155,8 @@ def build_server(authority: LocalAuthority | None = None, *,
     remaining_calls = call_budget
     if authority is None:
         authority = LocalAuthority.calculator_only()
-    service = CalculationService(authority)
+    runtime = ToolRuntime(authority, registry if registry is not None else REGISTRY)
+    tools = [to_mcp_tool(spec) for spec in runtime.tools()]
     bounded_readonly = BoundedReadOnlyExecutor(_READONLY_POLICY)
     bridge = None
     if ledger_path is not None:
@@ -170,7 +177,7 @@ def build_server(authority: LocalAuthority | None = None, *,
                                         principal=identity.name, authority=authority)
 
     async def list_tools(_context: ServerRequestContext, _params: PaginatedRequestParams | None) -> ListToolsResult:
-        return ListToolsResult(tools=[TOOL, RECORDED_TOOL] if bridge is not None else [TOOL])
+        return ListToolsResult(tools=[*tools, RECORDED_TOOL] if bridge is not None else list(tools))
 
     async def execute_tool(params: CallToolRequestParams) -> CallToolResult:
         if bridge is not None and params.name == RECORDED_TOOL_NAME:
@@ -183,17 +190,16 @@ def build_server(authority: LocalAuthority | None = None, *,
                 # Local migration path only, without request-scoped cancellation.
                 outcome_recorded = bridge.call(params.name, params.arguments)
             if outcome_recorded.ok:
-                return _calculation_reply(authority, params.arguments, outcome_recorded.value, outcome_recorded)
+                return _reply(runtime, "checked_add", _recorded_operands(params.arguments),
+                              ExecutionResult(outcome_recorded.value, None, ()), outcome_recorded)
             return _tool_error(outcome_recorded.error_code or "EXECUTION_FAILED")
-        # POLICY-011: bounded *elapsed response time* for the pure calculator.
-        # No untrusted code or external side effects execute in this branch.
+        # POLICY-011: bounded *elapsed response time* for read-only tools.
+        # ToolRuntime refuses every tool whose risk class is not read_only.
         try:
-            outcome = await bounded_readonly.run(service.execute, params.name, params.arguments)
+            outcome = await bounded_readonly.run(runtime.execute, params.name, params.arguments)
         except TimeoutError:
             return _tool_error("TIMEOUT")
-        if outcome.succeeded:
-            return _calculation_reply(authority, params.arguments, outcome.result)
-        return _tool_error(outcome.error_code or "EXECUTION_FAILED")
+        return _reply(runtime, params.name, params.arguments, outcome)
 
     trace_id = str(uuid4())
 
@@ -207,7 +213,7 @@ def build_server(authority: LocalAuthority | None = None, *,
         try:
             # task.authorization.018: debit before dispatch, with no await between check and debit.
             # Each registered call attempt consumes one unit, including retries and failures.
-            registered = params.name == TOOL.name or (
+            registered = params.name in runtime.registry or (
                 bridge is not None and params.name == RECORDED_TOOL_NAME
             )
             if registered and remaining_calls == 0:
