@@ -1,0 +1,24 @@
+{
+  "task_id": "task.durable_operations.022",
+  "acceptance_criteria": "機密情報を最小限に保つ",
+  "scope": "The architecture defines retention and disposal rules. Existing tests verify diagnostic minimization and persistent uncertain results. Automatic expiry is outside the design task.",
+  "policy_path": "docs/ARCHITECTURE.md",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_local_contracts.py::test_trace_correlates_retries_without_recording_private_input",
+    "tests/test_adapter_boundary.py::test_permission_denial_logs_only_fixed_fields",
+    "tests/test_ledger.py::test_reread_does_not_auto_retry_unknown"
+  ],
+  "report_path": "evidence/minimum-validation-tests.xml",
+  "report_sha256": "9800d0ae6c5623c88f9841db61eac5956d9c506bd547db3c2e3d32c12d931647",
+  "source_sha256": {
+    "docs/ARCHITECTURE.md": "d3ab1705ad2e23508bc6a2297b61d83e4a1d2996ffa59a94d0fc5bf053da2526",
+    "src/verified_execution/ledger.py": "3d8ba058dd5dd23957e70e87cf3a053514dd417a3ca05b35ba9410ebb3305a42",
+    "src/verified_execution/worker_leases.py": "3a328d1fe8043b51059c1c7e9e912a706136fb487ca896e4827cb3dd63a33b72",
+    "tests/test_adapter_boundary.py": "4c5b04e4d233f88079fb204f1f27a7b14fbd810f6aa336ba283b1f78003d6ac3",
+    "tests/test_ledger.py": "d4cf3c38949e718558d35bfb63eeb2d39cced84010b74d6ffc1befc4f1105770",
+    "tests/test_local_contracts.py": "da7c256bd5ced166122723d6e9a8fe2913a95a96f2a41938878e93c3837d4de7"
+  }
+}
