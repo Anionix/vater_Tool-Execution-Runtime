@@ -1,0 +1,24 @@
+{
+  "task_id": "task.minimum_release.008",
+  "acceptance_criteria": "未実行を成功と表示しない",
+  "scope": "The release verification rejects skipped or missing results.",
+  "environment_record": "evidence/minimum-validation-environment.json",
+  "official_conformance_record": "evidence/verified_tasks/task.mcp_transport.019.json",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_test_report_gate.py::test_rejects_unsuccessful_testcase[failure]",
+    "tests/test_test_report_gate.py::test_rejects_unsuccessful_testcase[error]",
+    "tests/test_test_report_gate.py::test_rejects_unsuccessful_testcase[skipped]",
+    "tests/test_test_report_gate.py::test_rejects_missing_testcases",
+    "tests/test_ci_workflow_contracts.py::test_release_workflow_blocks_unlocked_dependencies",
+    "tests/test_ci_workflow_contracts.py::test_smoke_workflow_is_diagnostic_not_release"
+  ],
+  "report_path": "evidence/minimum-validation-tests.xml",
+  "report_sha256": "9800d0ae6c5623c88f9841db61eac5956d9c506bd547db3c2e3d32c12d931647",
+  "source_sha256": {
+    "tests/test_ci_workflow_contracts.py": "c2e47c8efd7448a77d34b709d7042de641e136571793d4b7ac95058a1d77b3c1",
+    "tests/test_test_report_gate.py": "a28b035235412c107cb15d1c286472e6b9ec041fdc0b6a04ca240cac06725429"
+  }
+}

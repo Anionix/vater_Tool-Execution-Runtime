@@ -107,3 +107,5 @@ jobs:
         run: python scripts/verify_phase.py read_only
       - name: Verify minimum validation tasks
         run: python scripts/verify_phase.py minimum_validation
+      - name: Verify minimum release tasks
+        run: python scripts/verify_phase.py minimum_release

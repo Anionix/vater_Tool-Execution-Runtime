@@ -20,7 +20,7 @@ See [scope contract](docs/SCOPE_CONTRACT.md). Only local single-user pure arithm
 - [Local verification evidence](evidence/) and [provenance limitations](docs/PROVENANCE.md)
 - [GitHub Issue import checkpoint](backlog/ISSUE_IMPORT_STATUS.md) and [prepared Issue proposals](backlog/github_issues.jsonl)
 
-The scope and local trust phases have passed their completion gates. Run `python backlog/validate_tasks.py` for the current count of completed records. The [trust evidence](evidence/gates/trust.json) includes the exact cases used for each task. Recheck them together with `python scripts/verify_phase.py trust` in the locked test environment.
+The minimum local read-only profile passed its nine release gates. The [release evidence](evidence/gates/minimum_release.json) records the scope and exact checks. Run `python backlog/validate_tasks.py` for the current count of completed records. The [trust evidence](evidence/gates/trust.json) includes the exact cases used for each task. Recheck them together with `python scripts/verify_phase.py trust` in the locked test environment.
 
 ## Quick local verification
 
@@ -49,13 +49,15 @@ python -I scripts/run_local_mcp.py
 
 This launcher reads the host's validated limits, starts the existing guarded standard-input/output transport and passes a fresh allowlisted environment. It does not inherit the recorded-tool environment switch or API keys. Direct execution of server_mcp.py is a development/extension entry point, not the minimum release launch command. This is **not** an operating-system sandbox or remote authentication.
 
+To stop the server, close the client session so that standard input reaches end of file. If you started the launcher in a terminal, press Ctrl+C. The launcher also handles termination from a process supervisor.
+
 ## Official MCP verification paths
 
 - [Diagnostic smoke test](.github/workflows/official-mcp-smoke.yml): installs the selected SDK in a temporary GitHub Actions environment and attempts real client/server tests. Diagnostic only; no release approval.
 - [Dependency-lock candidate](.github/workflows/dependency-lock-candidate.yml): generates and verifies a candidate with package hashes.
 - [Release-oriented verification](.github/workflows/python-verification.yml): requires an accepted hash-pinned dependency lock and rejects skipped official MCP tests.
 
-The [diagnostic workflow succeeded](https://github.com/Anionix/vater_Tool-Execution-Runtime/actions/runs/45277418204) (14/14), and the [hash-locked main-branch verification also succeeded](https://github.com/Anionix/vater_Tool-Execution-Runtime/actions/runs/45278396997). Remaining phase gates and production authorization work are still incomplete.
+The [diagnostic workflow succeeded](https://github.com/Anionix/vater_Tool-Execution-Runtime/actions/runs/45277418204) (14/14), and the [hash-locked main-branch verification also succeeded](https://github.com/Anionix/vater_Tool-Execution-Runtime/actions/runs/45278396997). Extended profiles and production authorization remain separate work.
 
 ## GitHub Issues
 
