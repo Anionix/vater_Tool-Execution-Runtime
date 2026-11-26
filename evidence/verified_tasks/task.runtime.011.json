@@ -1,0 +1,18 @@
+{
+  "task_id": "task.runtime.011",
+  "acceptance_criteria": "上限を越えた場合の拒否、待機、切断をそれぞれ実行試験する",
+  "scope": "Waiting, capacity refusal and disconnect cleanup are exercised separately.",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_runtime_contracts.py::test_wait_for_slot_and_reject_while_timed_out_worker_finishes",
+    "tests/test_process_lifecycle.py::test_client_disconnection_causes_child_cleanup"
+  ],
+  "report_path": "evidence/runtime-completion-tests.xml",
+  "report_sha256": "0d4499455d702a8008e3479ead8745dc54c68b2e65ec3df134c3301305d2d8fc",
+  "source_sha256": {
+    "tests/test_process_lifecycle.py": "4c894a552989a90e0915148a2106517441dd6cc0cea073ac39e21255877cd50b",
+    "tests/test_runtime_contracts.py": "0999ababce47875e64d2bd06b02db2dc7fdf51f6ce3668005681e0cacd4c8019"
+  }
+}

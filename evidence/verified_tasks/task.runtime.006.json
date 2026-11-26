@@ -1,0 +1,31 @@
+{
+  "task_id": "task.runtime.006",
+  "acceptance_criteria": "不明な項目・無制限設定・危険な値を起動前に拒否する試験がある",
+  "scope": "Invalid settings prevent the fixed launcher from starting.",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_policy_config.py::test_rejects_unsafe_or_unknown_values[mutation0]",
+    "tests/test_policy_config.py::test_rejects_unsafe_or_unknown_values[mutation1]",
+    "tests/test_policy_config.py::test_rejects_unsafe_or_unknown_values[mutation2]",
+    "tests/test_policy_config.py::test_rejects_unsafe_or_unknown_values[mutation3]",
+    "tests/test_policy_config.py::test_rejects_unsafe_or_unknown_values[mutation4]",
+    "tests/test_policy_config.py::test_rejects_unsafe_or_unknown_values[mutation5]",
+    "tests/test_policy_config.py::test_rejects_unsafe_or_unknown_values[mutation6]",
+    "tests/test_policy_config.py::test_rejects_unsafe_or_unknown_values[mutation7]",
+    "tests/test_policy_config.py::test_rejects_unsafe_or_unknown_values[mutation8]",
+    "tests/test_policy_config.py::test_rejects_unsafe_or_unknown_values[mutation9]",
+    "tests/test_policy_config.py::test_rejects_unsafe_or_unknown_values[mutation10]",
+    "tests/test_policy_config.py::test_rejects_unsafe_or_unknown_values[mutation11]",
+    "tests/test_policy_config.py::test_rejects_unsafe_or_unknown_values[mutation12]",
+    "tests/test_policy_config.py::test_rejects_unsafe_or_unknown_values[mutation13]",
+    "tests/test_local_mcp_launcher.py::test_invalid_policy_fails_closed"
+  ],
+  "report_path": "evidence/runtime-completion-tests.xml",
+  "report_sha256": "0d4499455d702a8008e3479ead8745dc54c68b2e65ec3df134c3301305d2d8fc",
+  "source_sha256": {
+    "tests/test_local_mcp_launcher.py": "f849ab13e3b65db6730d503f3765c40d462e8b63746a1bdad19c03f9500da738",
+    "tests/test_policy_config.py": "c6cbd015826d3f2fb9ce53d62d11b53a3dfff21977c248003c9f005112da2b70"
+  }
+}

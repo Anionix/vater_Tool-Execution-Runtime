@@ -1,0 +1,19 @@
+{
+  "task_id": "task.runtime.016",
+  "acceptance_criteria": "仮想環境の用意・試験・整形・静的解析を別々のコマンドで再実行できる",
+  "scope": "The documented separate environment, test, format preview and static commands were executed.",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_runtime_contracts.py::test_core_import_and_python_version_in_isolation",
+    "tests/test_static_policy.py::test_real_project_has_no_rule_violations",
+    "tests/test_static_policy.py::test_cli_rejects_real_source_violation"
+  ],
+  "report_path": "evidence/runtime-completion-tests.xml",
+  "report_sha256": "0d4499455d702a8008e3479ead8745dc54c68b2e65ec3df134c3301305d2d8fc",
+  "source_sha256": {
+    "tests/test_runtime_contracts.py": "0999ababce47875e64d2bd06b02db2dc7fdf51f6ce3668005681e0cacd4c8019",
+    "tests/test_static_policy.py": "632f69b8b92f4bea3bb29ca990e54c535da5a9d2c0d13367af4f4f445d999ef8"
+  }
+}

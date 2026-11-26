@@ -1,0 +1,17 @@
+{
+  "task_id": "task.runtime.009",
+  "acceptance_criteria": "通信識別子と業務操作識別子を混同せず追跡でき、秘密値は残らない",
+  "scope": "Transport identifiers stay separate from operation and attempt identifiers.",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_local_contracts.py::test_trace_correlates_retries_without_recording_private_input",
+    "tests/test_local_contracts.py::test_protocol_routes_do_not_execute_query_or_model_requests"
+  ],
+  "report_path": "evidence/runtime-completion-tests.xml",
+  "report_sha256": "0d4499455d702a8008e3479ead8745dc54c68b2e65ec3df134c3301305d2d8fc",
+  "source_sha256": {
+    "tests/test_local_contracts.py": "da7c256bd5ced166122723d6e9a8fe2913a95a96f2a41938878e93c3837d4de7"
+  }
+}

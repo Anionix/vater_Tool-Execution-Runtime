@@ -1,0 +1,21 @@
+{
+  "task_id": "task.runtime.001",
+  "acceptance_criteria": "Pythonパッケージの中核・MCP入口・試験を分離し、仮想環境から実行できる",
+  "scope": "The computation package and the official process entry point run independently in the locked virtual environment.",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_runtime_contracts.py::test_core_import_and_python_version_in_isolation",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[run_local_mcp.py-2026-07-28]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[run_local_mcp.py-legacy]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[launch_guarded_mcp.py-2026-07-28]",
+    "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio[launch_guarded_mcp.py-legacy]"
+  ],
+  "report_path": "evidence/runtime-completion-tests.xml",
+  "report_sha256": "0d4499455d702a8008e3479ead8745dc54c68b2e65ec3df134c3301305d2d8fc",
+  "source_sha256": {
+    "tests/test_official_mcp_sdk.py": "1e065bdf2c1b046739419aaac2e96784101f1b2573c5fb4d9c73a3505b9cf99c",
+    "tests/test_runtime_contracts.py": "0999ababce47875e64d2bd06b02db2dc7fdf51f6ce3668005681e0cacd4c8019"
+  }
+}

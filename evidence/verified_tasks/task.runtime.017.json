@@ -1,0 +1,21 @@
+{
+  "task_id": "task.runtime.017",
+  "acceptance_criteria": "公式開発キットが未導入の場合は接続試験を成功扱いしない",
+  "scope": "The official workflow requires the pinned package and a passing report with executed cases.",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_test_report_gate.py::test_rejects_unsuccessful_testcase[failure]",
+    "tests/test_test_report_gate.py::test_rejects_unsuccessful_testcase[error]",
+    "tests/test_test_report_gate.py::test_rejects_unsuccessful_testcase[skipped]",
+    "tests/test_test_report_gate.py::test_rejects_missing_testcases",
+    "tests/test_ci_workflow_contracts.py::test_release_workflow_blocks_unlocked_dependencies"
+  ],
+  "report_path": "evidence/runtime-completion-tests.xml",
+  "report_sha256": "0d4499455d702a8008e3479ead8745dc54c68b2e65ec3df134c3301305d2d8fc",
+  "source_sha256": {
+    "tests/test_ci_workflow_contracts.py": "c2e47c8efd7448a77d34b709d7042de641e136571793d4b7ac95058a1d77b3c1",
+    "tests/test_test_report_gate.py": "a28b035235412c107cb15d1c286472e6b9ec041fdc0b6a04ca240cac06725429"
+  }
+}
