@@ -1,0 +1,20 @@
+{
+  "task_id": "task.read_only.009",
+  "acceptance_criteria": "0と最大値を含む反例試験がある",
+  "scope": "Boundary cases include zero, the maximum and overflow past it.",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_core.py::test_arithmetic[0-0-0]",
+    "tests/test_core.py::test_arithmetic[100-200-300]",
+    "tests/test_core.py::test_arithmetic[4294967295-0-4294967295]",
+    "tests/test_core.py::test_arithmetic[1-1-2]",
+    "tests/test_core.py::test_all_256_eight_bit_pairs_and_boundary"
+  ],
+  "report_path": "evidence/authorization-gate-tests.xml",
+  "report_sha256": "ba03242350e57854ec4b155c787fccb7b5c2ae58a1a9f276d90fe250b5f7f25d",
+  "source_sha256": {
+    "tests/test_core.py": "2a851784e79de34dfccf00a3acf34ffc6961053bb2ae8118721dc185113c5b66"
+  }
+}
