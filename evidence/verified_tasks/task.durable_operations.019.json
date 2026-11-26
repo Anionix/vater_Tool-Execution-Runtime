@@ -1,0 +1,19 @@
+{
+  "task_id": "task.durable_operations.019",
+  "acceptance_criteria": "予約・結果不明が保持される",
+  "scope": "On restart the durable reservation and uncertain result remain available.",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_ledger.py::test_real_crash_after_dispatch_recovers_as_unknown",
+    "tests/test_ledger.py::test_events_persist_across_reopen",
+    "tests/test_worker_leases.py::test_expired_lease_quarantines_and_stale_owner_cannot_finish"
+  ],
+  "report_path": "evidence/minimum-validation-tests.xml",
+  "report_sha256": "9800d0ae6c5623c88f9841db61eac5956d9c506bd547db3c2e3d32c12d931647",
+  "source_sha256": {
+    "tests/test_ledger.py": "d4cf3c38949e718558d35bfb63eeb2d39cced84010b74d6ffc1befc4f1105770",
+    "tests/test_worker_leases.py": "8c41cb3ccd882d010c47590262714cf0f22d6d42c978dc9e45706922fc2d0967"
+  }
+}

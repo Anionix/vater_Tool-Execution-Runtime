@@ -1,0 +1,18 @@
+{
+  "task_id": "task.durable_operations.004",
+  "acceptance_criteria": "異なる利用者の操作が混ざらない",
+  "scope": "The local principal partition separates otherwise identical requests.",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_ledger.py::test_principal_partition",
+    "tests/test_recorded_tool_bridge.py::test_bridge_principal_isolated"
+  ],
+  "report_path": "evidence/minimum-validation-tests.xml",
+  "report_sha256": "9800d0ae6c5623c88f9841db61eac5956d9c506bd547db3c2e3d32c12d931647",
+  "source_sha256": {
+    "tests/test_ledger.py": "d4cf3c38949e718558d35bfb63eeb2d39cced84010b74d6ffc1befc4f1105770",
+    "tests/test_recorded_tool_bridge.py": "ff8ca14407eadd7aafd1ee24e94359489b3e703525882e23f4ced93fd996607d"
+  }
+}

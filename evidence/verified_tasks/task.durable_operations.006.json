@@ -1,0 +1,17 @@
+{
+  "task_id": "task.durable_operations.006",
+  "acceptance_criteria": "期限切れ・再利用は拒否される",
+  "scope": "Expired and consumed approvals are refused.",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_ledger.py::test_expired_approval_rejected",
+    "tests/test_ledger.py::test_approval_cannot_be_reused_across_operations"
+  ],
+  "report_path": "evidence/minimum-validation-tests.xml",
+  "report_sha256": "9800d0ae6c5623c88f9841db61eac5956d9c506bd547db3c2e3d32c12d931647",
+  "source_sha256": {
+    "tests/test_ledger.py": "d4cf3c38949e718558d35bfb63eeb2d39cced84010b74d6ffc1befc4f1105770"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "task_id": "task.durable_operations.009",
+  "acceptance_criteria": "同時要求の一つだけ予約成功",
+  "scope": "Concurrent requests have one durable reservation and at most one dispatch.",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_ledger.py::test_parallel_reservations_return_one_id",
+    "tests/test_multiprocess_stress.py::test_process_collisions_preserve_at_most_one_dispatch[2-25-12]",
+    "tests/test_multiprocess_stress.py::test_process_collisions_preserve_at_most_one_dispatch[4-30-18]"
+  ],
+  "report_path": "evidence/minimum-validation-tests.xml",
+  "report_sha256": "9800d0ae6c5623c88f9841db61eac5956d9c506bd547db3c2e3d32c12d931647",
+  "source_sha256": {
+    "tests/test_ledger.py": "d4cf3c38949e718558d35bfb63eeb2d39cced84010b74d6ffc1befc4f1105770",
+    "tests/test_multiprocess_stress.py": "f831383523b4345b3dcfb1a327459be85475ee42e8b8d65fa1b6ebb80d4df111"
+  }
+}

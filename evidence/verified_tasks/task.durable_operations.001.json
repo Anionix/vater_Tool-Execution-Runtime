@@ -1,0 +1,16 @@
+{
+  "task_id": "task.durable_operations.001",
+  "acceptance_criteria": "本番データを変更しない",
+  "scope": "The example changes only the temporary SQLite history of an addition.",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_official_mcp_sdk.py::test_sdk_recorded_tool_guarded_stdio"
+  ],
+  "report_path": "evidence/minimum-validation-tests.xml",
+  "report_sha256": "9800d0ae6c5623c88f9841db61eac5956d9c506bd547db3c2e3d32c12d931647",
+  "source_sha256": {
+    "tests/test_official_mcp_sdk.py": "1e065bdf2c1b046739419aaac2e96784101f1b2573c5fb4d9c73a3505b9cf99c"
+  }
+}

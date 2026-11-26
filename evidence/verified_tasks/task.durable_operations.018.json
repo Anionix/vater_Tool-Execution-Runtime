@@ -1,0 +1,21 @@
+{
+  "task_id": "task.durable_operations.018",
+  "acceptance_criteria": "送信済み副作用は取消完了扱いしない",
+  "scope": "Cancellation separates pre-dispatch stop, uncertain effect, and committed result.",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_ledger.py::test_cancel_before_dispatch_is_terminal",
+    "tests/test_ledger.py::test_cancel_after_dispatch_does_not_mean_undone",
+    "tests/test_ledger.py::test_racing_cancel_and_result_never_claims_undo",
+    "tests/test_official_mcp_sdk.py::test_sdk_cancels_dispatched_call_over_stdio[2026-07-28]",
+    "tests/test_official_mcp_sdk.py::test_sdk_cancels_dispatched_call_over_stdio[legacy]"
+  ],
+  "report_path": "evidence/minimum-validation-tests.xml",
+  "report_sha256": "9800d0ae6c5623c88f9841db61eac5956d9c506bd547db3c2e3d32c12d931647",
+  "source_sha256": {
+    "tests/test_ledger.py": "d4cf3c38949e718558d35bfb63eeb2d39cced84010b74d6ffc1befc4f1105770",
+    "tests/test_official_mcp_sdk.py": "1e065bdf2c1b046739419aaac2e96784101f1b2573c5fb4d9c73a3505b9cf99c"
+  }
+}
