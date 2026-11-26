@@ -1,0 +1,14 @@
+{
+  "task_id": "task.contracts.020",
+  "acceptance_criteria": "秘密鍵・トークン・生の機密入力が除外される",
+  "scope": "Synthetic private input stays out of the process diagnostics and durable files.",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_local_contracts.py::test_trace_correlates_retries_without_recording_private_input"
+  ],
+  "report_path": "evidence/local-acceptance-tests.xml",
+  "report_sha256": "aee610ea687fad7318783b452bc188e2eb4ae4fefb82ad3a62eb527963a98395",
+  "source_commit": "010094ae1a77bdd8442740047d9c75225113c9dc"
+}

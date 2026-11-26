@@ -1,0 +1,14 @@
+{
+  "task_id": "task.contracts.013",
+  "acceptance_criteria": "互換変換で情報を黙って破棄しない",
+  "scope": "Official message types preserve nested provider extension data in conversion.",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_local_contracts.py::test_official_message_types_preserve_provider_metadata"
+  ],
+  "report_path": "evidence/local-acceptance-tests.xml",
+  "report_sha256": "aee610ea687fad7318783b452bc188e2eb4ae4fefb82ad3a62eb527963a98395",
+  "source_commit": "010094ae1a77bdd8442740047d9c75225113c9dc"
+}
