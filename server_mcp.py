@@ -135,11 +135,18 @@ def build_server(authority: LocalAuthority | None = None, *,
                  ledger_path: str | None = None,
                  principal: str = "local-process",
                  leased: bool = True,
+                 call_budget: int | None = None,
                  before_dispatch: Checkpoint | None = None,
                  after_dispatch: Checkpoint | None = None,
                  after_commit: Checkpoint | None = None) -> Server:
     """Host chooses principal, authority and database. Never use caller-provided identity."""
     identity = HostPrincipal(principal)
+    # task.authorization.002: ledger subject and registered service are separate identities.
+    if identity.name == LOCAL_PUBLISHER:
+        raise ValueError("principal must differ from the registered service")
+    if call_budget is not None and (type(call_budget) is not int or call_budget < 0):
+        raise ValueError("call budget must be a nonnegative integer")
+    remaining_calls = call_budget
     if authority is None:
         authority = LocalAuthority.calculator_only()
     service = CalculationService(authority)
@@ -196,11 +203,22 @@ def build_server(authority: LocalAuthority | None = None, *,
         event = {"source": "mcp.tools.call", "trace_id": trace_id, "attempt_id": str(uuid4()),
                  "outcome": "interrupted"}
         started = monotonic_ns()
+        nonlocal remaining_calls
         try:
-            reply = await execute_tool(params)
+            # task.authorization.018: debit before dispatch, with no await between check and debit.
+            # Each registered call attempt consumes one unit, including retries and failures.
+            registered = params.name == TOOL.name or (
+                bridge is not None and params.name == RECORDED_TOOL_NAME
+            )
+            if registered and remaining_calls == 0:
+                reply = _tool_error("BUDGET_EXCEEDED")
+            else:
+                if registered and remaining_calls is not None:
+                    remaining_calls -= 1
+                reply = await execute_tool(params)
             if getattr(reply, "is_error", False):
                 code = reply.content[0].text
-                event["outcome"] = "denied" if code == "NOT_AUTHORIZED" else "rejected"
+                event["outcome"] = "denied" if code in {"NOT_AUTHORIZED", "BUDGET_EXCEEDED"} else "rejected"
                 event["error_category"] = ERROR_CATEGORY.get(code, "unknown")
             else:
                 event["outcome"] = "succeeded"

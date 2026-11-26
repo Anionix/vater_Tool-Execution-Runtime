@@ -99,5 +99,5 @@ jobs:
         run: python scripts/verify_phase.py contracts
       - name: Verify all runtime tasks
         run: python scripts/verify_phase.py runtime
-      - name: Recheck completed authorization tasks
-        run: python scripts/verify_phase.py authorization --completed-only
+      - name: Verify all authorization tasks
+        run: python scripts/verify_phase.py authorization

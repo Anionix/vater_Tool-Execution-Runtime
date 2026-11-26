@@ -418,3 +418,34 @@ def test_permission_denial_logs_only_fixed_fields(adapter, capfd, tmp_path):
         "outcome": "denied",
         "error_category": "authorization",
     }
+
+
+def test_host_call_budget_blocks_execution_before_reservation(adapter, tmp_path):
+    import sqlite3
+
+    database = tmp_path / "history.sqlite3"
+    authority = LocalAuthority(frozenset({"checked_add", "checked_add_recorded"}))
+    server = adapter.build_server(
+        authority, ledger_path=str(database), principal="local-user", call_budget=1
+    )
+
+    async def run():
+        async def recorded(key):
+            return await server.on_call_tool(None, SimpleNamespace(
+                name="checked_add_recorded", arguments={"left": 1, "right": 2, "request_key": key}
+            ))
+        return await asyncio.gather(recorded("first"), recorded("second"))
+
+    results = asyncio.run(run())
+    assert sum(not getattr(result, "is_error", False) for result in results) == 1
+    assert [r.content[0].text for r in results if getattr(r, "is_error", False)] == [
+        "BUDGET_EXCEEDED"
+    ]
+    with sqlite3.connect(database) as connection:
+        assert connection.execute("SELECT principal FROM operations").fetchall() == [("local-user",)]
+    catalog = asyncio.run(server.on_list_tools(None, None))
+    service = catalog.tools[0].meta["io.github.anionix/contract"]["publisher"]
+    assert service == adapter.LOCAL_PUBLISHER
+    assert service != "local-user"
+    with pytest.raises(ValueError, match="registered service"):
+        adapter.build_server(principal=service)
