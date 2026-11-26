@@ -1,0 +1,21 @@
+{
+  "task_id": "task.testing.009",
+  "acceptance_criteria": "重複外部操作を起こさないか停止",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/attack-reproduction-tests.xml",
+  "report_sha256": "8390f9a0afe3f1fac065811110a21d803d9b1579a8c34d1b884b2ad6b941cf90",
+  "source_sha256": {
+    "server_mcp.py": "4445686917724617d7be5ebc8ae316417b1d0c029f6a8ff904251c1779ccc877",
+    "src/verified_execution/cancellable_bridge.py": "dff23afe49664e163785712d06b31436bc87b3663c40ba71075938b0a3d5d48d",
+    "src/verified_execution/runtime.py": "41ad00eb06ab2f19acb1996d19929ee64077a553eb453be2604737f1bfe3df67",
+    "tests/test_attack_reproduction.py": "6145c67968f9657f966dfe6304342f29a8776ba4529522a8f567f9e6de66da0c",
+    "tests/test_ledger.py": "d4cf3c38949e718558d35bfb63eeb2d39cced84010b74d6ffc1befc4f1105770"
+  },
+  "scope": "Through the MCP adapter, resending a recorded call with the same request_key after the reply was lost replays the stored result: one operation, history reserved -> leased_dispatch -> leased_completed, no second dispatch. An operation in the unknown state is never retried automatically. Real external services are not exercised. Status stays review: prerequisite gate.durable_operations.completed is open because it needs evidence from a real external service.",
+  "test_cases": [
+    "tests/test_attack_reproduction.py::test_mcp_resend_after_lost_response_replays_the_record",
+    "tests/test_ledger.py::test_reread_does_not_auto_retry_unknown"
+  ]
+}

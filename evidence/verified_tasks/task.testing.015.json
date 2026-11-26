@@ -1,0 +1,21 @@
+{
+  "task_id": "task.testing.015",
+  "acceptance_criteria": "権限判定が変わらない",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/attack-reproduction-tests.xml",
+  "report_sha256": "8390f9a0afe3f1fac065811110a21d803d9b1579a8c34d1b884b2ad6b941cf90",
+  "source_sha256": {
+    "server_mcp.py": "4445686917724617d7be5ebc8ae316417b1d0c029f6a8ff904251c1779ccc877",
+    "src/verified_execution/http_local.py": "b85e7d0c2d90f26d3fad5215a31f3b64c523385ede842a87064e989b5ab4663d",
+    "src/verified_execution/runtime.py": "41ad00eb06ab2f19acb1996d19929ee64077a553eb453be2604737f1bfe3df67",
+    "tests/test_adapter_boundary.py": "9c079abca9ff4ffb00543a17190f8010abe11e52de67901a3892289421fe4795",
+    "tests/test_attack_reproduction.py": "6145c67968f9657f966dfe6304342f29a8776ba4529522a8f567f9e6de66da0c"
+  },
+  "scope": "A tool description that claims administrator approval is published unchanged by MCP and in the HTTP OpenAPI summary, yet a denied host still gets NOT_AUTHORIZED / 403 and a granted host behaves exactly as without it. Status stays review: prerequisite gate.durable_operations.completed is open because it needs evidence from a real external service.",
+  "test_cases": [
+    "tests/test_attack_reproduction.py::test_injected_description_does_not_change_grants_on_any_adapter",
+    "tests/test_adapter_boundary.py::test_tool_description_does_not_grant_permission"
+  ]
+}

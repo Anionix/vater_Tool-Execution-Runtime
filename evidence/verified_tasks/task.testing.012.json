@@ -1,0 +1,25 @@
+{
+  "task_id": "task.testing.012",
+  "acceptance_criteria": "不正な文字コード入力を安全に拒否する",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/attack-reproduction-tests.xml",
+  "report_sha256": "8390f9a0afe3f1fac065811110a21d803d9b1579a8c34d1b884b2ad6b941cf90",
+  "source_sha256": {
+    "scripts/guarded_stdio.py": "dd0d6532805285f6108f75d24f9a4a0d54769c8e500265b166d8f98dd903aa5f",
+    "src/verified_execution/http_local.py": "b85e7d0c2d90f26d3fad5215a31f3b64c523385ede842a87064e989b5ab4663d",
+    "tests/test_attack_reproduction.py": "6145c67968f9657f966dfe6304342f29a8776ba4529522a8f567f9e6de66da0c",
+    "tests/test_guarded_stdio.py": "1a7a76a30d283e0538d2072286826f9cd06a52f9cf140d7c4cb9ca35289e5cc3",
+    "tests/test_unicode_input_validation.py": "0fedc482595548773df14b88a5e951d8e280c5d798fe771add72ae5b46e1eba9"
+  },
+  "scope": "Invalid UTF-8 (bad bytes, truncated sequences, encoded surrogates, a byte-order mark) is rejected with 400 INVALID_BODY by HTTP; the guarded stdio transport rejects invalid UTF-8 without losing frame sync; unpaired surrogates in a request key get a stable INVALID_REQUEST_KEY. Status stays review: prerequisite gate.durable_operations.completed is open because it needs evidence from a real external service.",
+  "test_cases": [
+    "tests/test_attack_reproduction.py::test_http_invalid_utf8_is_rejected[invalid_byte]",
+    "tests/test_attack_reproduction.py::test_http_invalid_utf8_is_rejected[truncated_sequence]",
+    "tests/test_attack_reproduction.py::test_http_invalid_utf8_is_rejected[encoded_surrogate]",
+    "tests/test_attack_reproduction.py::test_http_invalid_utf8_is_rejected[byte_order_mark]",
+    "tests/test_guarded_stdio.py::test_real_subprocess_invalid_utf8_does_not_desync",
+    "tests/test_unicode_input_validation.py::test_application_adapter_returns_stable_code_for_invalid_request_key"
+  ]
+}
