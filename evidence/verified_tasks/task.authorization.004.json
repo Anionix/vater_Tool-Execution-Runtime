@@ -1,0 +1,17 @@
+{
+  "task_id": "task.authorization.004",
+  "acceptance_criteria": "対象版と所有者を検査できる",
+  "scope": "Both dispatch paths compare the current resource version and owner.",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_local_contracts.py::test_dispatch_compares_current_resource_version[approval]",
+    "tests/test_local_contracts.py::test_dispatch_compares_current_resource_version[lease]"
+  ],
+  "report_path": "evidence/runtime-completion-tests.xml",
+  "report_sha256": "0d4499455d702a8008e3479ead8745dc54c68b2e65ec3df134c3301305d2d8fc",
+  "source_sha256": {
+    "tests/test_local_contracts.py": "da7c256bd5ced166122723d6e9a8fe2913a95a96f2a41938878e93c3837d4de7"
+  }
+}

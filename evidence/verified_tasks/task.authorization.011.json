@@ -1,0 +1,19 @@
+{
+  "task_id": "task.authorization.011",
+  "acceptance_criteria": "引数変更の反例を通す",
+  "scope": "An approval with changed arguments fails before dispatch.",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_ledger.py::test_mismatched_approval_rejected[change0]",
+    "tests/test_ledger.py::test_mismatched_approval_rejected[change1]",
+    "tests/test_ledger.py::test_mismatched_approval_rejected[change2]",
+    "tests/test_ledger.py::test_mismatched_approval_rejected[change3]"
+  ],
+  "report_path": "evidence/runtime-completion-tests.xml",
+  "report_sha256": "0d4499455d702a8008e3479ead8745dc54c68b2e65ec3df134c3301305d2d8fc",
+  "source_sha256": {
+    "tests/test_ledger.py": "d4cf3c38949e718558d35bfb63eeb2d39cced84010b74d6ffc1befc4f1105770"
+  }
+}

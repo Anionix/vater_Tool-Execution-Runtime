@@ -1,0 +1,18 @@
+{
+  "task_id": "task.authorization.007",
+  "acceptance_criteria": "許可規則が不在なら必ず拒否される",
+  "scope": "The default without a grant is denial.",
+  "verified_on": "2026-11-26",
+  "verification_status": "passed",
+  "executed": true,
+  "test_cases": [
+    "tests/test_core.py::test_service_denies_even_read_tool_without_authority",
+    "tests/test_adapter_boundary.py::test_router_rejects_unauthorized_host_policy"
+  ],
+  "report_path": "evidence/runtime-completion-tests.xml",
+  "report_sha256": "0d4499455d702a8008e3479ead8745dc54c68b2e65ec3df134c3301305d2d8fc",
+  "source_sha256": {
+    "tests/test_adapter_boundary.py": "64937e2c1cd43f51aa2a1bfbebe8f9548447a014875130dd59092e101645ea82",
+    "tests/test_core.py": "62ac8e13dda70e4326db20016887330bd2fd223e49dfe2a3f2d84e30f489b9b2"
+  }
+}
