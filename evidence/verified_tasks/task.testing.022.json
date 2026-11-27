@@ -1,0 +1,29 @@
+{
+  "task_id": "task.testing.022",
+  "acceptance_criteria": "対象版ごとの結果が保存",
+  "verified_on": "2026-11-27",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/testing-phase-tests.xml",
+  "report_sha256": "8a66adeaf1b98f4e1c6c05b5834ad69c39a4841aff8f3949cd09a43d7d5c7768",
+  "source_sha256": {
+    "evidence/mcp-conformance/results.json": "e0010b89360f6f56a59ea20a5aba59cecf7d92d79dbb15217128916e4eeac468",
+    "evidence/mcp-conformance/applicability.json": "4aec4639a5d99981845e3f72e078b075cb72b28d73878eca3f605b1f8ff8dc5d",
+    "scripts/check_mcp_conformance.py": "be40094d70a45032ad6d66299b1935ec0f21496f87a08ad141307a5dd9d8bff5",
+    "scripts/run_mcp_conformance.mjs": "0204ef8782324d63b4f40886cfcc30ed5afc6da34abf3a45eec7a0d1717e7efb",
+    ".github/workflows/mcp-conformance.yml": "8a17cf5ad35de31097deb516f70213cd84d3b6e33efb2c0e5dd04cec4b0a9fe1",
+    "tests/test_mcp_conformance_record.py": "47ebb4c70f60ba182a2480d074df470d291a30feac56214a5bba3f56992c4f95"
+  },
+  "scope": "The official MCP conformance suite (modelcontextprotocol/conformance 0.2.0-alpha.12, pinned commit 96a6f94) ran in CI (run 45918251896) against scripts/run_local_mcp.py for every protocol version the SDK supports: 2025-03-26, 2025-06-18, 2025-11-25 and 2026-07-28. The per-version results (every scenario upstream applies, each check's status) are saved in evidence/mcp-conformance/results.json; ping, tools/list, tools/call text and error results pass, and no frame broke the upstream wire schema. Scenarios the harness can run only over HTTP (27), capabilities this server does not offer (14) and scenarios needing upstream's fixture tools (6) are classified with reasons in applicability.json and recorded as not confirmed. Each later CI run must reproduce the record exactly (scripts/check_mcp_conformance.py).",
+  "test_cases": [
+    "tests/test_mcp_conformance_record.py::test_one_result_per_supported_protocol_version",
+    "tests/test_mcp_conformance_record.py::test_record_is_pinned_to_the_workflow_upstream_commit",
+    "tests/test_mcp_conformance_record.py::test_every_scenario_is_classified_and_the_required_ones_passed",
+    "tests/test_mcp_conformance_record.py::test_the_record_passes_its_own_check",
+    "tests/test_mcp_conformance_record.py::test_the_checker_rejects[regression]",
+    "tests/test_mcp_conformance_record.py::test_the_checker_rejects[wire_error]",
+    "tests/test_mcp_conformance_record.py::test_the_checker_rejects[drift]",
+    "tests/test_mcp_conformance_record.py::test_the_checker_rejects[unclassified]",
+    "tests/test_mcp_conformance_record.py::test_the_checker_rejects[other_commit]"
+  ]
+}

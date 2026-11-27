@@ -119,5 +119,5 @@ jobs:
         run: python scripts/verify_phase.py formal_verification --completed-only
       - name: Verify all local HTTP tasks
         run: python scripts/verify_phase.py http_interface
-      - name: Recheck completed testing tasks (includes the regression registry)
-        run: python scripts/verify_phase.py testing --completed-only
+      - name: Verify all testing tasks (includes the regression registry)
+        run: python scripts/verify_phase.py testing

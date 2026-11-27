@@ -8,102 +8,150 @@
   "areas": {
     "external_services": [
       {
-        "id": "EXT-1", "status": "executed",
+        "id": "EXT-1",
+        "status": "executed",
         "scope": "Create one labelled issue in this repository's GitHub Issues: normal, replay, lost reply, crash before send, target check.",
-        "evidence": ["evidence/external/github-issues-run-45839952764.json",
-                     "evidence/verified_tasks/task.durable_operations.011.json"],
-        "independent_tests": ["tests/test_external_change.py::test_possibly_executed_create_is_reconciled_never_resent"]
+        "evidence": [
+          "evidence/external/github-issues-run-45839952764.json",
+          "evidence/verified_tasks/task.durable_operations.011.json"
+        ],
+        "independent_tests": [
+          "tests/test_external_change.py::test_possibly_executed_create_is_reconciled_never_resent"
+        ]
       },
       {
-        "id": "EXT-2", "status": "not_executed",
+        "id": "EXT-2",
+        "status": "not_executed",
         "scope": "A real GitHub rate-limit reply followed by one resend.",
         "evidence": [],
-        "independent_tests": ["tests/test_external_change.py::test_resend_happens_only_after_a_proven_non_execution",
-                              "tests/test_external_change.py::test_resends_are_bounded",
-                              "tests/test_external_change.py::test_grant_revoked_during_the_rate_limit_wait_stops_the_resend"],
+        "independent_tests": [
+          "tests/test_external_change.py::test_resend_happens_only_after_a_proven_non_execution",
+          "tests/test_external_change.py::test_resends_are_bounded",
+          "tests/test_external_change.py::test_grant_revoked_during_the_rate_limit_wait_stops_the_resend"
+        ],
         "reason": "A live run cannot force GitHub to rate-limit; only the fake destination produces that reply."
       },
       {
-        "id": "EXT-3", "status": "not_executed",
+        "id": "EXT-3",
+        "status": "not_executed",
         "scope": "A redirect returned by the real GitHub API.",
         "evidence": [],
-        "independent_tests": ["tests/test_secret_flow.py::test_credential_never_follows_a_redirect",
-                              "tests/test_secret_flow.py::test_redirected_create_is_a_definitive_rejection"],
+        "independent_tests": [
+          "tests/test_secret_flow.py::test_credential_never_follows_a_redirect",
+          "tests/test_secret_flow.py::test_redirected_create_is_a_definitive_rejection"
+        ],
         "reason": "GitHub did not redirect during the live run; redirects were tested against local HTTP servers only."
       },
       {
-        "id": "EXT-4", "status": "not_executed",
+        "id": "EXT-4",
+        "status": "not_executed",
         "scope": "Any external destination other than GitHub Issues (for example payment providers).",
         "evidence": [],
         "independent_tests": [],
         "reason": "No adapter exists. contracts/github_issue_destination.json is the only destination contract."
       },
       {
-        "id": "EXT-5", "status": "not_executed",
+        "id": "EXT-5",
+        "status": "not_executed",
         "scope": "A real model provider (network model API).",
         "evidence": [],
-        "independent_tests": ["tests/test_model_mock.py::test_destination_and_budget_fail_before_fixture",
-                              "tests/test_model_tool_proposals.py::test_even_an_approved_proposal_cannot_reach_a_side_effect"],
+        "independent_tests": [
+          "tests/test_model_mock.py::test_destination_and_budget_fail_before_fixture",
+          "tests/test_model_tool_proposals.py::test_even_an_approved_proposal_cannot_reach_a_side_effect"
+        ],
         "reason": "Only the offline fixture (model_mock.OfflineResponses) is implemented; no request leaves the host."
       }
     ],
     "official_mcp": [
       {
-        "id": "MCP-1", "status": "executed",
+        "id": "MCP-1",
+        "status": "executed",
         "scope": "Official Python MCP SDK 2.3.0 client and server over standard input and output, with a hash-locked dependency set.",
-        "evidence": ["evidence/official_mcp_locked_verification_2026-11-24.json"],
-        "independent_tests": ["tests/test_adapter_conformance.py::test_mcp_matches_runtime"]
+        "evidence": [
+          "evidence/official_mcp_locked_verification_2026-11-24.json"
+        ],
+        "independent_tests": [
+          "tests/test_adapter_conformance.py::test_mcp_matches_runtime"
+        ]
       },
       {
-        "id": "MCP-2", "status": "not_executed",
-        "scope": "The official conformance suite (modelcontextprotocol/conformance), every applicable scenario, for each supported protocol version, against the current server source.",
-        "evidence": [],
-        "independent_tests": [],
-        "reason": "scripts/run_mcp_conformance.mjs is ready, but running the downloaded upstream suite needs the host owner's permission (task.testing.022). An older tools-list-only run (evidence/stdio-conformance-results.jsonl) predates the current server source."
+        "id": "MCP-2",
+        "status": "executed",
+        "scope": "The official conformance suite (modelcontextprotocol/conformance 0.2.0-alpha.12, commit 96a6f94) against the stdio server, every scenario upstream applies to each protocol version the SDK supports (2025-03-26, 2025-06-18, 2025-11-25, 2026-07-28): ping, tools/list, tools/call text and error results pass, and every exchanged frame passed the upstream wire-schema validator. CI compares each new run with this record.",
+        "evidence": [
+          "evidence/mcp-conformance/results.json"
+        ],
+        "independent_tests": [
+          "tests/test_mcp_conformance_record.py::test_the_record_passes_its_own_check"
+        ]
       },
       {
-        "id": "MCP-3", "status": "not_executed",
+        "id": "MCP-3",
+        "status": "not_executed",
         "scope": "MCP over the Streamable HTTP transport, and remote authorization.",
         "evidence": [],
         "independent_tests": [],
         "reason": "The server is served over standard input and output only; HTTP here is the separate jobs API."
+      },
+      {
+        "id": "MCP-4",
+        "status": "not_executed",
+        "scope": "Official conformance scenarios that could not probe this server: 27 that the upstream harness runs only through an HTTP URL (among them the 2026-07-28 stateless _meta and discovery probes, sessions, SSE, headers and DNS rebinding) and 6 that need tools of upstream's reference server.",
+        "evidence": [],
+        "independent_tests": [
+          "tests/test_official_mcp_sdk.py::test_sdk_guarded_real_stdio"
+        ],
+        "reason": "They are recorded per version in evidence/mcp-conformance/results.json with their category in evidence/mcp-conformance/applicability.json, but their checks did not run against this stdio server, so nothing they test is confirmed here."
       }
     ],
     "durable_records": [
       {
-        "id": "REC-1", "status": "executed",
+        "id": "REC-1",
+        "status": "executed",
         "scope": "SQLite ledger recovery after a process is killed (SIGKILL) mid-request, mid-lease and mid-transaction.",
-        "evidence": ["evidence/verified_tasks/task.testing.010.json"],
-        "independent_tests": ["tests/test_process_kill.py::test_killed_mid_transaction_stream_leaves_a_consistent_ledger",
-                              "tests/test_process_kill.py::test_killed_while_the_destination_holds_the_create",
-                              "tests/test_process_kill.py::test_killed_lease_owner_is_quarantined_and_never_redispatched"]
+        "evidence": [
+          "evidence/verified_tasks/task.testing.010.json"
+        ],
+        "independent_tests": [
+          "tests/test_process_kill.py::test_killed_mid_transaction_stream_leaves_a_consistent_ledger",
+          "tests/test_process_kill.py::test_killed_while_the_destination_holds_the_create",
+          "tests/test_process_kill.py::test_killed_lease_owner_is_quarantined_and_never_redispatched"
+        ]
       },
       {
-        "id": "REC-2", "status": "not_executed",
+        "id": "REC-2",
+        "status": "not_executed",
         "scope": "Operating-system crash or power loss (as opposed to a killed process).",
         "evidence": [],
-        "independent_tests": ["tests/test_cancellation_journal.py::test_directory_sync_failure_never_reports_durable_success"],
+        "independent_tests": [
+          "tests/test_cancellation_journal.py::test_directory_sync_failure_never_reports_durable_success"
+        ],
         "reason": "Only process death is simulated; SQLite's and the file system's durability after power loss is relied on."
       },
       {
-        "id": "REC-3", "status": "not_executed",
+        "id": "REC-3",
+        "status": "not_executed",
         "scope": "A full disk or I/O errors while the ledger commits.",
         "evidence": [],
         "independent_tests": [],
         "reason": "No test injects ENOSPC or EIO into SQLite."
       },
       {
-        "id": "REC-4", "status": "not_executed",
+        "id": "REC-4",
+        "status": "not_executed",
         "scope": "Ledger backup and restore without re-executing operations.",
         "evidence": [],
         "independent_tests": [],
         "reason": "Planned as task.operations.016; not part of the testing phase."
       },
       {
-        "id": "REC-5", "status": "not_executed",
+        "id": "REC-5",
+        "status": "not_executed",
         "scope": "Long-duration (soak) operation and the ledger on a network or multi-host file system.",
         "evidence": [],
-        "independent_tests": ["tests/test_multiprocess_stress.py::test_process_collisions_preserve_at_most_one_dispatch"],
+        "independent_tests": [
+          "tests/test_multiprocess_stress.py::test_process_collisions_preserve_at_most_one_dispatch"
+        ],
         "reason": "The stress test is finite and local (evidence/multiprocess_stress.json is marked not a soak test); multi-host storage is out of scope."
       }
     ]

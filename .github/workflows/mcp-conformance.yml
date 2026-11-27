@@ -56,6 +56,8 @@ jobs:
         run: >-
           node --import ./upstream-conformance/node_modules/tsx/dist/loader.mjs
           scripts/run_mcp_conformance.mjs upstream-conformance "$(command -v python)" mcp-conformance
+      - name: Check the run against the policy and the committed per-version record
+        run: python scripts/check_mcp_conformance.py mcp-conformance
       - name: Print the results (readable without the artifact)
         if: always()
         run: for file in mcp-conformance/*.json; do echo "=== $file"; python -c "import json,sys; print(json.dumps(json.load(open(sys.argv[1])), separators=(',', ':')))" "$file"; done
