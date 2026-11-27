@@ -13,6 +13,7 @@ import gzip
 import hashlib
 from importlib import util
 import io
+import json
 from pathlib import Path
 import re
 import subprocess
@@ -148,3 +149,38 @@ def test_a_build_without_its_wheel_or_sdist_is_refused(tmp_path, monkeypatch):
 def test_the_build_command_reads_its_output_directory_before_setuptools_rewrites_argv():
     assert release.BUILD.index("out = sys.argv[1]") < release.BUILD.index("build_sdist(out)")
     assert "sys.argv[1]" not in release.BUILD.split("out = sys.argv[1];", 1)[1]
+
+
+RECORDED = ROOT / "evidence" / "release" / "build-trial.json"
+VARIED_FIELDS = {"present", "sha256", "date_time", "external_attr", "mtime", "mode", "uid", "gid", "uname", "gname"}
+
+
+def test_the_recorded_ci_build_names_every_sha256():
+    record = json.loads(RECORDED.read_text())
+    manifest, provenance = record["manifest"], record["provenance"]
+    assert provenance["job"] == "release-artifacts" and provenance["artifact"]["retention_days"] == 90
+    assert re.fullmatch(r"[0-9a-f]{40}", manifest["commit"]) and provenance["head_sha"]
+    assert manifest["source"]["files"] > 100 and re.fullmatch(r"[0-9a-f]{64}", manifest["source"]["tree_sha256"])
+    packages = manifest["dependencies"]["packages"]
+    assert {p["name"] for p in packages} >= {"mcp", "anyio", "pydantic"}
+    assert all(p["sha256"] and all(re.fullmatch(r"[0-9a-f]{64}", h) for h in p["sha256"]) for p in packages)
+    assert manifest["build_requirements"]["packages"] == [{"name": "setuptools", "version": "80.9.0", "sha256": [
+        "062d34222ad13e0cc312a4c02d73f059e86a4acbfbdea8f8f76b28c99f306922"]}]
+    assert sorted(a["name"] for a in manifest["artifacts"]) == [
+        "verified_execution_prototype-0.11.0-py3-none-any.whl", "verified_execution_prototype-0.11.0.tar.gz"]
+    assert all(re.fullmatch(r"[0-9a-f]{64}", a["sha256"]) and a["bytes"] > 0 for a in manifest["artifacts"])
+    assert manifest["environment"]["setuptools"] == "80.9.0"
+
+
+def test_the_recorded_ci_build_trial_lists_the_environment_differences():
+    trial = json.loads(RECORDED.read_text())["manifest"]["reproducibility"]
+    a, b, c = (trial["variants"][name] for name in "ABC")
+    assert a["SOURCE_DATE_EPOCH"] == b["SOURCE_DATE_EPOCH"] and c["SOURCE_DATE_EPOCH"] is None
+    assert (a["TZ"], a["umask"]) != (b["TZ"], b["umask"]) and a["build_path_depth"] != b["build_path_depth"]
+    assert trial["controlled_identical"] is (trial["controlled_differences"] == [])
+    for group in trial["controlled_differences"] + trial["without_source_date_epoch"]:
+        assert group["field"] in VARIED_FIELDS and group["members"] >= 1 and "member" in group["example"]
+    # Each artifact built under the controlled environments either matched or has its differences listed.
+    hashes = {name: {x["name"]: x["sha256"] for x in trial["variants"][name]["artifacts"]} for name in "AB"}
+    differing = {group["artifact"] for group in trial["controlled_differences"]}
+    assert {name for name in hashes["A"] if hashes["A"][name] != hashes["B"].get(name)} == differing
