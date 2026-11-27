@@ -1,0 +1,22 @@
+{
+  "task_id": "task.testing.023",
+  "acceptance_criteria": "HTTP採用時はOpenAPIと実装が一致し、非採用時は適用外の根拠がある",
+  "verified_on": "2026-11-27",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/testing-phase-tests.xml",
+  "report_sha256": "d9394eb7cc407e49b5a1bdf839fb7a1dd6bd3c26e0925e2cacb7530ce136dd90",
+  "source_sha256": {
+    "contracts/http_jobs.responses.json": "318f4cc30e10ed60ec65e9e750f3721387edff9fa95f461b37c08f40fde193be",
+    "src/verified_execution/http_local.py": "3a9f0478fd2f8dd751973baefca8173f15f10007f105ce46c77069aca7ae394b",
+    "tests/test_http_openapi_contract.py": "199c7c39bf39f8e434e4afd0eb5aa1b6f6aeb80d4e8d9c7409f15cf2979abab9"
+  },
+  "scope": "HTTP is an adopted profile. The OpenAPI document served by the app now describes every response body (contracts/http_jobs.responses.json). Its paths and methods match the app's routes (the document itself is the one undocumented route); every documented status of every operation is produced by a real request and validated against its schema, and no undocumented status occurs; the documented request schema decides acceptance, except the decimal-notation rule its description announces.",
+  "test_cases": [
+    "tests/test_http_openapi_contract.py::test_routes_match_the_document",
+    "tests/test_http_openapi_contract.py::test_every_documented_response_is_produced_and_matches_its_schema",
+    "tests/test_http_openapi_contract.py::test_the_documented_request_schema_decides_acceptance[checked_add]",
+    "tests/test_http_openapi_contract.py::test_the_documented_request_schema_decides_acceptance[checked_multiply]",
+    "tests/test_http_openapi_contract.py::test_names_and_methods_outside_the_document"
+  ]
+}

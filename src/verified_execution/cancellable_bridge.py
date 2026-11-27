@@ -27,7 +27,7 @@ from collections.abc import Awaitable, Callable
 
 from .core import LocalAuthority, OperationError, checked_add, validated_arguments
 from .ledger import LedgerError, Operation
-from .recorded_tool_bridge import BridgeResult, RECORDED_TOOL_NAME
+from .recorded_tool_bridge import BridgeResult, RECORDED_TOOL_NAME, declared_failures, within_contract
 from .worker_leases import DEFAULT_LEASE_MS, LeasedLedger
 from .cancellation_journal import CancellationJournal, JournalError
 
@@ -60,6 +60,10 @@ class CancellableLeasedToolBridge:
             abandon_on_cancel=False, limiter=self._db_limiter)
 
     async def acall(self, name: str, arguments: object) -> BridgeResult:
+        # CONTRACT-FAILURE-001: only declared failure codes reach a client.
+        return within_contract(await self._acall(name, arguments), declared_failures(RECORDED_TOOL_NAME))
+
+    async def _acall(self, name: str, arguments: object) -> BridgeResult:
         if name != RECORDED_TOOL_NAME:
             return BridgeResult(False, None, None, False, 'UNKNOWN_TOOL')
         if type(arguments) is not dict or set(arguments) != {'request_key', 'left', 'right'}:

@@ -11,6 +11,11 @@
     "local_identifier": "The issue body carries the line 'vater-operation-id: {operation_id}'.",
     "approval": "Every dispatch needs a host-issued ledger approval bound to the exact arguments. In the evidence workflow, a person triggering the run is that approval."
   },
+  "credential_scope": {
+    "sent_to": "Only the configured API host. Redirects are never followed: urllib would copy the Authorization header to the redirect target, even on another host.",
+    "on_redirect": "The 3xx reply is returned as is. For a create it is a definitive rejection (REJECTED_BY_DESTINATION) and is never resent.",
+    "stored": "Destination replies are kept only as the issue number, node_id, updated_at, ETag and a SHA-256 of title, body and labels; reply text and headers are not stored."
+  },
   "idempotency": {
     "supported": false,
     "evidence": "No idempotency key is documented for creating an issue, and conditional requests are not supported for unsafe methods such as POST unless an endpoint says otherwise.",

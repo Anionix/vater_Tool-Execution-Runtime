@@ -1,0 +1,24 @@
+{
+  "task_id": "task.testing.010",
+  "acceptance_criteria": "永続状態から復旧",
+  "verified_on": "2026-11-27",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/testing-phase-tests.xml",
+  "report_sha256": "d9394eb7cc407e49b5a1bdf839fb7a1dd6bd3c26e0925e2cacb7530ce136dd90",
+  "source_sha256": {
+    "src/verified_execution/external_change.py": "65547f3beae40595c93b0298c34fbaf709e51352ef25f2b7d0d5d87decbb9f8a",
+    "src/verified_execution/ledger.py": "3d8ba058dd5dd23957e70e87cf3a053514dd417a3ca05b35ba9410ebb3305a42",
+    "src/verified_execution/worker_leases.py": "3a328d1fe8043b51059c1c7e9e912a706136fb487ca896e4827cb3dd63a33b72",
+    "tests/test_process_kill.py": "00cd65f991982eab837e9d7f7db11b0a74274e8e0d7302023b3e25d5c8e725a2"
+  },
+  "scope": "Children are killed with SIGKILL while a real HTTP destination holds their create, before the request leaves, while holding a worker lease, and in the middle of a stream of ledger transactions. Recovery from disk alone: the held create is reconciled by lookup without a resend; the unsent one goes to human reconciliation; the lease is fenced until it expires and then quarantined, never re-dispatched; the ledger passes integrity_check and every operation's state, result and history agree.",
+  "test_cases": [
+    "tests/test_process_kill.py::test_killed_while_the_destination_holds_the_create",
+    "tests/test_process_kill.py::test_killed_before_the_request_left",
+    "tests/test_process_kill.py::test_killed_lease_owner_is_quarantined_and_never_redispatched",
+    "tests/test_process_kill.py::test_killed_mid_transaction_stream_leaves_a_consistent_ledger[0.05]",
+    "tests/test_process_kill.py::test_killed_mid_transaction_stream_leaves_a_consistent_ledger[0.2]",
+    "tests/test_process_kill.py::test_killed_mid_transaction_stream_leaves_a_consistent_ledger[0.5]"
+  ]
+}

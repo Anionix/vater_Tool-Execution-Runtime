@@ -1,0 +1,39 @@
+{
+  "task_id": "task.testing.017",
+  "acceptance_criteria": "許可されない宛先へ出ない",
+  "verified_on": "2026-11-27",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/testing-phase-tests.xml",
+  "report_sha256": "d9394eb7cc407e49b5a1bdf839fb7a1dd6bd3c26e0925e2cacb7530ce136dd90",
+  "source_sha256": {
+    "contracts/github_issue_destination.json": "fd6a06c0cca8a5519773a17083ef239b87b836d8c8d76809e957ca06735b2cec",
+    "src/verified_execution/external_change.py": "65547f3beae40595c93b0298c34fbaf709e51352ef25f2b7d0d5d87decbb9f8a",
+    "tests/test_secret_flow.py": "c32d4736161e587628b631c1e8437708f719f1af25a30bf2f5ee90c7e2629863"
+  },
+  "scope": "The destination credential is sent only to the configured API host: urllib copied it onto redirects to other hosts, so redirects are now refused and returned as replies (a redirected create is a definitive rejection). Secrets in destination replies (body, fields, headers) are kept only as digests and never reach the SQLite files or the caller; argument text goes only to the approved destination; model input never reaches another destination or region; HTTP and MCP error replies do not echo request text.",
+  "test_cases": [
+    "tests/test_secret_flow.py::test_credential_never_follows_a_redirect[GET-301]",
+    "tests/test_secret_flow.py::test_credential_never_follows_a_redirect[GET-302]",
+    "tests/test_secret_flow.py::test_credential_never_follows_a_redirect[GET-303]",
+    "tests/test_secret_flow.py::test_credential_never_follows_a_redirect[GET-307]",
+    "tests/test_secret_flow.py::test_credential_never_follows_a_redirect[GET-308]",
+    "tests/test_secret_flow.py::test_credential_never_follows_a_redirect[POST-301]",
+    "tests/test_secret_flow.py::test_credential_never_follows_a_redirect[POST-302]",
+    "tests/test_secret_flow.py::test_credential_never_follows_a_redirect[POST-303]",
+    "tests/test_secret_flow.py::test_credential_never_follows_a_redirect[POST-307]",
+    "tests/test_secret_flow.py::test_credential_never_follows_a_redirect[POST-308]",
+    "tests/test_secret_flow.py::test_redirected_create_is_a_definitive_rejection",
+    "tests/test_secret_flow.py::test_destination_replies_are_stored_as_digests_only",
+    "tests/test_secret_flow.py::test_rejection_text_from_the_destination_is_not_copied",
+    "tests/test_secret_flow.py::test_tool_arguments_go_to_the_approved_destination_only",
+    "tests/test_secret_flow.py::test_model_input_never_reaches_a_destination_that_is_not_allowed[destination-remote-provider]",
+    "tests/test_secret_flow.py::test_model_input_never_reaches_a_destination_that_is_not_allowed[processing_region-other-region]",
+    "tests/test_secret_flow.py::test_http_rejections_do_not_echo_request_text[body0]",
+    "tests/test_secret_flow.py::test_http_rejections_do_not_echo_request_text[body1]",
+    "tests/test_secret_flow.py::test_http_rejections_do_not_echo_request_text[body2]",
+    "tests/test_secret_flow.py::test_http_rejection_of_invalid_json_does_not_echo_it",
+    "tests/test_secret_flow.py::test_mcp_rejections_do_not_echo_arguments[arguments0]",
+    "tests/test_secret_flow.py::test_mcp_rejections_do_not_echo_arguments[arguments1]"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "task_id": "task.testing.024",
+  "acceptance_criteria": "採用時は直接副作用が実行されず、非採用時は適用外の根拠がある",
+  "verified_on": "2026-11-27",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/testing-phase-tests.xml",
+  "report_sha256": "d9394eb7cc407e49b5a1bdf839fb7a1dd6bd3c26e0925e2cacb7530ce136dd90",
+  "source_sha256": {
+    "src/verified_execution/model_mock.py": "5ef31bfd7192fc0acff45e765d6820cff1897ddc4071bcfd2ca14beee5eae6f1",
+    "tests/test_model_tool_proposals.py": "1205d9bacd7b0cdf02a9d203182ab19a7d0a0dbe9d3a136af8be925c27b17386"
+  },
+  "scope": "Model connectors are an adopted profile. A fixture model proposes every side-effecting tool, with arguments claiming approval, while the host's side-effecting executors are live in the same process. The proposals stay inert, and even an exactly approved proposal reaches only the read-only runtime: the destination receives no request and the ledger records nothing. A control shows the same wiring does create an issue when the host calls it.",
+  "test_cases": [
+    "tests/test_model_tool_proposals.py::test_proposals_for_side_effecting_tools_stay_inert",
+    "tests/test_model_tool_proposals.py::test_even_an_approved_proposal_cannot_reach_a_side_effect[0]",
+    "tests/test_model_tool_proposals.py::test_even_an_approved_proposal_cannot_reach_a_side_effect[1]",
+    "tests/test_model_tool_proposals.py::test_even_an_approved_proposal_cannot_reach_a_side_effect[2]",
+    "tests/test_model_tool_proposals.py::test_proposal_arguments_cannot_turn_a_read_only_call_into_a_write",
+    "tests/test_model_tool_proposals.py::test_unapproved_proposal_is_refused_before_any_execution",
+    "tests/test_model_tool_proposals.py::test_the_host_path_is_the_only_way_to_the_side_effect"
+  ]
+}

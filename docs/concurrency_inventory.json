@@ -1,0 +1,230 @@
+{
+  "_comment": [
+    "task.testing.019: every place the Python implementation can race (threads, processes, SQLite, async tasks).",
+    "tests/test_concurrency_inventory.py scans the source for concurrency primitives and fails when a site",
+    "is not listed in some entry's sites, when a listed test does not exist, or when an entry is marked",
+    "unchecked but claims tests. 'unchecked' means no test exercises that order: it is NOT guaranteed.",
+    "Ledger methods run one SQLite transaction each (BEGIN IMMEDIATE); races are tested at that granularity."
+  ],
+  "entries": [
+    {
+      "id": "S1", "kind": "sqlite", "status": "tested",
+      "sites": ["src/verified_execution/ledger.py::OperationLedger._transaction",
+                "src/verified_execution/ledger.py::OperationLedger._open"],
+      "race": "Two callers, threads or processes reserve one (principal, request_key) at the same time.",
+      "guard": "BEGIN IMMEDIATE plus UNIQUE(principal, request_key); the second caller reads the first operation.",
+      "tests": ["tests/test_ledger.py::test_parallel_reservations_return_one_id",
+                "tests/test_multiprocess_stress.py::test_process_collisions_preserve_at_most_one_dispatch",
+                "tests/test_attack_reproduction.py::test_concurrent_durable_requests_reserve_once",
+                "tests/test_interleavings.py::test_every_order_of_two_reservations_dispatches_once",
+                "tests/test_interleavings.py::test_conflicting_reservations_keep_the_first_intent_in_every_order",
+                "tests/test_interleavings.py::test_reservation_search_finds_the_counterexample_in_a_broken_ledger"]
+    },
+    {
+      "id": "S2", "kind": "sqlite", "status": "tested",
+      "sites": ["src/verified_execution/ledger.py::OperationLedger._transaction"],
+      "race": "Two workers dispatch the same prepared operation.",
+      "guard": "State check and UPDATE ... WHERE state='prepared' in one transaction; leases fence workers.",
+      "tests": ["tests/test_ledger.py::test_parallel_dispatch_allows_one_winner",
+                "tests/test_worker_leases.py::test_parallel_clients_only_one_can_start"]
+    },
+    {
+      "id": "S3", "kind": "sqlite", "status": "tested",
+      "sites": ["src/verified_execution/ledger.py::OperationLedger._transaction"],
+      "race": "Two operations consume one host approval.",
+      "guard": "Approval consumption and dispatch commit together.",
+      "tests": ["tests/test_ledger.py::test_parallel_approval_consumption_only_one_winner",
+                "tests/test_ledger.py::test_approval_and_dispatch_roll_back_as_one_transaction"]
+    },
+    {
+      "id": "S4", "kind": "sqlite", "status": "tested",
+      "sites": ["src/verified_execution/ledger.py::OperationLedger._transaction"],
+      "race": "A cancel request races dispatch and the result.",
+      "guard": "Before dispatch a cancel is terminal; after dispatch it is a flag and never an undo.",
+      "tests": ["tests/test_ledger.py::test_racing_cancel_and_result_never_claims_undo",
+                "tests/test_interleavings.py::test_every_order_of_cancel_and_completion_keeps_its_meaning",
+                "tests/test_interleavings.py::test_cancellation_search_finds_the_counterexample_in_a_broken_ledger"]
+    },
+    {
+      "id": "S5", "kind": "sqlite", "status": "tested",
+      "sites": ["src/verified_execution/ledger.py::OperationLedger._transaction"],
+      "race": "A worker's lease expires while another process recovers expired work (ownership switch).",
+      "guard": "Owner token, session expiry and lease expiry are checked inside the finishing transaction; recovery quarantines to unknown.",
+      "tests": ["tests/test_worker_leases.py::test_expired_lease_quarantines_and_stale_owner_cannot_finish",
+                "tests/test_worker_leases.py::test_multi_process_active_worker_protected",
+                "tests/test_worker_leases.py::test_live_worker_unchanged_by_other_worker_recovery",
+                "tests/test_interleavings.py::test_every_order_of_owner_recovery_and_expiry_is_fenced",
+                "tests/test_interleavings.py::test_ownership_search_finds_the_counterexample_in_a_broken_ledger",
+                "tests/test_process_kill.py::test_killed_lease_owner_is_quarantined_and_never_redispatched"]
+    },
+    {
+      "id": "S6", "kind": "sqlite", "status": "tested",
+      "sites": ["src/verified_execution/cancellable_bridge.py::CancellableLeasedToolBridge.__init__",
+                "src/verified_execution/cancellable_bridge.py::CancellableLeasedToolBridge._database"],
+      "race": "A request is cancelled while its SQLite work waits on a write lock in a worker thread.",
+      "guard": "Each transaction finishes before cancellation is acted on (abandon_on_cancel=False); a bounded thread limiter.",
+      "tests": ["tests/test_sqlite_cancel_wait.py::test_cancel_while_reservation_worker_is_blocked",
+                "tests/test_sqlite_cancel_wait.py::test_cancel_during_dispatch_worker_does_not_misclassify",
+                "tests/test_sqlite_cancel_wait.py::test_real_sqlite_write_lock_does_not_block_event_loop",
+                "tests/test_sqlite_cancel_wait.py::test_locked_db_is_reported_without_fake_success",
+                "tests/test_sqlite_cancel_wait.py::test_cancel_during_result_commit_preserves_definitive_success"]
+    },
+    {
+      "id": "S7", "kind": "process", "status": "tested",
+      "sites": ["src/verified_execution/cancellation_journal.py::<module>",
+                "src/verified_execution/cancellation_journal.py::CancellationJournal.persist",
+                "src/verified_execution/cancellation_journal.py::CancellationJournal._sync_directory"],
+      "race": "A cancel intent must survive a process exit before SQLite records it.",
+      "guard": "The intent file and its directory are fsynced before cleanup; recovery replays it.",
+      "tests": ["tests/test_cancellation_journal.py::test_cancel_db_busy_remains_in_journal_then_recovers",
+                "tests/test_cancellation_journal.py::test_recovery_command_in_separate_process",
+                "tests/test_cancellation_journal.py::test_directory_sync_failure_never_reports_durable_success"]
+    },
+    {
+      "id": "S8", "kind": "process", "status": "tested",
+      "sites": ["src/verified_execution/ledger.py::OperationLedger._transaction"],
+      "race": "A process is killed in the middle of a stream of transactions.",
+      "guard": "SQLite atomic commit; recovery marks interrupted dispatches unknown.",
+      "tests": ["tests/test_process_kill.py::test_killed_mid_transaction_stream_leaves_a_consistent_ledger",
+                "tests/test_ledger.py::test_sqlite_integrity_check_after_concurrent_writes",
+                "tests/test_ledger.py::test_real_crash_after_dispatch_recovers_as_unknown"]
+    },
+    {
+      "id": "S9", "kind": "sqlite", "status": "tested",
+      "sites": ["src/verified_execution/external_change.py::ExternalResultStore._open"],
+      "race": "Two executors call the external destination with one request key at the same time.",
+      "guard": "The ledger reservation decides; the second caller sees IN_PROGRESS. The result is stored before the ledger claims success.",
+      "tests": ["tests/test_interleavings.py::test_two_threads_with_one_request_key_create_one_issue",
+                "tests/test_external_change.py::test_crash_between_result_store_and_ledger_success_keeps_the_result",
+                "tests/test_process_kill.py::test_killed_while_the_destination_holds_the_create"]
+    },
+    {
+      "id": "T1", "kind": "thread", "status": "tested",
+      "sites": ["src/verified_execution/cancellation.py::RequestCancellation.__init__"],
+      "race": "A cancellation arrives while the request binds its new operation.",
+      "guard": "A lock serializes cancel and bind; only a newly reserved operation can bind.",
+      "tests": ["tests/test_request_cancellation.py::test_cancel_before_dispatch_is_terminal_and_never_dispatched",
+                "tests/test_async_request_cancellation.py::test_cancellation_of_one_of_two_distinct_requests_is_isolated"]
+    },
+    {
+      "id": "T2", "kind": "thread", "status": "tested",
+      "sites": ["src/verified_execution/model_mock.py::<module>",
+                "src/verified_execution/model_mock.py::OfflineResponses.__init__"],
+      "race": "Concurrent model requests spend one call budget.",
+      "guard": "A lock reserves one call before the fixture runs.",
+      "tests": ["tests/test_interleavings.py::test_model_call_budget_holds_under_concurrent_calls"]
+    },
+    {
+      "id": "T3", "kind": "async", "status": "tested",
+      "sites": ["src/verified_execution/http_local.py::create_app",
+                "src/verified_execution/http_local.py::create_app.run_job",
+                "src/verified_execution/http_local.py::create_app.submit"],
+      "race": "HTTP jobs share one execution slot; a cancel races the job's start.",
+      "guard": "One asyncio lock; a job checks for cancellation after taking the slot; only prepared jobs can be cancelled.",
+      "tests": ["tests/test_http_local.py::test_real_http_routes_match_contract",
+                "tests/test_http_openapi_contract.py::test_every_documented_response_is_produced_and_matches_its_schema"]
+    },
+    {
+      "id": "T4", "kind": "thread", "status": "tested",
+      "sites": ["src/verified_execution/request_limits.py::BoundedReadOnlyExecutor.__init__",
+                "src/verified_execution/request_limits.py::BoundedReadOnlyExecutor.run",
+                "src/verified_execution/runtime.py::ToolRuntime._acall_read_only"],
+      "race": "Read-only calls wait for a bounded number of worker threads; a timed-out worker is still running.",
+      "guard": "A capacity limiter and a deadline that includes the queue wait.",
+      "tests": ["tests/test_runtime_contracts.py::test_wait_for_slot_and_reject_while_timed_out_worker_finishes"]
+    },
+    {
+      "id": "T5", "kind": "thread", "status": "tested",
+      "sites": ["src/verified_execution/core.py::<module>"],
+      "race": "The host revokes a grant (an Event set by another thread) while a call is running.",
+      "guard": "The live grant is read again before each external request and at handoff.",
+      "tests": ["tests/test_durable_runtime.py::test_grant_withdrawn_after_commit_suppresses_the_value",
+                "tests/test_external_change.py::test_grant_revoked_during_the_rate_limit_wait_stops_the_resend"]
+    },
+    {
+      "id": "T6", "kind": "process", "status": "tested",
+      "sites": ["scripts/guarded_stdio.py::DeadlineOutput.write",
+                "scripts/guarded_stdio.py::InterruptibleFdReader.__init__",
+                "scripts/guarded_stdio.py::InterruptibleFdReader.readline",
+                "scripts/guarded_stdio.py::_copy_child_stdout",
+                "scripts/guarded_stdio.py::_copy_parent_requests",
+                "scripts/guarded_stdio.py::_terminate_process_group",
+                "scripts/guarded_stdio.py::forward_child_responses",
+                "scripts/guarded_stdio.py::forward_valid_requests",
+                "scripts/guarded_stdio.py::main"],
+      "race": "The stdio guard relays two directions in threads around a child process group.",
+      "guard": "Per-direction locks, deadlines on blocked peers, and process-group termination.",
+      "tests": ["tests/test_guarded_stdio.py::test_real_subprocess_boundary_and_recovery",
+                "tests/test_lifecycle.py::test_real_stalled_reader_aborts_without_client_input_eof",
+                "tests/test_lifecycle.py::test_sigterm_kills_child_and_descendant",
+                "tests/test_lifecycle.py::test_unexpected_child_exit_detected_even_with_idle_client_input",
+                "tests/test_process_lifecycle.py::test_sigterm_cleans_child_and_grandchild"]
+    },
+    {
+      "id": "T7", "kind": "process", "status": "tested",
+      "sites": ["server_mcp.py::build_server.call_tool"],
+      "race": "A stalled reader of the diagnostics pipe while the server answers calls.",
+      "guard": "The diagnostics line is written only when select() reports stderr writable.",
+      "tests": ["tests/test_interleavings.py::test_a_stalled_diagnostics_reader_does_not_stop_replies",
+                "tests/test_adapter_boundary.py::test_permission_denial_logs_only_fixed_fields"]
+    },
+    {
+      "id": "A1", "kind": "async", "status": "tested",
+      "sites": ["src/verified_execution/cancellable_bridge.py::CancellableLeasedToolBridge._database"],
+      "race": "The MCP client cancels a recorded call at each checkpoint.",
+      "guard": "Cancellation before dispatch cancels; after dispatch it becomes unknown; after commit the result stays.",
+      "tests": ["tests/test_async_request_cancellation.py::test_cancel_before_dispatch_persists_cancelled",
+                "tests/test_async_request_cancellation.py::test_cancel_after_dispatch_becomes_unknown_never_cancelled",
+                "tests/test_async_request_cancellation.py::test_cancel_after_commit_preserves_success"]
+    },
+    {
+      "id": "A2", "kind": "async", "status": "tested",
+      "sites": ["src/verified_execution/external_change.py::ExternalChangeExecutor.acall"],
+      "race": "The caller of an external change is cancelled while the request is in flight.",
+      "guard": "The worker thread is not abandoned; the change finishes and is recorded before cancellation is delivered.",
+      "tests": ["tests/test_interleavings.py::test_cancelled_external_call_still_records_its_result"]
+    },
+    {
+      "id": "U1", "kind": "sqlite", "status": "unchecked", "sites": [], "tests": [],
+      "race": "Orders inside one SQLite transaction.",
+      "guard": "SQLite's own serialization of BEGIN IMMEDIATE transactions.",
+      "reason": "Interleavings are enumerated at transaction granularity only; SQLite's locking is relied on, not tested."
+    },
+    {
+      "id": "U2", "kind": "sqlite", "status": "unchecked", "sites": [], "tests": [],
+      "race": "The ledger on a network or multi-host file system.",
+      "guard": "None beyond SQLite; the documented scope is a single host.",
+      "reason": "Out of the documented scope (docs/ARCHITECTURE.md, task.durable_operations.020); never run."
+    },
+    {
+      "id": "U3", "kind": "process", "status": "unchecked", "sites": [], "tests": [],
+      "race": "The wall clock moves backwards, or processes on different hosts disagree on time.",
+      "guard": "None; lease and approval expiry use one host's ledger clock.",
+      "reason": "Out of the documented scope (docs/ARCHITECTURE.md); expiry orders are tested only with a monotone test clock."
+    },
+    {
+      "id": "U4", "kind": "process", "status": "unchecked", "sites": [], "tests": [],
+      "race": "Several HTTP server processes sharing job identifiers.",
+      "guard": "None; jobs live in one process's memory.",
+      "reason": "The local HTTP interface runs as one process; multi-worker deployments are not supported or tested."
+    },
+    {
+      "id": "U5", "kind": "thread", "status": "unchecked", "sites": [], "tests": [],
+      "race": "Free-threaded (no-GIL) CPython builds.",
+      "guard": "Locks are explicit, but nothing was run on such a build.",
+      "reason": "The pinned environment is CPython 3.13 with the GIL."
+    },
+    {
+      "id": "U6", "kind": "sqlite", "status": "unchecked", "sites": [], "tests": [],
+      "race": "Two processes reconcile the same unknown external operation at the same moment.",
+      "guard": "Each would record the same issue; the result store and the ledger are separate transactions.",
+      "reason": "Sequential reconciliation is tested; simultaneous reconciliation of one operation is not."
+    },
+    {
+      "id": "U7", "kind": "sqlite", "status": "unchecked", "sites": [], "tests": [],
+      "race": "More than two workers in one lease handover, or more steps than the enumerated actors.",
+      "guard": "The same per-transaction fencing.",
+      "reason": "Exhaustive orders cover two owners/recoverers and one clock step; longer schedules are sampled by the stress test only."
+    }
+  ]
+}

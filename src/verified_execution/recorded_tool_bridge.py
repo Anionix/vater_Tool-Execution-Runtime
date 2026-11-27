@@ -12,6 +12,8 @@ idempotency keys. Host sets identity by trusted local process configuration.
 """
 from __future__ import annotations
 from dataclasses import dataclass
+from functools import lru_cache
+import json
 from typing import Any
 
 from .core import LocalAuthority
@@ -29,11 +31,35 @@ class BridgeResult:
     error_code: str | None
 
 
+@lru_cache(maxsize=None)
+def declared_failures(tool_name: str) -> frozenset[str]:
+    """The failure codes a tool's output contract declares (domains.failure)."""
+    from .tools import DEFAULT_CONTRACTS_DIR
+    contract = json.loads((DEFAULT_CONTRACTS_DIR / f"{tool_name}.output.contract.json").read_text(encoding="utf-8"))
+    codes = contract["domains"]["failure"]["error_code"]["enum"]
+    if not codes or not all(type(code) is str and code for code in codes) or "INVALID_TOOL_RESULT" not in codes:
+        raise ValueError(f"invalid failure codes in the {tool_name} output contract")
+    return frozenset(codes)
+
+
+def within_contract(result: BridgeResult, declared: frozenset[str]) -> BridgeResult:
+    """CONTRACT-FAILURE-001: a durable executor's reply is part of the tool's
+    response contract. A failure code the contract does not declare (an
+    internal ledger condition, for example) is never passed to a client: it
+    becomes INVALID_TOOL_RESULT. Successful replies are verified by ToolRuntime."""
+    if result.ok or result.error_code in declared:
+        return result
+    return BridgeResult(False, None, result.operation_id, result.replayed, "INVALID_TOOL_RESULT")
+
+
 class RecordedToolBridge:
     def __init__(self, ledger: OperationLedger, *, principal: str, authority: LocalAuthority):
         self._service = RecordedCalculator(ledger, principal=principal, authority=authority)
 
     def call(self, name: str, arguments: Any) -> BridgeResult:
+        return within_contract(self._call(name, arguments), declared_failures(RECORDED_TOOL_NAME))
+
+    def _call(self, name: str, arguments: Any) -> BridgeResult:
         if name != RECORDED_TOOL_NAME:
             return BridgeResult(False, None, None, False, "UNKNOWN_TOOL")
         if type(arguments) is not dict or set(arguments) != {"request_key", "left", "right"}:

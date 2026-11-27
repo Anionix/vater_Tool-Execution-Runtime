@@ -1,0 +1,116 @@
+{
+  "kind": "operation_costs",
+  "generated_at_utc": "2026-11-27T00:13:18+00:00",
+  "source": {
+    "commit": "07a6939440d4c0b0abce67f41ed205c2a495bd04",
+    "label": "main before the testing phase (merge of #382)"
+  },
+  "environment": {
+    "python": "3.13.18",
+    "platform": "Linux-6.18.44-fc-v880-x86_64-with-glibc2.39",
+    "machine": "x86_64",
+    "cpu_count": 4
+  },
+  "iterations": 200,
+  "cost_model": "No paid service is called. Cost is requests to an external service per operation; paid API calls must stay zero.",
+  "operations": {
+    "runtime_execute": {
+      "wall_us": {
+        "median": 5.1,
+        "p95": 8.4,
+        "max": 632.6
+      },
+      "cpu_us": {
+        "median": 4.6
+      },
+      "peak_rss_kib": 24320,
+      "ledger_bytes_per_operation": 0.0,
+      "external_requests_per_operation": 0.0,
+      "paid_api_calls_per_operation": 0
+    },
+    "runtime_acall": {
+      "wall_us": {
+        "median": 161.7,
+        "p95": 191.7,
+        "max": 223.6
+      },
+      "cpu_us": {
+        "median": 162.9
+      },
+      "peak_rss_kib": 26632,
+      "ledger_bytes_per_operation": 0.0,
+      "external_requests_per_operation": 0.0,
+      "paid_api_calls_per_operation": 0
+    },
+    "mcp_call": {
+      "wall_us": {
+        "median": 785.5,
+        "p95": 855.8,
+        "max": 1422.4
+      },
+      "cpu_us": {
+        "median": 772.7
+      },
+      "peak_rss_kib": 70260,
+      "ledger_bytes_per_operation": 0.0,
+      "external_requests_per_operation": 0.0,
+      "paid_api_calls_per_operation": 0
+    },
+    "http_job": {
+      "wall_us": {
+        "median": 1625.1,
+        "p95": 1829.5,
+        "max": 1947.3
+      },
+      "cpu_us": {
+        "median": 501.5
+      },
+      "peak_rss_kib": 27972,
+      "ledger_bytes_per_operation": 0.0,
+      "external_requests_per_operation": 0.0,
+      "paid_api_calls_per_operation": 0
+    },
+    "recorded_legacy": {
+      "wall_us": {
+        "median": 8367.1,
+        "p95": 12496.9,
+        "max": 22542.8
+      },
+      "cpu_us": {
+        "median": 2463.1
+      },
+      "peak_rss_kib": 25992,
+      "ledger_bytes_per_operation": 573.4,
+      "external_requests_per_operation": 0.0,
+      "paid_api_calls_per_operation": 0
+    },
+    "recorded_leased": {
+      "wall_us": {
+        "median": 11738.1,
+        "p95": 15561.8,
+        "max": 18942.8
+      },
+      "cpu_us": {
+        "median": 3959.4
+      },
+      "peak_rss_kib": 28848,
+      "ledger_bytes_per_operation": 860.2,
+      "external_requests_per_operation": 0.0,
+      "paid_api_calls_per_operation": 0
+    },
+    "external_create": {
+      "wall_us": {
+        "median": 13144.3,
+        "p95": 17893.6,
+        "max": 34715.6
+      },
+      "cpu_us": {
+        "median": 3432.2
+      },
+      "peak_rss_kib": 48204,
+      "ledger_bytes_per_operation": 1105.9,
+      "external_requests_per_operation": 2.0,
+      "paid_api_calls_per_operation": 0
+    }
+  }
+}

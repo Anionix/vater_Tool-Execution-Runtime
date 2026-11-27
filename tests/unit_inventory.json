@@ -1,0 +1,1728 @@
+{
+ "_comment": [
+  "task.testing.001: every public function of the implementation with a normal and an abnormal test.",
+  "Generated from a traced run (tests/unit_trace_plugin.py); tests/test_unit_inventory.py re-runs the listed tests",
+  "under the same tracer and checks each expectation: return (returned normally), raise, error_value (returned a",
+  "refusal such as an error code, ok=False or False), absent (returned None for a missing item), handled (returned",
+  "normally for an abnormal input or state; the note says why the function has no failure outcome)."
+ ],
+ "functions": {
+  "server_mcp.py::build_server": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_mcp_main_fails_without_standard_io",
+     "tests/test_unit_gaps.py::test_mcp_main_serves_until_the_client_closes"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_adapter_boundary.py::test_corrupt_cancel_journal_blocks_server_startup",
+     "tests/test_adapter_boundary.py::test_host_call_budget_blocks_execution_before_reservation"
+    ]
+   }
+  },
+  "server_mcp.py::main": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_mcp_main_serves_until_the_client_closes"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_unit_gaps.py::test_mcp_main_fails_without_standard_io"
+    ]
+   }
+  },
+  "server_mcp.py::to_mcp_tool": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_mcp_main_fails_without_standard_io",
+     "tests/test_unit_gaps.py::test_mcp_main_serves_until_the_client_closes"
+    ]
+   },
+   "abnormal": {
+    "expect": "handled",
+    "tests": [
+     "tests/test_unit_gaps.py::test_to_mcp_tool_translates_and_never_invents_a_version"
+    ],
+    "note": "Total; a spec without a version is published without a version claim."
+   }
+  },
+  "src/verified_execution/arithmetic.py::checked_multiply": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_adapter_conformance.py::test_mcp_matches_runtime[MUL-001]",
+     "tests/test_adapter_conformance.py::test_mcp_matches_runtime[MUL-002]"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_adapter_conformance.py::test_mcp_matches_runtime[MUL-005]",
+     "tests/test_adapter_conformance.py::test_http_matches_runtime[MUL-005]"
+    ]
+   }
+  },
+  "src/verified_execution/arithmetic.py::checked_multiply_spec": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_default_registry_is_one_immutable_registry",
+     "tests/test_unit_gaps.py::test_spec_builders_read_their_contracts_and_fail_without_them[checked_multiply_spec]"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_unit_gaps.py::test_spec_builders_read_their_contracts_and_fail_without_them[checked_multiply_spec]"
+    ]
+   }
+  },
+  "src/verified_execution/cancellable_bridge.py::CancellableLeasedToolBridge.acall": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_durable_runtime.py::test_durable_call_records_and_replays[leased]",
+     "tests/test_attack_reproduction.py::test_concurrent_durable_requests_reserve_once"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_adapter_boundary.py::test_sdk_stub_cancellation_after_dispatch",
+     "tests/test_adapter_boundary.py::test_sdk_stub_cancellation_before_dispatch"
+    ]
+   }
+  },
+  "src/verified_execution/cancellation.py::RequestCancellation.bind_new_operation": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_cancellation_token_binds_then_cancels_once",
+     "tests/test_unit_gaps.py::test_cancellation_before_binding_cancels_at_bind"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_unit_gaps.py::test_cancellation_token_refuses_a_second_operation"
+    ]
+   }
+  },
+  "src/verified_execution/cancellation.py::RequestCancellation.cancel": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_cancellation_token_binds_then_cancels_once",
+     "tests/test_unit_gaps.py::test_cancellation_before_binding_cancels_at_bind"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_unit_gaps.py::test_cancellation_stays_set_when_the_ledger_cannot_record_it"
+    ]
+   }
+  },
+  "src/verified_execution/cancellation.py::RequestCancellation.cancelled": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_cancellation_token_binds_then_cancels_once",
+     "tests/test_unit_gaps.py::test_cancellation_before_binding_cancels_at_bind"
+    ]
+   },
+   "abnormal": {
+    "expect": "handled",
+    "tests": [
+     "tests/test_unit_gaps.py::test_cancellation_stays_set_when_the_ledger_cannot_record_it"
+    ],
+    "note": "The flag stays set when recording the cancellation fails."
+   }
+  },
+  "src/verified_execution/cancellation_journal.py::CancellationJournal.list_intents": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_adapter_boundary.py::test_sdk_stub_cancellation_after_dispatch",
+     "tests/test_adapter_boundary.py::test_sdk_stub_cancellation_before_dispatch"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_cancellation_journal.py::test_symlinked_journal_file_is_not_trusted",
+     "tests/test_adapter_boundary.py::test_corrupt_cancel_journal_blocks_server_startup"
+    ]
+   }
+  },
+  "src/verified_execution/cancellation_journal.py::CancellationJournal.persist": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_adapter_boundary.py::test_sdk_stub_cancellation_after_dispatch",
+     "tests/test_adapter_boundary.py::test_sdk_stub_cancellation_before_dispatch"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_cancellation_journal.py::test_directory_sync_failure_never_reports_durable_success"
+    ]
+   }
+  },
+  "src/verified_execution/cancellation_journal.py::CancellationJournal.replay": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_adapter_boundary.py::test_sdk_stub_cancellation_after_dispatch",
+     "tests/test_adapter_boundary.py::test_sdk_stub_cancellation_before_dispatch"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_adapter_boundary.py::test_corrupt_cancel_journal_blocks_server_startup",
+     "tests/test_cancellation_journal.py::test_other_principal_cannot_apply_forged_intent"
+    ]
+   }
+  },
+  "src/verified_execution/client_result.py::read_checked_add_result": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_official_mcp_sdk.py::test_sdk_in_process",
+     "tests/test_official_mcp_sdk.py::test_sdk_stdio_legacy"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_contracts.py::test_untrusted_calculation_reply[text]",
+     "tests/test_contracts.py::test_untrusted_calculation_reply[array]"
+    ]
+   }
+  },
+  "src/verified_execution/core.py::ExecutionResult.succeeded": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_local_cli_answers_each_line",
+     "tests/test_unit_gaps.py::test_local_cli_refuses_bad_lines_and_keeps_going"
+    ]
+   },
+   "abnormal": {
+    "expect": "error_value",
+    "tests": [
+     "tests/test_contracts.py::test_expected_case[CALC-004]",
+     "tests/test_contracts.py::test_expected_case[CALC-005]"
+    ]
+   }
+  },
+  "src/verified_execution/core.py::ExecutionResult.to_dict": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_local_cli_answers_each_line",
+     "tests/test_unit_gaps.py::test_local_cli_refuses_bad_lines_and_keeps_going"
+    ]
+   },
+   "abnormal": {
+    "expect": "error_value",
+    "tests": [
+     "tests/test_contracts.py::test_expected_case[CALC-004]",
+     "tests/test_contracts.py::test_expected_case[CALC-005]"
+    ]
+   }
+  },
+  "src/verified_execution/core.py::ExecutionTrace.move": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_local_cli_answers_each_line",
+     "tests/test_unit_gaps.py::test_local_cli_refuses_bad_lines_and_keeps_going"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_core.py::test_all_states_have_exact_edge_rules"
+    ]
+   }
+  },
+  "src/verified_execution/core.py::LocalAuthority.calculator_only": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_local_cli_answers_each_line",
+     "tests/test_unit_gaps.py::test_recorded_cli_records_each_line"
+    ]
+   },
+   "abnormal": {
+    "expect": "handled",
+    "tests": [
+     "tests/test_unit_gaps.py::test_calculator_grant_covers_only_the_addition"
+    ],
+    "note": "Total factory; the abnormal case checks that it grants nothing beyond the addition."
+   }
+  },
+  "src/verified_execution/core.py::LocalAuthority.permits": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_local_cli_answers_each_line",
+     "tests/test_unit_gaps.py::test_recorded_cli_records_each_line"
+    ]
+   },
+   "abnormal": {
+    "expect": "error_value",
+    "tests": [
+     "tests/test_core.py::test_host_permission_truth_table",
+     "tests/test_worker_bridge.py::test_tool_invalid_and_denied"
+    ]
+   }
+  },
+  "src/verified_execution/core.py::checked_add": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_local_cli_answers_each_line",
+     "tests/test_unit_gaps.py::test_recorded_cli_records_each_line"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_core.py::test_seeded_full_unsigned_range",
+     "tests/test_contracts.py::test_expected_case[CALC-004]"
+    ]
+   }
+  },
+  "src/verified_execution/core.py::require_unsigned_32": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_local_cli_answers_each_line",
+     "tests/test_unit_gaps.py::test_recorded_cli_records_each_line"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_core.py::test_not_unsigned_integer[2]",
+     "tests/test_core.py::test_not_unsigned_integer[-1]"
+    ]
+   }
+  },
+  "src/verified_execution/core.py::validated_arguments": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_local_cli_answers_each_line",
+     "tests/test_unit_gaps.py::test_recorded_cli_records_each_line"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_core.py::test_bad_arguments[1]",
+     "tests/test_core.py::test_bad_arguments[None]"
+    ]
+   }
+  },
+  "src/verified_execution/durable.py::checked_add_recorded_spec": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_runtime_lists_only_executable_tools",
+     "tests/test_unit_gaps.py::test_spec_builders_read_their_contracts_and_fail_without_them[checked_add_recorded_spec]"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_unit_gaps.py::test_spec_builders_read_their_contracts_and_fail_without_them[checked_add_recorded_spec]"
+    ]
+   }
+  },
+  "src/verified_execution/durable.py::validate_recorded": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_adapter_boundary.py::test_sdk_stub_cancellation_after_dispatch",
+     "tests/test_adapter_boundary.py::test_sdk_stub_cancellation_before_dispatch"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_durable_runtime.py::test_validation_matches_both_ledger_bridges[0]",
+     "tests/test_durable_runtime.py::test_validation_matches_both_ledger_bridges[1]"
+    ]
+   }
+  },
+  "src/verified_execution/durable.py::validate_request_key": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_external_change.py::test_rejection_is_final",
+     "tests/test_external_change.py::test_resends_are_bounded"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_durable_runtime.py::test_validation_matches_both_ledger_bridges[3]",
+     "tests/test_durable_runtime.py::test_validation_matches_both_ledger_bridges[4]"
+    ]
+   }
+  },
+  "src/verified_execution/external_change.py::ExternalChangeExecutor.acall": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_contract_inventory.py::test_failure_corpus_stays_within_the_contracts",
+     "tests/test_external_change.py::test_external_tool_runs_through_the_shared_runtime"
+    ]
+   },
+   "abnormal": {
+    "expect": "error_value",
+    "tests": [
+     "tests/test_contract_inventory.py::test_failure_corpus_stays_within_the_contracts"
+    ]
+   }
+  },
+  "src/verified_execution/external_change.py::ExternalChangeExecutor.call": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_external_change.py::test_version_fields_come_from_one_snapshot",
+     "tests/test_external_change.py::test_absence_in_a_lagging_list_is_not_proof"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_external_change.py::test_crash_after_creation_is_recovered_by_lookup_not_resent",
+     "tests/test_external_change.py::test_crash_before_the_destination_received_goes_to_a_person"
+    ]
+   }
+  },
+  "src/verified_execution/external_change.py::ExternalChangeExecutor.reserve_arguments": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_reserve_arguments_bind_the_title_only",
+     "tests/test_external_change.py::test_rejection_is_final"
+    ]
+   },
+   "abnormal": {
+    "expect": "handled",
+    "tests": [
+     "tests/test_unit_gaps.py::test_reserve_arguments_bind_the_title_only"
+    ],
+    "note": "Total; unusual request keys and titles bind the title only."
+   }
+  },
+  "src/verified_execution/external_change.py::ExternalChangeExecutor.result": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_external_change.py::test_result_and_version_are_stored_by_operation_id",
+     "tests/test_cross_principal.py::test_external_result_is_readable_only_by_its_principal"
+    ]
+   },
+   "abnormal": {
+    "expect": "absent",
+    "tests": [
+     "tests/test_cross_principal.py::test_external_result_is_readable_only_by_its_principal"
+    ]
+   }
+  },
+  "src/verified_execution/external_change.py::ExternalResultStore.dispatched": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_result_store_refuses_duplicates_and_unknown_operations",
+     "tests/test_external_change.py::test_rejection_is_final"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_unit_gaps.py::test_result_store_refuses_duplicates_and_unknown_operations"
+    ]
+   }
+  },
+  "src/verified_execution/external_change.py::ExternalResultStore.get": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_result_store_refuses_duplicates_and_unknown_operations",
+     "tests/test_external_change.py::test_resends_are_bounded"
+    ]
+   },
+   "abnormal": {
+    "expect": "absent",
+    "tests": [
+     "tests/test_unit_gaps.py::test_result_store_refuses_duplicates_and_unknown_operations"
+    ]
+   }
+  },
+  "src/verified_execution/external_change.py::ExternalResultStore.record": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_result_store_refuses_duplicates_and_unknown_operations",
+     "tests/test_external_change.py::test_rejection_is_final"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_unit_gaps.py::test_result_store_refuses_duplicates_and_unknown_operations"
+    ]
+   }
+  },
+  "src/verified_execution/external_change.py::GitHubIssueDestination.check": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_external_change.py::test_version_fields_come_from_one_snapshot",
+     "tests/test_external_change.py::test_absence_in_a_lagging_list_is_not_proof"
+    ]
+   },
+   "abnormal": {
+    "expect": "error_value",
+    "tests": [
+     "tests/test_contract_inventory.py::test_failure_corpus_stays_within_the_contracts",
+     "tests/test_external_change.py::test_object_that_does_not_match_the_request_is_refused"
+    ]
+   }
+  },
+  "src/verified_execution/external_change.py::GitHubIssueDestination.lookup": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_external_change.py::test_duplicate_matches_go_to_a_person",
+     "tests/test_external_change.py::test_absence_in_a_lagging_list_is_not_proof"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_external_change.py::test_failed_lookup_goes_to_a_person"
+    ]
+   }
+  },
+  "src/verified_execution/external_change.py::GitHubIssueDestination.marker": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_marker_and_payload_keep_the_operation_line_apart_from_the_title",
+     "tests/test_external_change.py::test_rejection_is_final"
+    ]
+   },
+   "abnormal": {
+    "expect": "handled",
+    "tests": [
+     "tests/test_unit_gaps.py::test_marker_and_payload_keep_the_operation_line_apart_from_the_title"
+    ],
+    "note": "Total; the marker line stays unique even when a title imitates it."
+   }
+  },
+  "src/verified_execution/external_change.py::GitHubIssueDestination.payload": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_marker_and_payload_keep_the_operation_line_apart_from_the_title",
+     "tests/test_external_change.py::test_rejection_is_final"
+    ]
+   },
+   "abnormal": {
+    "expect": "handled",
+    "tests": [
+     "tests/test_unit_gaps.py::test_marker_and_payload_keep_the_operation_line_apart_from_the_title"
+    ],
+    "note": "Total; a title imitating the marker stays out of the body."
+   }
+  },
+  "src/verified_execution/external_change.py::GitHubIssueDestination.send": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_external_change.py::test_version_fields_come_from_one_snapshot",
+     "tests/test_secret_flow.py::test_destination_replies_are_stored_as_digests_only"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_external_change.py::test_crash_after_creation_is_recovered_by_lookup_not_resent",
+     "tests/test_external_change.py::test_crash_before_the_destination_received_goes_to_a_person"
+    ]
+   }
+  },
+  "src/verified_execution/external_change.py::GitHubIssueDestination.snapshot": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_snapshot_is_absent_when_the_destination_cannot_answer",
+     "tests/test_external_change.py::test_version_fields_come_from_one_snapshot"
+    ]
+   },
+   "abnormal": {
+    "expect": "absent",
+    "tests": [
+     "tests/test_unit_gaps.py::test_snapshot_is_absent_when_the_destination_cannot_answer"
+    ]
+   }
+  },
+  "src/verified_execution/external_change.py::GitHubIssueDestination.version": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_version_of_a_partial_object_is_still_well_formed",
+     "tests/test_external_change.py::test_version_fields_come_from_one_snapshot"
+    ]
+   },
+   "abnormal": {
+    "expect": "handled",
+    "tests": [
+     "tests/test_unit_gaps.py::test_version_of_a_partial_object_is_still_well_formed"
+    ],
+    "note": "Total; a partial or odd object still yields a well-formed version."
+   }
+  },
+  "src/verified_execution/external_change.py::UrllibTransport.request": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_secret_flow.py::test_redirected_create_is_a_definitive_rejection",
+     "tests/test_secret_flow.py::test_credential_never_follows_a_redirect[GET-301]"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_external_change.py::test_truncated_reply_bodies_become_transport_errors"
+    ]
+   }
+  },
+  "src/verified_execution/external_change.py::github_test_create_issue_spec": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_spec_builders_read_their_contracts_and_fail_without_them[github_test_create_issue_spec]",
+     "tests/test_contract_inventory.py::test_every_contract_is_in_the_inventory"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_unit_gaps.py::test_spec_builders_read_their_contracts_and_fail_without_them[github_test_create_issue_spec]"
+    ]
+   }
+  },
+  "src/verified_execution/external_change.py::validate_issue_request": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_external_change.py::test_rejection_is_final",
+     "tests/test_external_change.py::test_resends_are_bounded"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_contract_inventory.py::test_failure_corpus_stays_within_the_contracts",
+     "tests/test_external_change.py::test_external_tool_runs_through_the_shared_runtime"
+    ]
+   }
+  },
+  "src/verified_execution/http_local.py::create_app": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_http_main_serves_on_loopback_only",
+     "tests/test_http_local.py::test_real_http_routes_match_contract"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_unit_gaps.py::test_http_main_refuses_to_start_without_a_token",
+     "tests/test_tool_runtime.py::test_http_rejects_inconsistent_tool_selection"
+    ]
+   }
+  },
+  "src/verified_execution/http_local.py::main": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_http_main_serves_on_loopback_only"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_unit_gaps.py::test_http_main_refuses_to_start_without_a_token"
+    ]
+   }
+  },
+  "src/verified_execution/http_local.py::response": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_http_local.py::test_real_http_routes_match_contract",
+     "tests/test_tool_runtime.py::test_http_openapi_uses_contract_schema"
+    ]
+   },
+   "abnormal": {
+    "expect": "error_value",
+    "tests": [
+     "tests/test_http_local.py::test_real_http_routes_match_contract",
+     "tests/test_adapter_conformance.py::test_http_matches_runtime[MUL-006]"
+    ]
+   }
+  },
+  "src/verified_execution/json_bounds.py::check_json_depth": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_local_cli_answers_each_line",
+     "tests/test_unit_gaps.py::test_decode_line_accepts_a_request"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_output_boundary.py::test_depth_bound_output",
+     "tests/test_policy_config.py::test_bad_json_fail_closed[{]"
+    ]
+   }
+  },
+  "src/verified_execution/ledger.py::OperationLedger.begin_dispatch": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_recorded_cli_records_each_line",
+     "tests/test_external_change.py::test_rejection_is_final"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_ledger.py::test_expired_approval_rejected",
+     "tests/test_ledger.py::test_ambiguous_connection_fails_closed"
+    ]
+   }
+  },
+  "src/verified_execution/ledger.py::OperationLedger.complete_calculation": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_recorded_cli_records_each_line",
+     "tests/test_recorded_tool_bridge.py::test_bridge_success"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_recorded_tool_bridge.py::test_atomic_completion_rejects_invalid_value",
+     "tests/test_worker_bridge.py::test_legacy_instance_cannot_mutate_leased_operation"
+    ]
+   }
+  },
+  "src/verified_execution/ledger.py::OperationLedger.get": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_global_recovery_is_refused_on_a_leased_ledger",
+     "tests/test_unit_gaps.py::test_unfenced_writes_are_refused_on_a_leased_ledger[mark_unknown-arguments3]"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_cancellation_journal.py::test_nonexistent_operation_intent_kept_pending",
+     "tests/test_cross_principal.py::test_external_result_is_readable_only_by_its_principal"
+    ]
+   }
+  },
+  "src/verified_execution/ledger.py::OperationLedger.history": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_history_and_saved_results_for_known_and_unknown_operations",
+     "tests/test_ledger.py::test_reservation_and_history"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_unit_gaps.py::test_history_and_saved_results_for_known_and_unknown_operations"
+    ]
+   }
+  },
+  "src/verified_execution/ledger.py::OperationLedger.issue_approval": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_ledger.py::test_expired_approval_rejected",
+     "tests/test_external_change.py::test_rejection_is_final"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_ledger.py::test_duplicate_approval_identifier_rejected",
+     "tests/test_unicode_input_validation.py::test_approval_id_rejects_malformed_unicode_before_persist"
+    ]
+   }
+  },
+  "src/verified_execution/ledger.py::OperationLedger.mark_unknown": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_ledger.py::test_events_persist_across_reopen",
+     "tests/test_ledger.py::test_ambiguous_connection_fails_closed"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_worker_bridge.py::test_legacy_instance_cannot_mutate_leased_operation"
+    ]
+   }
+  },
+  "src/verified_execution/ledger.py::OperationLedger.read_calculation": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_recorded_cli_records_each_line",
+     "tests/test_unit_gaps.py::test_history_and_saved_results_for_known_and_unknown_operations"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_unit_gaps.py::test_history_and_saved_results_for_known_and_unknown_operations"
+    ]
+   }
+  },
+  "src/verified_execution/ledger.py::OperationLedger.reconcile": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_ledger.py::test_ambiguous_connection_fails_closed"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_ledger.py::test_ambiguous_connection_fails_closed"
+    ]
+   }
+  },
+  "src/verified_execution/ledger.py::OperationLedger.record_definitive_result": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_external_change.py::test_rejection_is_final",
+     "tests/test_external_change.py::test_resends_are_bounded"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_ledger.py::test_definitive_failure_must_be_dispatched",
+     "tests/test_worker_bridge.py::test_legacy_instance_cannot_mutate_leased_operation"
+    ]
+   }
+  },
+  "src/verified_execution/ledger.py::OperationLedger.recover_interrupted": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_recovery_fails_closed_on_a_damaged_ledger",
+     "tests/test_ledger.py::test_restart_interrupted_marks_unknown"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_unit_gaps.py::test_recovery_fails_closed_on_a_damaged_ledger"
+    ]
+   }
+  },
+  "src/verified_execution/ledger.py::OperationLedger.request_cancel": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_ledger.py::test_ambiguous_connection_fails_closed",
+     "tests/test_ledger.py::test_cancel_before_dispatch_is_terminal"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_cancellation_journal.py::test_cancel_db_busy_remains_in_journal_then_recovers"
+    ]
+   }
+  },
+  "src/verified_execution/ledger.py::OperationLedger.reserve": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_recorded_cli_records_each_line",
+     "tests/test_unit_gaps.py::test_history_and_saved_results_for_known_and_unknown_operations"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_ledger.py::test_bad_identifier_and_flag_rejected",
+     "tests/test_recorded_calculator.py::test_request_collision_is_blocked"
+    ]
+   }
+  },
+  "src/verified_execution/ledger.py::OperationLedger.revoke_approval": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_runtime_contracts.py::test_revoked_approval_stays_revoked_after_restart"
+    ]
+   },
+   "abnormal": {
+    "expect": "error_value",
+    "tests": [
+     "tests/test_runtime_contracts.py::test_revoked_approval_stays_revoked_after_restart"
+    ]
+   }
+  },
+  "src/verified_execution/ledger.py::fingerprint": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_recorded_cli_records_each_line",
+     "tests/test_unit_gaps.py::test_history_and_saved_results_for_known_and_unknown_operations"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_ledger.py::test_fingerprint_rejects_too_much_data",
+     "tests/test_ledger.py::test_fingerprint_rejects_recursive_data"
+    ]
+   }
+  },
+  "src/verified_execution/local_cli.py::decode_line": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_local_cli_answers_each_line",
+     "tests/test_unit_gaps.py::test_decode_line_accepts_a_request"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_unit_gaps.py::test_decode_line_refuses_other_shapes[[1]]",
+     "tests/test_unit_gaps.py::test_local_cli_refuses_bad_lines_and_keeps_going"
+    ]
+   }
+  },
+  "src/verified_execution/local_cli.py::decode_request_object": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_local_cli_answers_each_line",
+     "tests/test_unit_gaps.py::test_decode_line_accepts_a_request"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_unit_gaps.py::test_local_cli_refuses_bad_lines_and_keeps_going",
+     "tests/test_unit_gaps.py::test_decode_line_refuses_other_shapes[{\"name\":\"a\",\"arguments\":NaN}]"
+    ]
+   }
+  },
+  "src/verified_execution/local_cli.py::main": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_local_cli_answers_each_line",
+     "tests/test_unit_gaps.py::test_local_cli_refuses_bad_lines_and_keeps_going"
+    ]
+   },
+   "abnormal": {
+    "expect": "handled",
+    "tests": [
+     "tests/test_unit_gaps.py::test_local_cli_refuses_bad_lines_and_keeps_going"
+    ],
+    "note": "Bad lines are answered with INVALID_MESSAGE and the loop continues."
+   }
+  },
+  "src/verified_execution/local_cli.py::reject_nonfinite": {
+   "normal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_unit_gaps.py::test_non_finite_constants_are_refused[NaN]"
+    ],
+    "note": "The documented behaviour of this method is to refuse; the refusal is its normal case."
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_unit_gaps.py::test_non_finite_constants_are_refused[Infinity]"
+    ],
+    "note": "Refused for unusual input or state as well."
+   }
+  },
+  "src/verified_execution/local_cli.py::unique_fields": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_local_cli_answers_each_line",
+     "tests/test_unit_gaps.py::test_decode_line_accepts_a_request"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_cli.py::test_malformed_json_rejected[{\"name\":\"checked_add\",\"arguments\":{\"left\":1,\"left\":2,\"right\":3}}\\n]",
+     "tests/test_cli.py::test_malformed_json_rejected[{\"name\":\"checked_add\",\"arguments\":{\"left\":1,\"right\":2},\"name\":\"checked_add\"}\\n]"
+    ]
+   }
+  },
+  "src/verified_execution/model_mock.py::OfflineResponses.respond": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_model_mock.py::test_destination_and_budget_fail_before_fixture",
+     "tests/test_model_tool_proposals.py::test_proposals_for_side_effecting_tools_stay_inert"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_model_mock.py::test_fixture_timeout_has_its_own_error",
+     "tests/test_model_mock.py::test_destination_and_budget_fail_before_fixture"
+    ]
+   }
+  },
+  "src/verified_execution/model_mock.py::collect_fixture_stream": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_model_mock.py::test_fragment_order_and_end_are_checked"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_model_mock.py::test_fragment_order_and_end_are_checked"
+    ]
+   }
+  },
+  "src/verified_execution/model_mock.py::execute_approved_proposal": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_model_mock.py::test_host_approval_and_common_authorization_are_both_required"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_model_mock.py::test_host_approval_and_common_authorization_are_both_required",
+     "tests/test_model_tool_proposals.py::test_unapproved_proposal_is_refused_before_any_execution"
+    ]
+   }
+  },
+  "src/verified_execution/policy_config.py::load_local_policy": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_mcp_main_fails_without_standard_io",
+     "tests/test_unit_gaps.py::test_mcp_main_serves_until_the_client_closes"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_policy_config.py::test_bad_json_fail_closed[{]",
+     "tests/test_policy_config.py::test_bad_json_fail_closed[[]]"
+    ]
+   }
+  },
+  "src/verified_execution/policy_config.py::validate_local_policy": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_mcp_main_fails_without_standard_io",
+     "tests/test_unit_gaps.py::test_mcp_main_serves_until_the_client_closes"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_policy_config.py::test_bad_json_fail_closed[[]]",
+     "tests/test_policy_config.py::test_no_raw_secret_leaked_in_error"
+    ]
+   }
+  },
+  "src/verified_execution/recorded_calculator.py::RecordedCalculator.execute": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_recorded_cli_records_each_line",
+     "tests/test_recorded_tool_bridge.py::test_bridge_success"
+    ]
+   },
+   "abnormal": {
+    "expect": "error_value",
+    "tests": [
+     "tests/test_recorded_tool_bridge.py::test_unknown_never_autoretries",
+     "tests/test_recorded_calculator.py::test_request_collision_is_blocked"
+    ]
+   }
+  },
+  "src/verified_execution/recorded_calculator.py::RecordedResult.to_dict": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_recorded_cli_records_each_line",
+     "tests/test_unit_gaps.py::test_recorded_result_dict_for_success_and_failure"
+    ]
+   },
+   "abnormal": {
+    "expect": "handled",
+    "tests": [
+     "tests/test_unit_gaps.py::test_recorded_result_dict_for_success_and_failure"
+    ],
+    "note": "Total; a failure result serializes with no value."
+   }
+  },
+  "src/verified_execution/recorded_cli.py::decode_recorded_request": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_recorded_cli_records_each_line",
+     "tests/test_unit_gaps.py::test_decode_recorded_request_accepts_and_refuses"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_unit_gaps.py::test_recorded_cli_refuses_bad_lines",
+     "tests/test_unit_gaps.py::test_decode_recorded_request_accepts_and_refuses"
+    ]
+   }
+  },
+  "src/verified_execution/recorded_cli.py::main": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_recorded_cli_records_each_line",
+     "tests/test_unit_gaps.py::test_recorded_cli_refuses_bad_lines"
+    ]
+   },
+   "abnormal": {
+    "expect": "handled",
+    "tests": [
+     "tests/test_unit_gaps.py::test_recorded_cli_refuses_bad_lines"
+    ],
+    "note": "Bad lines are answered with INVALID_MESSAGE and the loop continues."
+   }
+  },
+  "src/verified_execution/recorded_tool_bridge.py::RecordedToolBridge.call": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_recorded_tool_bridge.py::test_bridge_success",
+     "tests/test_recorded_tool_bridge.py::test_bridge_principal_isolated"
+    ]
+   },
+   "abnormal": {
+    "expect": "error_value",
+    "tests": [
+     "tests/test_recorded_tool_bridge.py::test_bridge_unknown_tool",
+     "tests/test_recorded_tool_bridge.py::test_unknown_never_autoretries"
+    ]
+   }
+  },
+  "src/verified_execution/recorded_tool_bridge.py::declared_failures": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_declared_failures_from_the_contract_and_for_an_unknown_tool",
+     "tests/test_adapter_boundary.py::test_recorded_sdk_handler_uses_leased_ledger_by_default"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_unit_gaps.py::test_declared_failures_from_the_contract_and_for_an_unknown_tool"
+    ]
+   }
+  },
+  "src/verified_execution/recorded_tool_bridge.py::within_contract": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_recorded_tool_bridge.py::test_bridge_success",
+     "tests/test_recorded_tool_bridge.py::test_bridge_principal_isolated"
+    ]
+   },
+   "abnormal": {
+    "expect": "error_value",
+    "tests": [
+     "tests/test_external_change.py::test_rejection_is_final",
+     "tests/test_external_change.py::test_resends_are_bounded"
+    ]
+   }
+  },
+  "src/verified_execution/request_limits.py::BoundedReadOnlyExecutor.run": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_adapter_boundary.py::test_model_text_is_only_input",
+     "tests/test_adapter_boundary.py::test_router_validates_then_runs"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_runtime_contracts.py::test_wait_for_slot_and_reject_while_timed_out_worker_finishes"
+    ]
+   }
+  },
+  "src/verified_execution/runtime.py::ToolOutcome.durable": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_structured_outcome_with_and_without_a_record",
+     "tests/test_durable_runtime.py::test_durable_call_records_and_replays[leased]"
+    ]
+   },
+   "abnormal": {
+    "expect": "handled",
+    "tests": [
+     "tests/test_unit_gaps.py::test_outcome_without_a_record_is_not_durable"
+    ],
+    "note": "Total property; a failed outcome without a record reports False."
+   }
+  },
+  "src/verified_execution/runtime.py::ToolOutcome.structured": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_structured_outcome_with_and_without_a_record",
+     "tests/test_adapter_boundary.py::test_model_text_is_only_input"
+    ]
+   },
+   "abnormal": {
+    "expect": "handled",
+    "tests": [
+     "tests/test_unit_gaps.py::test_structured_outcome_with_and_without_a_record"
+    ],
+    "note": "Total; an outcome without a record never gains record fields."
+   }
+  },
+  "src/verified_execution/runtime.py::ToolRuntime.acall": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_adapter_boundary.py::test_model_text_is_only_input",
+     "tests/test_adapter_boundary.py::test_router_validates_then_runs"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_adapter_boundary.py::test_sdk_stub_cancellation_after_dispatch",
+     "tests/test_adapter_boundary.py::test_sdk_stub_cancellation_before_dispatch"
+    ]
+   }
+  },
+  "src/verified_execution/runtime.py::ToolRuntime.check": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_http_local.py::test_real_http_routes_match_contract",
+     "tests/test_adapter_conformance.py::test_http_matches_runtime[MUL-001]"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_adapter_conformance.py::test_http_matches_runtime[MUL-006]",
+     "tests/test_adapter_conformance.py::test_http_matches_runtime[MUL-007]"
+    ]
+   }
+  },
+  "src/verified_execution/runtime.py::ToolRuntime.execute": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_local_cli_answers_each_line",
+     "tests/test_unit_gaps.py::test_local_cli_refuses_bad_lines_and_keeps_going"
+    ]
+   },
+   "abnormal": {
+    "expect": "error_value",
+    "tests": [
+     "tests/test_core.py::test_unknown_tool",
+     "tests/test_contracts.py::test_expected_case[CALC-004]"
+    ]
+   }
+  },
+  "src/verified_execution/runtime.py::ToolRuntime.permits": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_http_local.py::test_real_http_routes_match_contract",
+     "tests/test_adapter_conformance.py::test_http_matches_runtime[MUL-001]"
+    ]
+   },
+   "abnormal": {
+    "expect": "error_value",
+    "tests": [
+     "tests/test_adapter_conformance.py::test_http_grant_refusal_matches_runtime",
+     "tests/test_http_local.py::test_real_http_requires_host_credential_and_common_grant"
+    ]
+   }
+  },
+  "src/verified_execution/runtime.py::ToolRuntime.release": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_adapter_boundary.py::test_model_text_is_only_input",
+     "tests/test_http_local.py::test_real_http_routes_match_contract"
+    ]
+   },
+   "abnormal": {
+    "expect": "error_value",
+    "tests": [
+     "tests/test_adapter_boundary.py::test_model_text_is_only_input",
+     "tests/test_tool_runtime.py::test_release_rechecks_grant_and_result"
+    ]
+   }
+  },
+  "src/verified_execution/runtime.py::ToolRuntime.serves": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_adapter_boundary.py::test_model_text_is_only_input",
+     "tests/test_adapter_boundary.py::test_router_validates_then_runs"
+    ]
+   },
+   "abnormal": {
+    "expect": "error_value",
+    "tests": [
+     "tests/test_adapter_boundary.py::test_router_rejects_unlisted_tool",
+     "tests/test_adapter_conformance.py::test_mcp_matches_runtime[CALC-010]"
+    ]
+   }
+  },
+  "src/verified_execution/runtime.py::ToolRuntime.tools": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_http_main_serves_on_loopback_only",
+     "tests/test_unit_gaps.py::test_mcp_main_fails_without_standard_io"
+    ]
+   },
+   "abnormal": {
+    "expect": "handled",
+    "tests": [
+     "tests/test_unit_gaps.py::test_runtime_lists_only_executable_tools"
+    ],
+    "note": "Total; a registry with no executable tool yields an empty list."
+   }
+  },
+  "src/verified_execution/tools.py::ToolRegistry.get": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_local_cli_answers_each_line",
+     "tests/test_unit_gaps.py::test_mcp_main_fails_without_standard_io"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_core.py::test_unknown_tool",
+     "tests/test_contracts.py::test_expected_case[CALC-010]"
+    ]
+   }
+  },
+  "src/verified_execution/tools.py::ToolRegistry.names": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_default_registry_is_one_immutable_registry",
+     "tests/test_unit_gaps.py::test_load_registry_from_a_directory_and_without_one"
+    ]
+   },
+   "abnormal": {
+    "expect": "handled",
+    "tests": [
+     "tests/test_unit_gaps.py::test_default_registry_is_one_immutable_registry"
+    ],
+    "note": "Total; names stay unchanged after another registry is derived."
+   }
+  },
+  "src/verified_execution/tools.py::ToolRegistry.with_tools": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_runtime_lists_only_executable_tools",
+     "tests/test_unit_gaps.py::test_default_registry_is_one_immutable_registry"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_unit_gaps.py::test_registry_refuses_a_duplicate_tool"
+    ]
+   }
+  },
+  "src/verified_execution/tools.py::checked_add_spec": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_registry_refuses_a_duplicate_tool",
+     "tests/test_unit_gaps.py::test_mcp_main_fails_without_standard_io"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_unit_gaps.py::test_load_registry_from_a_directory_and_without_one",
+     "tests/test_unit_gaps.py::test_spec_builders_read_their_contracts_and_fail_without_them[checked_add_spec]"
+    ]
+   }
+  },
+  "src/verified_execution/tools.py::default_registry": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_default_registry_is_one_immutable_registry"
+    ]
+   },
+   "abnormal": {
+    "expect": "handled",
+    "tests": [
+     "tests/test_unit_gaps.py::test_default_registry_is_one_immutable_registry"
+    ],
+    "note": "Total, cached; deriving a registry never changes the default."
+   }
+  },
+  "src/verified_execution/tools.py::load_registry": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_mcp_main_fails_without_standard_io",
+     "tests/test_unit_gaps.py::test_mcp_main_serves_until_the_client_closes"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_unit_gaps.py::test_load_registry_from_a_directory_and_without_one"
+    ]
+   }
+  },
+  "src/verified_execution/tools.py::thaw": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_http_main_serves_on_loopback_only",
+     "tests/test_unit_gaps.py::test_mcp_main_fails_without_standard_io"
+    ]
+   },
+   "abnormal": {
+    "expect": "handled",
+    "tests": [
+     "tests/test_unit_gaps.py::test_thaw_copies_frozen_structures_and_leaves_other_values_alone"
+    ],
+    "note": "Total; values that are not mappings or tuples come back as independent copies."
+   }
+  },
+  "src/verified_execution/worker_leases.py::LeasedCalculator.execute": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_worker_leases.py::test_simple_leased_calculator_replay",
+     "tests/test_worker_bridge.py::test_tool_race_does_not_double_dispatch"
+    ]
+   },
+   "abnormal": {
+    "expect": "error_value",
+    "tests": [
+     "tests/test_worker_leases.py::test_pure_overflow_is_failed_not_unknown",
+     "tests/test_worker_leases.py::test_leased_calculator_denies_unauthorized"
+    ]
+   }
+  },
+  "src/verified_execution/worker_leases.py::LeasedLedger.abandon_owner_on_cancel": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_adapter_boundary.py::test_sdk_stub_cancellation_after_dispatch",
+     "tests/test_request_cancellation.py::test_lease_fencing_prevents_other_worker_cancel"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_request_cancellation.py::test_lease_fencing_prevents_other_worker_cancel",
+     "tests/test_request_cancellation.py::test_expired_owner_cannot_write_cancellation_state"
+    ]
+   }
+  },
+  "src/verified_execution/worker_leases.py::LeasedLedger.begin_dispatch": {
+   "normal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_unit_gaps.py::test_unfenced_writes_are_refused_on_a_leased_ledger[begin_dispatch-arguments0]"
+    ],
+    "note": "The documented behaviour of this method is to refuse; the refusal is its normal case."
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_worker_leases.py::test_old_unsafe_recovery_rejected_in_leased_mode"
+    ],
+    "note": "Refused for unusual input or state as well."
+   }
+  },
+  "src/verified_execution/worker_leases.py::LeasedLedger.complete_calculation": {
+   "normal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_unit_gaps.py::test_unfenced_writes_are_refused_on_a_leased_ledger[complete_calculation-arguments1]"
+    ],
+    "note": "The documented behaviour of this method is to refuse; the refusal is its normal case."
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_worker_leases.py::test_old_unsafe_recovery_rejected_in_leased_mode"
+    ],
+    "note": "Refused for unusual input or state as well."
+   }
+  },
+  "src/verified_execution/worker_leases.py::LeasedLedger.fail": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_worker_leases.py::test_pure_overflow_is_failed_not_unknown",
+     "tests/test_durable_runtime.py::test_durable_overflow_is_a_recorded_failure"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_worker_leases.py::test_fenced_definitive_failure_and_owner_check"
+    ]
+   }
+  },
+  "src/verified_execution/worker_leases.py::LeasedLedger.finish": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_worker_leases.py::test_simple_leased_calculator_replay",
+     "tests/test_worker_leases.py::test_heartbeat_preserves_active_lease"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_worker_leases.py::test_fenced_definitive_failure_and_owner_check",
+     "tests/test_worker_leases.py::test_different_session_cannot_finish_or_mark_unknown"
+    ]
+   }
+  },
+  "src/verified_execution/worker_leases.py::LeasedLedger.heartbeat": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_worker_leases.py::test_heartbeat_preserves_active_lease"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_worker_leases.py::test_expired_owner_cannot_heartbeat_or_dispatch"
+    ]
+   }
+  },
+  "src/verified_execution/worker_leases.py::LeasedLedger.legacy_recovery": {
+   "normal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_unit_gaps.py::test_global_recovery_is_refused_on_a_leased_ledger"
+    ],
+    "note": "The documented behaviour of this method is to refuse; the refusal is its normal case."
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_worker_leases.py::test_old_unsafe_recovery_rejected_in_leased_mode"
+    ],
+    "note": "Refused for unusual input or state as well."
+   }
+  },
+  "src/verified_execution/worker_leases.py::LeasedLedger.mark_owner_unknown": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_owner_can_mark_unknown_and_another_session_cannot"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_unit_gaps.py::test_owner_can_mark_unknown_and_another_session_cannot",
+     "tests/test_worker_leases.py::test_different_session_cannot_finish_or_mark_unknown"
+    ]
+   }
+  },
+  "src/verified_execution/worker_leases.py::LeasedLedger.mark_unknown": {
+   "normal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_unit_gaps.py::test_unfenced_writes_are_refused_on_a_leased_ledger[mark_unknown-arguments3]"
+    ],
+    "note": "The documented behaviour of this method is to refuse; the refusal is its normal case."
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_worker_leases.py::test_old_unsafe_recovery_rejected_in_leased_mode"
+    ],
+    "note": "Refused for unusual input or state as well."
+   }
+  },
+  "src/verified_execution/worker_leases.py::LeasedLedger.new_session": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_owner_can_cancel_and_another_session_cannot",
+     "tests/test_unit_gaps.py::test_owner_can_mark_unknown_and_another_session_cannot"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_worker_leases.py::test_reject_bad_lease_duration[0]",
+     "tests/test_worker_leases.py::test_reject_bad_lease_duration[-1]"
+    ]
+   }
+  },
+  "src/verified_execution/worker_leases.py::LeasedLedger.owner_cancel": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_owner_can_cancel_and_another_session_cannot"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_unit_gaps.py::test_owner_can_cancel_and_another_session_cannot"
+    ]
+   }
+  },
+  "src/verified_execution/worker_leases.py::LeasedLedger.record_definitive_result": {
+   "normal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_unit_gaps.py::test_unfenced_writes_are_refused_on_a_leased_ledger[record_definitive_result-arguments2]"
+    ],
+    "note": "The documented behaviour of this method is to refuse; the refusal is its normal case."
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_worker_leases.py::test_old_unsafe_recovery_rejected_in_leased_mode"
+    ],
+    "note": "Refused for unusual input or state as well."
+   }
+  },
+  "src/verified_execution/worker_leases.py::LeasedLedger.recover_expired": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_unit_gaps.py::test_recovery_fails_closed_on_a_damaged_ledger",
+     "tests/test_worker_leases.py::test_heartbeat_preserves_active_lease"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_unit_gaps.py::test_recovery_fails_closed_on_a_damaged_ledger"
+    ]
+   }
+  },
+  "src/verified_execution/worker_leases.py::LeasedLedger.recover_interrupted": {
+   "normal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_unit_gaps.py::test_global_recovery_is_refused_on_a_leased_ledger"
+    ],
+    "note": "The documented behaviour of this method is to refuse; the refusal is its normal case."
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_worker_leases.py::test_old_unsafe_recovery_rejected_in_leased_mode"
+    ],
+    "note": "Refused for unusual input or state as well."
+   }
+  },
+  "src/verified_execution/worker_leases.py::LeasedLedger.start": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_worker_leases.py::test_simple_leased_calculator_replay",
+     "tests/test_worker_leases.py::test_heartbeat_preserves_active_lease"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_worker_leases.py::test_cancel_before_start_cannot_dispatch",
+     "tests/test_worker_leases.py::test_parallel_clients_only_one_can_start"
+    ]
+   }
+  },
+  "src/verified_execution/worker_leases.py::LeasedToolBridge.call": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_worker_bridge.py::test_tool_race_does_not_double_dispatch",
+     "tests/test_worker_bridge.py::test_tool_replays_from_two_worker_instances"
+    ]
+   },
+   "abnormal": {
+    "expect": "error_value",
+    "tests": [
+     "tests/test_worker_bridge.py::test_tool_invalid_and_denied",
+     "tests/test_recorded_tool_bridge.py::test_replay_requires_live_host_grant[during_read-expired-leased]"
+    ]
+   }
+  }
+ }
+}

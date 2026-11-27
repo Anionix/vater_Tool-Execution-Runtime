@@ -1,5 +1,5 @@
 {
-  "contract_version": "1.0.0",
+  "contract_version": "1.1.0",
   "tool": "checked_add_recorded",
   "domains": {
     "success": {
@@ -41,6 +41,9 @@
           "IN_PROGRESS",
           "OUTCOME_UNKNOWN",
           "ALREADY_RECORDED",
+          "IDEMPOTENCY_CONFLICT",
+          "DATABASE_BUSY",
+          "DATABASE_ERROR",
           "INVALID_TOOL_RESULT"
         ]
       },

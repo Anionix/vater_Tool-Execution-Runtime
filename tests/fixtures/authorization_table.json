@@ -1,0 +1,1792 @@
+{
+ "_comment": [
+  "Independent expectations for the host authority. Every row is literal data:",
+  "the tests read the expected outcome from here and never compute it.",
+  "Source: docs/ARCHITECTURE.md (deny-by-default host authority, task.trust.011),",
+  "the runtime pipeline validate -> authorize -> run -> verify, contracts/expected_cases.jsonl CALC-010,",
+  "ADAPTER-001 (MCP only translates the runtime's outcome) and docs/LOCAL_HTTP.md (HTTP serves",
+  "read-only tools; other names are 404 UNKNOWN_TOOL; ungranted tools are 403).",
+  "deny_reasons explains each refusal in words of that policy."
+ ],
+ "grant_fixture": {
+  "allowed_tools": [
+   "checked_add"
+  ],
+  "allowed_destinations": [
+   "api.example.test"
+  ]
+ },
+ "grants": {
+  "none": {
+   "tools": [],
+   "state": "absent"
+  },
+  "add": {
+   "tools": [
+    "checked_add"
+   ],
+   "state": "absent"
+  },
+  "multiply": {
+   "tools": [
+    "checked_multiply"
+   ],
+   "state": "absent"
+  },
+  "both": {
+   "tools": [
+    "checked_add",
+    "checked_multiply"
+   ],
+   "state": "absent"
+  },
+  "add_revoked": {
+   "tools": [
+    "checked_add"
+   ],
+   "state": "revoked"
+  },
+  "add_expired": {
+   "tools": [
+    "checked_add"
+   ],
+   "state": "expired"
+  }
+ },
+ "calls": {
+  "add_valid": {
+   "tool": "checked_add",
+   "arguments": {
+    "left": 1,
+    "right": 2
+   },
+   "durable_executor": true
+  },
+  "add_invalid": {
+   "tool": "checked_add",
+   "arguments": {
+    "left": 1
+   },
+   "durable_executor": true
+  },
+  "multiply_valid": {
+   "tool": "checked_multiply",
+   "arguments": {
+    "left": 2,
+    "right": 3
+   },
+   "durable_executor": true
+  },
+  "recorded_with_executor": {
+   "tool": "checked_add_recorded",
+   "arguments": {
+    "request_key": "k",
+    "left": 1,
+    "right": 2
+   },
+   "durable_executor": true
+  },
+  "recorded_without_executor": {
+   "tool": "checked_add_recorded",
+   "arguments": {
+    "request_key": "k",
+    "left": 1,
+    "right": 2
+   },
+   "durable_executor": false
+  },
+  "unknown_tool": {
+   "tool": "delete_file",
+   "arguments": {},
+   "durable_executor": true
+  }
+ },
+ "grant_check": [
+  {
+   "tool": "checked_add",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": null,
+   "revocation": "absent",
+   "expiry": "absent",
+   "deny_reasons": [],
+   "allowed": true
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": null,
+   "revocation": "absent",
+   "expiry": "future",
+   "deny_reasons": [],
+   "allowed": true
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": null,
+   "revocation": "absent",
+   "expiry": "past",
+   "deny_reasons": [
+    "grant_has_expired"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": null,
+   "revocation": "not_set",
+   "expiry": "absent",
+   "deny_reasons": [],
+   "allowed": true
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": null,
+   "revocation": "not_set",
+   "expiry": "future",
+   "deny_reasons": [],
+   "allowed": true
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": null,
+   "revocation": "not_set",
+   "expiry": "past",
+   "deny_reasons": [
+    "grant_has_expired"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": null,
+   "revocation": "set",
+   "expiry": "absent",
+   "deny_reasons": [
+    "grant_was_revoked"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": null,
+   "revocation": "set",
+   "expiry": "future",
+   "deny_reasons": [
+    "grant_was_revoked"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": null,
+   "revocation": "set",
+   "expiry": "past",
+   "deny_reasons": [
+    "grant_was_revoked",
+    "grant_has_expired"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": "api.example.test",
+   "revocation": "absent",
+   "expiry": "absent",
+   "deny_reasons": [],
+   "allowed": true
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": "api.example.test",
+   "revocation": "absent",
+   "expiry": "future",
+   "deny_reasons": [],
+   "allowed": true
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": "api.example.test",
+   "revocation": "absent",
+   "expiry": "past",
+   "deny_reasons": [
+    "grant_has_expired"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": "api.example.test",
+   "revocation": "not_set",
+   "expiry": "absent",
+   "deny_reasons": [],
+   "allowed": true
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": "api.example.test",
+   "revocation": "not_set",
+   "expiry": "future",
+   "deny_reasons": [],
+   "allowed": true
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": "api.example.test",
+   "revocation": "not_set",
+   "expiry": "past",
+   "deny_reasons": [
+    "grant_has_expired"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": "api.example.test",
+   "revocation": "set",
+   "expiry": "absent",
+   "deny_reasons": [
+    "grant_was_revoked"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": "api.example.test",
+   "revocation": "set",
+   "expiry": "future",
+   "deny_reasons": [
+    "grant_was_revoked"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": "api.example.test",
+   "revocation": "set",
+   "expiry": "past",
+   "deny_reasons": [
+    "grant_was_revoked",
+    "grant_has_expired"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": "other.example.test",
+   "revocation": "absent",
+   "expiry": "absent",
+   "deny_reasons": [
+    "destination_is_not_allowed"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": "other.example.test",
+   "revocation": "absent",
+   "expiry": "future",
+   "deny_reasons": [
+    "destination_is_not_allowed"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": "other.example.test",
+   "revocation": "absent",
+   "expiry": "past",
+   "deny_reasons": [
+    "destination_is_not_allowed",
+    "grant_has_expired"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": "other.example.test",
+   "revocation": "not_set",
+   "expiry": "absent",
+   "deny_reasons": [
+    "destination_is_not_allowed"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": "other.example.test",
+   "revocation": "not_set",
+   "expiry": "future",
+   "deny_reasons": [
+    "destination_is_not_allowed"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": "other.example.test",
+   "revocation": "not_set",
+   "expiry": "past",
+   "deny_reasons": [
+    "destination_is_not_allowed",
+    "grant_has_expired"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": "other.example.test",
+   "revocation": "set",
+   "expiry": "absent",
+   "deny_reasons": [
+    "destination_is_not_allowed",
+    "grant_was_revoked"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": "other.example.test",
+   "revocation": "set",
+   "expiry": "future",
+   "deny_reasons": [
+    "destination_is_not_allowed",
+    "grant_was_revoked"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": "other.example.test",
+   "revocation": "set",
+   "expiry": "past",
+   "deny_reasons": [
+    "destination_is_not_allowed",
+    "grant_was_revoked",
+    "grant_has_expired"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "someone-else/tools",
+   "destination": null,
+   "revocation": "absent",
+   "expiry": "absent",
+   "deny_reasons": [
+    "publisher_is_not_this_service"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "someone-else/tools",
+   "destination": null,
+   "revocation": "absent",
+   "expiry": "future",
+   "deny_reasons": [
+    "publisher_is_not_this_service"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "someone-else/tools",
+   "destination": null,
+   "revocation": "absent",
+   "expiry": "past",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "grant_has_expired"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "someone-else/tools",
+   "destination": null,
+   "revocation": "not_set",
+   "expiry": "absent",
+   "deny_reasons": [
+    "publisher_is_not_this_service"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "someone-else/tools",
+   "destination": null,
+   "revocation": "not_set",
+   "expiry": "future",
+   "deny_reasons": [
+    "publisher_is_not_this_service"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "someone-else/tools",
+   "destination": null,
+   "revocation": "not_set",
+   "expiry": "past",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "grant_has_expired"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "someone-else/tools",
+   "destination": null,
+   "revocation": "set",
+   "expiry": "absent",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "grant_was_revoked"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "someone-else/tools",
+   "destination": null,
+   "revocation": "set",
+   "expiry": "future",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "grant_was_revoked"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "someone-else/tools",
+   "destination": null,
+   "revocation": "set",
+   "expiry": "past",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "grant_was_revoked",
+    "grant_has_expired"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "someone-else/tools",
+   "destination": "api.example.test",
+   "revocation": "absent",
+   "expiry": "absent",
+   "deny_reasons": [
+    "publisher_is_not_this_service"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "someone-else/tools",
+   "destination": "api.example.test",
+   "revocation": "absent",
+   "expiry": "future",
+   "deny_reasons": [
+    "publisher_is_not_this_service"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "someone-else/tools",
+   "destination": "api.example.test",
+   "revocation": "absent",
+   "expiry": "past",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "grant_has_expired"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "someone-else/tools",
+   "destination": "api.example.test",
+   "revocation": "not_set",
+   "expiry": "absent",
+   "deny_reasons": [
+    "publisher_is_not_this_service"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "someone-else/tools",
+   "destination": "api.example.test",
+   "revocation": "not_set",
+   "expiry": "future",
+   "deny_reasons": [
+    "publisher_is_not_this_service"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "someone-else/tools",
+   "destination": "api.example.test",
+   "revocation": "not_set",
+   "expiry": "past",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "grant_has_expired"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "someone-else/tools",
+   "destination": "api.example.test",
+   "revocation": "set",
+   "expiry": "absent",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "grant_was_revoked"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "someone-else/tools",
+   "destination": "api.example.test",
+   "revocation": "set",
+   "expiry": "future",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "grant_was_revoked"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "someone-else/tools",
+   "destination": "api.example.test",
+   "revocation": "set",
+   "expiry": "past",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "grant_was_revoked",
+    "grant_has_expired"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "someone-else/tools",
+   "destination": "other.example.test",
+   "revocation": "absent",
+   "expiry": "absent",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "destination_is_not_allowed"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "someone-else/tools",
+   "destination": "other.example.test",
+   "revocation": "absent",
+   "expiry": "future",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "destination_is_not_allowed"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "someone-else/tools",
+   "destination": "other.example.test",
+   "revocation": "absent",
+   "expiry": "past",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "destination_is_not_allowed",
+    "grant_has_expired"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "someone-else/tools",
+   "destination": "other.example.test",
+   "revocation": "not_set",
+   "expiry": "absent",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "destination_is_not_allowed"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "someone-else/tools",
+   "destination": "other.example.test",
+   "revocation": "not_set",
+   "expiry": "future",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "destination_is_not_allowed"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "someone-else/tools",
+   "destination": "other.example.test",
+   "revocation": "not_set",
+   "expiry": "past",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "destination_is_not_allowed",
+    "grant_has_expired"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "someone-else/tools",
+   "destination": "other.example.test",
+   "revocation": "set",
+   "expiry": "absent",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "destination_is_not_allowed",
+    "grant_was_revoked"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "someone-else/tools",
+   "destination": "other.example.test",
+   "revocation": "set",
+   "expiry": "future",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "destination_is_not_allowed",
+    "grant_was_revoked"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_add",
+   "publisher": "someone-else/tools",
+   "destination": "other.example.test",
+   "revocation": "set",
+   "expiry": "past",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "destination_is_not_allowed",
+    "grant_was_revoked",
+    "grant_has_expired"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": null,
+   "revocation": "absent",
+   "expiry": "absent",
+   "deny_reasons": [
+    "tool_is_not_granted"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": null,
+   "revocation": "absent",
+   "expiry": "future",
+   "deny_reasons": [
+    "tool_is_not_granted"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": null,
+   "revocation": "absent",
+   "expiry": "past",
+   "deny_reasons": [
+    "tool_is_not_granted",
+    "grant_has_expired"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": null,
+   "revocation": "not_set",
+   "expiry": "absent",
+   "deny_reasons": [
+    "tool_is_not_granted"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": null,
+   "revocation": "not_set",
+   "expiry": "future",
+   "deny_reasons": [
+    "tool_is_not_granted"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": null,
+   "revocation": "not_set",
+   "expiry": "past",
+   "deny_reasons": [
+    "tool_is_not_granted",
+    "grant_has_expired"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": null,
+   "revocation": "set",
+   "expiry": "absent",
+   "deny_reasons": [
+    "tool_is_not_granted",
+    "grant_was_revoked"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": null,
+   "revocation": "set",
+   "expiry": "future",
+   "deny_reasons": [
+    "tool_is_not_granted",
+    "grant_was_revoked"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": null,
+   "revocation": "set",
+   "expiry": "past",
+   "deny_reasons": [
+    "tool_is_not_granted",
+    "grant_was_revoked",
+    "grant_has_expired"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": "api.example.test",
+   "revocation": "absent",
+   "expiry": "absent",
+   "deny_reasons": [
+    "tool_is_not_granted"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": "api.example.test",
+   "revocation": "absent",
+   "expiry": "future",
+   "deny_reasons": [
+    "tool_is_not_granted"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": "api.example.test",
+   "revocation": "absent",
+   "expiry": "past",
+   "deny_reasons": [
+    "tool_is_not_granted",
+    "grant_has_expired"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": "api.example.test",
+   "revocation": "not_set",
+   "expiry": "absent",
+   "deny_reasons": [
+    "tool_is_not_granted"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": "api.example.test",
+   "revocation": "not_set",
+   "expiry": "future",
+   "deny_reasons": [
+    "tool_is_not_granted"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": "api.example.test",
+   "revocation": "not_set",
+   "expiry": "past",
+   "deny_reasons": [
+    "tool_is_not_granted",
+    "grant_has_expired"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": "api.example.test",
+   "revocation": "set",
+   "expiry": "absent",
+   "deny_reasons": [
+    "tool_is_not_granted",
+    "grant_was_revoked"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": "api.example.test",
+   "revocation": "set",
+   "expiry": "future",
+   "deny_reasons": [
+    "tool_is_not_granted",
+    "grant_was_revoked"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": "api.example.test",
+   "revocation": "set",
+   "expiry": "past",
+   "deny_reasons": [
+    "tool_is_not_granted",
+    "grant_was_revoked",
+    "grant_has_expired"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": "other.example.test",
+   "revocation": "absent",
+   "expiry": "absent",
+   "deny_reasons": [
+    "tool_is_not_granted",
+    "destination_is_not_allowed"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": "other.example.test",
+   "revocation": "absent",
+   "expiry": "future",
+   "deny_reasons": [
+    "tool_is_not_granted",
+    "destination_is_not_allowed"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": "other.example.test",
+   "revocation": "absent",
+   "expiry": "past",
+   "deny_reasons": [
+    "tool_is_not_granted",
+    "destination_is_not_allowed",
+    "grant_has_expired"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": "other.example.test",
+   "revocation": "not_set",
+   "expiry": "absent",
+   "deny_reasons": [
+    "tool_is_not_granted",
+    "destination_is_not_allowed"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": "other.example.test",
+   "revocation": "not_set",
+   "expiry": "future",
+   "deny_reasons": [
+    "tool_is_not_granted",
+    "destination_is_not_allowed"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": "other.example.test",
+   "revocation": "not_set",
+   "expiry": "past",
+   "deny_reasons": [
+    "tool_is_not_granted",
+    "destination_is_not_allowed",
+    "grant_has_expired"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": "other.example.test",
+   "revocation": "set",
+   "expiry": "absent",
+   "deny_reasons": [
+    "tool_is_not_granted",
+    "destination_is_not_allowed",
+    "grant_was_revoked"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": "other.example.test",
+   "revocation": "set",
+   "expiry": "future",
+   "deny_reasons": [
+    "tool_is_not_granted",
+    "destination_is_not_allowed",
+    "grant_was_revoked"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "Anionix/vater_Tool-Execution-Runtime",
+   "destination": "other.example.test",
+   "revocation": "set",
+   "expiry": "past",
+   "deny_reasons": [
+    "tool_is_not_granted",
+    "destination_is_not_allowed",
+    "grant_was_revoked",
+    "grant_has_expired"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "someone-else/tools",
+   "destination": null,
+   "revocation": "absent",
+   "expiry": "absent",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "tool_is_not_granted"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "someone-else/tools",
+   "destination": null,
+   "revocation": "absent",
+   "expiry": "future",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "tool_is_not_granted"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "someone-else/tools",
+   "destination": null,
+   "revocation": "absent",
+   "expiry": "past",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "tool_is_not_granted",
+    "grant_has_expired"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "someone-else/tools",
+   "destination": null,
+   "revocation": "not_set",
+   "expiry": "absent",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "tool_is_not_granted"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "someone-else/tools",
+   "destination": null,
+   "revocation": "not_set",
+   "expiry": "future",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "tool_is_not_granted"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "someone-else/tools",
+   "destination": null,
+   "revocation": "not_set",
+   "expiry": "past",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "tool_is_not_granted",
+    "grant_has_expired"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "someone-else/tools",
+   "destination": null,
+   "revocation": "set",
+   "expiry": "absent",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "tool_is_not_granted",
+    "grant_was_revoked"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "someone-else/tools",
+   "destination": null,
+   "revocation": "set",
+   "expiry": "future",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "tool_is_not_granted",
+    "grant_was_revoked"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "someone-else/tools",
+   "destination": null,
+   "revocation": "set",
+   "expiry": "past",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "tool_is_not_granted",
+    "grant_was_revoked",
+    "grant_has_expired"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "someone-else/tools",
+   "destination": "api.example.test",
+   "revocation": "absent",
+   "expiry": "absent",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "tool_is_not_granted"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "someone-else/tools",
+   "destination": "api.example.test",
+   "revocation": "absent",
+   "expiry": "future",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "tool_is_not_granted"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "someone-else/tools",
+   "destination": "api.example.test",
+   "revocation": "absent",
+   "expiry": "past",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "tool_is_not_granted",
+    "grant_has_expired"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "someone-else/tools",
+   "destination": "api.example.test",
+   "revocation": "not_set",
+   "expiry": "absent",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "tool_is_not_granted"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "someone-else/tools",
+   "destination": "api.example.test",
+   "revocation": "not_set",
+   "expiry": "future",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "tool_is_not_granted"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "someone-else/tools",
+   "destination": "api.example.test",
+   "revocation": "not_set",
+   "expiry": "past",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "tool_is_not_granted",
+    "grant_has_expired"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "someone-else/tools",
+   "destination": "api.example.test",
+   "revocation": "set",
+   "expiry": "absent",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "tool_is_not_granted",
+    "grant_was_revoked"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "someone-else/tools",
+   "destination": "api.example.test",
+   "revocation": "set",
+   "expiry": "future",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "tool_is_not_granted",
+    "grant_was_revoked"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "someone-else/tools",
+   "destination": "api.example.test",
+   "revocation": "set",
+   "expiry": "past",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "tool_is_not_granted",
+    "grant_was_revoked",
+    "grant_has_expired"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "someone-else/tools",
+   "destination": "other.example.test",
+   "revocation": "absent",
+   "expiry": "absent",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "tool_is_not_granted",
+    "destination_is_not_allowed"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "someone-else/tools",
+   "destination": "other.example.test",
+   "revocation": "absent",
+   "expiry": "future",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "tool_is_not_granted",
+    "destination_is_not_allowed"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "someone-else/tools",
+   "destination": "other.example.test",
+   "revocation": "absent",
+   "expiry": "past",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "tool_is_not_granted",
+    "destination_is_not_allowed",
+    "grant_has_expired"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "someone-else/tools",
+   "destination": "other.example.test",
+   "revocation": "not_set",
+   "expiry": "absent",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "tool_is_not_granted",
+    "destination_is_not_allowed"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "someone-else/tools",
+   "destination": "other.example.test",
+   "revocation": "not_set",
+   "expiry": "future",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "tool_is_not_granted",
+    "destination_is_not_allowed"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "someone-else/tools",
+   "destination": "other.example.test",
+   "revocation": "not_set",
+   "expiry": "past",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "tool_is_not_granted",
+    "destination_is_not_allowed",
+    "grant_has_expired"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "someone-else/tools",
+   "destination": "other.example.test",
+   "revocation": "set",
+   "expiry": "absent",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "tool_is_not_granted",
+    "destination_is_not_allowed",
+    "grant_was_revoked"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "someone-else/tools",
+   "destination": "other.example.test",
+   "revocation": "set",
+   "expiry": "future",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "tool_is_not_granted",
+    "destination_is_not_allowed",
+    "grant_was_revoked"
+   ],
+   "allowed": false
+  },
+  {
+   "tool": "checked_multiply",
+   "publisher": "someone-else/tools",
+   "destination": "other.example.test",
+   "revocation": "set",
+   "expiry": "past",
+   "deny_reasons": [
+    "publisher_is_not_this_service",
+    "tool_is_not_granted",
+    "destination_is_not_allowed",
+    "grant_was_revoked",
+    "grant_has_expired"
+   ],
+   "allowed": false
+  }
+ ],
+ "end_to_end": [
+  {
+   "grant": "none",
+   "call": "add_valid",
+   "runtime": "NOT_AUTHORIZED",
+   "mcp": "NOT_AUTHORIZED",
+   "http": {
+    "status": 403,
+    "error": "NOT_AUTHORIZED"
+   }
+  },
+  {
+   "grant": "none",
+   "call": "add_invalid",
+   "runtime": "INVALID_ARGUMENT",
+   "mcp": "INVALID_ARGUMENT",
+   "http": {
+    "status": 403,
+    "error": "NOT_AUTHORIZED"
+   }
+  },
+  {
+   "grant": "none",
+   "call": "multiply_valid",
+   "runtime": "NOT_AUTHORIZED",
+   "mcp": "NOT_AUTHORIZED",
+   "http": {
+    "status": 403,
+    "error": "NOT_AUTHORIZED"
+   }
+  },
+  {
+   "grant": "none",
+   "call": "recorded_with_executor",
+   "runtime": "NOT_AUTHORIZED",
+   "mcp": "NOT_AUTHORIZED",
+   "http": {
+    "status": 404,
+    "error": "UNKNOWN_TOOL"
+   }
+  },
+  {
+   "grant": "none",
+   "call": "recorded_without_executor",
+   "runtime": "UNSUPPORTED_OPERATION",
+   "mcp": "UNSUPPORTED_OPERATION",
+   "http": {
+    "status": 404,
+    "error": "UNKNOWN_TOOL"
+   }
+  },
+  {
+   "grant": "none",
+   "call": "unknown_tool",
+   "runtime": "UNKNOWN_TOOL",
+   "mcp": "UNKNOWN_TOOL",
+   "http": {
+    "status": 404,
+    "error": "UNKNOWN_TOOL"
+   }
+  },
+  {
+   "grant": "add",
+   "call": "add_valid",
+   "runtime": {
+    "ok": 3
+   },
+   "mcp": {
+    "ok": 3
+   },
+   "http": {
+    "status": 202,
+    "job": {
+     "state": "succeeded",
+     "result": 3
+    }
+   }
+  },
+  {
+   "grant": "add",
+   "call": "add_invalid",
+   "runtime": "INVALID_ARGUMENT",
+   "mcp": "INVALID_ARGUMENT",
+   "http": {
+    "status": 400,
+    "error": "INVALID_BODY"
+   }
+  },
+  {
+   "grant": "add",
+   "call": "multiply_valid",
+   "runtime": "NOT_AUTHORIZED",
+   "mcp": "NOT_AUTHORIZED",
+   "http": {
+    "status": 403,
+    "error": "NOT_AUTHORIZED"
+   }
+  },
+  {
+   "grant": "add",
+   "call": "recorded_with_executor",
+   "runtime": {
+    "ok": 3
+   },
+   "mcp": {
+    "ok": 3
+   },
+   "http": {
+    "status": 404,
+    "error": "UNKNOWN_TOOL"
+   }
+  },
+  {
+   "grant": "add",
+   "call": "recorded_without_executor",
+   "runtime": "UNSUPPORTED_OPERATION",
+   "mcp": "UNSUPPORTED_OPERATION",
+   "http": {
+    "status": 404,
+    "error": "UNKNOWN_TOOL"
+   }
+  },
+  {
+   "grant": "add",
+   "call": "unknown_tool",
+   "runtime": "UNKNOWN_TOOL",
+   "mcp": "UNKNOWN_TOOL",
+   "http": {
+    "status": 404,
+    "error": "UNKNOWN_TOOL"
+   }
+  },
+  {
+   "grant": "multiply",
+   "call": "add_valid",
+   "runtime": "NOT_AUTHORIZED",
+   "mcp": "NOT_AUTHORIZED",
+   "http": {
+    "status": 403,
+    "error": "NOT_AUTHORIZED"
+   }
+  },
+  {
+   "grant": "multiply",
+   "call": "add_invalid",
+   "runtime": "INVALID_ARGUMENT",
+   "mcp": "INVALID_ARGUMENT",
+   "http": {
+    "status": 403,
+    "error": "NOT_AUTHORIZED"
+   }
+  },
+  {
+   "grant": "multiply",
+   "call": "multiply_valid",
+   "runtime": {
+    "ok": 6
+   },
+   "mcp": {
+    "ok": 6
+   },
+   "http": {
+    "status": 202,
+    "job": {
+     "state": "succeeded",
+     "result": 6
+    }
+   }
+  },
+  {
+   "grant": "multiply",
+   "call": "recorded_with_executor",
+   "runtime": "NOT_AUTHORIZED",
+   "mcp": "NOT_AUTHORIZED",
+   "http": {
+    "status": 404,
+    "error": "UNKNOWN_TOOL"
+   }
+  },
+  {
+   "grant": "multiply",
+   "call": "recorded_without_executor",
+   "runtime": "UNSUPPORTED_OPERATION",
+   "mcp": "UNSUPPORTED_OPERATION",
+   "http": {
+    "status": 404,
+    "error": "UNKNOWN_TOOL"
+   }
+  },
+  {
+   "grant": "multiply",
+   "call": "unknown_tool",
+   "runtime": "UNKNOWN_TOOL",
+   "mcp": "UNKNOWN_TOOL",
+   "http": {
+    "status": 404,
+    "error": "UNKNOWN_TOOL"
+   }
+  },
+  {
+   "grant": "both",
+   "call": "add_valid",
+   "runtime": {
+    "ok": 3
+   },
+   "mcp": {
+    "ok": 3
+   },
+   "http": {
+    "status": 202,
+    "job": {
+     "state": "succeeded",
+     "result": 3
+    }
+   }
+  },
+  {
+   "grant": "both",
+   "call": "add_invalid",
+   "runtime": "INVALID_ARGUMENT",
+   "mcp": "INVALID_ARGUMENT",
+   "http": {
+    "status": 400,
+    "error": "INVALID_BODY"
+   }
+  },
+  {
+   "grant": "both",
+   "call": "multiply_valid",
+   "runtime": {
+    "ok": 6
+   },
+   "mcp": {
+    "ok": 6
+   },
+   "http": {
+    "status": 202,
+    "job": {
+     "state": "succeeded",
+     "result": 6
+    }
+   }
+  },
+  {
+   "grant": "both",
+   "call": "recorded_with_executor",
+   "runtime": {
+    "ok": 3
+   },
+   "mcp": {
+    "ok": 3
+   },
+   "http": {
+    "status": 404,
+    "error": "UNKNOWN_TOOL"
+   }
+  },
+  {
+   "grant": "both",
+   "call": "recorded_without_executor",
+   "runtime": "UNSUPPORTED_OPERATION",
+   "mcp": "UNSUPPORTED_OPERATION",
+   "http": {
+    "status": 404,
+    "error": "UNKNOWN_TOOL"
+   }
+  },
+  {
+   "grant": "both",
+   "call": "unknown_tool",
+   "runtime": "UNKNOWN_TOOL",
+   "mcp": "UNKNOWN_TOOL",
+   "http": {
+    "status": 404,
+    "error": "UNKNOWN_TOOL"
+   }
+  },
+  {
+   "grant": "add_revoked",
+   "call": "add_valid",
+   "runtime": "NOT_AUTHORIZED",
+   "mcp": "NOT_AUTHORIZED",
+   "http": {
+    "status": 403,
+    "error": "NOT_AUTHORIZED"
+   }
+  },
+  {
+   "grant": "add_revoked",
+   "call": "add_invalid",
+   "runtime": "INVALID_ARGUMENT",
+   "mcp": "INVALID_ARGUMENT",
+   "http": {
+    "status": 403,
+    "error": "NOT_AUTHORIZED"
+   }
+  },
+  {
+   "grant": "add_revoked",
+   "call": "multiply_valid",
+   "runtime": "NOT_AUTHORIZED",
+   "mcp": "NOT_AUTHORIZED",
+   "http": {
+    "status": 403,
+    "error": "NOT_AUTHORIZED"
+   }
+  },
+  {
+   "grant": "add_revoked",
+   "call": "recorded_with_executor",
+   "runtime": "NOT_AUTHORIZED",
+   "mcp": "NOT_AUTHORIZED",
+   "http": {
+    "status": 404,
+    "error": "UNKNOWN_TOOL"
+   }
+  },
+  {
+   "grant": "add_revoked",
+   "call": "recorded_without_executor",
+   "runtime": "UNSUPPORTED_OPERATION",
+   "mcp": "UNSUPPORTED_OPERATION",
+   "http": {
+    "status": 404,
+    "error": "UNKNOWN_TOOL"
+   }
+  },
+  {
+   "grant": "add_revoked",
+   "call": "unknown_tool",
+   "runtime": "UNKNOWN_TOOL",
+   "mcp": "UNKNOWN_TOOL",
+   "http": {
+    "status": 404,
+    "error": "UNKNOWN_TOOL"
+   }
+  },
+  {
+   "grant": "add_expired",
+   "call": "add_valid",
+   "runtime": "NOT_AUTHORIZED",
+   "mcp": "NOT_AUTHORIZED",
+   "http": {
+    "status": 403,
+    "error": "NOT_AUTHORIZED"
+   }
+  },
+  {
+   "grant": "add_expired",
+   "call": "add_invalid",
+   "runtime": "INVALID_ARGUMENT",
+   "mcp": "INVALID_ARGUMENT",
+   "http": {
+    "status": 403,
+    "error": "NOT_AUTHORIZED"
+   }
+  },
+  {
+   "grant": "add_expired",
+   "call": "multiply_valid",
+   "runtime": "NOT_AUTHORIZED",
+   "mcp": "NOT_AUTHORIZED",
+   "http": {
+    "status": 403,
+    "error": "NOT_AUTHORIZED"
+   }
+  },
+  {
+   "grant": "add_expired",
+   "call": "recorded_with_executor",
+   "runtime": "NOT_AUTHORIZED",
+   "mcp": "NOT_AUTHORIZED",
+   "http": {
+    "status": 404,
+    "error": "UNKNOWN_TOOL"
+   }
+  },
+  {
+   "grant": "add_expired",
+   "call": "recorded_without_executor",
+   "runtime": "UNSUPPORTED_OPERATION",
+   "mcp": "UNSUPPORTED_OPERATION",
+   "http": {
+    "status": 404,
+    "error": "UNKNOWN_TOOL"
+   }
+  },
+  {
+   "grant": "add_expired",
+   "call": "unknown_tool",
+   "runtime": "UNKNOWN_TOOL",
+   "mcp": "UNKNOWN_TOOL",
+   "http": {
+    "status": 404,
+    "error": "UNKNOWN_TOOL"
+   }
+  }
+ ]
+}

@@ -5,9 +5,9 @@
   "verification_status": "passed",
   "executed": true,
   "report_path": "evidence/attack-reproduction-tests.xml",
-  "report_sha256": "ba7e6a675e91742483df8f3aa1b0aa47212819d883e95fab1e7cac4827df5a55",
+  "report_sha256": "7b63a0db1d991864ab79118ebc3e6a7dad478f4c94f4a08c46be94e12bc9e707",
   "source_sha256": {
-    "src/verified_execution/http_local.py": "b85e7d0c2d90f26d3fad5215a31f3b64c523385ede842a87064e989b5ab4663d",
+    "src/verified_execution/http_local.py": "3a9f0478fd2f8dd751973baefca8173f15f10007f105ce46c77069aca7ae394b",
     "src/verified_execution/json_bounds.py": "eb77d5730eedddc3ac540101f123288c21acd4bb62d8584febd713e693672bd4",
     "tests/test_attack_reproduction.py": "6145c67968f9657f966dfe6304342f29a8776ba4529522a8f567f9e6de66da0c",
     "tests/test_local_contracts.py": "da7c256bd5ced166122723d6e9a8fe2913a95a96f2a41938878e93c3837d4de7"

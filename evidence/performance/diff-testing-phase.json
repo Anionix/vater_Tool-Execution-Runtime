@@ -1,0 +1,249 @@
+{
+  "baseline": "evidence/performance/baseline.json",
+  "baseline_sha256": "7c0ac25ed141dda013b05a79d6b0fd601b456cb3a130ce5c0eb247de7ec9ed83",
+  "baseline_source": {
+    "commit": "07a6939440d4c0b0abce67f41ed205c2a495bd04",
+    "label": "main before the testing phase (merge of #382)"
+  },
+  "candidate_source": {
+    "commit": "671a1adb9ef961fead2042b826768a09021a9850",
+    "label": "testing phase working tree"
+  },
+  "thresholds": {
+    "wall_us.median": 1.5,
+    "cpu_us.median": 1.5,
+    "peak_rss_kib": 1.25,
+    "ledger_bytes_per_operation": 1.25
+  },
+  "exact": [
+    "external_requests_per_operation",
+    "paid_api_calls_per_operation"
+  ],
+  "changes": {
+    "runtime_execute": {
+      "wall_us.median": {
+        "baseline": 5.1,
+        "candidate": 4.9,
+        "ratio": 0.961
+      },
+      "cpu_us.median": {
+        "baseline": 4.6,
+        "candidate": 4.4,
+        "ratio": 0.957
+      },
+      "peak_rss_kib": {
+        "baseline": 24320,
+        "candidate": 23856,
+        "ratio": 0.981
+      },
+      "ledger_bytes_per_operation": {
+        "baseline": 0.0,
+        "candidate": 0.0,
+        "ratio": null
+      },
+      "external_requests_per_operation": {
+        "baseline": 0.0,
+        "candidate": 0.0,
+        "ratio": null
+      },
+      "paid_api_calls_per_operation": {
+        "baseline": 0,
+        "candidate": 0,
+        "ratio": null
+      }
+    },
+    "runtime_acall": {
+      "wall_us.median": {
+        "baseline": 161.7,
+        "candidate": 145.5,
+        "ratio": 0.9
+      },
+      "cpu_us.median": {
+        "baseline": 162.9,
+        "candidate": 146.0,
+        "ratio": 0.896
+      },
+      "peak_rss_kib": {
+        "baseline": 26632,
+        "candidate": 26704,
+        "ratio": 1.003
+      },
+      "ledger_bytes_per_operation": {
+        "baseline": 0.0,
+        "candidate": 0.0,
+        "ratio": null
+      },
+      "external_requests_per_operation": {
+        "baseline": 0.0,
+        "candidate": 0.0,
+        "ratio": null
+      },
+      "paid_api_calls_per_operation": {
+        "baseline": 0,
+        "candidate": 0,
+        "ratio": null
+      }
+    },
+    "mcp_call": {
+      "wall_us.median": {
+        "baseline": 785.5,
+        "candidate": 596.9,
+        "ratio": 0.76
+      },
+      "cpu_us.median": {
+        "baseline": 772.7,
+        "candidate": 562.2,
+        "ratio": 0.728
+      },
+      "peak_rss_kib": {
+        "baseline": 70260,
+        "candidate": 70248,
+        "ratio": 1.0
+      },
+      "ledger_bytes_per_operation": {
+        "baseline": 0.0,
+        "candidate": 0.0,
+        "ratio": null
+      },
+      "external_requests_per_operation": {
+        "baseline": 0.0,
+        "candidate": 0.0,
+        "ratio": null
+      },
+      "paid_api_calls_per_operation": {
+        "baseline": 0,
+        "candidate": 0,
+        "ratio": null
+      }
+    },
+    "http_job": {
+      "wall_us.median": {
+        "baseline": 1625.1,
+        "candidate": 1605.3,
+        "ratio": 0.988
+      },
+      "cpu_us.median": {
+        "baseline": 501.5,
+        "candidate": 488.5,
+        "ratio": 0.974
+      },
+      "peak_rss_kib": {
+        "baseline": 27972,
+        "candidate": 27744,
+        "ratio": 0.992
+      },
+      "ledger_bytes_per_operation": {
+        "baseline": 0.0,
+        "candidate": 0.0,
+        "ratio": null
+      },
+      "external_requests_per_operation": {
+        "baseline": 0.0,
+        "candidate": 0.0,
+        "ratio": null
+      },
+      "paid_api_calls_per_operation": {
+        "baseline": 0,
+        "candidate": 0,
+        "ratio": null
+      }
+    },
+    "recorded_legacy": {
+      "wall_us.median": {
+        "baseline": 8367.1,
+        "candidate": 8046.5,
+        "ratio": 0.962
+      },
+      "cpu_us.median": {
+        "baseline": 2463.1,
+        "candidate": 2438.0,
+        "ratio": 0.99
+      },
+      "peak_rss_kib": {
+        "baseline": 25992,
+        "candidate": 25760,
+        "ratio": 0.991
+      },
+      "ledger_bytes_per_operation": {
+        "baseline": 573.4,
+        "candidate": 573.4,
+        "ratio": 1.0
+      },
+      "external_requests_per_operation": {
+        "baseline": 0.0,
+        "candidate": 0.0,
+        "ratio": null
+      },
+      "paid_api_calls_per_operation": {
+        "baseline": 0,
+        "candidate": 0,
+        "ratio": null
+      }
+    },
+    "recorded_leased": {
+      "wall_us.median": {
+        "baseline": 11738.1,
+        "candidate": 12540.4,
+        "ratio": 1.068
+      },
+      "cpu_us.median": {
+        "baseline": 3959.4,
+        "candidate": 4372.6,
+        "ratio": 1.104
+      },
+      "peak_rss_kib": {
+        "baseline": 28848,
+        "candidate": 28872,
+        "ratio": 1.001
+      },
+      "ledger_bytes_per_operation": {
+        "baseline": 860.2,
+        "candidate": 860.2,
+        "ratio": 1.0
+      },
+      "external_requests_per_operation": {
+        "baseline": 0.0,
+        "candidate": 0.0,
+        "ratio": null
+      },
+      "paid_api_calls_per_operation": {
+        "baseline": 0,
+        "candidate": 0,
+        "ratio": null
+      }
+    },
+    "external_create": {
+      "wall_us.median": {
+        "baseline": 13144.3,
+        "candidate": 14098.1,
+        "ratio": 1.073
+      },
+      "cpu_us.median": {
+        "baseline": 3432.2,
+        "candidate": 3655.9,
+        "ratio": 1.065
+      },
+      "peak_rss_kib": {
+        "baseline": 48204,
+        "candidate": 53084,
+        "ratio": 1.101
+      },
+      "ledger_bytes_per_operation": {
+        "baseline": 1105.9,
+        "candidate": 1105.9,
+        "ratio": 1.0
+      },
+      "external_requests_per_operation": {
+        "baseline": 2.0,
+        "candidate": 2.0,
+        "ratio": 1.0
+      },
+      "paid_api_calls_per_operation": {
+        "baseline": 0,
+        "candidate": 0,
+        "ratio": null
+      }
+    }
+  },
+  "regressions": []
+}

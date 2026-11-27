@@ -1,0 +1,32 @@
+{
+  "task_id": "task.testing.026",
+  "acceptance_criteria": "再発が試験で検出可能",
+  "verified_on": "2026-11-27",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/testing-phase-tests.xml",
+  "report_sha256": "d9394eb7cc407e49b5a1bdf839fb7a1dd6bd3c26e0925e2cacb7530ce136dd90",
+  "source_sha256": {
+    "tests/regressions.json": "f9daeb79eb40970a078ecb14969fc1c16e5d38bb6789fc1dcd861dedf55ef9ef",
+    "tests/test_regression_registry.py": "9af9f1583d8c8db93a8006a3d29f9de3fed395527841f6310e52d275a1c2682c"
+  },
+  "scope": "tests/regressions.json lists 14 known anomalies (the Codex findings on #382, the live-run list lag, and the defects found in this phase) with their regression tests and a mutant that re-introduces each one. The test applies every mutant to a temporary copy of the repository and requires its tests to fail, after an unmodified copy passes them all.",
+  "test_cases": [
+    "tests/test_regression_registry.py::test_registry_entries_are_complete",
+    "tests/test_regression_registry.py::test_regression_tests_pass_without_any_mutant",
+    "tests/test_regression_registry.py::test_the_anomaly_is_detected_when_it_returns[REG-001]",
+    "tests/test_regression_registry.py::test_the_anomaly_is_detected_when_it_returns[REG-002]",
+    "tests/test_regression_registry.py::test_the_anomaly_is_detected_when_it_returns[REG-003]",
+    "tests/test_regression_registry.py::test_the_anomaly_is_detected_when_it_returns[REG-004]",
+    "tests/test_regression_registry.py::test_the_anomaly_is_detected_when_it_returns[REG-005]",
+    "tests/test_regression_registry.py::test_the_anomaly_is_detected_when_it_returns[REG-006]",
+    "tests/test_regression_registry.py::test_the_anomaly_is_detected_when_it_returns[REG-007]",
+    "tests/test_regression_registry.py::test_the_anomaly_is_detected_when_it_returns[REG-008]",
+    "tests/test_regression_registry.py::test_the_anomaly_is_detected_when_it_returns[REG-009]",
+    "tests/test_regression_registry.py::test_the_anomaly_is_detected_when_it_returns[REG-010]",
+    "tests/test_regression_registry.py::test_the_anomaly_is_detected_when_it_returns[REG-011]",
+    "tests/test_regression_registry.py::test_the_anomaly_is_detected_when_it_returns[REG-012]",
+    "tests/test_regression_registry.py::test_the_anomaly_is_detected_when_it_returns[REG-013]",
+    "tests/test_regression_registry.py::test_the_anomaly_is_detected_when_it_returns[REG-014]"
+  ]
+}

@@ -348,7 +348,6 @@ def test_truncated_reply_bodies_become_transport_errors(monkeypatch):
     import http.client
     import io
     import urllib.error
-    import urllib.request
     from verified_execution.external_change import UrllibTransport
 
     class Truncated:
@@ -363,8 +362,14 @@ def test_truncated_reply_bodies_become_transport_errors(monkeypatch):
         def read(self):
             raise http.client.IncompleteRead(b'{"number": 1', 40)
 
+    from verified_execution import external_change
+
+    class Opener:  # the transport's no-redirect opener (no network in this test)
+        def __init__(self, reply):
+            self.open = reply
+
     transport = UrllibTransport("example/repository", "dummy-token")
-    monkeypatch.setattr(urllib.request, "urlopen", lambda *_a, **_k: Truncated())
+    monkeypatch.setattr(external_change, "_OPENER", Opener(lambda *_a, **_k: Truncated()))
     with pytest.raises(TransportError):
         transport.request("POST", "/issues", json_body={})
 
@@ -374,7 +379,7 @@ def test_truncated_reply_bodies_become_transport_errors(monkeypatch):
 
     def error_reply(*_args, **_kwargs):
         raise urllib.error.HTTPError("https://api.github.com", 502, "Bad Gateway", {}, TruncatedError())
-    monkeypatch.setattr(urllib.request, "urlopen", error_reply)
+    monkeypatch.setattr(external_change, "_OPENER", Opener(error_reply))
     with pytest.raises(TransportError):
         transport.request("POST", "/issues", json_body={})
 

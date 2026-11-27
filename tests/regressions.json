@@ -1,0 +1,209 @@
+{
+ "_comment": [
+  "task.testing.026: known anomalies and the regression tests that catch them.",
+  "Each mutant re-introduces its anomaly as an exact text replacement. tests/test_regression_registry.py",
+  "applies each mutant to a temporary copy of the repository and requires its tests to FAIL there,",
+  "after confirming that the same tests pass on an unmodified copy."
+ ],
+ "entries": [
+  {
+   "id": "REG-001",
+   "found": "2026-11-26",
+   "source": "Codex review on Anionix/vater_Tool-Execution-Runtime#382 (P1, approval hashes)",
+   "anomaly": "A launcher-pinned file changed while the host approval record was not updated; the server must refuse to start rather than run unapproved code.",
+   "tests": [
+    "tests/test_local_contracts.py::test_protocol_capabilities_and_trusted_publisher"
+   ],
+   "mutant": {
+    "file": "src/verified_execution/runtime.py",
+    "find": "class ToolRuntime:\n",
+    "replace": "class ToolRuntime:  # changed without host approval\n"
+   }
+  },
+  {
+   "id": "REG-002",
+   "found": "2026-11-26",
+   "source": "Codex review on Anionix/vater_Tool-Execution-Runtime#382 (P2, packaging)",
+   "anomaly": "Contract files were not shipped in non-editable installs, so the CLI failed with FileNotFoundError.",
+   "tests": [
+    "tests/test_tool_runtime.py::test_installs_ship_every_contract_the_registry_reads"
+   ],
+   "mutant": {
+    "file": "pyproject.toml",
+    "find": "verified_execution_contracts = [\"*.json\", \"*.jsonl\"]",
+    "replace": "verified_execution_contracts = [\"*.schema.json\"]"
+   }
+  },
+  {
+   "id": "REG-003",
+   "found": "2026-11-26",
+   "source": "CI on Anionix/vater_Tool-Execution-Runtime#382 (isolated core import)",
+   "anomaly": "Importing the core pulled in anyio, so the isolated standard-library-only import failed.",
+   "tests": [
+    "tests/test_runtime_contracts.py::test_core_import_and_python_version_in_isolation"
+   ],
+   "mutant": {
+    "file": "src/verified_execution/runtime.py",
+    "find": "from __future__ import annotations\n",
+    "replace": "from __future__ import annotations\nimport anyio\n"
+   }
+  },
+  {
+   "id": "REG-004",
+   "found": "2026-11-26",
+   "source": "Codex review on Anionix/vater_Tool-Execution-Runtime#382 (persistence order)",
+   "anomaly": "A succeeded ledger entry without its stored result answered ALREADY_RECORDED forever instead of being recovered by lookup.",
+   "tests": [
+    "tests/test_external_change.py::test_succeeded_ledger_without_a_stored_result_is_recovered_by_lookup"
+   ],
+   "mutant": {
+    "file": "src/verified_execution/external_change.py",
+    "find": "if op.state == \"unknown\" or (op.state == \"succeeded\" and (saved or {}).get(\"status\") != \"failed\"):",
+    "replace": "if op.state == \"unknown\":"
+   }
+  },
+  {
+   "id": "REG-005",
+   "found": "2026-11-26",
+   "source": "Codex review on Anionix/vater_Tool-Execution-Runtime#382 (version snapshot)",
+   "anomaly": "Version fields mixed one response's ETag with another snapshot's content, and an edited issue was accepted.",
+   "tests": [
+    "tests/test_external_change.py::test_version_fields_come_from_one_snapshot",
+    "tests/test_external_change.py::test_issue_edited_before_the_version_read_is_a_target_mismatch"
+   ],
+   "mutant": {
+    "file": "src/verified_execution/external_change.py",
+    "find": "        verified = current if current is not None else obj\n",
+    "replace": "        verified = obj\n"
+   }
+  },
+  {
+   "id": "REG-006",
+   "found": "2026-11-26",
+   "source": "Codex review on Anionix/vater_Tool-Execution-Runtime#382 (unreadable success)",
+   "anomaly": "A 2xx reply without a readable body was recorded as a rejection although the issue may exist.",
+   "tests": [
+    "tests/test_external_change.py::test_success_without_a_readable_body_is_reconciled_not_failed"
+   ],
+   "mutant": {
+    "file": "src/verified_execution/external_change.py",
+    "find": "return SendOutcome(\"unknown\", detail=f\"HTTP {reply.status} without a usable body\")",
+    "replace": "return SendOutcome(\"rejected\", detail=f\"HTTP {reply.status} without a usable body\")"
+   }
+  },
+  {
+   "id": "REG-007",
+   "found": "2026-11-26",
+   "source": "Codex review on Anionix/vater_Tool-Execution-Runtime#382 (marker cleanup)",
+   "anomaly": "Issues found only by the evidence harness's own lookup were left open.",
+   "tests": [
+    "tests/test_github_issue_evidence_script.py::test_issues_found_only_by_the_harness_are_still_closed",
+    "tests/test_github_issue_evidence_script.py::test_an_issue_no_reply_named_is_still_closed_through_its_marker"
+   ],
+   "mutant": {
+    "file": "scripts/run_github_issue_evidence.py",
+    "find": "                for issue in found:\n",
+    "replace": "                for issue in []:\n"
+   }
+  },
+  {
+   "id": "REG-008",
+   "found": "2026-11-26",
+   "source": "Codex review on Anionix/vater_Tool-Execution-Runtime#382 (truncated replies)",
+   "anomaly": "A reply cut off mid-body (IncompleteRead) escaped as an exception instead of an uncertain outcome.",
+   "tests": [
+    "tests/test_external_change.py::test_truncated_reply_bodies_become_transport_errors"
+   ],
+   "mutant": {
+    "file": "src/verified_execution/external_change.py",
+    "find": "unreadable = (urllib.error.URLError, OSError, TimeoutError, http.client.HTTPException)",
+    "replace": "unreadable = (urllib.error.URLError, OSError, TimeoutError)"
+   }
+  },
+  {
+   "id": "REG-009",
+   "found": "2026-11-26",
+   "source": "Codex review on Anionix/vater_Tool-Execution-Runtime#382 (grant recheck)",
+   "anomaly": "A grant revoked during the rate-limit wait did not stop the resend.",
+   "tests": [
+    "tests/test_external_change.py::test_grant_revoked_during_the_rate_limit_wait_stops_the_resend"
+   ],
+   "mutant": {
+    "file": "src/verified_execution/external_change.py",
+    "find": "            if not self.authority.permits(TOOL_NAME):\n                revoked = True\n",
+    "replace": "            if False:\n                revoked = True\n"
+   }
+  },
+  {
+   "id": "REG-010",
+   "found": "2026-11-26",
+   "source": "Codex review on Anionix/vater_Tool-Execution-Runtime#382 (harness cleanup)",
+   "anomaly": "A scenario that raised left its test issue open and wrote no report.",
+   "tests": [
+    "tests/test_github_issue_evidence_script.py::test_a_scenario_that_raises_still_closes_its_issues_and_writes_the_report"
+   ],
+   "mutant": {
+    "file": "scripts/run_github_issue_evidence.py",
+    "find": "    except Exception as error:  # a scenario failed hard: still clean up and report\n",
+    "replace": "    except ZeroDivisionError as error:  # regression mutant\n"
+   }
+  },
+  {
+   "id": "REG-011",
+   "found": "2026-11-26",
+   "source": "Live evidence run 45839389073 (list lag)",
+   "anomaly": "GitHub's issue list lagged behind a real create; the harness check failed instead of waiting.",
+   "tests": [
+    "tests/test_github_issue_evidence_script.py::test_evidence_checks_wait_for_a_lagging_list_without_resending"
+   ],
+   "mutant": {
+    "file": "scripts/run_github_issue_evidence.py",
+    "find": "def marked(operation_id, expect=None, wait_seconds=30):",
+    "replace": "def marked(operation_id, expect=None, wait_seconds=0):"
+   }
+  },
+  {
+   "id": "REG-012",
+   "found": "2026-11-27",
+   "source": "task.testing.017 (secret flow)",
+   "anomaly": "urllib copied the destination credential onto a redirect to another host.",
+   "tests": [
+    "tests/test_secret_flow.py::test_credential_never_follows_a_redirect",
+    "tests/test_secret_flow.py::test_redirected_create_is_a_definitive_rejection"
+   ],
+   "mutant": {
+    "file": "src/verified_execution/external_change.py",
+    "find": "            with _OPENER.open(request, timeout=self._timeout) as response:",
+    "replace": "            with urllib.request.urlopen(request, timeout=self._timeout) as response:"
+   }
+  },
+  {
+   "id": "REG-013",
+   "found": "2026-11-27",
+   "source": "task.testing.005 (cross-principal reference)",
+   "anomaly": "Any principal could read another principal's stored external result by operation id.",
+   "tests": [
+    "tests/test_cross_principal.py::test_external_result_is_readable_only_by_its_principal"
+   ],
+   "mutant": {
+    "file": "src/verified_execution/external_change.py",
+    "find": "        if op.principal != self.principal or op.tool_name != TOOL_NAME:",
+    "replace": "        if op.tool_name != TOOL_NAME:"
+   }
+  },
+  {
+   "id": "REG-014",
+   "found": "2026-11-27",
+   "source": "task.testing.002 (response contract)",
+   "anomaly": "Durable executors passed failure codes that their output contracts do not declare to clients.",
+   "tests": [
+    "tests/test_contract_inventory.py::test_undeclared_internal_code_never_reaches_a_client"
+   ],
+   "mutant": {
+    "file": "src/verified_execution/recorded_tool_bridge.py",
+    "find": "    if result.ok or result.error_code in declared:",
+    "replace": "    if True:"
+   }
+  }
+ ]
+}

@@ -1,0 +1,28 @@
+{
+  "task_id": "task.testing.025",
+  "acceptance_criteria": "基準値と変更差分が残る",
+  "verified_on": "2026-11-27",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/testing-phase-tests.xml",
+  "report_sha256": "d9394eb7cc407e49b5a1bdf839fb7a1dd6bd3c26e0925e2cacb7530ce136dd90",
+  "source_sha256": {
+    "evidence/performance/baseline.json": "7c0ac25ed141dda013b05a79d6b0fd601b456cb3a130ce5c0eb247de7ec9ed83",
+    "evidence/performance/diff-testing-phase.json": "685585e848e10385a4d769fa9f0b96475748faa17462afc5362317a5eda151ef",
+    "scripts/measure_operations.py": "7861e837761c2a450811427118af4065be6d77c628878219def5e961d2d4e23e",
+    "tests/test_operation_costs.py": "00a13a82b2fdf592599eaa104d36b93ce76657e9c7f6656607b04c436dd69ad2"
+  },
+  "scope": "scripts/measure_operations.py measures wall and CPU time per call, peak memory, ledger bytes and cost (requests to an external service; paid API calls, always zero) for seven operations, each in its own process. The baseline was measured on main before the testing phase (07a6939); the diff of this tree against it shows no regression beyond the thresholds and identical request counts. Timings vary by machine; the tests compare only the deterministic costs exactly.",
+  "test_cases": [
+    "tests/test_operation_costs.py::test_baseline_is_complete",
+    "tests/test_operation_costs.py::test_diff_is_recorded_against_this_baseline",
+    "tests/test_operation_costs.py::test_deterministic_costs_match_the_baseline[runtime_execute]",
+    "tests/test_operation_costs.py::test_deterministic_costs_match_the_baseline[runtime_acall]",
+    "tests/test_operation_costs.py::test_deterministic_costs_match_the_baseline[mcp_call]",
+    "tests/test_operation_costs.py::test_deterministic_costs_match_the_baseline[http_job]",
+    "tests/test_operation_costs.py::test_deterministic_costs_match_the_baseline[recorded_legacy]",
+    "tests/test_operation_costs.py::test_deterministic_costs_match_the_baseline[recorded_leased]",
+    "tests/test_operation_costs.py::test_deterministic_costs_match_the_baseline[external_create]",
+    "tests/test_operation_costs.py::test_comparison_flags_regressions_and_exact_cost_changes"
+  ]
+}
