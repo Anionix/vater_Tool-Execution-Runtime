@@ -14,6 +14,7 @@ import hashlib
 from importlib import util
 import io
 from pathlib import Path
+import re
 import subprocess
 import tarfile
 import zipfile
@@ -121,7 +122,7 @@ def test_each_build_gets_a_fresh_copy_of_exactly_the_tracked_files(tmp_path):
 
 
 def test_ci_builds_with_the_hash_locked_backend_and_keeps_artifacts_and_manifest():
-    job = WORKFLOW.split("  release-artifacts:\n", 1)[1].split("\n  official-mcp:\n", 1)[0]
+    job = re.split(r"\n  (?=[A-Za-z0-9_-]+:\n)", WORKFLOW.split("  release-artifacts:\n", 1)[1], 1)[0]
     install = job.index("python -m pip install --require-hashes --only-binary :all: -r requirements-build.lock")
     assert install < job.index("python scripts/release_manifest.py --output release-manifest.json --dist dist")
     assert "dist/\n            release-manifest.json" in job and "retention-days: 90" in job
