@@ -1,0 +1,140 @@
+{
+  "document_identifier": "vater-formal-contract-candidates-2026-11-26",
+  "status": "specified_not_proven",
+  "sources": [
+    {
+      "path": "src/verified_execution/core.py",
+      "git_blob_sha": "a33d6b9da863df1a7856467fc6d70fefcf52e859"
+    },
+    {
+      "path": "src/verified_execution/ledger.py",
+      "git_blob_sha": "50bb7d8315ae851a65fe2c066ab3fc45f9b8e0de"
+    },
+    {
+      "path": "docs/RELEASE_PROFILES.json",
+      "git_blob_sha": "a0e07caa3a4bd909adb9c9f27d930266383063a8"
+    }
+  ],
+  "propositions": [
+    {
+      "task_identifier": "task.formal_verification.002",
+      "source_symbol": "OperationLedger.begin_dispatch",
+      "premises": [
+        "Privileged host uses the ledger before dispatch.",
+        "Operation requires approval.",
+        "SQLite transaction is atomic and the stored record is trusted."
+      ],
+      "conclusion": "A successful prepared-to-dispatched transition requires an existing, unconsumed, unexpired approval matching principal, tool, target, resource version and arguments digest; consumption and transition commit together.",
+      "not_claimed": "An actual external effect occurs or cannot bypass the privileged host."
+    },
+    {
+      "task_identifier": "task.formal_verification.003",
+      "source_symbols": [
+        "LocalAuthority.permits",
+        "CalculationService.execute",
+        "OperationLedger._check_dispatch_grant"
+      ],
+      "premises": [
+        "The host supplies a non-null authority to the guarded path.",
+        "The permission check observes a disallowed tool, publisher or destination (when supplied), a revoked grant, or an expired grant."
+      ],
+      "conclusion": "The permission predicate returns false; guarded execution rejects a false predicate before entering running or dispatched.",
+      "not_claimed": "Revocation after the check is atomic with the external effect. The ledger accepts authority=None on privileged paths and does not itself authenticate callers."
+    },
+    {
+      "task_identifier": "task.formal_verification.004",
+      "source_symbol": "OperationLedger.begin_dispatch",
+      "premises": [
+        "Operation requires approval.",
+        "The stored approval binding differs from the reserved operation in at least one field of principal, tool, target, resource version or arguments digest."
+      ],
+      "conclusion": "The approval is rejected and no prepared-to-dispatched transition commits.",
+      "not_claimed": "Digest equality proves raw argument equality without a collision-resistance assumption; current external resource version is checked only when a resource reader is configured for a target."
+    },
+    {
+      "task_identifier": "task.formal_verification.005",
+      "source_symbol": "ExecutionTrace.move",
+      "states": [
+        "received",
+        "validated",
+        "authorized",
+        "running",
+        "completed",
+        "rejected",
+        "failed"
+      ],
+      "allowed_transitions": [
+        [
+          "received",
+          "validated"
+        ],
+        [
+          "received",
+          "rejected"
+        ],
+        [
+          "validated",
+          "authorized"
+        ],
+        [
+          "validated",
+          "rejected"
+        ],
+        [
+          "authorized",
+          "running"
+        ],
+        [
+          "running",
+          "completed"
+        ],
+        [
+          "running",
+          "failed"
+        ]
+      ],
+      "premises": [
+        "Trace is initialized by ExecutionTrace and modified only through move."
+      ],
+      "conclusion": "Every state-changing edge outside the enumerated relation is rejected without appending a state.",
+      "not_claimed": "The mutable Python states list is protected from arbitrary privileged writes; the separate persistent ledger or leased worker transitions are formally verified."
+    }
+  ],
+  "scope": [
+    {
+      "task_identifier": "task.formal_verification.014",
+      "status": "not_verified",
+      "decision": "No Rust port or Kani harness is selected by this change; applicability must be decided before marking the task complete."
+    },
+    {
+      "task_identifier": "task.formal_verification.017",
+      "status": "not_proven",
+      "unproven": [
+        "SQLite transaction and concurrent process semantics",
+        "Asynchronous cancellation",
+        "Worker lease and crash recovery"
+      ]
+    },
+    {
+      "task_identifier": "task.formal_verification.020",
+      "status": "not_proven",
+      "unproven": [
+        "Python runtime",
+        "Compiler and proof checker implementation",
+        "SQLite",
+        "Model Context Protocol transport",
+        "Host identity and clock",
+        "External services and effects",
+        "Cryptographic digest collision resistance",
+        "Source-to-model refinement"
+      ]
+    }
+  ],
+  "verification": {
+    "source_review": "completed",
+    "formal_proof": "not_run",
+    "implementation_tests": "not_run",
+    "independent_review": "pending",
+    "state_transition": "specified_not_proven -> verified only after actual proof, applicable implementation checks, and evidence review"
+  }
+}
