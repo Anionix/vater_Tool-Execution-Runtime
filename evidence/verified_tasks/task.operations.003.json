@@ -1,0 +1,23 @@
+{
+  "task_id": "task.operations.003",
+  "acceptance_criteria": "一変更が独立した検査単位",
+  "verified_on": "2026-11-27",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/operations-phase-tests.xml",
+  "report_sha256": "4ba44ed438cf5c62050443fe893879b4a13254d82c774b83030265d992ae7122",
+  "source_sha256": {
+    "scripts/verify_phase.py": "e9bf7a14813534653fb938125f53ec18d06878fd613573e68f1cdb298afa7290",
+    "scripts/verify_task.py": "e5cb40b077332d3fcdca7603a8114c1561aea08028c4821b065975135123cf63",
+    "tests/test_verify_task.py": "594c2649f88a06013de1794c5b8902f4cad58637cad4b168752a4649be39113d"
+  },
+  "scope": "scripts/verify_task.py checks one task as an independent unit: its single evidence record (validated by the same task_cases function verify_phase uses), exactly its pytest cases in a new process without a cache, each passing exactly once, and its review scope (the files bound to the record, each unchanged, changed or missing). Every done task outside the scope phase, whose 18 records predate case lists, is such a self-contained unit.",
+  "test_cases": [
+    "tests/test_verify_task.py::test_helper_that_fails_only_when_asked",
+    "tests/test_verify_task.py::test_a_task_is_checked_alone_with_exactly_its_cases[task.http_interface.003]",
+    "tests/test_verify_task.py::test_a_task_is_checked_alone_with_exactly_its_cases[task.authorization.001]",
+    "tests/test_verify_task.py::test_a_failing_case_fails_its_unit",
+    "tests/test_verify_task.py::test_unknown_gate_or_unready_tasks_are_refused_before_anything_runs",
+    "tests/test_verify_task.py::test_every_done_task_of_the_verified_phases_is_a_self_contained_unit"
+  ]
+}

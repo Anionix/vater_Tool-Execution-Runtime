@@ -1,0 +1,27 @@
+{
+  "task_id": "task.operations.009",
+  "acceptance_criteria": "重大な検査失敗では配布しない",
+  "verified_on": "2026-11-27",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/operations-phase-tests.xml",
+  "report_sha256": "4ba44ed438cf5c62050443fe893879b4a13254d82c774b83030265d992ae7122",
+  "source_sha256": {
+    ".github/workflows/python-verification.yml": "ea6e336f303d9988bbf296d640b6915a04e858811345ca7457cac366709c752c",
+    "scripts/release_gate.py": "87c7b9dc71f2915799e1face3fd01e6db481b690de4b09d2f68f61b543679f39",
+    "tests/test_release_gate.py": "75e1608d12241f6a49f97bc0de13e2489dac9f9a4966e48d08bf0d84fc5c209c"
+  },
+  "scope": "scripts/release_gate.py runs the static safety policy, the permission-history check, the secret audit of evidence and documentation, the saved-scan check and a live OSV scan, all of them even after a failure, and allows a release only if every one passed. The release-artifacts job needs every verification job (including the safety tests) to pass, runs the gate before building, and keeps the artifacts only on success; the gate report is always kept.",
+  "test_cases": [
+    "tests/test_release_gate.py::test_the_real_offline_security_checks_pass_on_this_repository",
+    "tests/test_release_gate.py::test_any_failed_security_check_refuses_the_release_after_running_every_check[live_vulnerability_scan]",
+    "tests/test_release_gate.py::test_any_failed_security_check_refuses_the_release_after_running_every_check[permission_history]",
+    "tests/test_release_gate.py::test_any_failed_security_check_refuses_the_release_after_running_every_check[saved_vulnerability_scan]",
+    "tests/test_release_gate.py::test_any_failed_security_check_refuses_the_release_after_running_every_check[secret_audit]",
+    "tests/test_release_gate.py::test_any_failed_security_check_refuses_the_release_after_running_every_check[static_policy]",
+    "tests/test_release_gate.py::test_a_planted_secret_refuses_the_release",
+    "tests/test_release_gate.py::test_a_saved_scan_of_another_lock_refuses_the_release",
+    "tests/test_release_gate.py::test_no_checks_is_never_a_release",
+    "tests/test_release_gate.py::test_the_release_job_publishes_only_after_the_gate_and_every_verification_job"
+  ]
+}

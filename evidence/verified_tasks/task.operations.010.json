@@ -1,0 +1,21 @@
+{
+  "task_id": "task.operations.010",
+  "acceptance_criteria": "本番データを使わない",
+  "verified_on": "2026-11-27",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/operations-phase-tests.xml",
+  "report_sha256": "4ba44ed438cf5c62050443fe893879b4a13254d82c774b83030265d992ae7122",
+  "source_sha256": {
+    ".github/workflows/python-verification.yml": "ea6e336f303d9988bbf296d640b6915a04e858811345ca7457cac366709c752c",
+    "scripts/staging_trial.py": "c1db7aa1b2c7f002be6a074b2b4221909e85054a136f9a58534bb956796e86c8",
+    "tests/test_staging_trial.py": "13a4fcad209727042365fc0294d211f2c23366e860ac6eb173ee675b6fc2c511"
+  },
+  "scope": "scripts/staging_trial.py runs inside one new staging directory with synthetic data only: the real MCP server over stdio with a staging ledger and a fresh environment (no host credential reaches it), the external tool against an in-memory destination, the kill switch, a backup and restore and the monitor. It refuses a host ledger outside the staging directory and leaves it untouched; the repository and the operator's home are not written. CI runs it in the locked environment.",
+  "test_cases": [
+    "tests/test_staging_trial.py::test_the_trial_passes_inside_its_staging_directory_only",
+    "tests/test_staging_trial.py::test_a_ledger_outside_the_staging_directory_is_refused_untouched",
+    "tests/test_staging_trial.py::test_a_ledger_inside_the_staging_directory_is_allowed",
+    "tests/test_staging_trial.py::test_ci_runs_the_staging_trial_in_the_locked_environment"
+  ]
+}

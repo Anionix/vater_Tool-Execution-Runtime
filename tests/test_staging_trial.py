@@ -47,7 +47,8 @@ def test_the_trial_passes_inside_its_staging_directory_only(tmp_path, monkeypatc
     assert report["data"] == "synthetic only" and "GITHUB_TOKEN" in report["credentials_withheld"]
     assert report["files"] == ["external-ledger.backup.sqlite3", "external-ledger.backup.sqlite3.manifest.json",
                                "external-ledger.sqlite3", "kill-switch", "mcp-ledger.sqlite3",
-                               "restored-ledger.sqlite3"]
+                               "restored-ledger.sqlite3", "server-diagnostics.jsonl"]
+    assert report["checks"]["diagnostics_monitored"] is True
     assert repository_state() == before  # nothing written into the repository
     assert not (tmp_path / "operator-home").exists()  # nor into the operator's home
     for path in staging.rglob("*"):

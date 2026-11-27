@@ -1,0 +1,27 @@
+{
+  "task_id": "task.operations.016",
+  "acceptance_criteria": "復旧後に重複実行しない",
+  "verified_on": "2026-11-27",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/operations-phase-tests.xml",
+  "report_sha256": "4ba44ed438cf5c62050443fe893879b4a13254d82c774b83030265d992ae7122",
+  "source_sha256": {
+    "scripts/backup_ledger.py": "1f62eb09efef72b983829d8d727795adebf5a0e845728bd5782825cf7dc97f27",
+    "src/verified_execution/external_change.py": "45e67a4053b82f165ff34c2608f17fc64fd5415cccaaa25a5edea058d95aa68c",
+    "src/verified_execution/restore_fence.py": "ef762f5b38e9a745b7a6b13fa3d8e164ddfb41ecc954b618fc1c71b179f17837",
+    "tests/test_backup_restore.py": "8eb91824b8c94444aa3b31d492149173993551734cefc976fc2aaa496b821341"
+  },
+  "scope": "scripts/backup_ledger.py takes consistent online backups with SQLite's backup API (with a manifest hash and integrity check) and restores them without overwriting a ledger. After a restore, a recorded operation is replayed, one in flight at backup time is settled by lookup and never resent, and one executed after the backup is not executed again: a restore fence stops new external dispatches until a complete destination listing shows nothing missing from the ledger, or a person reconciles it.",
+  "test_cases": [
+    "tests/test_backup_restore.py::test_a_recorded_operation_is_replayed_after_a_restore_not_executed",
+    "tests/test_backup_restore.py::test_an_operation_in_flight_at_backup_time_is_settled_by_lookup_never_resent",
+    "tests/test_backup_restore.py::test_an_operation_executed_after_the_backup_is_not_executed_again",
+    "tests/test_backup_restore.py::test_a_gap_without_destination_activity_is_cleared_by_the_report",
+    "tests/test_backup_restore.py::test_an_incomplete_destination_listing_keeps_the_fence",
+    "tests/test_backup_restore.py::test_restore_refuses_a_damaged_backup_and_never_overwrites_without_replace",
+    "tests/test_backup_restore.py::test_a_backup_taken_while_the_service_writes_is_consistent",
+    "tests/test_backup_restore.py::test_the_command_line_backs_up_restores_and_clears",
+    "tests/test_backup_restore.py::test_a_fence_cannot_be_installed_where_no_ledger_can_be_written"
+  ]
+}

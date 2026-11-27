@@ -1,0 +1,21 @@
+{
+  "task_id": "task.operations.008",
+  "acceptance_criteria": "環境差による違いを記録",
+  "verified_on": "2026-11-27",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/operations-phase-tests.xml",
+  "report_sha256": "4ba44ed438cf5c62050443fe893879b4a13254d82c774b83030265d992ae7122",
+  "source_sha256": {
+    ".github/workflows/python-verification.yml": "ea6e336f303d9988bbf296d640b6915a04e858811345ca7457cac366709c752c",
+    "requirements-build.lock": "3321335737f7e89634b82b05aa42d3eacc01d1538615d75d4519bff07035b0e2",
+    "scripts/release_manifest.py": "65fdaa18d84221d68eb9f94d5e85edb73c2c1a7972262960898c0792fc085c3a",
+    "tests/test_release_manifest.py": "c833f6410f0625f3218785922a423ba41cadfda3d5b9027893df704b49b47428"
+  },
+  "scope": "Each CI build is made three times from fresh copies of the tracked files: A with SOURCE_DATE_EPOCH, TZ=UTC and umask 022; B with the same epoch but TZ=Asia/Tokyo, umask 077, another path and earlier file times; C without SOURCE_DATE_EPOCH. Every differing archive member and field is recorded. In CI run 45948159854 the controlled builds A and B were not byte-identical: the wheel's file modes (external_attr, 27 members) follow the build umask, the sdist's tar and gzip times (132 members) follow file and build times although SOURCE_DATE_EPOCH was set, and 12 sdist directory modes follow the umask; without SOURCE_DATE_EPOCH the wheel's timestamps (46 members) change as well. These differences are recorded in evidence/release/build-trial.json; no reproducibility is claimed.",
+  "test_cases": [
+    "tests/test_release_manifest.py::test_identical_builds_have_no_differences_and_varied_ones_name_each_field",
+    "tests/test_release_manifest.py::test_each_build_gets_a_fresh_copy_of_exactly_the_tracked_files",
+    "tests/test_release_manifest.py::test_the_recorded_ci_build_trial_lists_the_environment_differences"
+  ]
+}

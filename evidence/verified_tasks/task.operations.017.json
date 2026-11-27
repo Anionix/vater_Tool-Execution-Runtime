@@ -1,0 +1,25 @@
+{
+  "task_id": "task.operations.017",
+  "acceptance_criteria": "初期Python公開ゲートと追加機能の必須ゲートが全て合格した場合にだけ拡張版を公開する",
+  "verified_on": "2026-11-27",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/operations-phase-tests.xml",
+  "report_sha256": "4ba44ed438cf5c62050443fe893879b4a13254d82c774b83030265d992ae7122",
+  "source_sha256": {
+    ".github/workflows/python-verification.yml": "ea6e336f303d9988bbf296d640b6915a04e858811345ca7457cac366709c752c",
+    "scripts/evidence_freshness.py": "36da33be60da713a9aebeb0e7d8b55852d425f86931b33747b38af2d10a6743e",
+    "scripts/release_decision.py": "a2e1ad5beef2bc3947f5ef58b4b97e30d2eac3a5c65c9e90849350add546db93",
+    "tests/test_release_decision.py": "077fd95840e6d4fb2ac960b492a95e31a98f4229bbcf6fb058400a52070a5cea"
+  },
+  "scope": "scripts/release_decision.py takes the required gates from the ledger (the nine initial Python phases, then the five required added-feature phases; optional phases excluded) and accepts a gate only when it is done and its evidence is executed, passed and fresh. The extended release is allowed only when every initial and added-feature gate passes, and the release job publishes the extended artifacts only on that decision. In CI run 45948159854 the decision blocked both releases, since every gate's evidence was stale at that commit, and the extended release was not published. After the gates were rebound by passing live reruns, only gate.scope.completed, whose records predate case lists, stays stale and keeps both releases blocked until a person re-verifies the scope.",
+  "test_cases": [
+    "tests/test_release_decision.py::test_the_required_gates_come_from_the_ledger_and_skip_optional_phases",
+    "tests/test_release_decision.py::test_every_gate_passing_with_fresh_evidence_allows_the_extended_release",
+    "tests/test_release_decision.py::test_an_open_added_feature_gate_blocks_only_the_extended_release",
+    "tests/test_release_decision.py::test_stale_initial_evidence_blocks_both_releases",
+    "tests/test_release_decision.py::test_a_failed_or_missing_record_blocks_the_release",
+    "tests/test_release_decision.py::test_the_repository_decision_names_a_reason_for_every_blocked_gate",
+    "tests/test_release_decision.py::test_the_release_job_publishes_the_extended_release_only_on_the_decision"
+  ]
+}

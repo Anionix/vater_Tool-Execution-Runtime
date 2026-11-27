@@ -82,8 +82,10 @@ def preflight(staging: Path, environ=os.environ) -> list[str]:
 def mcp_workload(staging: Path) -> dict:
     import anyio
     from mcp import Client, StdioServerParameters
+    from mcp.client.stdio import stdio_client
 
     ledger = staging / "mcp-ledger.sqlite3"
+    diagnostics = staging / "server-diagnostics.jsonl"
     # A fresh environment: nothing from the host's environment, so no credential, reaches the server.
     env = {"PYTHONPATH": str(ROOT / "src"), LEDGER_VARIABLE: str(ledger), "HOME": str(staging / "home")}
     observed = {}
@@ -91,21 +93,31 @@ def mcp_workload(staging: Path) -> dict:
     async def run():
         params = StdioServerParameters(command=sys.executable, args=["-u", str(ROOT / "server_mcp.py")],
                                        cwd=str(staging), env=env)
-        async with Client(params, mode="2026-07-28") as client:
-            observed["tools"] = sorted(tool.name for tool in (await client.list_tools()).tools)
-            added = await client.call_tool("checked_add", {"left": 40, "right": 2})
-            observed["checked_add"] = added.structured_content
-            overflow = await client.call_tool("checked_add", {"left": 4294967295, "right": 1})
-            observed["overflow_is_error"] = overflow.is_error
-            first = await client.call_tool("checked_add_recorded", {"request_key": "staging-1", "left": 1, "right": 2})
-            again = await client.call_tool("checked_add_recorded", {"request_key": "staging-1", "left": 1, "right": 2})
-            observed["recorded"] = first.structured_content
-            observed["replayed"] = again.structured_content
-            denied = await client.call_tool("delete_file", {"path": "/"})
-            observed["unregistered_is_error"] = denied.is_error
+        # The server's diagnostics go to a staging file, never to whatever sys.stderr was when
+        # the SDK was imported (its stdio_client binds that default once).
+        with diagnostics.open("w", encoding="utf-8") as errlog:
+            async with Client(stdio_client(params, errlog=errlog), mode="2026-07-28") as client:
+                await calls(client)
+
+    async def calls(client):
+        observed["tools"] = sorted(tool.name for tool in (await client.list_tools()).tools)
+        added = await client.call_tool("checked_add", {"left": 40, "right": 2})
+        observed["checked_add"] = added.structured_content
+        overflow = await client.call_tool("checked_add", {"left": 4294967295, "right": 1})
+        observed["overflow_is_error"] = overflow.is_error
+        first = await client.call_tool("checked_add_recorded", {"request_key": "staging-1", "left": 1, "right": 2})
+        again = await client.call_tool("checked_add_recorded", {"request_key": "staging-1", "left": 1, "right": 2})
+        observed["recorded"] = first.structured_content
+        observed["replayed"] = again.structured_content
+        denied = await client.call_tool("delete_file", {"path": "/"})
+        observed["unregistered_is_error"] = denied.is_error
 
     anyio.run(run)
     observed["history"] = OperationLedger(ledger).history(observed["recorded"]["operation_id"])
+    monitoring = load_script("monitor_operations")
+    monitor = monitoring.OperationMonitor(monitoring.Rules.load())
+    monitoring.feed_diagnostics(monitor, diagnostics.read_text(encoding="utf-8").splitlines(), clock=lambda: 0)
+    observed["diagnostics"] = monitor.report()["windows"][-1]
     return observed
 
 
@@ -178,6 +190,7 @@ def run(staging: Path, environ=os.environ) -> dict:
         "kill_switch_stops": external["stopped_by_kill_switch"] == "NOT_AUTHORIZED",
         "restore_replays_without_resend": external["replayed_after_restore"] and external["posts"] == 1,
         "monitor_quiet": external["monitor_alerts"] == [],
+        "diagnostics_monitored": (mcp["diagnostics"]["operations"], mcp["diagnostics"]["errors"]) == (5, 2),
         "only_staging_principals": principals == ["local-process"],
     }
     return {**report, "mcp": mcp, "external": external, "files": staged_files(staging), "checks": checks,

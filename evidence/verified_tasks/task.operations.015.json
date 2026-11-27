@@ -1,0 +1,29 @@
+{
+  "task_id": "task.operations.015",
+  "acceptance_criteria": "外部ツールを即停止できる",
+  "verified_on": "2026-11-27",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/operations-phase-tests.xml",
+  "report_sha256": "4ba44ed438cf5c62050443fe893879b4a13254d82c774b83030265d992ae7122",
+  "source_sha256": {
+    ".github/workflows/external-change-evidence.yml": "926fb0c25ddc1a85f1c9e5dfadf336740f183a2def4769e0ab7da74aa3420b83",
+    "docs/runbooks/disable_external_tools.md": "5d8053fb199331ed953afbca8e093adbe3701ecc42408826e9ba103f50eaae6b",
+    "scripts/kill_switch.py": "a045343ac16de9d7f4f30c5d173da2c9279de28ee86eff3c9ac51297a36f8809",
+    "scripts/run_github_issue_evidence.py": "e34256165abf0e700983a988c1b5f42b837b17c5cd4dcdd2969e7e067b226d22",
+    "src/verified_execution/kill_switch.py": "79618896dcb7d652306f63ee58f8701dcad95729ef14306908f60b5067d5d6ae",
+    "tests/test_kill_switch.py": "2c144bf1ce891d52c1b0e2854a72f40317136262fbd31a594811fab509159569"
+  },
+  "scope": "A kill switch file revokes the grant of tools with external effects: LocalAuthority consults it before reservation, the ledger inside the dispatch transaction and the executor before any resend, so no request leaves after it is seen. It is sticky until restart and fails closed. scripts/kill_switch.py engages, reports and clears it; the repository variable VATER_EXTERNAL_TOOLS_DISABLED stops the live evidence workflow before its first request; docs/runbooks/disable_external_tools.md is the incident procedure.",
+  "test_cases": [
+    "tests/test_kill_switch.py::test_an_engaged_switch_refuses_before_anything_is_reserved_or_sent",
+    "tests/test_kill_switch.py::test_engaged_between_approval_and_dispatch_the_ledger_refuses_the_dispatch",
+    "tests/test_kill_switch.py::test_engaged_during_a_rate_limit_wait_nothing_is_resent",
+    "tests/test_kill_switch.py::test_the_switch_is_sticky_until_restart_and_fails_closed",
+    "tests/test_kill_switch.py::test_without_the_variable_the_switch_lives_in_the_home_directory",
+    "tests/test_kill_switch.py::test_an_engage_that_cannot_write_its_file_raises_but_still_stops_this_process",
+    "tests/test_kill_switch.py::test_the_operator_command_engages_reports_and_clears",
+    "tests/test_kill_switch.py::test_the_live_evidence_run_stops_before_its_first_request",
+    "tests/test_kill_switch.py::test_the_workflow_switch_is_wired_through_the_environment_and_the_runbook_names_the_steps"
+  ]
+}
