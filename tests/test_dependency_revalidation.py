@@ -24,9 +24,13 @@ CANDIDATE = (ROOT / ".github/workflows/dependency-lock-candidate.yml").read_text
 
 def test_the_required_checks_are_every_run_step_of_the_release_verification_except_installs():
     commands = [step["command"] for step in required.required_commands()]
-    run_steps = len(re.findall(r"^\s*run:", RELEASE, flags=re.M))
-    installs = len(re.findall(r"^\s*run: python -m pip install", RELEASE, flags=re.M))
-    assert len(commands) == run_steps - installs >= 25
+    steps = required.run_steps(RELEASE)
+    assert len(steps) == len(re.findall(r"^\s*run:", RELEASE, flags=re.M))
+    # Only installs, and the build job with its own hash-locked backend, are left out.
+    assert required.INDEPENDENT_OF_RUNTIME_DEPENDENCIES == {"release-artifacts"}
+    assert commands == [step["command"] for step in steps if "pip install" not in step["command"]
+                        and step["job"] != "release-artifacts"]
+    assert len(commands) >= 25
     phases = re.findall(r"run: (python scripts/verify_phase\.py [a-z_]+(?: --completed-only)?)", RELEASE)
     assert phases and set(phases) <= set(commands)
     assert "python scripts/staging_trial.py --output staging-trial.json" in commands

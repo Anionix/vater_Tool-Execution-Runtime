@@ -48,6 +48,8 @@ def parse_lock(text: str) -> list[dict]:
 def classify(command: str) -> tuple[str, str]:
     if "--require-hashes" in command and "requirements-py313.lock" in command:
         return "hash_locked", "Installs exactly the reviewed lock, every artifact checked against its SHA-256."
+    if "--require-hashes" in command and "requirements-build.lock" in command:
+        return "hash_locked", "Installs exactly the reviewed build backend, checked against its SHA-256."
     if re.fullmatch(r"python -m pip install uv==\d+(\.\d+)*", command):
         return "tool_pinned", "The resolver itself, pinned to an exact version, used only to produce a lock candidate."
     return ("diagnostic_unpinned", "Offline or diagnostic tests against the newest allowed versions; never used to "
@@ -78,6 +80,8 @@ def build(root: Path = ROOT) -> dict:
         "resolver": "uv 0.10.0 in .github/workflows/dependency-lock-candidate.yml, for CPython 3.13 on x86-64 Linux",
         "direct_requirements": DIRECT,
         "packages": parse_lock(lock),
+        "build_requirements": {"lock": "requirements-build.lock",
+                               "packages": parse_lock((root / "requirements-build.lock").read_text(encoding="utf-8"))},
         "installs": workflow_installs(root),
     }
 

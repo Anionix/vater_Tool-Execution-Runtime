@@ -302,6 +302,17 @@
    ]
   }
  ],
+ "build_requirements": {
+  "lock": "requirements-build.lock",
+  "packages": [
+   {
+    "name": "setuptools",
+    "version": "80.9.0",
+    "hashes": 1,
+    "adopted_via": []
+   }
+  ]
+ },
  "installs": [
   {
    "workflow": "dependency-lock-candidate.yml",
@@ -356,6 +367,12 @@
    "command": "python -m pip install '.[test]'",
    "kind": "diagnostic_unpinned",
    "reason": "Offline or diagnostic tests against the newest allowed versions; never used to build or release, and the release jobs install the lock."
+  },
+  {
+   "workflow": "python-verification.yml",
+   "command": "python -m pip install --require-hashes --only-binary :all: -r requirements-build.lock",
+   "kind": "hash_locked",
+   "reason": "Installs exactly the reviewed build backend, checked against its SHA-256."
   },
   {
    "workflow": "python-verification.yml",

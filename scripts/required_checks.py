@@ -23,6 +23,9 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 WORKFLOW = ROOT / ".github" / "workflows" / "python-verification.yml"
+# Jobs that do not use the runtime dependency set: release-artifacts builds with its own
+# hash-locked backend (requirements-build.lock), so a runtime candidate does not change it.
+INDEPENDENT_OF_RUNTIME_DEPENDENCIES = frozenset({"release-artifacts"})
 
 
 def run_steps(text: str) -> list[dict]:
@@ -53,7 +56,8 @@ def run_steps(text: str) -> list[dict]:
 
 def required_commands(workflow: Path = WORKFLOW) -> list[dict]:
     return [step for step in run_steps(workflow.read_text(encoding="utf-8"))
-            if not re.search(r"\bpip install\b", step["command"])]
+            if not re.search(r"\bpip install\b", step["command"])
+            and step["job"] not in INDEPENDENT_OF_RUNTIME_DEPENDENCIES]
 
 
 def with_interpreter(command: str, python: str = sys.executable) -> str:
