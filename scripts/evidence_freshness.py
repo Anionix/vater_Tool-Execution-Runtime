@@ -18,7 +18,7 @@ from __future__ import annotations
 
 import argparse
 from datetime import datetime, timezone
-from hashlib import sha256
+from hashlib import sha1, sha256
 import json
 import os
 from pathlib import Path
@@ -34,14 +34,23 @@ def digest(path: Path) -> str | None:
     return sha256(path.read_bytes()).hexdigest() if path.is_file() else None
 
 
+def git_blob(path: Path) -> str | None:
+    """The git blob id of a file, for records bound by source_blobs."""
+    if not path.is_file():
+        return None
+    data = path.read_bytes()
+    return sha1(b"blob %d\0" % len(data) + data).hexdigest()
+
+
 def freshness(record_path: Path, root: Path = ROOT) -> dict:
     record = json.loads(record_path.read_text(encoding="utf-8"))
-    bound = record.get("source_sha256") or {}
+    bound, blobs = record.get("source_sha256") or {}, record.get("source_blobs") or {}
     name = str(record_path.relative_to(root)) if record_path.is_relative_to(root) else str(record_path)
     result = {"record": name, "task_id": record.get("task_id")}
-    if not bound:
+    if not bound and not blobs:
         return {**result, "state": "unbound", "changed": []}
-    changed = sorted(file for file, expected in bound.items() if digest(root / file) != expected)
+    changed = sorted({file for file, expected in bound.items() if digest(root / file) != expected}
+                     | {file for file, expected in blobs.items() if git_blob(root / file) != expected})
     if record.get("report_path") and digest(root / record["report_path"]) != record.get("report_sha256"):
         changed.append(record["report_path"])
     return {**result, "state": "stale" if changed else "fresh", "changed": changed}
@@ -71,7 +80,9 @@ def phase_files(phase: str, root: Path = ROOT) -> set[str]:
 def refresh_gate(phase: str, root: Path = ROOT, runner=run_phase, files=phase_files) -> dict:
     path = root / "evidence" / "gates" / f"{phase}.json"
     record = json.loads(path.read_text(encoding="utf-8"))
-    report = root / record["report_path"]
+    # A report of its own: several older gates share one report file, which a rerun must not overwrite.
+    report_path = f"evidence/gates/{phase}-tests.xml"
+    report = root / report_path
     candidate = report.with_name(report.name + ".candidate")
     candidate.unlink(missing_ok=True)
     if runner(phase, candidate, root) != 0 or not candidate.is_file():
@@ -81,8 +92,8 @@ def refresh_gate(phase: str, root: Path = ROOT, runner=run_phase, files=phase_fi
     bound = sorted(set(record.get("source_sha256") or {}) | files(phase, root))
     refreshed = {**record,
                  "source_sha256": {name: digest(root / name) for name in bound if (root / name).is_file()},
-                 "previous_report_sha256": record.get("report_sha256"),
-                 "report_sha256": digest(report),
+                 "previous_report": {"path": record.get("report_path"), "sha256": record.get("report_sha256")},
+                 "report_path": report_path, "report_sha256": digest(report),
                  "refreshed_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
                  "environment": {"python": platform.python_version(), "platform": platform.platform()}}
     path.write_text(json.dumps(refreshed, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")

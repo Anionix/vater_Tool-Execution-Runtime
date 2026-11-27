@@ -92,7 +92,8 @@ def test_a_passing_rerun_rebinds_the_gate_to_the_current_files(project):
     record = json.loads((project / "evidence/gates/demo.json").read_text())
     assert result["state"] == "fresh"
     assert set(record["source_sha256"]) == {"src/a.py", "tests/test_a.py"}
-    assert record["previous_report_sha256"] != record["report_sha256"] and record["refreshed_at"]
+    assert record["previous_report"]["sha256"] != record["report_sha256"] and record["refreshed_at"]
+    assert record["report_path"] == "evidence/gates/demo-tests.xml"
 
 
 def test_a_failing_rerun_leaves_the_gate_record_untouched(project):
@@ -107,3 +108,32 @@ def test_a_failing_rerun_leaves_the_gate_record_untouched(project):
         freshness.refresh_gate("demo", project, runner=failing, files=lambda phase, root: set())
     assert {path: path.read_bytes() for path in (project / "evidence/gates").iterdir()} == before
     assert freshness.freshness(project / "evidence/gates/demo.json", project)["state"] == "stale"
+
+
+def test_a_shared_report_is_never_overwritten_by_a_rerun(project):
+    shared = project / "evidence" / "shared-tests.xml"
+    shared.write_text("<testsuite tests='9'/>\n")
+    record_path = project / "evidence/gates/demo.json"
+    record = json.loads(record_path.read_text())
+    record_path.write_text(json.dumps({**record, "report_path": "evidence/shared-tests.xml",
+                                       "report_sha256": digest(shared)}))
+    before = shared.read_bytes()
+
+    def passing(phase, report, root):
+        report.write_text("<testsuite tests='1' failures='0'/>\n")
+        return 0
+
+    freshness.refresh_gate("demo", project, runner=passing, files=lambda phase, root: set())
+    assert shared.read_bytes() == before
+    assert json.loads(record_path.read_text())["previous_report"]["path"] == "evidence/shared-tests.xml"
+
+
+def test_records_bound_by_git_blob_ids_are_checked_too(project):
+    blob_record = project / "evidence" / "gates" / "blobs.json"
+    blob_record.write_text(json.dumps({"task_id": "gate.blobs.completed",
+                                       "source_blobs": {"src/a.py": freshness.git_blob(project / "src/a.py")}}))
+    assert freshness.freshness(blob_record, project)["state"] == "fresh"
+    (project / "src" / "a.py").write_text("A = 3\n")
+    assert freshness.freshness(blob_record, project)["changed"] == ["src/a.py"]
+    assert freshness.git_blob(ROOT / "pyproject.toml") == __import__("subprocess").run(
+        ["git", "hash-object", "pyproject.toml"], cwd=ROOT, capture_output=True, text=True).stdout.strip()
