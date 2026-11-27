@@ -72,3 +72,16 @@ def test_external_change_evidence_runs_only_on_a_person_s_request():
     assert "persist-credentials: false" in text and "pip install" not in text
     uses = re.findall(r"uses: ([^@\s]+)@(\S+)", text)
     assert uses and all(re.fullmatch(r"[0-9a-f]{40}", ref) for _action, ref in uses), uses
+
+
+def test_no_plain_run_command_breaks_the_workflow_yaml():
+    """A plain scalar cannot contain ': ' or end in ':' (YAML would read a mapping and
+    GitHub would reject the whole workflow); such commands must be quoted or folded."""
+    import re
+    for path in sorted(WORKFLOWS.glob("*.yml")):
+        for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+            match = re.match(r"^\s*(?:- )?run:\s*(.*)$", line)
+            if not match or match.group(1)[:1] in ("", ">", "|", "'", '"'):
+                continue
+            value = match.group(1).split(" #", 1)[0]
+            assert ": " not in value and not value.endswith(":"), f"{path.name}:{number}"
