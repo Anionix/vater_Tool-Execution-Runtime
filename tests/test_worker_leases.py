@@ -62,12 +62,16 @@ def test_expired_owner_cannot_heartbeat_or_dispatch(tmp_path):
     assert db.get(op.operation_id).state=='prepared'
 
 
-def test_heartbeat_preserves_active_lease(tmp_path):
+def test_heartbeat_preserves_active_lease(tmp_path, monkeypatch):
+    # A controlled clock: with time.sleep, a slow runner could pass the 250 ms lease
+    # before the heartbeat ran (seen in CI), which is not what this test is about.
+    clock={'now':1_800_000_000_000}
+    monkeypatch.setattr(LeasedLedger,'_now',staticmethod(lambda: clock['now']))
     db=LeasedLedger(tmp_path/'ledger.sqlite3');token=db.new_session(duration_ms=250).token
     op=reserved(db,'heartbeat');db.start(op.operation_id,token=token,duration_ms=250)
-    time.sleep(.12)
+    clock['now']+=120
     db.heartbeat(token,duration_ms=300)
-    time.sleep(.18)
+    clock['now']+=180  # past the first lease, inside the renewed one
     assert db.recover_expired()==0
     assert db.finish(op.operation_id,token=token,value=3).state=='succeeded'
 
