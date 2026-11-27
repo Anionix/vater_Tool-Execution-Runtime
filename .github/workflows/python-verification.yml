@@ -97,7 +97,9 @@ jobs:
           retention-days: 90
 
   release-artifacts:
-    # task.operations.006 / 008: SHA-256 of source, dependencies and artifacts; a reproducible-build trial.
+    # task.operations.006 / 008 / 009: artifacts are built and kept only after every verification
+    # job (including the safety tests) and every security check of the release gate has passed.
+    needs: [offline-contracts, durable-state, dependency-vulnerabilities, official-mcp]
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -107,20 +109,30 @@ jobs:
       - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
         with:
           python-version: '3.13'
+      - name: Stop the release on any failed security check
+        run: python scripts/release_gate.py --output release-gate.json
       - name: Install the hash-locked build backend
         # A folded block: ':all: ' would end a plain YAML scalar.
         run: >-
           python -m pip install --require-hashes --only-binary :all: -r requirements-build.lock
       - name: Build under varied environments and record every SHA-256
         run: python scripts/release_manifest.py --output release-manifest.json --dist dist
+      # No 'if: always()': nothing is distributed after a failed gate or build.
       - name: Keep the artifacts and their manifest
-        if: always()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: release-artifacts
           path: |
             dist/
             release-manifest.json
+          if-no-files-found: error
+          retention-days: 90
+      - name: Keep the release gate report
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: release-gate
+          path: release-gate.json
           if-no-files-found: warn
           retention-days: 90
 
