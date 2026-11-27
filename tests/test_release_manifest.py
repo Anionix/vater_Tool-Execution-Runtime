@@ -111,7 +111,12 @@ def test_the_manifest_ties_source_dependencies_and_artifacts_together(tmp_path, 
     assert trial["variants"]["B"]["TZ"] == "Asia/Tokyo" and trial["variants"]["B"]["umask"] == "0o77"
     assert trial["variants"]["C"]["SOURCE_DATE_EPOCH"] is None
     assert [d["field"] for d in trial["without_source_date_epoch"]] == ["date_time"]  # recorded, not hidden
-    assert "files_sha256" not in release.summary(full)["source"]
+    short = release.summary(full)
+    assert "files_sha256" not in short["source"]
+    assert short["reproducibility"]["without_source_date_epoch"] == [{
+        "artifact": "verified_execution_prototype-0.11.0-py3-none-any.whl", "field": "date_time", "members": 1,
+        "example": {"member": "verified_execution/__init__.py", "a": [2026, 11, 27, 0, 0, 0],
+                    "b": [2026, 11, 28, 12, 0, 0]}}]
 
 
 def test_each_build_gets_a_fresh_copy_of_exactly_the_tracked_files(tmp_path):

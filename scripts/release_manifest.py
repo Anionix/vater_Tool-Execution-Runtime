@@ -171,9 +171,23 @@ def manifest(root: Path, work: Path) -> dict:
     }
 
 
+def grouped(differences_found: list[dict]) -> list[dict]:
+    """Differences per artifact and field: how many members differ, with one example."""
+    groups: dict[tuple, dict] = {}
+    for item in differences_found:
+        key = (item["artifact"], item["field"])
+        group = groups.setdefault(key, {"artifact": item["artifact"], "field": item["field"], "members": 0,
+                                        "example": {k: item[k] for k in ("member", "a", "b")}})
+        group["members"] += 1
+    return list(groups.values())
+
+
 def summary(full: dict) -> dict:
-    """The manifest without the per-file source list (kept in the artifact)."""
-    return {**full, "source": {key: value for key, value in full["source"].items() if key != "files_sha256"}}
+    """The manifest for the log: no per-file source list, differences grouped (all are in the artifact)."""
+    trial = full["reproducibility"]
+    return {**full, "source": {key: value for key, value in full["source"].items() if key != "files_sha256"},
+            "reproducibility": {**trial, "controlled_differences": grouped(trial["controlled_differences"]),
+                                "without_source_date_epoch": grouped(trial["without_source_date_epoch"])}}
 
 
 def main(argv: list[str] | None = None) -> int:
