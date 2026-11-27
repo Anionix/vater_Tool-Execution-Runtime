@@ -5,14 +5,14 @@
   "verification_status": "passed",
   "executed": true,
   "report_path": "evidence/external-change-tests.xml",
-  "report_sha256": "e970258da20b0e76137ba6060a1c410537dbec5e9fe0fbfbb85d20c06d184d42",
+  "report_sha256": "f40196bf2bd07a07d9e3fe32b7bfc80cb4208d86b2d58415b2d036d3b885f8a2",
   "source_sha256": {
     ".github/workflows/external-change-evidence.yml": "ab1134f3503415c92ee3cce27037f73752839bbb4084b0f73759a5f0e6b671c1",
-    "contracts/github_issue_destination.json": "5e4a26da1713c877c59462421d8d1be44abbea1a64308660ab4bdb993899d2b5",
+    "contracts/github_issue_destination.json": "fd6a06c0cca8a5519773a17083ef239b87b836d8c8d76809e957ca06735b2cec",
     "evidence/external/github-issues-run-45839952764.json": "75f5480aeca6f769fc99c4cd89d116cbef449f4002cd837a5c708d3e22e66e53",
     "scripts/run_github_issue_evidence.py": "56ed2b8c0c0dc71adb4950624e1407169a251472547b453b32a14ed81fda2e7d",
-    "src/verified_execution/external_change.py": "59a3d39415b62337b3a39bb00e7ce31aa36072f5abeafeba8dd4725082828b02",
-    "tests/test_external_change.py": "418b0ca6c70a6798829ec38652d785094840c6911c01782d86405c9a0d3839a3",
+    "src/verified_execution/external_change.py": "65547f3beae40595c93b0298c34fbaf709e51352ef25f2b7d0d5d87decbb9f8a",
+    "tests/test_external_change.py": "72806d207bb2a332e28691f6c01256078961373d6432230d7a3bf0ff8be0a668",
     "tests/test_external_evidence_record.py": "d810d9ed3b03690ccfb09115791aede1cbe5a7bb85af6805f8eda8b8a0ad43fe"
   },
   "scope": "A request is resent only after a rate-limit reply proving it did not execute, at most twice in total. Live, neither a replay nor a dropped reply caused a second POST. The rate-limit resend itself is covered by unit tests only, because a live run cannot force a rate limit. Live evidence: run 45839952764 of .github/workflows/external-change-evidence.yml against this repository's GitHub Issues (issues #385 and #386, both closed), archived in evidence/external/github-issues-run-45839952764.json. Unit tests against an in-memory fake cover the executor's branches that a live run cannot force.",

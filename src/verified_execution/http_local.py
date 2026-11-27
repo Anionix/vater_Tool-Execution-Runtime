@@ -16,7 +16,7 @@ from starlette.routing import Route
 from .core import LocalAuthority, OperationError
 from .json_bounds import check_json_depth
 from .runtime import ToolRuntime
-from .tools import ToolRegistry, ToolSpec, thaw
+from .tools import DEFAULT_CONTRACTS_DIR, ToolRegistry, ToolSpec, thaw
 
 LOOPBACK = "127.0.0.1"
 MAX_BYTES = 4096
@@ -166,16 +166,25 @@ def create_app(token: str, authority: LocalAuthority | None = None, *,
         job.state = "cancelled"
         return response(200, state=job.state)
 
-    submit_codes = {202, 400, 401, 403, 413, 415, 429}
+    # task.testing.023: every response body is described, so the document can be
+    # checked against what the handlers above actually send. The bodies come from
+    # contracts/ like every other schema; only the job result is filled in here,
+    # from the served tools' own output contracts.
+    described = json.loads((DEFAULT_CONTRACTS_DIR / "http_jobs.responses.json").read_text(encoding="utf-8"))
+    bodies = described["operations"]
+    bodies["status"]["200"]["properties"]["result"] = {
+        "anyOf": [*(thaw(spec.output_schema)["properties"]["result"] for spec in served.values()),
+                  {"type": "null"}]}
 
-    def responses(codes: set[int]) -> dict:
-        return {str(code): {"description": f"HTTP {code}"} for code in sorted(codes)}
+    def responses(operation: str) -> dict:
+        return {code: {"description": f"HTTP {code}", "content": {"application/json": {"schema": schema}}}
+                for code, schema in sorted(bodies[operation].items())}
 
     def submission(operation_id: str, spec: ToolSpec) -> dict:
         return {
             "operationId": operation_id,
             "summary": spec.description,
-            "responses": responses(submit_codes),
+            "responses": responses("submit"),
             "requestBody": {"required": True,
                             "content": {"application/json": {"schema": thaw(spec.input_schema)}}},
         }
@@ -187,9 +196,8 @@ def create_app(token: str, authority: LocalAuthority | None = None, *,
     if default_tool is not None:
         paths["/jobs"] = {"post": submission("start", served[default_tool])}
     paths["/jobs/{job_id}"] = {
-        "get": {"operationId": "status", "responses": responses({200, 401, 404}), "parameters": job_parameter},
-        "delete": {"operationId": "cancel", "responses": responses({200, 401, 404, 409}),
-                   "parameters": job_parameter},
+        "get": {"operationId": "status", "parameters": job_parameter, "responses": responses("status")},
+        "delete": {"operationId": "cancel", "parameters": job_parameter, "responses": responses("cancel")},
     }
     routes = [Route("/tools/{tool_name}/jobs", start_named, methods=["POST"]),
               Route("/jobs/{job_id}", status, methods=["GET"]),

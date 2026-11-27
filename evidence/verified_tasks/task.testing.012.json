@@ -5,10 +5,10 @@
   "verification_status": "passed",
   "executed": true,
   "report_path": "evidence/attack-reproduction-tests.xml",
-  "report_sha256": "ba7e6a675e91742483df8f3aa1b0aa47212819d883e95fab1e7cac4827df5a55",
+  "report_sha256": "7b63a0db1d991864ab79118ebc3e6a7dad478f4c94f4a08c46be94e12bc9e707",
   "source_sha256": {
     "scripts/guarded_stdio.py": "dd0d6532805285f6108f75d24f9a4a0d54769c8e500265b166d8f98dd903aa5f",
-    "src/verified_execution/http_local.py": "b85e7d0c2d90f26d3fad5215a31f3b64c523385ede842a87064e989b5ab4663d",
+    "src/verified_execution/http_local.py": "3a9f0478fd2f8dd751973baefca8173f15f10007f105ce46c77069aca7ae394b",
     "tests/test_attack_reproduction.py": "6145c67968f9657f966dfe6304342f29a8776ba4529522a8f567f9e6de66da0c",
     "tests/test_guarded_stdio.py": "1a7a76a30d283e0538d2072286826f9cd06a52f9cf140d7c4cb9ca35289e5cc3",
     "tests/test_unicode_input_validation.py": "0fedc482595548773df14b88a5e951d8e280c5d798fe771add72ae5b46e1eba9"

@@ -157,3 +157,22 @@ def test_a_scenario_that_raises_still_closes_its_issues_and_writes_the_report(tm
     assert report["all_passed"] is False and "TransportError" in report["error"]
     assert len(fake.issues) == 1 and fake.closed == [1] and report["closed"] == [1]
     assert all(issue["state"] == "closed" for issue in fake.issues)
+
+
+def test_an_issue_no_reply_named_is_still_closed_through_its_marker(tmp_path, monkeypatch):
+    # The lost-reply create answers 500 after creating, so no 201 reply names it, and
+    # the executor's own lookups (list reads 2 and 3) miss it. Only the harness's
+    # marker lookup finds it, and it must still be closed (regression REG-007).
+    script = load_script()
+    fake = SelectivelyLaggingRepository(hidden={2, 3})
+    fake.script = ["ok", "server_error_after_create"]
+    monkeypatch.setattr(script, "UrllibTransport", lambda repository, token: fake)
+    monkeypatch.setattr(script.time, "sleep", lambda _seconds: None)
+    monkeypatch.setenv("GITHUB_REPOSITORY", "example/repository")
+    monkeypatch.setenv("GITHUB_TOKEN", "dummy-token-for-the-fake")
+    output = tmp_path / "report.json"
+    monkeypatch.setattr("sys.argv", ["run_github_issue_evidence.py", "--output", str(output)])
+
+    script.main()
+    assert len(fake.issues) == 2 and sorted(fake.closed) == [1, 2]
+    assert all(issue["state"] == "closed" for issue in fake.issues)

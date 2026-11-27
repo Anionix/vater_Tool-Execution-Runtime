@@ -1,0 +1,236 @@
+{
+  "contract_version": "1.0.0",
+  "description": "Response bodies of the local HTTP jobs API (src/verified_execution/http_local.py). The adapter serves these as the OpenAPI response schemas; in operations.status.200 the 'result' property is replaced by the served tools' result schemas (from their output contracts) or null.",
+  "operations": {
+    "submit": {
+      "202": {
+        "type": "object",
+        "required": [
+          "job_id",
+          "state"
+        ],
+        "properties": {
+          "job_id": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{32}$"
+          },
+          "state": {
+            "const": "prepared"
+          }
+        },
+        "additionalProperties": false
+      },
+      "400": {
+        "type": "object",
+        "required": [
+          "error"
+        ],
+        "properties": {
+          "error": {
+            "type": "string",
+            "enum": [
+              "INVALID_BODY",
+              "INCOMPLETE_BODY"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "401": {
+        "type": "object",
+        "required": [
+          "error"
+        ],
+        "properties": {
+          "error": {
+            "type": "string",
+            "enum": [
+              "UNAUTHORIZED"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "403": {
+        "type": "object",
+        "required": [
+          "error"
+        ],
+        "properties": {
+          "error": {
+            "type": "string",
+            "enum": [
+              "NOT_AUTHORIZED"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "413": {
+        "type": "object",
+        "required": [
+          "error"
+        ],
+        "properties": {
+          "error": {
+            "type": "string",
+            "enum": [
+              "BODY_TOO_LARGE"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "415": {
+        "type": "object",
+        "required": [
+          "error"
+        ],
+        "properties": {
+          "error": {
+            "type": "string",
+            "enum": [
+              "UNSUPPORTED_MEDIA_TYPE"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "429": {
+        "type": "object",
+        "required": [
+          "error"
+        ],
+        "properties": {
+          "error": {
+            "type": "string",
+            "enum": [
+              "JOB_LIMIT"
+            ]
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "status": {
+      "200": {
+        "type": "object",
+        "required": [
+          "error",
+          "result",
+          "state"
+        ],
+        "properties": {
+          "state": {
+            "enum": [
+              "prepared",
+              "running",
+              "succeeded",
+              "failed",
+              "cancelled"
+            ]
+          },
+          "result": {
+            "description": "Replaced by the served tools' result schemas, or null."
+          },
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "401": {
+        "type": "object",
+        "required": [
+          "error"
+        ],
+        "properties": {
+          "error": {
+            "type": "string",
+            "enum": [
+              "UNAUTHORIZED"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "404": {
+        "type": "object",
+        "required": [
+          "error"
+        ],
+        "properties": {
+          "error": {
+            "type": "string",
+            "enum": [
+              "UNKNOWN_JOB"
+            ]
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "cancel": {
+      "200": {
+        "type": "object",
+        "required": [
+          "state"
+        ],
+        "properties": {
+          "state": {
+            "const": "cancelled"
+          }
+        },
+        "additionalProperties": false
+      },
+      "401": {
+        "type": "object",
+        "required": [
+          "error"
+        ],
+        "properties": {
+          "error": {
+            "type": "string",
+            "enum": [
+              "UNAUTHORIZED"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "404": {
+        "type": "object",
+        "required": [
+          "error"
+        ],
+        "properties": {
+          "error": {
+            "type": "string",
+            "enum": [
+              "UNKNOWN_JOB"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "409": {
+        "type": "object",
+        "required": [
+          "error"
+        ],
+        "properties": {
+          "error": {
+            "type": "string",
+            "enum": [
+              "CANNOT_CANCEL"
+            ]
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

@@ -5,10 +5,10 @@
   "verification_status": "passed",
   "executed": true,
   "report_path": "evidence/attack-reproduction-tests.xml",
-  "report_sha256": "ba7e6a675e91742483df8f3aa1b0aa47212819d883e95fab1e7cac4827df5a55",
+  "report_sha256": "7b63a0db1d991864ab79118ebc3e6a7dad478f4c94f4a08c46be94e12bc9e707",
   "source_sha256": {
     "server_mcp.py": "4445686917724617d7be5ebc8ae316417b1d0c029f6a8ff904251c1779ccc877",
-    "src/verified_execution/cancellable_bridge.py": "dff23afe49664e163785712d06b31436bc87b3663c40ba71075938b0a3d5d48d",
+    "src/verified_execution/cancellable_bridge.py": "54e220985d38c0c7285b58bdbd4b8dcd781a818b10305822896d14726f665215",
     "src/verified_execution/runtime.py": "41ad00eb06ab2f19acb1996d19929ee64077a553eb453be2604737f1bfe3df67",
     "tests/test_attack_reproduction.py": "6145c67968f9657f966dfe6304342f29a8776ba4529522a8f567f9e6de66da0c",
     "tests/test_ledger.py": "d4cf3c38949e718558d35bfb63eeb2d39cced84010b74d6ffc1befc4f1105770"

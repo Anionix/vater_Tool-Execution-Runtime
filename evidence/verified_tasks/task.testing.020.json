@@ -1,0 +1,30 @@
+{
+  "task_id": "task.testing.020",
+  "acceptance_criteria": "同時予約・取消し・所有権切替を独立試験し、未検査の並行順序を保証済みにしない",
+  "verified_on": "2026-11-27",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/testing-phase-tests.xml",
+  "report_sha256": "8a66adeaf1b98f4e1c6c05b5834ad69c39a4841aff8f3949cd09a43d7d5c7768",
+  "source_sha256": {
+    "src/verified_execution/external_change.py": "65547f3beae40595c93b0298c34fbaf709e51352ef25f2b7d0d5d87decbb9f8a",
+    "src/verified_execution/ledger.py": "3d8ba058dd5dd23957e70e87cf3a053514dd417a3ca05b35ba9410ebb3305a42",
+    "src/verified_execution/model_mock.py": "5ef31bfd7192fc0acff45e765d6820cff1897ddc4071bcfd2ca14beee5eae6f1",
+    "src/verified_execution/worker_leases.py": "3a328d1fe8043b51059c1c7e9e912a706136fb487ca896e4827cb3dd63a33b72",
+    "tests/test_interleavings.py": "41c6bc755148a71ca8d13ea8fe6be018632dc1890908d8fc5910fdf1c2e27391"
+  },
+  "scope": "Every transaction order of concurrent reservation (20 orders), cancellation against dispatch and result, and lease-expiry ownership switch (30 orders) is run on a fresh ledger with a controlled clock and checked against its invariants; each search finds counterexamples when one guard is removed from the ledger. Real threads and task cancellation close three paths that had no test: two callers with one external request key, the model call budget, a cancelled external call, and a stalled diagnostics reader. Orders inside one transaction are not enumerated and are recorded as unchecked.",
+  "test_cases": [
+    "tests/test_interleavings.py::test_every_order_of_two_reservations_dispatches_once",
+    "tests/test_interleavings.py::test_conflicting_reservations_keep_the_first_intent_in_every_order",
+    "tests/test_interleavings.py::test_reservation_search_finds_the_counterexample_in_a_broken_ledger",
+    "tests/test_interleavings.py::test_every_order_of_cancel_and_completion_keeps_its_meaning",
+    "tests/test_interleavings.py::test_cancellation_search_finds_the_counterexample_in_a_broken_ledger",
+    "tests/test_interleavings.py::test_every_order_of_owner_recovery_and_expiry_is_fenced",
+    "tests/test_interleavings.py::test_ownership_search_finds_the_counterexample_in_a_broken_ledger",
+    "tests/test_interleavings.py::test_two_threads_with_one_request_key_create_one_issue",
+    "tests/test_interleavings.py::test_model_call_budget_holds_under_concurrent_calls",
+    "tests/test_interleavings.py::test_cancelled_external_call_still_records_its_result",
+    "tests/test_interleavings.py::test_a_stalled_diagnostics_reader_does_not_stop_replies"
+  ]
+}

@@ -33,11 +33,12 @@ import sqlite3
 import time
 from typing import Any, Callable, Mapping, NamedTuple, Protocol
 from urllib.parse import urlencode
+import urllib.request
 
 from .core import LocalAuthority, OperationError
 from .durable import validate_request_key
 from .ledger import LedgerError, Operation, OperationLedger
-from .recorded_tool_bridge import BridgeResult
+from .recorded_tool_bridge import BridgeResult, declared_failures, within_contract
 from .tools import DEFAULT_CONTRACTS_DIR, ToolSpec
 
 TOOL_NAME = "github_test_create_issue"
@@ -94,7 +95,7 @@ class UrllibTransport:
         # the request may or may not have executed.
         unreadable = (urllib.error.URLError, OSError, TimeoutError, http.client.HTTPException)
         try:
-            with urllib.request.urlopen(request, timeout=self._timeout) as response:
+            with _OPENER.open(request, timeout=self._timeout) as response:
                 return HttpReply(response.status, _lower(response.headers), _json(response.read()))
         except urllib.error.HTTPError as error:
             try:
@@ -103,6 +104,19 @@ class UrllibTransport:
                 raise TransportError(type(read_error).__name__) from None
         except unreadable as error:
             raise TransportError(type(error).__name__) from None
+
+
+class _RefuseRedirects(urllib.request.HTTPRedirectHandler):
+    """urllib copies every request header, Authorization included, onto the
+    redirected request, even when it goes to another host. Redirects are never
+    followed: the 3xx reply itself is returned (a definitive non-execution for a
+    create), and the credential never leaves the configured host."""
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        return None
+
+
+_OPENER = urllib.request.build_opener(_RefuseRedirects())
 
 
 def _lower(headers) -> dict[str, str]:
@@ -350,7 +364,15 @@ class ExternalChangeExecutor:
         return await anyio.to_thread.run_sync(self.call, name, arguments, abandon_on_cancel=False)
 
     def result(self, operation_id: str) -> dict[str, Any] | None:
-        """EXTERNAL-012: the stored destination result for one operation."""
+        """EXTERNAL-012: the stored destination result for one of this
+        principal's operations. Another principal's operation id reads as
+        absent (as LEDGER-010 does for calculations), never as its result."""
+        try:
+            op = self.ledger.get(operation_id)
+        except LedgerError:
+            return None
+        if op.principal != self.principal or op.tool_name != TOOL_NAME:
+            return None
         return self.store.get(operation_id)
 
     @staticmethod
@@ -359,6 +381,10 @@ class ExternalChangeExecutor:
         return {"title": request.title}
 
     def call(self, name: str, arguments: Any) -> BridgeResult:
+        # CONTRACT-FAILURE-001: only declared failure codes reach a client.
+        return within_contract(self._call(name, arguments), declared_failures(TOOL_NAME))
+
+    def _call(self, name: str, arguments: Any) -> BridgeResult:
         if name != TOOL_NAME:
             return _error("UNKNOWN_TOOL")
         try:

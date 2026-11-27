@@ -1,0 +1,24 @@
+{
+  "task_id": "task.testing.005",
+  "acceptance_criteria": "別の利用者の対象データを一切返さない",
+  "verified_on": "2026-11-27",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/testing-phase-tests.xml",
+  "report_sha256": "8a66adeaf1b98f4e1c6c05b5834ad69c39a4841aff8f3949cd09a43d7d5c7768",
+  "source_sha256": {
+    "src/verified_execution/external_change.py": "65547f3beae40595c93b0298c34fbaf709e51352ef25f2b7d0d5d87decbb9f8a",
+    "tests/test_cross_principal.py": "a5925133dd9544b6982caa9f11212f79849fc3fce22c436b3bbe8cb781332d4c"
+  },
+  "scope": "Two principals share one ledger. Another principal's request key, operation id, approval, MCP server or HTTP credential returns none of the first principal's data: no value, no issue number, no stored result and no replay. ExternalChangeExecutor.result now reads only the executor's own principal's operations (it returned any operation's result before).",
+  "test_cases": [
+    "tests/test_cross_principal.py::test_saved_result_is_readable_only_by_its_principal[legacy]",
+    "tests/test_cross_principal.py::test_saved_result_is_readable_only_by_its_principal[leased]",
+    "tests/test_cross_principal.py::test_same_request_key_is_a_different_operation_for_another_principal",
+    "tests/test_cross_principal.py::test_approval_for_one_principal_cannot_dispatch_anothers_operation",
+    "tests/test_cross_principal.py::test_mcp_never_replays_another_principals_recorded_call[legacy]",
+    "tests/test_cross_principal.py::test_mcp_never_replays_another_principals_recorded_call[leased]",
+    "tests/test_cross_principal.py::test_external_result_is_readable_only_by_its_principal",
+    "tests/test_cross_principal.py::test_http_jobs_are_not_visible_to_another_credential"
+  ]
+}

@@ -1,0 +1,218 @@
+{
+ "_comment": [
+  "Which official conformance scenarios this stdio server must pass (task.testing.022).",
+  "required: every check SUCCESS or INFO. required_checks: these checks SUCCESS or INFO.",
+  "not_applicable: the category and reason; the observed result is still recorded and compared.",
+  "Every scenario upstream reports must be listed here, and no scenario may report a wire error."
+ ],
+ "scenarios": {
+  "caching": {
+   "required_checks": [
+    "sep-2549-tools-list-caching-hints",
+    "sep-2549-ttl-non-negative",
+    "sep-2549-cache-scope-valid"
+   ],
+   "reason": "Only the tools checks apply; prompts and resources are not offered."
+  },
+  "completion-complete": {
+   "not_applicable": "capability_not_offered",
+   "reason": "The server does not declare this capability (it serves tools only) and correctly answers -32601 Method not found."
+  },
+  "dns-rebinding-protection": {
+   "not_applicable": "http_transport_only",
+   "reason": "The upstream harness reaches the server only through an HTTP URL (Streamable HTTP, SSE, headers, sessions or an SDK client by URL). This server speaks MCP over standard input and output only, so the scenario could not probe it."
+  },
+  "elicitation-sep1034-defaults": {
+   "not_applicable": "http_transport_only",
+   "reason": "The upstream harness reaches the server only through an HTTP URL (Streamable HTTP, SSE, headers, sessions or an SDK client by URL). This server speaks MCP over standard input and output only, so the scenario could not probe it."
+  },
+  "elicitation-sep1330-enums": {
+   "not_applicable": "http_transport_only",
+   "reason": "The upstream harness reaches the server only through an HTTP URL (Streamable HTTP, SSE, headers, sessions or an SDK client by URL). This server speaks MCP over standard input and output only, so the scenario could not probe it."
+  },
+  "http-custom-header-server-validation": {
+   "not_applicable": "http_transport_only",
+   "reason": "The upstream harness reaches the server only through an HTTP URL (Streamable HTTP, SSE, headers, sessions or an SDK client by URL). This server speaks MCP over standard input and output only, so the scenario could not probe it."
+  },
+  "http-header-validation": {
+   "not_applicable": "http_transport_only",
+   "reason": "The upstream harness reaches the server only through an HTTP URL (Streamable HTTP, SSE, headers, sessions or an SDK client by URL). This server speaks MCP over standard input and output only, so the scenario could not probe it."
+  },
+  "input-required-result-basic-elicitation": {
+   "not_applicable": "http_transport_only",
+   "reason": "The upstream harness reaches the server only through an HTTP URL (Streamable HTTP, SSE, headers, sessions or an SDK client by URL). This server speaks MCP over standard input and output only, so the scenario could not probe it."
+  },
+  "input-required-result-basic-list-roots": {
+   "not_applicable": "http_transport_only",
+   "reason": "The upstream harness reaches the server only through an HTTP URL (Streamable HTTP, SSE, headers, sessions or an SDK client by URL). This server speaks MCP over standard input and output only, so the scenario could not probe it."
+  },
+  "input-required-result-basic-sampling": {
+   "not_applicable": "http_transport_only",
+   "reason": "The upstream harness reaches the server only through an HTTP URL (Streamable HTTP, SSE, headers, sessions or an SDK client by URL). This server speaks MCP over standard input and output only, so the scenario could not probe it."
+  },
+  "input-required-result-capability-check": {
+   "not_applicable": "http_transport_only",
+   "reason": "The upstream harness reaches the server only through an HTTP URL (Streamable HTTP, SSE, headers, sessions or an SDK client by URL). This server speaks MCP over standard input and output only, so the scenario could not probe it."
+  },
+  "input-required-result-ignore-extra-params": {
+   "not_applicable": "http_transport_only",
+   "reason": "The upstream harness reaches the server only through an HTTP URL (Streamable HTTP, SSE, headers, sessions or an SDK client by URL). This server speaks MCP over standard input and output only, so the scenario could not probe it."
+  },
+  "input-required-result-missing-input-response": {
+   "not_applicable": "http_transport_only",
+   "reason": "The upstream harness reaches the server only through an HTTP URL (Streamable HTTP, SSE, headers, sessions or an SDK client by URL). This server speaks MCP over standard input and output only, so the scenario could not probe it."
+  },
+  "input-required-result-multi-round": {
+   "not_applicable": "http_transport_only",
+   "reason": "The upstream harness reaches the server only through an HTTP URL (Streamable HTTP, SSE, headers, sessions or an SDK client by URL). This server speaks MCP over standard input and output only, so the scenario could not probe it."
+  },
+  "input-required-result-multiple-input-requests": {
+   "not_applicable": "http_transport_only",
+   "reason": "The upstream harness reaches the server only through an HTTP URL (Streamable HTTP, SSE, headers, sessions or an SDK client by URL). This server speaks MCP over standard input and output only, so the scenario could not probe it."
+  },
+  "input-required-result-non-tool-request": {
+   "not_applicable": "http_transport_only",
+   "reason": "The upstream harness reaches the server only through an HTTP URL (Streamable HTTP, SSE, headers, sessions or an SDK client by URL). This server speaks MCP over standard input and output only, so the scenario could not probe it."
+  },
+  "input-required-result-request-state": {
+   "not_applicable": "http_transport_only",
+   "reason": "The upstream harness reaches the server only through an HTTP URL (Streamable HTTP, SSE, headers, sessions or an SDK client by URL). This server speaks MCP over standard input and output only, so the scenario could not probe it."
+  },
+  "input-required-result-result-type": {
+   "not_applicable": "http_transport_only",
+   "reason": "The upstream harness reaches the server only through an HTTP URL (Streamable HTTP, SSE, headers, sessions or an SDK client by URL). This server speaks MCP over standard input and output only, so the scenario could not probe it."
+  },
+  "input-required-result-tampered-state": {
+   "not_applicable": "http_transport_only",
+   "reason": "The upstream harness reaches the server only through an HTTP URL (Streamable HTTP, SSE, headers, sessions or an SDK client by URL). This server speaks MCP over standard input and output only, so the scenario could not probe it."
+  },
+  "input-required-result-unsupported-methods": {
+   "not_applicable": "http_transport_only",
+   "reason": "The upstream harness reaches the server only through an HTTP URL (Streamable HTTP, SSE, headers, sessions or an SDK client by URL). This server speaks MCP over standard input and output only, so the scenario could not probe it."
+  },
+  "input-required-result-validate-input": {
+   "not_applicable": "http_transport_only",
+   "reason": "The upstream harness reaches the server only through an HTTP URL (Streamable HTTP, SSE, headers, sessions or an SDK client by URL). This server speaks MCP over standard input and output only, so the scenario could not probe it."
+  },
+  "json-schema-2020-12": {
+   "not_applicable": "fixture_tool_required",
+   "reason": "Needs a tool that exists only in upstream's reference server (image, audio, embedded resource, progress or the JSON Schema 2020-12 fixture tool)."
+  },
+  "logging-set-level": {
+   "not_applicable": "capability_not_offered",
+   "reason": "The server does not declare this capability (it serves tools only) and correctly answers -32601 Method not found."
+  },
+  "ping": {
+   "required": true
+  },
+  "prompts-get-embedded-resource": {
+   "not_applicable": "capability_not_offered",
+   "reason": "The server does not declare this capability (it serves tools only) and correctly answers -32601 Method not found."
+  },
+  "prompts-get-simple": {
+   "not_applicable": "capability_not_offered",
+   "reason": "The server does not declare this capability (it serves tools only) and correctly answers -32601 Method not found."
+  },
+  "prompts-get-with-args": {
+   "not_applicable": "capability_not_offered",
+   "reason": "The server does not declare this capability (it serves tools only) and correctly answers -32601 Method not found."
+  },
+  "prompts-get-with-image": {
+   "not_applicable": "capability_not_offered",
+   "reason": "The server does not declare this capability (it serves tools only) and correctly answers -32601 Method not found."
+  },
+  "prompts-list": {
+   "not_applicable": "capability_not_offered",
+   "reason": "The server does not declare this capability (it serves tools only) and correctly answers -32601 Method not found."
+  },
+  "resources-list": {
+   "not_applicable": "capability_not_offered",
+   "reason": "The server does not declare this capability (it serves tools only) and correctly answers -32601 Method not found."
+  },
+  "resources-read-binary": {
+   "not_applicable": "capability_not_offered",
+   "reason": "The server does not declare this capability (it serves tools only) and correctly answers -32601 Method not found."
+  },
+  "resources-read-text": {
+   "not_applicable": "capability_not_offered",
+   "reason": "The server does not declare this capability (it serves tools only) and correctly answers -32601 Method not found."
+  },
+  "resources-subscribe": {
+   "not_applicable": "capability_not_offered",
+   "reason": "The server does not declare this capability (it serves tools only) and correctly answers -32601 Method not found."
+  },
+  "resources-templates-read": {
+   "not_applicable": "capability_not_offered",
+   "reason": "The server does not declare this capability (it serves tools only) and correctly answers -32601 Method not found."
+  },
+  "resources-unsubscribe": {
+   "not_applicable": "capability_not_offered",
+   "reason": "The server does not declare this capability (it serves tools only) and correctly answers -32601 Method not found."
+  },
+  "sep-2164-resource-not-found": {
+   "not_applicable": "capability_not_offered",
+   "reason": "The server does not declare this capability (it serves tools only) and correctly answers -32601 Method not found."
+  },
+  "server-initialize": {
+   "not_applicable": "http_transport_only",
+   "reason": "The upstream harness reaches the server only through an HTTP URL (Streamable HTTP, SSE, headers, sessions or an SDK client by URL). This server speaks MCP over standard input and output only, so the scenario could not probe it."
+  },
+  "server-session-lifecycle": {
+   "not_applicable": "http_transport_only",
+   "reason": "The upstream harness reaches the server only through an HTTP URL (Streamable HTTP, SSE, headers, sessions or an SDK client by URL). This server speaks MCP over standard input and output only, so the scenario could not probe it."
+  },
+  "server-sse-multiple-streams": {
+   "not_applicable": "http_transport_only",
+   "reason": "The upstream harness reaches the server only through an HTTP URL (Streamable HTTP, SSE, headers, sessions or an SDK client by URL). This server speaks MCP over standard input and output only, so the scenario could not probe it."
+  },
+  "server-sse-polling": {
+   "not_applicable": "http_transport_only",
+   "reason": "The upstream harness reaches the server only through an HTTP URL (Streamable HTTP, SSE, headers, sessions or an SDK client by URL). This server speaks MCP over standard input and output only, so the scenario could not probe it."
+  },
+  "server-stateless": {
+   "not_applicable": "http_transport_only",
+   "reason": "The upstream harness reaches the server only through an HTTP URL (Streamable HTTP, SSE, headers, sessions or an SDK client by URL). This server speaks MCP over standard input and output only, so the scenario could not probe it."
+  },
+  "tools-call-audio": {
+   "not_applicable": "fixture_tool_required",
+   "reason": "Needs a tool that exists only in upstream's reference server (image, audio, embedded resource, progress or the JSON Schema 2020-12 fixture tool)."
+  },
+  "tools-call-elicitation": {
+   "not_applicable": "http_transport_only",
+   "reason": "The upstream harness reaches the server only through an HTTP URL (Streamable HTTP, SSE, headers, sessions or an SDK client by URL). This server speaks MCP over standard input and output only, so the scenario could not probe it."
+  },
+  "tools-call-embedded-resource": {
+   "not_applicable": "fixture_tool_required",
+   "reason": "Needs a tool that exists only in upstream's reference server (image, audio, embedded resource, progress or the JSON Schema 2020-12 fixture tool)."
+  },
+  "tools-call-error": {
+   "required": true
+  },
+  "tools-call-image": {
+   "not_applicable": "fixture_tool_required",
+   "reason": "Needs a tool that exists only in upstream's reference server (image, audio, embedded resource, progress or the JSON Schema 2020-12 fixture tool)."
+  },
+  "tools-call-mixed-content": {
+   "not_applicable": "fixture_tool_required",
+   "reason": "Needs a tool that exists only in upstream's reference server (image, audio, embedded resource, progress or the JSON Schema 2020-12 fixture tool)."
+  },
+  "tools-call-sampling": {
+   "not_applicable": "http_transport_only",
+   "reason": "The upstream harness reaches the server only through an HTTP URL (Streamable HTTP, SSE, headers, sessions or an SDK client by URL). This server speaks MCP over standard input and output only, so the scenario could not probe it."
+  },
+  "tools-call-simple-text": {
+   "required": true
+  },
+  "tools-call-with-logging": {
+   "not_applicable": "http_transport_only",
+   "reason": "The upstream harness reaches the server only through an HTTP URL (Streamable HTTP, SSE, headers, sessions or an SDK client by URL). This server speaks MCP over standard input and output only, so the scenario could not probe it."
+  },
+  "tools-call-with-progress": {
+   "not_applicable": "fixture_tool_required",
+   "reason": "Needs a tool that exists only in upstream's reference server (image, audio, embedded resource, progress or the JSON Schema 2020-12 fixture tool)."
+  },
+  "tools-list": {
+   "required": true
+  }
+ }
+}

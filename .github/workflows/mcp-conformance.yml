@@ -1,0 +1,71 @@
+# task.testing.022: the official MCP conformance suite against the local stdio server.
+# The upstream suite is third-party code: it runs here, in CI, with read-only
+# permissions and no secrets, from a pinned commit and its own lockfile with
+# install scripts disabled. It never runs in a developer's or agent's session.
+name: Official MCP conformance
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - server_mcp.py
+      - scripts/run_local_mcp.py
+      - scripts/run_mcp_conformance.mjs
+      - config/**
+      - contracts/**
+      - src/verified_execution/**
+      - requirements-py313.lock
+      - .github/workflows/mcp-conformance.yml
+
+permissions:
+  contents: read
+
+env:
+  UPSTREAM_REPOSITORY: modelcontextprotocol/conformance
+  UPSTREAM_COMMIT: 96a6f9478b7f2e125cf0360a213383cf57533893
+
+jobs:
+  conformance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+      - name: Check out the pinned upstream conformance suite
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          repository: ${{ env.UPSTREAM_REPOSITORY }}
+          ref: ${{ env.UPSTREAM_COMMIT }}
+          path: upstream-conformance
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        with:
+          python-version: '3.13'
+      - name: Fail closed without a reviewed transitive hash lock
+        run: python scripts/check_dependency_lock.py requirements-py313.lock
+      - name: Install the server's requirements with their checked artifact hashes
+        run: python -m pip install --require-hashes -r requirements-py313.lock
+      - name: Install the upstream suite from its lockfile without install scripts
+        working-directory: upstream-conformance
+        run: |
+          test "$(git rev-parse HEAD)" = "$UPSTREAM_COMMIT"
+          node --version
+          npm ci --ignore-scripts --no-audit --no-fund
+      - name: Run every applicable scenario for every supported protocol version
+        run: >-
+          node --import ./upstream-conformance/node_modules/tsx/dist/loader.mjs
+          scripts/run_mcp_conformance.mjs upstream-conformance "$(command -v python)" mcp-conformance
+      - name: Check the run against the policy and the committed per-version record
+        run: python scripts/check_mcp_conformance.py mcp-conformance
+      - name: Print the results (readable without the artifact)
+        if: always()
+        run: for file in mcp-conformance/*.json; do echo "=== $file"; python -c "import json,sys; print(json.dumps(json.load(open(sys.argv[1])), separators=(',', ':')))" "$file"; done
+      - name: Preserve the results
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: mcp-conformance-results
+          path: mcp-conformance/
+          if-no-files-found: error
+          retention-days: 30
