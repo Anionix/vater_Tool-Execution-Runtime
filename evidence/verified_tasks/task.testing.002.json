@@ -5,7 +5,7 @@
   "verification_status": "passed",
   "executed": true,
   "report_path": "evidence/testing-phase-tests.xml",
-  "report_sha256": "d9394eb7cc407e49b5a1bdf839fb7a1dd6bd3c26e0925e2cacb7530ce136dd90",
+  "report_sha256": "72dfda9fa4e232d358002f3fed1d7f9bc85449fe52b1c1101d0c5e81e76f0568",
   "source_sha256": {
     "contracts/checked_add.input.schema.json": "d9cbeeff8d08fff5c2a9886c20b7aef93c4db3879be256e7c4f60f717eefa41d",
     "contracts/checked_add_recorded.input.schema.json": "9753bf80d23d920432c6da8d4cb0793f78bc8529af6b6221164a611262a0b069",

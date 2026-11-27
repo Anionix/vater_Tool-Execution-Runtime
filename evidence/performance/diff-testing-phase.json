@@ -6,8 +6,8 @@
     "label": "main before the testing phase (merge of #382)"
   },
   "candidate_source": {
-    "commit": "671a1adb9ef961fead2042b826768a09021a9850",
-    "label": "testing phase working tree"
+    "commit": "e12bc194b992c62b8a27fba9e5a840ad637e38a3",
+    "label": "testing phase (this branch)"
   },
   "thresholds": {
     "wall_us.median": 1.5,
@@ -23,18 +23,18 @@
     "runtime_execute": {
       "wall_us.median": {
         "baseline": 5.1,
-        "candidate": 4.9,
-        "ratio": 0.961
+        "candidate": 4.8,
+        "ratio": 0.941
       },
       "cpu_us.median": {
         "baseline": 4.6,
-        "candidate": 4.4,
-        "ratio": 0.957
+        "candidate": 4.3,
+        "ratio": 0.935
       },
       "peak_rss_kib": {
         "baseline": 24320,
-        "candidate": 23856,
-        "ratio": 0.981
+        "candidate": 23896,
+        "ratio": 0.983
       },
       "ledger_bytes_per_operation": {
         "baseline": 0.0,
@@ -55,18 +55,18 @@
     "runtime_acall": {
       "wall_us.median": {
         "baseline": 161.7,
-        "candidate": 145.5,
-        "ratio": 0.9
+        "candidate": 124.8,
+        "ratio": 0.772
       },
       "cpu_us.median": {
         "baseline": 162.9,
-        "candidate": 146.0,
-        "ratio": 0.896
+        "candidate": 126.0,
+        "ratio": 0.773
       },
       "peak_rss_kib": {
         "baseline": 26632,
-        "candidate": 26704,
-        "ratio": 1.003
+        "candidate": 26692,
+        "ratio": 1.002
       },
       "ledger_bytes_per_operation": {
         "baseline": 0.0,
@@ -87,18 +87,18 @@
     "mcp_call": {
       "wall_us.median": {
         "baseline": 785.5,
-        "candidate": 596.9,
-        "ratio": 0.76
+        "candidate": 514.0,
+        "ratio": 0.654
       },
       "cpu_us.median": {
         "baseline": 772.7,
-        "candidate": 562.2,
-        "ratio": 0.728
+        "candidate": 503.4,
+        "ratio": 0.651
       },
       "peak_rss_kib": {
         "baseline": 70260,
-        "candidate": 70248,
-        "ratio": 1.0
+        "candidate": 70392,
+        "ratio": 1.002
       },
       "ledger_bytes_per_operation": {
         "baseline": 0.0,
@@ -119,18 +119,18 @@
     "http_job": {
       "wall_us.median": {
         "baseline": 1625.1,
-        "candidate": 1605.3,
-        "ratio": 0.988
+        "candidate": 1534.1,
+        "ratio": 0.944
       },
       "cpu_us.median": {
         "baseline": 501.5,
-        "candidate": 488.5,
-        "ratio": 0.974
+        "candidate": 428.0,
+        "ratio": 0.853
       },
       "peak_rss_kib": {
         "baseline": 27972,
-        "candidate": 27744,
-        "ratio": 0.992
+        "candidate": 27804,
+        "ratio": 0.994
       },
       "ledger_bytes_per_operation": {
         "baseline": 0.0,
@@ -151,18 +151,18 @@
     "recorded_legacy": {
       "wall_us.median": {
         "baseline": 8367.1,
-        "candidate": 8046.5,
-        "ratio": 0.962
+        "candidate": 6285.6,
+        "ratio": 0.751
       },
       "cpu_us.median": {
         "baseline": 2463.1,
-        "candidate": 2438.0,
-        "ratio": 0.99
+        "candidate": 1615.5,
+        "ratio": 0.656
       },
       "peak_rss_kib": {
         "baseline": 25992,
-        "candidate": 25760,
-        "ratio": 0.991
+        "candidate": 25836,
+        "ratio": 0.994
       },
       "ledger_bytes_per_operation": {
         "baseline": 573.4,
@@ -183,18 +183,18 @@
     "recorded_leased": {
       "wall_us.median": {
         "baseline": 11738.1,
-        "candidate": 12540.4,
-        "ratio": 1.068
+        "candidate": 10160.6,
+        "ratio": 0.866
       },
       "cpu_us.median": {
         "baseline": 3959.4,
-        "candidate": 4372.6,
-        "ratio": 1.104
+        "candidate": 3232.8,
+        "ratio": 0.816
       },
       "peak_rss_kib": {
         "baseline": 28848,
-        "candidate": 28872,
-        "ratio": 1.001
+        "candidate": 28896,
+        "ratio": 1.002
       },
       "ledger_bytes_per_operation": {
         "baseline": 860.2,
@@ -215,18 +215,18 @@
     "external_create": {
       "wall_us.median": {
         "baseline": 13144.3,
-        "candidate": 14098.1,
-        "ratio": 1.073
+        "candidate": 12886.4,
+        "ratio": 0.98
       },
       "cpu_us.median": {
         "baseline": 3432.2,
-        "candidate": 3655.9,
-        "ratio": 1.065
+        "candidate": 3245.6,
+        "ratio": 0.946
       },
       "peak_rss_kib": {
         "baseline": 48204,
-        "candidate": 53084,
-        "ratio": 1.101
+        "candidate": 52968,
+        "ratio": 1.099
       },
       "ledger_bytes_per_operation": {
         "baseline": 1105.9,
