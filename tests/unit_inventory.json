@@ -1723,6 +1723,65 @@
      "tests/test_recorded_tool_bridge.py::test_replay_requires_live_host_grant[during_read-expired-leased]"
     ]
    }
+  },
+  "src/verified_execution/kill_switch.py::default_path": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_kill_switch.py::test_the_operator_command_engages_reports_and_clears"
+    ]
+   },
+   "abnormal": {
+    "expect": "handled",
+    "note": "an unset VATER_KILL_SWITCH_FILE falls back to ~/.vater/kill-switch; there is no failure outcome",
+    "tests": [
+     "tests/test_kill_switch.py::test_without_the_variable_the_switch_lives_in_the_home_directory"
+    ]
+   }
+  },
+  "src/verified_execution/kill_switch.py::KillSwitch.from_env": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_kill_switch.py::test_the_operator_command_engages_reports_and_clears"
+    ]
+   },
+   "abnormal": {
+    "expect": "handled",
+    "note": "an unset VATER_KILL_SWITCH_FILE falls back to ~/.vater/kill-switch; there is no failure outcome",
+    "tests": [
+     "tests/test_kill_switch.py::test_without_the_variable_the_switch_lives_in_the_home_directory"
+    ]
+   }
+  },
+  "src/verified_execution/kill_switch.py::KillSwitch.is_set": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_kill_switch.py::test_the_switch_is_sticky_until_restart_and_fails_closed"
+    ]
+   },
+   "abnormal": {
+    "expect": "handled",
+    "note": "fails closed: a path that cannot be checked reports the switch engaged",
+    "tests": [
+     "tests/test_kill_switch.py::test_the_switch_is_sticky_until_restart_and_fails_closed"
+    ]
+   }
+  },
+  "src/verified_execution/kill_switch.py::KillSwitch.engage": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_kill_switch.py::test_the_operator_command_engages_reports_and_clears"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_kill_switch.py::test_an_engage_that_cannot_write_its_file_raises_but_still_stops_this_process"
+    ]
+   }
   }
  }
 }

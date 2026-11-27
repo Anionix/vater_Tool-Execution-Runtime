@@ -29,10 +29,21 @@ jobs:
       - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
         with:
           python-version: "3.13"
+      # task.operations.015: setting the repository variable VATER_EXTERNAL_TOOLS_DISABLED
+      # to "true" engages the kill switch, and the run stops before any request.
+      - name: Engage the kill switch when external tools are disabled
+        env:
+          DISABLED: ${{ vars.VATER_EXTERNAL_TOOLS_DISABLED }}
+          VATER_KILL_SWITCH_FILE: ${{ runner.temp }}/vater-kill-switch
+        run: |
+          if [ "$DISABLED" = "true" ]; then
+            python -I scripts/kill_switch.py engage --reason "repository variable VATER_EXTERNAL_TOOLS_DISABLED"
+          fi
       # Standard library only: no third-party packages are installed for this run.
       - name: Run live scenarios against this repository's issues
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VATER_KILL_SWITCH_FILE: ${{ runner.temp }}/vater-kill-switch
         run: python -I scripts/run_github_issue_evidence.py --output github-issue-evidence.json
       - name: Keep the evidence report
         if: always()
