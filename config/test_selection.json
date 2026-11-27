@@ -1,0 +1,63 @@
+{
+  "_comment": [
+    "task.operations.002: which tests a change must run (scripts/select_tests.py).",
+    "A path matching permission_paths is a permission change: the safety suite always runs, whatever else changed.",
+    "A path matching full_suite_paths, or one no rule explains, runs the whole suite (fail safe).",
+    "Otherwise a test file runs itself, and a script, document or evidence file runs the tests that name it."
+  ],
+  "safety_suite": [
+    "tests/test_adapter_boundary.py",
+    "tests/test_attack_reproduction.py",
+    "tests/test_authorization_table.py",
+    "tests/test_cross_principal.py",
+    "tests/test_guarded_stdio.py",
+    "tests/test_kill_switch.py",
+    "tests/test_local_mcp_launcher.py",
+    "tests/test_output_boundary.py",
+    "tests/test_permission_history.py",
+    "tests/test_policy_config.py",
+    "tests/test_regression_registry.py",
+    "tests/test_secret_flow.py",
+    "tests/test_static_policy.py",
+    "tests/test_unicode_input_validation.py"
+  ],
+  "permission_paths": [
+    "contracts/tool_risks.json",
+    "contracts/*.input.schema.json",
+    "contracts/*.output.contract.json",
+    "contracts/github_issue_destination.json",
+    "config/local_tool.json",
+    "config/limits.json",
+    "docs/permission_history.jsonl",
+    "server_mcp.py",
+    "src/verified_execution/__init__.py",
+    "src/verified_execution/core.py",
+    "src/verified_execution/runtime.py",
+    "src/verified_execution/tools.py",
+    "src/verified_execution/ledger.py",
+    "src/verified_execution/worker_leases.py",
+    "src/verified_execution/http_local.py",
+    "src/verified_execution/external_change.py",
+    "src/verified_execution/kill_switch.py",
+    "src/verified_execution/restore_fence.py",
+    "scripts/run_local_mcp.py",
+    "scripts/launch_guarded_mcp.py",
+    "scripts/guarded_stdio.py",
+    ".github/workflows/*.yml"
+  ],
+  "full_suite_paths": [
+    "src/**",
+    "server_mcp.py",
+    "contracts/**",
+    "config/**",
+    "pyproject.toml",
+    "requirements-*.lock",
+    "tests/conftest.py",
+    "tests/adapter_drivers.py",
+    "tests/unit_trace_plugin.py",
+    "tests/*.json",
+    "tests/fixtures/**",
+    "backlog/**",
+    "formal/**"
+  ]
+}
