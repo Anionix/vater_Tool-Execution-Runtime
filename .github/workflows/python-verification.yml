@@ -127,12 +127,30 @@ jobs:
             release-manifest.json
           if-no-files-found: error
           retention-days: 90
-      - name: Keep the release gate report
+      # task.operations.017: the extended release only when every initial and added-feature gate
+      # passed with evidence still bound to the current files.
+      - name: Decide which releases the gates allow
+        id: decision
+        run: python scripts/release_decision.py --output release-decision.json --github-output "$GITHUB_OUTPUT"
+      - name: Publish the extended release
+        if: steps.decision.outputs.extended == 'true'
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: extended-release
+          path: |
+            dist/
+            release-manifest.json
+            release-decision.json
+          if-no-files-found: error
+          retention-days: 90
+      - name: Keep the release gate report and decision
         if: always()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: release-gate
-          path: release-gate.json
+          path: |
+            release-gate.json
+            release-decision.json
           if-no-files-found: warn
           retention-days: 90
 

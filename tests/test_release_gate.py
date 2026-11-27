@@ -73,5 +73,5 @@ def test_the_release_job_publishes_only_after_the_gate_and_every_verification_jo
     assert gate < job.index("release_manifest.py") < job.index("name: release-artifacts")
     publish = job.split("- name: Keep the artifacts and their manifest", 1)[1].split("- name:", 1)[0]
     assert "if: always()" not in publish and "if-no-files-found: error" in publish
-    report = job.split("- name: Keep the release gate report", 1)[1]
+    report = job.split("- name: Keep the release gate report and decision", 1)[1]
     assert "if: always()" in report and "release-gate.json" in report
