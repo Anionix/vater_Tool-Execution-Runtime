@@ -35,6 +35,7 @@ from typing import Any, Callable, Mapping, NamedTuple, Protocol
 from urllib.parse import urlencode
 import urllib.request
 
+from . import restore_fence
 from .core import LocalAuthority, OperationError
 from .durable import validate_request_key
 from .ledger import LedgerError, Operation, OperationLedger
@@ -250,10 +251,10 @@ class GitHubIssueDestination:
                 return 60.0
         return 60.0 if reply.status == 429 else None
 
-    def lookup(self, operation_id: str, dispatched_at_ms: int) -> list[Mapping[str, Any]]:
-        since = time.strftime("%Y-%m-%dT%H:%M:%SZ",
-                              time.gmtime(max(0, dispatched_at_ms - LOOKUP_MARGIN_MS) / 1000))
-        marker, matches = self.marker(operation_id), []
+    def _issues_since(self, since_ms: int) -> list[Mapping[str, Any]]:
+        """Every labelled issue updated since since_ms (minus the margin); incomplete raises."""
+        since = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(max(0, since_ms - LOOKUP_MARGIN_MS) / 1000))
+        issues: list[Mapping[str, Any]] = []
         for page in range(1, MAX_LOOKUP_PAGES + 1):
             try:
                 reply = self.transport.request("GET", "/issues", query={
@@ -262,11 +263,21 @@ class GitHubIssueDestination:
                 raise LookupIncomplete(str(error)) from None
             if reply.status != 200 or not isinstance(reply.body, list):
                 raise LookupIncomplete(f"HTTP {reply.status}")
-            matches += [issue for issue in reply.body if isinstance(issue, Mapping)
-                        and "pull_request" not in issue and marker in str(issue.get("body") or "").splitlines()]
+            issues += [issue for issue in reply.body if isinstance(issue, Mapping) and "pull_request" not in issue]
             if len(reply.body) < 100:
-                return matches
+                return issues
         raise LookupIncomplete("too many pages")
+
+    def lookup(self, operation_id: str, dispatched_at_ms: int) -> list[Mapping[str, Any]]:
+        marker = self.marker(operation_id)
+        return [issue for issue in self._issues_since(dispatched_at_ms)
+                if marker in str(issue.get("body") or "").splitlines()]
+
+    def operation_ids_since(self, since_ms: int) -> set[str]:
+        """task.operations.016: operation ids named by markers of issues updated since since_ms."""
+        prefix = self.marker("")
+        return {line[len(prefix):].strip() for issue in self._issues_since(since_ms)
+                for line in str(issue.get("body") or "").splitlines() if line.startswith(prefix)}
 
     def check(self, operation_id: str, title: str, obj: Mapping[str, Any]) -> bool:
         labels = {label.get("name") for label in obj.get("labels") or [] if isinstance(label, Mapping)}
@@ -417,6 +428,10 @@ class ExternalChangeExecutor:
         return _error((saved or {}).get("detail") or "ALREADY_RECORDED", op, replayed=True)
 
     def _dispatch(self, op: Operation, request: IssueRequest) -> BridgeResult:
+        # task.operations.016: a restored ledger may be missing operations executed after
+        # its backup; nothing new is sent until that gap is reconciled.
+        if restore_fence.active(self.ledger.path) is not None:
+            return _error("HUMAN_RECONCILIATION_REQUIRED", op)
         approval_id = (self.approve(op, self.reserve_arguments(request))
                        if self.approve is not None else None)
         if approval_id is None:
