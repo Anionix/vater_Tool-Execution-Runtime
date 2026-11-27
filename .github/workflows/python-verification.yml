@@ -97,6 +97,8 @@ jobs:
         run: python -m pytest -q -rs --junitxml=official-mcp-report.xml tests/test_official_mcp_sdk.py
       - name: Require all official MCP integration cases to execute and pass
         run: python scripts/check_test_report.py official-mcp-report.xml --minimum 14
+      - name: Run the staging trial with synthetic data only
+        run: python scripts/staging_trial.py --output staging-trial.json
       - name: Verify trust phase using the same locked environment
         run: python scripts/verify_phase.py trust
       - name: Verify all contract tasks
