@@ -132,3 +132,19 @@ def test_ci_builds_with_the_hash_locked_backend_and_keeps_artifacts_and_manifest
     assert install < job.index("python scripts/release_manifest.py --output release-manifest.json --dist dist")
     assert "dist/\n            release-manifest.json" in job and "retention-days: 90" in job
     assert "permissions:" not in job  # the workflow's read-only token
+
+
+def test_a_build_without_its_wheel_or_sdist_is_refused(tmp_path, monkeypatch):
+    def sdist_only(source, out, environment, umask):
+        out.mkdir(parents=True)
+        sdist(out / "verified_execution_prototype-0.11.0.tar.gz")
+
+    monkeypatch.setattr(release, "build", sdist_only)
+    import pytest
+    with pytest.raises(RuntimeError, match="expected one wheel and one sdist"):
+        release.trial(ROOT, tmp_path)
+
+
+def test_the_build_command_reads_its_output_directory_before_setuptools_rewrites_argv():
+    assert release.BUILD.index("out = sys.argv[1]") < release.BUILD.index("build_sdist(out)")
+    assert "sys.argv[1]" not in release.BUILD.split("out = sys.argv[1];", 1)[1]

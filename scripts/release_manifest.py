@@ -37,8 +37,9 @@ import time
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-BUILD = ("import sys, setuptools.build_meta as backend; "
-         "backend.build_sdist(sys.argv[1]); backend.build_wheel(sys.argv[1])")
+# The output directory is read once: setuptools.build_meta rewrites sys.argv while it builds.
+BUILD = ("import sys, setuptools.build_meta as backend; out = sys.argv[1]; "
+         "backend.build_sdist(out); backend.build_wheel(out)")
 
 
 def sha256_bytes(data: bytes) -> str:
@@ -130,6 +131,15 @@ def build(source: Path, out: Path, environment: dict, umask: int) -> None:
                    capture_output=True, preexec_fn=lambda: os.umask(umask))
 
 
+def require_both_artifacts(directory: Path) -> None:
+    """Exactly one wheel and one sdist, or the build is refused (a missing wheel once passed silently)."""
+    wheels = list(directory.glob("*.whl"))
+    sdists = list(directory.glob("*.tar.gz"))
+    if len(wheels) != 1 or len(sdists) != 1:
+        raise RuntimeError(f"expected one wheel and one sdist in {directory.name}, found "
+                           f"{[p.name for p in directory.iterdir()]}")
+
+
 def trial(root: Path, work: Path) -> dict:
     epoch = git(root, "log", "-1", "--format=%ct").strip()
     base = {key: value for key, value in os.environ.items() if key not in ("SOURCE_DATE_EPOCH", "TZ")}
@@ -147,6 +157,7 @@ def trial(root: Path, work: Path) -> dict:
         if variant["SOURCE_DATE_EPOCH"] is not None:
             environment["SOURCE_DATE_EPOCH"] = variant["SOURCE_DATE_EPOCH"]
         build(source, work / f"dist-{name}", environment, variant["umask"])
+        require_both_artifacts(work / f"dist-{name}")
         described[name] = {"SOURCE_DATE_EPOCH": variant["SOURCE_DATE_EPOCH"], "TZ": variant["TZ"],
                            "umask": oct(variant["umask"]), "build_path_depth": len(Path(variant["path"]).parts),
                            "file_times": "one day earlier" if variant["file_time"] else "time of copy",
