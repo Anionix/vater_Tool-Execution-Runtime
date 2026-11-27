@@ -73,6 +73,29 @@ jobs:
           tests/test_cancellation_journal.py
           tests/test_sqlite_cancel_wait.py
 
+  dependency-vulnerabilities:
+    # task.operations.005: every locked package checked against OSV, standard library only
+    # (no third-party scanner is installed); the report is kept, and a known vulnerability fails.
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        with:
+          python-version: '3.13'
+      - name: Query OSV for every locked package
+        run: python -I scripts/scan_vulnerabilities.py --output osv-scan.json
+      - name: Keep the scan result
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: osv-scan
+          path: osv-scan.json
+          if-no-files-found: warn
+          retention-days: 90
+
   official-mcp:
     runs-on: ubuntu-latest
     timeout-minutes: 15
