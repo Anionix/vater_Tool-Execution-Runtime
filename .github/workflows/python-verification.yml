@@ -121,3 +121,5 @@ jobs:
         run: python scripts/verify_phase.py http_interface
       - name: Verify all testing tasks (includes the regression registry)
         run: python scripts/verify_phase.py testing
+      - name: Audit evidence and documentation for secret values
+        run: python scripts/audit_logs.py evidence/ docs/
