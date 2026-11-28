@@ -21,7 +21,15 @@
 
 ## 証拠と対象外
 
-`task.formal_verification.014`。この版では Rust 移植を採用していないため Kani の対象はゼロ。候補は対応表に留める。将来採用した場合は、移植関数の入力範囲、境界値、時計と権限の仮定、除外された入力を関数単位で記録する。
+`task.formal_verification.014`。Rust 移植を採用した（[rust/vater_core](../rust/vater_core)）。移植したのは副作用のない判定だけで、`checked_add`、状態遷移の許可表、権限判定（時計を入力にした `LocalAuthority.permits`）、承認の束縛判定（`OperationLedger.begin_dispatch` の承認条件）。永続化、SQLite のトランザクション、スレッド、MCP と HTTP の入口は移植していない。関数ごとの入力範囲、仮定とその正当化、除外した入力は [kani_assumptions.json](kani_assumptions.json) に記録する。
+
+## Rust 移植と Kani
+
+`task.formal_verification.011` と `task.formal_verification.012`。Kani 0.68.0 が [proofs.rs](../rust/vater_core/src/proofs.rs) の6つのハーネスで、移植関数をハーネス内に別に書いた仕様と全入力について照合する。加算は u64 の全組と u32 の全組、状態遷移は49通りすべて、権限判定は全ての許可集合・取消し・期限・時計、承認判定は全ての束縛・使用済み・期限・時計の組合せが対象。Kani は CI の `formal-rust` ジョブだけで実行し、Python の試験環境には入れない（`task.operations.001`）。結果は Python の試験結果と別の証拠として残す。
+
+`task.formal_verification.013`。`kani::assume` は1か所（状態の添字を7未満に限る）で、正当化を記録した。各ハーネスには到達すべき場合の `kani::cover!` があり、Kani がすべて満たされたと報告しない限り CI は失敗する（`scripts/check_kani.py`）。満たされた cover は、仮定を置いた後も検証対象の場合が残っていることを示す。
+
+`task.formal_verification.015`。期待値は [independent_expected_values.txt](../tests/fixtures/independent_expected_values.txt) にリテラルで書き、どちらの実装の式も使わない。Python の試験と Rust の試験が同じファイルの同じ入力を読み、両方が全行で一致する。期待値は作成者が仕様から書いたもので、人による確認は pull request のレビューで行う。
 
 `task.formal_verification.017`。SQLite の並行予約、承認消費、非同期取消し、強制終了からの復元は実行テスト済みの範囲で扱う。Python の並行処理に対する Kani の証明はない。
 
