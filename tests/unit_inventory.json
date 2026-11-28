@@ -1839,6 +1839,64 @@
      "tests/test_backup_restore.py::test_an_incomplete_destination_listing_keeps_the_fence"
     ]
    }
+  },
+  "src/verified_execution/webhooks.py::verify_signature": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_webhooks.py::test_a_signed_delivery_is_applied"
+    ]
+   },
+   "abnormal": {
+    "expect": "error_value",
+    "tests": [
+     "tests/test_webhooks.py::test_a_forged_notification_is_always_refused_and_leaves_nothing[wrong_secret]"
+    ]
+   }
+  },
+  "src/verified_execution/webhooks.py::WebhookReceiver.receive": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_webhooks.py::test_a_signed_delivery_is_applied"
+    ]
+   },
+   "abnormal": {
+    "expect": "error_value",
+    "tests": [
+     "tests/test_webhooks.py::test_a_forged_notification_is_always_refused_and_leaves_nothing[wrong_secret]",
+     "tests/test_webhooks.py::test_a_reused_delivery_id_with_another_body_is_refused"
+    ]
+   }
+  },
+  "src/verified_execution/webhooks.py::WebhookReceiver.state": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_webhooks.py::test_a_signed_delivery_is_applied"
+    ]
+   },
+   "abnormal": {
+    "expect": "absent",
+    "tests": [
+     "tests/test_webhooks.py::test_a_forged_notification_is_always_refused_and_leaves_nothing[wrong_secret]"
+    ]
+   }
+  },
+  "src/verified_execution/webhooks.py::WebhookReceiver.reconcile": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_webhooks.py::test_reconciliation_names_deliveries_that_never_arrived"
+    ]
+   },
+   "abnormal": {
+    "expect": "handled",
+    "note": "total over the sender's list: an empty list or an unknown id only changes which ids are named",
+    "tests": [
+     "tests/test_webhooks.py::test_an_interrupted_delivery_is_applied_on_redelivery_and_a_resend_is_not"
+    ]
+   }
   }
  }
 }
