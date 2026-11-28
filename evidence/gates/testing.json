@@ -34,7 +34,7 @@
     "task.testing.026"
   ],
   "report_path": "evidence/gates/testing-tests.xml",
-  "report_sha256": "a808fb528fd68e51e4c324e118b62f476b455de3f9f41a43a233458882d43796",
+  "report_sha256": "86244abbd0af158df293a5645856a3947f0717cf5cca61f997ca8c602a81dc51",
   "source_sha256": {
     ".github/workflows/mcp-conformance.yml": "8a17cf5ad35de31097deb516f70213cd84d3b6e33efb2c0e5dd04cec4b0a9fe1",
     "contracts/checked_add.input.schema.json": "d9cbeeff8d08fff5c2a9886c20b7aef93c4db3879be256e7c4f60f717eefa41d",
@@ -46,7 +46,7 @@
     "contracts/github_test_create_issue.output.contract.json": "70856ea4cb51f7e69e6b28d7920b47b233e6a9c2dd9c77d1cd1be7de67a2e199",
     "contracts/http_jobs.responses.json": "318f4cc30e10ed60ec65e9e750f3721387edff9fa95f461b37c08f40fde193be",
     "docs/concurrency_inventory.json": "e0f7f4692895b4b870801d5be3bdd29394af3fc21575ca9294d9c1c43e255ec7",
-    "docs/verification_scope.json": "228887cfeb06fc92866dd2f11097245d438bd9b2635dd5790325c445d7e7d6b4",
+    "docs/verification_scope.json": "34bed48674b2cfd9dd739396e0d224f907ca1e2388c0d8af4020c1c5e54ab069",
     "evidence/mcp-conformance/applicability.json": "4aec4639a5d99981845e3f72e078b075cb72b28d73878eca3f605b1f8ff8dc5d",
     "evidence/mcp-conformance/results.json": "e0010b89360f6f56a59ea20a5aba59cecf7d92d79dbb15217128916e4eeac468",
     "evidence/performance/baseline.json": "7c0ac25ed141dda013b05a79d6b0fd601b456cb3a130ce5c0eb247de7ec9ed83",
@@ -92,12 +92,12 @@
     "tests/unit_inventory.json": "56db6d898041dbe95f39007b6357c4cdb7a3679e7d7f7822b55f208c4234bfee",
     "tests/unit_trace_plugin.py": "14a3a0391a86326fe396a1615d5ace456944894e8656c076bd010898f3d53ba9"
   },
-  "scope": "All 26 testing tasks are done with executed evidence; this report reruns every mapped case in one session (603 cases). task.testing.022 rests on CI run 45918251896 of the official MCP conformance suite, recorded per protocol version in evidence/mcp-conformance/results.json and re-checked on every CI run. Scope that was not executed is listed in docs/verification_scope.json and docs/concurrency_inventory.json.",
+  "scope": "All 26 testing tasks are done with executed evidence; this report reruns every mapped case in one session (604 cases). task.testing.022 rests on CI run 45918251896 of the official MCP conformance suite, recorded per protocol version in evidence/mcp-conformance/results.json and re-checked on every CI run. Scope that was not executed is listed in docs/verification_scope.json and docs/concurrency_inventory.json.",
   "previous_report": {
     "path": "evidence/gates/testing-tests.xml",
-    "sha256": "e25fc1edf0a4052e4f7f458798cbcc637d394fe3126d49a064f9951a0dda5faa"
+    "sha256": "a808fb528fd68e51e4c324e118b62f476b455de3f9f41a43a233458882d43796"
   },
-  "refreshed_at": "2026-11-27T05:53:00Z",
+  "refreshed_at": "2026-11-28T07:38:23Z",
   "environment": {
     "python": "3.13.18",
     "platform": "Linux-6.18.44-fc-v880-x86_64-with-glibc2.39"

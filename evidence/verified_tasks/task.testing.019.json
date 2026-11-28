@@ -5,9 +5,9 @@
   "verification_status": "passed",
   "executed": true,
   "report_path": "evidence/testing-phase-tests.xml",
-  "report_sha256": "8a66adeaf1b98f4e1c6c05b5834ad69c39a4841aff8f3949cd09a43d7d5c7768",
+  "report_sha256": "5c330ec017dff6eb1d99f7df268e3ea5b0512c7207f68fd6cbf8654610e99191",
   "source_sha256": {
-    "docs/concurrency_inventory.json": "bcdf608f512ab39920c6d3d7aee905072252809d86f21e63b9edf27995402984",
+    "docs/concurrency_inventory.json": "e0f7f4692895b4b870801d5be3bdd29394af3fc21575ca9294d9c1c43e255ec7",
     "tests/test_concurrency_inventory.py": "0e36fa819830782a9b9da9125b5d7038dfb2faba797817879c404cc227e29f65"
   },
   "scope": "docs/concurrency_inventory.json lists the thread, process, SQLite and async races. The test scans the source for concurrency primitives and fails on any site not listed (29 sites), on listed tests that do not exist, and on unchecked entries that claim tests. Seven orders are recorded as unchecked and not guaranteed, among them orders inside one SQLite transaction, multi-host storage, clock rollback and free-threaded builds.",
