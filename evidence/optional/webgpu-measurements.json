@@ -1,0 +1,51 @@
+{
+ "browser": "158.0.8127.36",
+ "adapter": {
+  "vendor": "google",
+  "architecture": "swiftshader",
+  "fallback": true
+ },
+ "repeats": 5,
+ "sizes": [
+  {
+   "n": 32,
+   "python_reference_ms": 9.8,
+   "python_reference_peak_bytes": 42907,
+   "js_cpu_ms_median": 0.3,
+   "gpu_pipeline_ms": 5.7,
+   "gpu_total_ms_median": 2.7,
+   "fastest_cpu_ms": 0.3,
+   "within_tolerance": true,
+   "max_error_to_tolerance": 0.0
+  },
+  {
+   "n": 64,
+   "python_reference_ms": 35.6,
+   "python_reference_peak_bytes": 163344,
+   "js_cpu_ms_median": 0.9,
+   "gpu_pipeline_ms": 0.3,
+   "gpu_total_ms_median": 2.6,
+   "fastest_cpu_ms": 0.9,
+   "within_tolerance": true,
+   "max_error_to_tolerance": 0.0
+  },
+  {
+   "n": 128,
+   "python_reference_ms": 229.3,
+   "python_reference_peak_bytes": 664724,
+   "js_cpu_ms_median": 7,
+   "gpu_pipeline_ms": 0.4,
+   "gpu_total_ms_median": 7.1,
+   "fastest_cpu_ms": 7,
+   "within_tolerance": true,
+   "max_error_to_tolerance": 0.007561363038867461
+  }
+ ],
+ "decision": {
+  "rule": "hardware adapter, round trip >= 2.0x faster than the fastest CPU path at every size, every result within tolerance",
+  "hardware_adapter": false,
+  "fast_enough": false,
+  "accurate": true,
+  "adopt": false
+ }
+}
