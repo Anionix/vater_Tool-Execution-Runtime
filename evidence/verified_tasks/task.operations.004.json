@@ -1,0 +1,24 @@
+{
+  "task_id": "task.operations.004",
+  "acceptance_criteria": "採用経路と版が明確",
+  "verified_on": "2026-11-27",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/operations-phase-tests.xml",
+  "report_sha256": "4ba44ed438cf5c62050443fe893879b4a13254d82c774b83030265d992ae7122",
+  "source_sha256": {
+    "docs/dependency_sources.json": "8363853a803e6ac6f925cef075119f532a58b33d777b761b0878e25c1696ac3e",
+    "requirements-build.lock": "3321335737f7e89634b82b05aa42d3eacc01d1538615d75d4519bff07035b0e2",
+    "requirements-py313.lock": "cc651303afe6b684a979e14fdd9d1ca8b73d7bda0ea6e1d0480a20ae792de51c",
+    "scripts/dependency_sources.py": "3cc758f17494addcc8987041cf20cb536a5aeda27ffb4312df302ac6917ac31c",
+    "tests/test_dependency_sources.py": "55f2f743536a5f21c2f06e95a8ccc5a89abd13a018b7545f20c75a8972adc4d3"
+  },
+  "scope": "docs/dependency_sources.json is generated from the locks and the workflows: for each of the 33 runtime packages and the build backend, its exact version, artifact hash count and adoption chain (direct requirement or via another package), and every dependency install in the workflows, classified as hash-locked, a pinned tool or a diagnostic install. The tests require the record to equal what the lock and workflows say, every direct requirement of pyproject.toml to be satisfied by the lock, and the lock to name no index, path, VCS or URL source.",
+  "test_cases": [
+    "tests/test_dependency_sources.py::test_record_equals_the_lock_and_the_workflows",
+    "tests/test_dependency_sources.py::test_every_package_is_pinned_by_version_and_hash_and_has_an_adoption_route",
+    "tests/test_dependency_sources.py::test_direct_requirements_match_pyproject_and_the_lock",
+    "tests/test_dependency_sources.py::test_the_lock_names_no_other_source",
+    "tests/test_dependency_sources.py::test_every_install_is_hash_locked_or_explained"
+  ]
+}

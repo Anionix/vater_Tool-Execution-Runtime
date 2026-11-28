@@ -1,0 +1,28 @@
+{
+  "task_id": "task.operations.012",
+  "acceptance_criteria": "秘密値検出で失敗",
+  "verified_on": "2026-11-27",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/operations-phase-tests.xml",
+  "report_sha256": "4ba44ed438cf5c62050443fe893879b4a13254d82c774b83030265d992ae7122",
+  "source_sha256": {
+    ".github/workflows/python-verification.yml": "ea6e336f303d9988bbf296d640b6915a04e858811345ca7457cac366709c752c",
+    "scripts/audit_logs.py": "d587af4cae351de2a32975b76c79c007c9155d4c35884a1b4cc50ac68b69d174",
+    "tests/test_log_audit.py": "87c84404829fdaf2b86031cd8c485835495849fa7dcf5bc82513042e4cba5658"
+  },
+  "scope": "scripts/audit_logs.py scans text files for credential shapes (GitHub, Stripe-like and AWS keys, bearer headers, private keys, JWTs, password or token assignments) and for the literal values of named environment variables; any finding fails with a redacted report. CI audits evidence/ and docs/, and the test also audits the real MCP server's diagnostics while it handles calls that carry a secret.",
+  "test_cases": [
+    "tests/test_log_audit.py::test_each_secret_shape_fails_the_audit_without_being_repeated[aws_access_key]",
+    "tests/test_log_audit.py::test_each_secret_shape_fails_the_audit_without_being_repeated[bearer_header]",
+    "tests/test_log_audit.py::test_each_secret_shape_fails_the_audit_without_being_repeated[credential_assignment]",
+    "tests/test_log_audit.py::test_each_secret_shape_fails_the_audit_without_being_repeated[github_token]",
+    "tests/test_log_audit.py::test_each_secret_shape_fails_the_audit_without_being_repeated[jwt]",
+    "tests/test_log_audit.py::test_each_secret_shape_fails_the_audit_without_being_repeated[private_key]",
+    "tests/test_log_audit.py::test_each_secret_shape_fails_the_audit_without_being_repeated[stripe_like_key]",
+    "tests/test_log_audit.py::test_a_named_secret_value_fails_the_audit",
+    "tests/test_log_audit.py::test_placeholders_and_ordinary_text_pass",
+    "tests/test_log_audit.py::test_repository_evidence_and_docs_hold_no_secret",
+    "tests/test_log_audit.py::test_server_diagnostics_do_not_log_a_secret_from_a_call"
+  ]
+}

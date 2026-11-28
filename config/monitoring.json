@@ -1,0 +1,18 @@
+{
+  "_comment": [
+    "task.operations.011: thresholds of scripts/monitor_operations.py.",
+    "The latest window is compared with the mean of the preceding baseline windows.",
+    "operation_spike: operations > max(min_spike_operations, spike_factor * baseline mean).",
+    "error_spike: errors > max(min_spike_errors, spike_factor * baseline mean errors).",
+    "error_rate: errors / operations > error_rate_threshold, once the window has min_rate_operations."
+  ],
+  "rules": {
+    "window_ms": 60000,
+    "baseline_windows": 10,
+    "spike_factor": 3.0,
+    "min_spike_operations": 20,
+    "min_spike_errors": 5,
+    "error_rate_threshold": 0.2,
+    "min_rate_operations": 10
+  }
+}

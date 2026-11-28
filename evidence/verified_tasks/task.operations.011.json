@@ -1,0 +1,27 @@
+{
+  "task_id": "task.operations.011",
+  "acceptance_criteria": "異常増加を検出できる",
+  "verified_on": "2026-11-27",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/operations-phase-tests.xml",
+  "report_sha256": "4ba44ed438cf5c62050443fe893879b4a13254d82c774b83030265d992ae7122",
+  "source_sha256": {
+    "config/monitoring.json": "32bb7715f5d702259c1c3515b0b9f7845358a67ceeb41764f5979cf1f8ef1711",
+    "scripts/monitor_operations.py": "202fd1c2f25160eebb88b57a3da58d7f395b40deeecd4e4aeeb4eda2eb7c9088",
+    "tests/test_operation_monitoring.py": "11d08921bc40d680d9eba3298d57667f5f12f6ad545bada39edb2f2b543a4156"
+  },
+  "scope": "scripts/monitor_operations.py counts operations, errors and denials per window, from the ledger (opened read-only) or from the MCP server's diagnostics, and compares the latest window with the mean of ten baseline windows: operation_spike, error_spike and error_rate (thresholds in config/monitoring.json). Steady traffic stays quiet; a burst, an error burst and a high error rate each raise their alert once per window, from both sources and from the command line (exit status 2).",
+  "test_cases": [
+    "tests/test_operation_monitoring.py::test_the_rules_are_the_configured_ones",
+    "tests/test_operation_monitoring.py::test_steady_traffic_with_rare_errors_raises_nothing",
+    "tests/test_operation_monitoring.py::test_an_operation_burst_is_detected",
+    "tests/test_operation_monitoring.py::test_an_error_burst_and_a_high_error_rate_are_detected",
+    "tests/test_operation_monitoring.py::test_too_few_operations_do_not_raise_a_rate_alert_and_quiet_windows_count_as_baseline",
+    "tests/test_operation_monitoring.py::test_the_ledger_source_detects_failures_and_never_writes",
+    "tests/test_operation_monitoring.py::test_the_ledger_source_stays_quiet_for_normal_traffic",
+    "tests/test_operation_monitoring.py::test_the_real_server_diagnostics_feed_the_monitor",
+    "tests/test_operation_monitoring.py::test_the_cli_reports_each_alert_once_and_exits_two",
+    "tests/test_operation_monitoring.py::test_the_cli_reads_a_ledger"
+  ]
+}

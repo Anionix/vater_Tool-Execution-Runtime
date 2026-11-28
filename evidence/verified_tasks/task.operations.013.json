@@ -1,0 +1,26 @@
+{
+  "task_id": "task.operations.013",
+  "acceptance_criteria": "権限が変わった履歴が残る",
+  "verified_on": "2026-11-27",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/operations-phase-tests.xml",
+  "report_sha256": "4ba44ed438cf5c62050443fe893879b4a13254d82c774b83030265d992ae7122",
+  "source_sha256": {
+    ".github/workflows/python-verification.yml": "ea6e336f303d9988bbf296d640b6915a04e858811345ca7457cac366709c752c",
+    "docs/permission_history.jsonl": "c8fe04965325798df1c9772eb1b5134878c066796de622c5fdafb966570cec4a",
+    "scripts/permission_history.py": "07295b045b6ccc11c4d4ea127a01e097b5219ee7b5dcb177490220baaba872f4",
+    "tests/test_permission_history.py": "f084439c2d01205ca9de036c5150542a30b36284c7ca791f7504f040780e2a8d"
+  },
+  "scope": "docs/permission_history.jsonl is a hash chain of permission snapshots (tool risk classes, the launcher's approved code, external destinations and their credential scope, limits, and every workflow's token permissions) with the changes between them, rebuilt from the available git history (14 entries). CI fails when the chain was edited or when the current files differ from the last snapshot; a change is recorded only with a reason and an approver.",
+  "test_cases": [
+    "tests/test_permission_history.py::test_the_repository_history_is_intact_and_current",
+    "tests/test_permission_history.py::test_a_risk_class_change_fails_until_it_is_recorded_with_an_approver",
+    "tests/test_permission_history.py::test_workflow_token_and_launcher_approval_changes_are_permission_changes",
+    "tests/test_permission_history.py::test_an_edited_history_is_detected",
+    "tests/test_permission_history.py::test_a_forged_snapshot_is_detected",
+    "tests/test_permission_history.py::test_past_permission_approvals_are_in_the_history",
+    "tests/test_permission_history.py::test_the_permission_reader_handles_workflow_and_job_scopes",
+    "tests/test_permission_history.py::test_ci_refuses_an_unrecorded_permission_change"
+  ]
+}

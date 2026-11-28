@@ -32,6 +32,7 @@ from verified_execution.core import LocalAuthority  # noqa: E402
 from verified_execution.external_change import (  # noqa: E402
     EVIDENCE_LABEL, TOOL_NAME, ExternalChangeExecutor, ExternalResultStore, GitHubIssueDestination,
     TransportError, UrllibTransport)
+from verified_execution.kill_switch import KillSwitch  # noqa: E402
 from verified_execution.ledger import OperationLedger  # noqa: E402
 
 
@@ -70,7 +71,9 @@ def main() -> int:
     run = os.environ.get("GITHUB_RUN_ID", str(int(time.time())))
     transport = Paced(UrllibTransport(repository, token))
     destination = GitHubIssueDestination(transport)
-    grant = LocalAuthority(frozenset({TOOL_NAME}))
+    # task.operations.015: the operator kill switch revokes the grant at every check.
+    kill_switch = KillSwitch.from_env()
+    grant = LocalAuthority(frozenset({TOOL_NAME}), revocation_event=kill_switch)
     database = Path(tempfile.mkdtemp(prefix="vater-evidence-")) / "ledger.sqlite3"
     report = {"destination": "github_issues", "repository": repository, "run_id": run,
               "contract": "contracts/github_issue_destination.json", "scenarios": [], "issues": [], "closed": []}
@@ -120,6 +123,11 @@ def main() -> int:
     def call(executor, key, title):
         return executor.call(TOOL_NAME, {"request_key": key, "title": title})
 
+    if kill_switch.is_set():
+        # Stopped before any request: nothing is created, and a stop is never a pass.
+        report["stopped_by_kill_switch"] = str(kill_switch.path)
+        finish(transport, report, args.output)
+        return 1
     try:
         ensure_label(transport)
 

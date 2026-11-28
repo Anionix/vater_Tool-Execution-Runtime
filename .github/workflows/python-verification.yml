@@ -28,6 +28,8 @@ jobs:
         run: python -m compileall -q src scripts tests server_mcp.py
       - name: Enforce production-code static safety policy
         run: python scripts/check_static_policy.py
+      - name: Refuse a permission change without its history entry
+        run: python scripts/permission_history.py check
       - name: Run strict boundary tests
         run: >-
           python -m pytest -q
@@ -71,6 +73,87 @@ jobs:
           tests/test_cancellation_journal.py
           tests/test_sqlite_cancel_wait.py
 
+  dependency-vulnerabilities:
+    # task.operations.005: every locked package checked against OSV, standard library only
+    # (no third-party scanner is installed); the report is kept, and a known vulnerability fails.
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        with:
+          python-version: '3.13'
+      - name: Query OSV for every locked package
+        run: python -I scripts/scan_vulnerabilities.py --output osv-scan.json
+      - name: Keep the scan result
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: osv-scan
+          path: osv-scan.json
+          if-no-files-found: warn
+          retention-days: 90
+
+  release-artifacts:
+    # task.operations.006 / 008 / 009: artifacts are built and kept only after every verification
+    # job (including the safety tests) and every security check of the release gate has passed.
+    needs: [offline-contracts, durable-state, dependency-vulnerabilities, official-mcp]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        with:
+          python-version: '3.13'
+      - name: Stop the release on any failed security check
+        run: python scripts/release_gate.py --output release-gate.json
+      - name: Install the hash-locked build backend
+        # A folded block: ':all: ' would end a plain YAML scalar.
+        run: >-
+          python -m pip install --require-hashes --only-binary :all: -r requirements-build.lock
+      - name: Build under varied environments and record every SHA-256
+        run: python scripts/release_manifest.py --output release-manifest.json --dist dist
+      # No 'if: always()': nothing is distributed after a failed gate or build.
+      - name: Keep the artifacts and their manifest
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: release-artifacts
+          path: |
+            dist/
+            release-manifest.json
+          if-no-files-found: error
+          retention-days: 90
+      # task.operations.017: the extended release only when every initial and added-feature gate
+      # passed with evidence still bound to the current files.
+      - name: Decide which releases the gates allow
+        id: decision
+        run: python scripts/release_decision.py --output release-decision.json --github-output "$GITHUB_OUTPUT"
+      - name: Publish the extended release
+        if: steps.decision.outputs.extended == 'true'
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: extended-release
+          path: |
+            dist/
+            release-manifest.json
+            release-decision.json
+          if-no-files-found: error
+          retention-days: 90
+      - name: Keep the release gate report and decision
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: release-gate
+          path: |
+            release-gate.json
+            release-decision.json
+          if-no-files-found: warn
+          retention-days: 90
+
   official-mcp:
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -87,12 +170,16 @@ jobs:
         run: python -m pip install --require-hashes -r requirements-py313.lock
       - name: Check installed dependency compatibility
         run: python -m pip check
+      - name: Require the locked Python set and report formal toolchains without counting them as passed
+        run: python scripts/check_toolchains.py --require-locked-python
       - name: Refuse tests if the real official SDK is missing
         run: python -c "from importlib.metadata import version; assert version('mcp') == '2.3.0'"
       - name: Run real official SDK integration separately
         run: python -m pytest -q -rs --junitxml=official-mcp-report.xml tests/test_official_mcp_sdk.py
       - name: Require all official MCP integration cases to execute and pass
         run: python scripts/check_test_report.py official-mcp-report.xml --minimum 14
+      - name: Run the staging trial with synthetic data only
+        run: python scripts/staging_trial.py --output staging-trial.json
       - name: Verify trust phase using the same locked environment
         run: python scripts/verify_phase.py trust
       - name: Verify all contract tasks
@@ -121,3 +208,7 @@ jobs:
         run: python scripts/verify_phase.py http_interface
       - name: Verify all testing tasks (includes the regression registry)
         run: python scripts/verify_phase.py testing
+      - name: Verify all operations tasks
+        run: python scripts/verify_phase.py operations
+      - name: Audit evidence and documentation for secret values
+        run: python scripts/audit_logs.py evidence/ docs/

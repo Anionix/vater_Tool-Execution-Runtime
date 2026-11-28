@@ -1,0 +1,25 @@
+{
+  "task_id": "task.operations.006",
+  "acceptance_criteria": "元ソース・依存版・Python配布物のSHA-256が追える",
+  "verified_on": "2026-11-27",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/operations-phase-tests.xml",
+  "report_sha256": "4ba44ed438cf5c62050443fe893879b4a13254d82c774b83030265d992ae7122",
+  "source_sha256": {
+    ".github/workflows/python-verification.yml": "ea6e336f303d9988bbf296d640b6915a04e858811345ca7457cac366709c752c",
+    "requirements-build.lock": "3321335737f7e89634b82b05aa42d3eacc01d1538615d75d4519bff07035b0e2",
+    "scripts/release_manifest.py": "65fdaa18d84221d68eb9f94d5e85edb73c2c1a7972262960898c0792fc085c3a",
+    "tests/test_release_manifest.py": "c833f6410f0625f3218785922a423ba41cadfda3d5b9027893df704b49b47428"
+  },
+  "scope": "scripts/release_manifest.py ties one commit's tracked files (each SHA-256 and a tree digest), the hash-locked runtime and build dependencies and the built sdist and wheel (SHA-256 and size) into one manifest. The release-artifacts CI job builds with setuptools 80.9.0 installed by hash and keeps the artifacts with the manifest for 90 days; evidence/release/build-trial.json records the manifest summary of CI run 45948159854 (merge commit a6e2de9, 606 tracked files, artifacts kept 90 days).",
+  "test_cases": [
+    "tests/test_release_manifest.py::test_every_tracked_file_is_hashed_into_the_tree_digest",
+    "tests/test_release_manifest.py::test_both_dependency_sets_are_recorded_by_version_and_artifact_hash",
+    "tests/test_release_manifest.py::test_the_manifest_ties_source_dependencies_and_artifacts_together",
+    "tests/test_release_manifest.py::test_ci_builds_with_the_hash_locked_backend_and_keeps_artifacts_and_manifest",
+    "tests/test_release_manifest.py::test_a_build_without_its_wheel_or_sdist_is_refused",
+    "tests/test_release_manifest.py::test_the_build_command_reads_its_output_directory_before_setuptools_rewrites_argv",
+    "tests/test_release_manifest.py::test_the_recorded_ci_build_names_every_sha256"
+  ]
+}

@@ -1723,6 +1723,122 @@
      "tests/test_recorded_tool_bridge.py::test_replay_requires_live_host_grant[during_read-expired-leased]"
     ]
    }
+  },
+  "src/verified_execution/kill_switch.py::default_path": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_kill_switch.py::test_the_operator_command_engages_reports_and_clears"
+    ]
+   },
+   "abnormal": {
+    "expect": "handled",
+    "note": "an unset VATER_KILL_SWITCH_FILE falls back to ~/.vater/kill-switch; there is no failure outcome",
+    "tests": [
+     "tests/test_kill_switch.py::test_without_the_variable_the_switch_lives_in_the_home_directory"
+    ]
+   }
+  },
+  "src/verified_execution/kill_switch.py::KillSwitch.from_env": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_kill_switch.py::test_the_operator_command_engages_reports_and_clears"
+    ]
+   },
+   "abnormal": {
+    "expect": "handled",
+    "note": "an unset VATER_KILL_SWITCH_FILE falls back to ~/.vater/kill-switch; there is no failure outcome",
+    "tests": [
+     "tests/test_kill_switch.py::test_without_the_variable_the_switch_lives_in_the_home_directory"
+    ]
+   }
+  },
+  "src/verified_execution/kill_switch.py::KillSwitch.is_set": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_kill_switch.py::test_the_switch_is_sticky_until_restart_and_fails_closed"
+    ]
+   },
+   "abnormal": {
+    "expect": "handled",
+    "note": "fails closed: a path that cannot be checked reports the switch engaged",
+    "tests": [
+     "tests/test_kill_switch.py::test_the_switch_is_sticky_until_restart_and_fails_closed"
+    ]
+   }
+  },
+  "src/verified_execution/kill_switch.py::KillSwitch.engage": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_kill_switch.py::test_the_operator_command_engages_reports_and_clears"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_kill_switch.py::test_an_engage_that_cannot_write_its_file_raises_but_still_stops_this_process"
+    ]
+   }
+  },
+  "src/verified_execution/restore_fence.py::install": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_backup_restore.py::test_a_recorded_operation_is_replayed_after_a_restore_not_executed"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_backup_restore.py::test_a_fence_cannot_be_installed_where_no_ledger_can_be_written"
+    ]
+   }
+  },
+  "src/verified_execution/restore_fence.py::active": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_backup_restore.py::test_an_incomplete_destination_listing_keeps_the_fence"
+    ]
+   },
+   "abnormal": {
+    "expect": "absent",
+    "tests": [
+     "tests/test_backup_restore.py::test_a_fence_cannot_be_installed_where_no_ledger_can_be_written",
+     "tests/test_backup_restore.py::test_the_command_line_backs_up_restores_and_clears"
+    ]
+   }
+  },
+  "src/verified_execution/restore_fence.py::clear": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_backup_restore.py::test_the_command_line_backs_up_restores_and_clears"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_backup_restore.py::test_an_operation_executed_after_the_backup_is_not_executed_again"
+    ]
+   }
+  },
+  "src/verified_execution/external_change.py::GitHubIssueDestination.operation_ids_since": {
+   "normal": {
+    "expect": "return",
+    "tests": [
+     "tests/test_backup_restore.py::test_an_operation_executed_after_the_backup_is_not_executed_again"
+    ]
+   },
+   "abnormal": {
+    "expect": "raise",
+    "tests": [
+     "tests/test_backup_restore.py::test_an_incomplete_destination_listing_keeps_the_fence"
+    ]
+   }
   }
  }
 }

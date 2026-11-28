@@ -5,9 +5,9 @@
   "verification_status": "passed",
   "executed": true,
   "report_path": "evidence/testing-phase-tests.xml",
-  "report_sha256": "8a66adeaf1b98f4e1c6c05b5834ad69c39a4841aff8f3949cd09a43d7d5c7768",
+  "report_sha256": "5c330ec017dff6eb1d99f7df268e3ea5b0512c7207f68fd6cbf8654610e99191",
   "source_sha256": {
-    "src/verified_execution/external_change.py": "65547f3beae40595c93b0298c34fbaf709e51352ef25f2b7d0d5d87decbb9f8a",
+    "src/verified_execution/external_change.py": "45e67a4053b82f165ff34c2608f17fc64fd5415cccaaa25a5edea058d95aa68c",
     "src/verified_execution/ledger.py": "3d8ba058dd5dd23957e70e87cf3a053514dd417a3ca05b35ba9410ebb3305a42",
     "src/verified_execution/model_mock.py": "5ef31bfd7192fc0acff45e765d6820cff1897ddc4071bcfd2ca14beee5eae6f1",
     "src/verified_execution/worker_leases.py": "3a328d1fe8043b51059c1c7e9e912a706136fb487ca896e4827cb3dd63a33b72",

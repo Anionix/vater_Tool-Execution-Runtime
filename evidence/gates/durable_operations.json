@@ -30,14 +30,14 @@
     "task.durable_operations.022",
     "task.durable_operations.023"
   ],
-  "report_path": "evidence/gates/durable-operations-tests.xml",
-  "report_sha256": "6b39012f77816a661cae1a321bc7f7b1a7db175767b2c5f89f613d07f5b9c440",
+  "report_path": "evidence/gates/durable_operations-tests.xml",
+  "report_sha256": "752c9ab5aa805d5347db828aa603df777f55d5c2995c3e8a7682047dea2a188b",
   "source_sha256": {
     "contracts/external_change_release.json": "a20e107b4ec71d82c95d591287187ed8e5a1ab59510ddedf60d345281c601567",
     "contracts/github_issue_destination.json": "fd6a06c0cca8a5519773a17083ef239b87b836d8c8d76809e957ca06735b2cec",
     "evidence/external/github-issues-run-45839952764.json": "75f5480aeca6f769fc99c4cd89d116cbef449f4002cd837a5c708d3e22e66e53",
     "src/verified_execution/cancellable_bridge.py": "54e220985d38c0c7285b58bdbd4b8dcd781a818b10305822896d14726f665215",
-    "src/verified_execution/external_change.py": "65547f3beae40595c93b0298c34fbaf709e51352ef25f2b7d0d5d87decbb9f8a",
+    "src/verified_execution/external_change.py": "45e67a4053b82f165ff34c2608f17fc64fd5415cccaaa25a5edea058d95aa68c",
     "src/verified_execution/ledger.py": "3d8ba058dd5dd23957e70e87cf3a053514dd417a3ca05b35ba9410ebb3305a42",
     "src/verified_execution/worker_leases.py": "3a328d1fe8043b51059c1c7e9e912a706136fb487ca896e4827cb3dd63a33b72",
     "tests/test_adapter_boundary.py": "26d6e6e5fa4f93188b4f4322f9fdf6117a4eecc2adc25bb01f96237544749d71",
@@ -51,7 +51,16 @@
     "tests/test_recorded_calculator.py": "35cbed27d1dff0770ca7b3780ca244b3b7f0582ed8f39812038d596720fb38cc",
     "tests/test_recorded_tool_bridge.py": "ff8ca14407eadd7aafd1ee24e94359489b3e703525882e23f4ced93fd996607d",
     "tests/test_request_cancellation.py": "ee242fa5bb960b88fe551e6ebb57bf21d3c32372431b8076bb8442a445a6b03d",
-    "tests/test_worker_leases.py": "8c41cb3ccd882d010c47590262714cf0f22d6d42c978dc9e45706922fc2d0967"
+    "tests/test_worker_leases.py": "ba3f35e12ce14cc39f403cdbd2c994345811a9a3e3ecce7d71f71ce6a0ee9888"
   },
-  "scope": "All 23 durable_operations tasks are done with executed evidence; this report reruns every mapped case in one session. The six external-change tasks rest on live run 45839952764 against this repository's GitHub Issues (evidence/external/github-issues-run-45839952764.json). External destinations other than github_issues are not covered."
+  "scope": "All 23 durable_operations tasks are done with executed evidence; this report reruns every mapped case in one session. The six external-change tasks rest on live run 45839952764 against this repository's GitHub Issues (evidence/external/github-issues-run-45839952764.json). External destinations other than github_issues are not covered.",
+  "previous_report": {
+    "path": "evidence/gates/durable-operations-tests.xml",
+    "sha256": "6b39012f77816a661cae1a321bc7f7b1a7db175767b2c5f89f613d07f5b9c440"
+  },
+  "refreshed_at": "2026-11-27T05:52:05Z",
+  "environment": {
+    "python": "3.13.18",
+    "platform": "Linux-6.18.44-fc-v880-x86_64-with-glibc2.39"
+  }
 }

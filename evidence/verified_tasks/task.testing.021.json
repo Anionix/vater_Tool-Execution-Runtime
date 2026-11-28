@@ -5,9 +5,9 @@
   "verification_status": "passed",
   "executed": true,
   "report_path": "evidence/testing-phase-tests.xml",
-  "report_sha256": "8a66adeaf1b98f4e1c6c05b5834ad69c39a4841aff8f3949cd09a43d7d5c7768",
+  "report_sha256": "5c330ec017dff6eb1d99f7df268e3ea5b0512c7207f68fd6cbf8654610e99191",
   "source_sha256": {
-    "docs/verification_scope.json": "228887cfeb06fc92866dd2f11097245d438bd9b2635dd5790325c445d7e7d6b4",
+    "docs/verification_scope.json": "34bed48674b2cfd9dd739396e0d224f907ca1e2388c0d8af4020c1c5e54ab069",
     "tests/test_verification_scope.py": "e01853353eb11933972ebd780c0c54d634017f5084fe1bc97d8db6ad27fd7431"
   },
   "scope": "docs/verification_scope.json separates executed from not executed for external services, official MCP and durable records. Executed items point only at evidence that ran and passed; not-executed items claim no evidence, are marked unconfirmed, list their local substitute tests and say why (for example the official conformance suite against the current source, a real rate limit, power loss, a full disk). A not-executed item that names a task keeps that task from being marked done.",
@@ -26,6 +26,7 @@
     "tests/test_verification_scope.py::test_item_claims_only_what_ran[durable_records-REC-2]",
     "tests/test_verification_scope.py::test_item_claims_only_what_ran[durable_records-REC-3]",
     "tests/test_verification_scope.py::test_item_claims_only_what_ran[durable_records-REC-4]",
+    "tests/test_verification_scope.py::test_item_claims_only_what_ran[durable_records-REC-6]",
     "tests/test_verification_scope.py::test_item_claims_only_what_ran[durable_records-REC-5]",
     "tests/test_verification_scope.py::test_an_unexecuted_item_keeps_its_task_open[external_services-EXT-2]",
     "tests/test_verification_scope.py::test_an_unexecuted_item_keeps_its_task_open[external_services-EXT-3]",
@@ -35,7 +36,7 @@
     "tests/test_verification_scope.py::test_an_unexecuted_item_keeps_its_task_open[official_mcp-MCP-4]",
     "tests/test_verification_scope.py::test_an_unexecuted_item_keeps_its_task_open[durable_records-REC-2]",
     "tests/test_verification_scope.py::test_an_unexecuted_item_keeps_its_task_open[durable_records-REC-3]",
-    "tests/test_verification_scope.py::test_an_unexecuted_item_keeps_its_task_open[durable_records-REC-4]",
+    "tests/test_verification_scope.py::test_an_unexecuted_item_keeps_its_task_open[durable_records-REC-6]",
     "tests/test_verification_scope.py::test_an_unexecuted_item_keeps_its_task_open[durable_records-REC-5]"
   ]
 }

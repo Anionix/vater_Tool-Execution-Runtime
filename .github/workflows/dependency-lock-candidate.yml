@@ -4,6 +4,9 @@ name: Python dependency lock candidate
 
 on:
   workflow_dispatch:
+  # task.operations.014: new upstream releases are revalidated weekly, not only on local changes.
+  schedule:
+    - cron: '23 4 * * 1'
   push:
     paths:
       - pyproject.toml
@@ -58,11 +61,18 @@ jobs:
         run: .venv/bin/python -m pytest -q -rs --junitxml=official-mcp-report.xml tests/test_official_mcp_sdk.py
       - name: Refuse partial or entirely skipped official SDK test runs
         run: .venv/bin/python scripts/check_test_report.py official-mcp-report.xml --minimum 14
+      - name: Record where each candidate dependency comes from, for review
+        run: .venv/bin/python scripts/dependency_sources.py --write
+      # task.operations.014: every required check of the release verification, on the new versions.
+      - name: Run every required check on the candidate versions
+        run: .venv/bin/python scripts/required_checks.py
       - name: Publish lock candidate for human review
         if: always()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: python313-linux-lock-candidate-unreviewed
-          path: requirements-py313.lock
+          path: |
+            requirements-py313.lock
+            docs/dependency_sources.json
           if-no-files-found: warn
           retention-days: 7

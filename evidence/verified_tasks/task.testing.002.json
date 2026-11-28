@@ -5,7 +5,7 @@
   "verification_status": "passed",
   "executed": true,
   "report_path": "evidence/testing-phase-tests.xml",
-  "report_sha256": "8a66adeaf1b98f4e1c6c05b5834ad69c39a4841aff8f3949cd09a43d7d5c7768",
+  "report_sha256": "5c330ec017dff6eb1d99f7df268e3ea5b0512c7207f68fd6cbf8654610e99191",
   "source_sha256": {
     "contracts/checked_add.input.schema.json": "d9cbeeff8d08fff5c2a9886c20b7aef93c4db3879be256e7c4f60f717eefa41d",
     "contracts/checked_add_recorded.input.schema.json": "9753bf80d23d920432c6da8d4cb0793f78bc8529af6b6221164a611262a0b069",
@@ -14,7 +14,7 @@
     "contracts/github_test_create_issue.input.schema.json": "7c13a6fa4ccbb374a04292243163714b0d8eb448294769d8510acb22ef32d25d",
     "contracts/github_test_create_issue.output.contract.json": "70856ea4cb51f7e69e6b28d7920b47b233e6a9c2dd9c77d1cd1be7de67a2e199",
     "src/verified_execution/cancellable_bridge.py": "54e220985d38c0c7285b58bdbd4b8dcd781a818b10305822896d14726f665215",
-    "src/verified_execution/external_change.py": "65547f3beae40595c93b0298c34fbaf709e51352ef25f2b7d0d5d87decbb9f8a",
+    "src/verified_execution/external_change.py": "45e67a4053b82f165ff34c2608f17fc64fd5415cccaaa25a5edea058d95aa68c",
     "src/verified_execution/recorded_tool_bridge.py": "8d5c745527d5fcf4bac582d45612a2313da269d5121e17eca58c3e33856b8b1f",
     "tests/test_contract_inventory.py": "d7bb0bb696fb5a4ddd3d6ee487a9e5113588c9d840cd01c30c9cce46e929fbec"
   },

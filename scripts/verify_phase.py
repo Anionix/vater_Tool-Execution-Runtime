@@ -34,36 +34,46 @@ def phase_cases(phase: str, *, completed_only: bool = False) -> dict[str, list[s
         members = {key for key in members if tasks[key]["status"] == "done"}
         if not members:
             raise ValueError(f"No completed tasks: {phase}")
-    inventory = {}
-    for key in sorted(members):
-        row = tasks[key]
-        if any(tasks[parent]["status"] != "done" for parent in row["depends_on"]):
-            raise ValueError(f"Open prerequisite: {key}")
-        records = []
-        for relative in row["evidence_paths"]:
-            path = (ROOT / relative).resolve()
-            if not path.is_relative_to(ROOT / "evidence"):
-                raise ValueError(f"Invalid evidence path: {key}")
-            record = json.loads(path.read_text())
-            if "test_cases" in record:
-                records.append(record)
-        if len(records) != 1:
-            raise ValueError(f"Expected one case mapping: {key}")
-        record = records[0]
-        cases = record["test_cases"]
-        if (record["task_id"] != key or record["acceptance_criteria"] != row["acceptance_criteria"]
-                or record["executed"] is not True or record["verification_status"] != "passed"
-                or not isinstance(cases, list) or not cases or not all(isinstance(node, str) for node in cases)
-                or len(set(cases)) != len(cases)):
-            raise ValueError(f"Evidence does not match acceptance criteria: {key}")
-        for node in cases:
-            file, sep, test = node.partition("::")
-            path = (ROOT / file).resolve()
-            if (not sep or not test or not file.startswith("tests/")
-                    or not path.is_relative_to(ROOT / "tests") or not path.is_file()):
-                raise ValueError(f"Unresolvable test case for {key}: {node}")
-        inventory[key] = cases
-    return inventory
+    return {key: task_cases(tasks, key) for key in sorted(members)}
+
+
+def load_tasks() -> dict[str, dict]:
+    rows = [json.loads(line) for line in (ROOT / "backlog/tasks.jsonl").read_text().splitlines()]
+    tasks = {row["task_id"]: row for row in rows}
+    if len(rows) != len(tasks):
+        raise ValueError("Duplicate task identifier")
+    return tasks
+
+
+def task_cases(tasks: dict[str, dict], key: str) -> list[str]:
+    """One task's exact pytest cases, from its single evidence record (task.operations.003)."""
+    row = tasks[key]
+    if any(tasks[parent]["status"] != "done" for parent in row["depends_on"]):
+        raise ValueError(f"Open prerequisite: {key}")
+    records = []
+    for relative in row["evidence_paths"]:
+        path = (ROOT / relative).resolve()
+        if not path.is_relative_to(ROOT / "evidence"):
+            raise ValueError(f"Invalid evidence path: {key}")
+        record = json.loads(path.read_text())
+        if "test_cases" in record:
+            records.append(record)
+    if len(records) != 1:
+        raise ValueError(f"Expected one case mapping: {key}")
+    record = records[0]
+    cases = record["test_cases"]
+    if (record["task_id"] != key or record["acceptance_criteria"] != row["acceptance_criteria"]
+            or record["executed"] is not True or record["verification_status"] != "passed"
+            or not isinstance(cases, list) or not cases or not all(isinstance(node, str) for node in cases)
+            or len(set(cases)) != len(cases)):
+        raise ValueError(f"Evidence does not match acceptance criteria: {key}")
+    for node in cases:
+        file, sep, test = node.partition("::")
+        path = (ROOT / file).resolve()
+        if (not sep or not test or not file.startswith("tests/")
+                or not path.is_relative_to(ROOT / "tests") or not path.is_file()):
+            raise ValueError(f"Unresolvable test case for {key}: {node}")
+    return cases
 
 
 def verify_report(report: Path, inventory: dict[str, list[str]]) -> dict:

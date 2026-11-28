@@ -1,0 +1,28 @@
+{
+  "task_id": "task.operations.005",
+  "acceptance_criteria": "スキャン結果が保存される",
+  "verified_on": "2026-11-27",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/operations-phase-tests.xml",
+  "report_sha256": "4ba44ed438cf5c62050443fe893879b4a13254d82c774b83030265d992ae7122",
+  "source_sha256": {
+    ".github/workflows/python-verification.yml": "ea6e336f303d9988bbf296d640b6915a04e858811345ca7457cac366709c752c",
+    "evidence/security/osv-scan.json": "85322c2c71c91c83108d51aa2fb27b80453d6c0f191793014a5c481d6923dae7",
+    "evidence/security/osv-scan.provenance.json": "48e18905978e95df4d6b2486c433461954f82ab7e7f7b5b07d00978496ececa1",
+    "requirements-py313.lock": "cc651303afe6b684a979e14fdd9d1ca8b73d7bda0ea6e1d0480a20ae792de51c",
+    "scripts/scan_vulnerabilities.py": "a463d74ce58fe5bb1d9130fa74b1d5a1dc0321e504b77e91310c098dc41651c7",
+    "tests/test_vulnerability_scan.py": "d7e5464eb9a9d83cc85cef2f117d6d32a3be9a85c42381e64b4f46824ad24949"
+  },
+  "scope": "The dependency-vulnerabilities CI job queries OSV for the exact version of every locked package, with the standard library only, keeps the report as an artifact for 90 days and fails on any known vulnerability. CI run 45945637877 found none in the 33 packages; evidence/security/osv-scan.json is that report, transcribed from the job log, and its canonical SHA-256 equals the one the job printed. The release gate re-runs the scan and checks that the saved report covers exactly the current lock.",
+  "test_cases": [
+    "tests/test_vulnerability_scan.py::test_every_locked_package_is_queried_at_its_exact_version",
+    "tests/test_vulnerability_scan.py::test_recorded_answers_are_turned_into_advisory_ids",
+    "tests/test_vulnerability_scan.py::test_a_vulnerable_package_fails_the_scan_and_is_named",
+    "tests/test_vulnerability_scan.py::test_a_clean_scan_passes_and_is_saved",
+    "tests/test_vulnerability_scan.py::test_a_failed_or_mismatched_query_never_passes",
+    "tests/test_vulnerability_scan.py::test_a_saved_report_must_describe_exactly_the_current_lock_with_nothing_found",
+    "tests/test_vulnerability_scan.py::test_ci_scans_with_the_standard_library_on_a_read_only_token_and_keeps_the_report",
+    "tests/test_vulnerability_scan.py::test_the_saved_scan_covers_the_current_lock_with_nothing_found_and_matches_its_ci_run"
+  ]
+}

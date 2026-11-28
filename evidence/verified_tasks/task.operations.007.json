@@ -1,0 +1,25 @@
+{
+  "task_id": "task.operations.007",
+  "acceptance_criteria": "各試験記録を対象ソースの検査値へ紐付け、古い証拠の流用を防ぐ",
+  "verified_on": "2026-11-27",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/operations-phase-tests.xml",
+  "report_sha256": "4ba44ed438cf5c62050443fe893879b4a13254d82c774b83030265d992ae7122",
+  "source_sha256": {
+    "scripts/evidence_freshness.py": "36da33be60da713a9aebeb0e7d8b55852d425f86931b33747b38af2d10a6743e",
+    "scripts/verify_phase.py": "e9bf7a14813534653fb938125f53ec18d06878fd613573e68f1cdb298afa7290",
+    "tests/test_evidence_freshness.py": "57b7b3d304c5e7c661aaf287962f847e3eb6738bc309366b2ff363511da16884"
+  },
+  "scope": "Task and gate records are bound to the SHA-256 (or git blob id) of every file their tests checked and to their report. scripts/evidence_freshness.py classifies each record as fresh, stale or unbound and fails --require-fresh on a stale one; verify_phase --snapshot and the release decision refuse stale gates, and live runs never read old results. --refresh-gate reruns a phase in a new process and rebinds the gate, with a report of its own, only after that run passed; a failing rerun leaves the record untouched.",
+  "test_cases": [
+    "tests/test_evidence_freshness.py::test_every_repository_record_is_classified_and_stale_ones_name_their_changes",
+    "tests/test_evidence_freshness.py::test_a_changed_source_or_report_makes_the_record_stale",
+    "tests/test_evidence_freshness.py::test_a_snapshot_check_refuses_a_stale_gate",
+    "tests/test_evidence_freshness.py::test_require_fresh_fails_on_any_stale_record",
+    "tests/test_evidence_freshness.py::test_a_passing_rerun_rebinds_the_gate_to_the_current_files",
+    "tests/test_evidence_freshness.py::test_a_failing_rerun_leaves_the_gate_record_untouched",
+    "tests/test_evidence_freshness.py::test_a_shared_report_is_never_overwritten_by_a_rerun",
+    "tests/test_evidence_freshness.py::test_records_bound_by_git_blob_ids_are_checked_too"
+  ]
+}

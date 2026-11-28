@@ -5,7 +5,7 @@
   "verification_status": "passed",
   "executed": true,
   "report_path": "evidence/testing-phase-tests.xml",
-  "report_sha256": "8a66adeaf1b98f4e1c6c05b5834ad69c39a4841aff8f3949cd09a43d7d5c7768",
+  "report_sha256": "5c330ec017dff6eb1d99f7df268e3ea5b0512c7207f68fd6cbf8654610e99191",
   "source_sha256": {
     "tests/regressions.json": "f9daeb79eb40970a078ecb14969fc1c16e5d38bb6789fc1dcd861dedf55ef9ef",
     "tests/test_regression_registry.py": "9af9f1583d8c8db93a8006a3d29f9de3fed395527841f6310e52d275a1c2682c"

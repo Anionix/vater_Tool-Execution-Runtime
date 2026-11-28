@@ -169,6 +169,16 @@
                 "tests/test_adapter_boundary.py::test_permission_denial_logs_only_fixed_fields"]
     },
     {
+      "id": "T8", "kind": "thread", "status": "tested",
+      "sites": ["src/verified_execution/kill_switch.py::KillSwitch.__init__",
+                "src/verified_execution/kill_switch.py::KillSwitch.is_set"],
+      "race": "An operator engages the kill switch (another process writes its file) while a call is between grant checks: after approval, or waiting out a rate limit.",
+      "guard": "Every grant check reads the switch, including the ledger's check inside the dispatch transaction and the check before a resend; once seen, a threading.Event keeps it engaged for every thread of the process.",
+      "tests": ["tests/test_kill_switch.py::test_engaged_between_approval_and_dispatch_the_ledger_refuses_the_dispatch",
+                "tests/test_kill_switch.py::test_engaged_during_a_rate_limit_wait_nothing_is_resent",
+                "tests/test_kill_switch.py::test_the_switch_is_sticky_until_restart_and_fails_closed"]
+    },
+    {
       "id": "A1", "kind": "async", "status": "tested",
       "sites": ["src/verified_execution/cancellable_bridge.py::CancellableLeasedToolBridge._database"],
       "race": "The MCP client cancels a recorded call at each checkpoint.",

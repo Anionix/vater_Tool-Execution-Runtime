@@ -1,0 +1,175 @@
+{
+ "source": "https://api.osv.dev/v1/querybatch",
+ "ecosystem": "PyPI",
+ "scanned_at": "2026-11-27T05:24:50Z",
+ "lock": "requirements-py313.lock",
+ "lock_sha256": "cc651303afe6b684a979e14fdd9d1ca8b73d7bda0ea6e1d0480a20ae792de51c",
+ "packages": [
+  {
+   "name": "annotated-types",
+   "version": "0.8.0",
+   "vulnerabilities": []
+  },
+  {
+   "name": "anyio",
+   "version": "4.16.0",
+   "vulnerabilities": []
+  },
+  {
+   "name": "attrs",
+   "version": "26.1.0",
+   "vulnerabilities": []
+  },
+  {
+   "name": "cffi",
+   "version": "2.1.1",
+   "vulnerabilities": []
+  },
+  {
+   "name": "click",
+   "version": "8.5.1",
+   "vulnerabilities": []
+  },
+  {
+   "name": "cryptography",
+   "version": "50.0.2",
+   "vulnerabilities": []
+  },
+  {
+   "name": "h11",
+   "version": "0.16.0",
+   "vulnerabilities": []
+  },
+  {
+   "name": "httpcore2",
+   "version": "2.16.2",
+   "vulnerabilities": []
+  },
+  {
+   "name": "httpx2",
+   "version": "2.16.2",
+   "vulnerabilities": []
+  },
+  {
+   "name": "idna",
+   "version": "3.20",
+   "vulnerabilities": []
+  },
+  {
+   "name": "iniconfig",
+   "version": "2.3.1",
+   "vulnerabilities": []
+  },
+  {
+   "name": "jsonschema",
+   "version": "4.26.0",
+   "vulnerabilities": []
+  },
+  {
+   "name": "jsonschema-specifications",
+   "version": "2025.9.1",
+   "vulnerabilities": []
+  },
+  {
+   "name": "mcp",
+   "version": "2.3.0",
+   "vulnerabilities": []
+  },
+  {
+   "name": "mcp-types",
+   "version": "2.3.0",
+   "vulnerabilities": []
+  },
+  {
+   "name": "opentelemetry-api",
+   "version": "1.45.2",
+   "vulnerabilities": []
+  },
+  {
+   "name": "packaging",
+   "version": "26.4",
+   "vulnerabilities": []
+  },
+  {
+   "name": "pluggy",
+   "version": "1.7.0",
+   "vulnerabilities": []
+  },
+  {
+   "name": "pycparser",
+   "version": "3.12",
+   "vulnerabilities": []
+  },
+  {
+   "name": "pydantic",
+   "version": "2.14.4",
+   "vulnerabilities": []
+  },
+  {
+   "name": "pydantic-core",
+   "version": "2.50.5",
+   "vulnerabilities": []
+  },
+  {
+   "name": "pygments",
+   "version": "2.21.0",
+   "vulnerabilities": []
+  },
+  {
+   "name": "pyjwt",
+   "version": "2.15.1",
+   "vulnerabilities": []
+  },
+  {
+   "name": "pytest",
+   "version": "9.2.0",
+   "vulnerabilities": []
+  },
+  {
+   "name": "python-multipart",
+   "version": "0.0.34",
+   "vulnerabilities": []
+  },
+  {
+   "name": "referencing",
+   "version": "0.37.0",
+   "vulnerabilities": []
+  },
+  {
+   "name": "rpds-py",
+   "version": "2026.9.1",
+   "vulnerabilities": []
+  },
+  {
+   "name": "sse-starlette",
+   "version": "3.7.1",
+   "vulnerabilities": []
+  },
+  {
+   "name": "starlette",
+   "version": "1.10.0",
+   "vulnerabilities": []
+  },
+  {
+   "name": "truststore",
+   "version": "0.10.5",
+   "vulnerabilities": []
+  },
+  {
+   "name": "typing-extensions",
+   "version": "4.16.0",
+   "vulnerabilities": []
+  },
+  {
+   "name": "typing-inspection",
+   "version": "0.4.5",
+   "vulnerabilities": []
+  },
+  {
+   "name": "uvicorn",
+   "version": "0.54.0",
+   "vulnerabilities": []
+  }
+ ],
+ "vulnerable_packages": 0
+}

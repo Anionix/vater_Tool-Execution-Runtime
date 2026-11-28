@@ -1,0 +1,16 @@
+{
+ "_comment": "task.operations.005: where evidence/security/osv-scan.json came from. The report is transcribed from the job log (artifact downloads are not reachable from the authoring environment); its canonical SHA-256 equals the one the job printed.",
+ "workflow": ".github/workflows/python-verification.yml",
+ "job": "dependency-vulnerabilities",
+ "run_id": 45945637877,
+ "job_id": 140329571047,
+ "run_url": "https://github.com/Anionix/vater_Tool-Execution-Runtime/actions/runs/45945637877/job/140329571047",
+ "artifact": {
+  "name": "osv-scan",
+  "id": 15174547122,
+  "zip_sha256": "be7a07b3bd837ebbb8acc146b010df8aca09cf3438a974e9e8135f0ec637b008",
+  "retention_days": 90
+ },
+ "head_sha": "a335b6bcb35eb21786df9f820355dd078781ea0f",
+ "canonical_sha256": "e68fe8f7f2ed4b59286c56216a140a014dbd7e8e00199bc52bdf531b6e3eb479"
+}
