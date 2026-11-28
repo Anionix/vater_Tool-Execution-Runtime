@@ -2,16 +2,15 @@
   "task_id": "gate.scope.completed",
   "verification_status": "passed",
   "executed": true,
-  "verification_date": "2026-11-24",
-  "source_commit": "6efc1972414bd6c993f61bf2f9c7e7efc2d012f9",
+  "verification_date": "2026-11-28",
+  "source_commit": "727d7bf5362effbadef72ab8c9de5f30051e7562",
   "acceptance_criteria": "同段階の全作業について、実物・独立した合格判定・証拠の所在がある",
   "checks": {
     "scope_task_count": 18,
-    "prior_completed": 17,
-    "remaining_scope_task": "task.scope.015",
+    "tasks_done": 18,
     "all_evidence_records_read_and_matched": true,
-    "current_scope_reconciliation_checks_passed": 13,
-    "current_scope_reconciliation_checks_total": 13,
+    "current_scope_reconciliation_checks_passed": 18,
+    "current_scope_reconciliation_checks_total": 18,
     "dependency_packages": 33,
     "artifact_hashes": 485,
     "official_mcp_integration_passed": 14,
@@ -91,11 +90,40 @@
       "path": "evidence/scope_tasks/task.scope.018.json"
     }
   ],
+  "human_recheck": {
+    "blobs": {
+      "README.md": "e187269176a0cf067d7f9f480b05bd768e439fed",
+      "docs/SCOPE_CONTRACT.md": "e9450d1eaded3202c821bfbe3a5ab55feb7e5b56"
+    },
+    "rechecked": [
+      "README.md"
+    ],
+    "date": "2026-11-28",
+    "statement": "A person re-checked the wording of the files named in 'rechecked' at these blobs before this rebuild; the tests check each scope criterion mechanically."
+  },
   "source_blobs": {
-    "README.md": "624bd04eff8abeb8fa7d7f05d082aadb7708ee3d",
+    "README.md": "e187269176a0cf067d7f9f480b05bd768e439fed",
     "docs/SCOPE_CONTRACT.md": "e9450d1eaded3202c821bfbe3a5ab55feb7e5b56",
     "requirements-py313.lock": "804466bbea18c0889a3704b7b67895696711a61a"
   },
+  "source_sha256": {
+    "tests/test_scope_reconciliation.py": "4f72945e5e2bbfc12174bd7ad8f339667349579bbcdd83c0157c80a709325464",
+    "scripts/rebuild_scope_gate.py": "ae5fdbf0965b9af4ae1b282a543a2c8f71268b20353ca9a162b4315466a70a6a",
+    "config/limits.json": "f10b9be0d6b196cb58aa5175dcd7a7ee45b481087c24834743408b60b387b20f",
+    "contracts/checked_add.output.contract.json": "fc44dbe5bbae215503356ab16f03d5c8b122aa473928dfed11d54aa4e0ea5145",
+    "pyproject.toml": "08e89feab2cbeba0df2fc6e663be654f4fa7c57cff61cdce43ed56d0694d01f5"
+  },
+  "report_path": "evidence/gates/scope-tests.xml",
+  "report_sha256": "24e208eb9355d708ea7b72b676ed45670348d0f83485d5d98035e7e89f162b2f",
   "integration_run": "https://github.com/Anionix/vater_Tool-Execution-Runtime/actions/runs/45278396997",
-  "limitation": "Scope acceptance and structural reconciliation of historical evidence. Not a rerun of all original scope checks, independent human review, security proof or production approval. Remaining mandatory release gates remain open."
+  "previous_binding": {
+    "source_commit": "6efc1972414bd6c993f61bf2f9c7e7efc2d012f9",
+    "verification_date": "2026-11-24",
+    "source_blobs": {
+      "README.md": "624bd04eff8abeb8fa7d7f05d082aadb7708ee3d",
+      "docs/SCOPE_CONTRACT.md": "e9450d1eaded3202c821bfbe3a5ab55feb7e5b56",
+      "requirements-py313.lock": "804466bbea18c0889a3704b7b67895696711a61a"
+    }
+  },
+  "limitation": "Each scope task's acceptance criterion is re-checked against the current files by tests/test_scope_reconciliation.py; the original archive's scope tests are not rerun. The wording of README.md and docs/SCOPE_CONTRACT.md is judged by a person. Not a security proof or production approval."
 }

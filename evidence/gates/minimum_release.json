@@ -26,7 +26,7 @@
     "task.minimum_release.009"
   ],
   "report_path": "evidence/gates/minimum_release-tests.xml",
-  "report_sha256": "c1649c919c3b537168df074e79ffd790df80c83731603967b8acdbba64051a21",
+  "report_sha256": "f360bbc1bd3a5a368a4ead7ffdb7c8e446d04620ce4857bf146de600827698b1",
   "source_sha256": {
     "README.md": "041ac79bd0cd34c26befc5fa9e024ff9717e8e0484fb3317ce2e215b2ccf4e4b",
     "config/limits.json": "f10b9be0d6b196cb58aa5175dcd7a7ee45b481087c24834743408b60b387b20f",
@@ -44,7 +44,7 @@
     "evidence/gates/minimum_validation.json": "d14913bf6a9ad6ff2f035da6f08941b04e22ad483fc9ca48b073b8765cb6797c",
     "evidence/gates/read_only.json": "1fd86fc3fc98f53fe28c46993b56dc6e454a7e306e8aca1e60eb9ba02dfc4cc8",
     "evidence/gates/runtime.json": "2192698a28232f68462736004abf1546e21c52543241d1c08d574c33cbe3bf5e",
-    "evidence/gates/scope.json": "571b67c17ea4bf0d35ccca02ede9debf2a12b7d812f8e08b8a41075fed0713c3",
+    "evidence/gates/scope.json": "5917549cce95018562cf916bb31c9be76def5e7a56b2a6f328f163ae48059aed",
     "evidence/gates/trust.json": "380bdeca4e2526df377dbe835ae0416b18fb7246b5c70e5e8fd59d9a8c44a6e9",
     "evidence/minimum-validation-environment.json": "7c5352b19b27d9f4f8e2a54ca3ed2dc28ba4d429fb71075e835c11fdc8c255bf",
     "evidence/stdio-conformance-results.jsonl": "08322b13708c2adfb6020cfbcb9c2662747f45e6191543556702e792f2c7e7b1",
@@ -132,9 +132,9 @@
   },
   "previous_report": {
     "path": "evidence/gates/minimum_release-tests.xml",
-    "sha256": "671c7064f9b872d63ecd50ad7a8216ecdad90befc915a7fbe97c5892f039e2e1"
+    "sha256": "c1649c919c3b537168df074e79ffd790df80c83731603967b8acdbba64051a21"
   },
-  "refreshed_at": "2026-11-28T16:56:20Z",
+  "refreshed_at": "2026-11-28T17:16:14Z",
   "environment": {
     "python": "3.13.18",
     "platform": "Linux-6.18.44-fc-v880-x86_64-with-glibc2.39"
