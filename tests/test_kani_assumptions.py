@@ -117,6 +117,15 @@ def test_the_formal_job_runs_kani_and_the_checker():
     job = re.split(r"\n  (?=[A-Za-z0-9_-]+:\n)", workflow.split("  formal-rust:\n", 1)[1], maxsplit=1)[0]
     for step in ("cargo test --locked", f"cargo install --locked kani-verifier --version {AUDIT['kani_version']}",
                  "cargo kani setup", "cargo kani 2>&1 | tee ../../kani-output.txt",
-                 "python scripts/check_kani.py kani-output.txt"):
+                 "python scripts/check_kani.py kani-output.txt --record evidence/formal/kani-results.json"):
         assert step in job, step
     assert "shell: bash" in job  # pipefail: a failing cargo kani fails the step despite tee
+
+
+def test_the_recorded_kani_run_verified_every_audited_harness_with_all_covers():
+    record = json.loads((ROOT / "evidence" / "formal" / "kani-results.json").read_text(encoding="utf-8"))
+    assert check_kani.problems({"harnesses": record["harnesses"], "summary": record["summary"]}, AUDIT) == []
+    assert record["tools"]["kani"] == AUDIT["kani_version"]
+    covers = sum(len(entry["covers"]) for entry in AUDIT["harnesses"].values())
+    assert record["check_statuses"]["SATISFIED"] == covers  # every cover reached: no vacuous harness
+    assert set(record["check_statuses"]) <= {"SUCCESS", "SATISFIED", "UNREACHABLE"}  # nothing failed or undetermined

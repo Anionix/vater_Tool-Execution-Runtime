@@ -1,0 +1,31 @@
+{
+  "task_id": "task.optional_more_protocols.010",
+  "acceptance_criteria": "複数通知で整合性を保つ",
+  "verified_on": "2026-11-27",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/more-protocols-tests.xml",
+  "report_sha256": "1601bd1757aac52db97776df7788582e82baf116cf554a977dbe787868907235",
+  "source_sha256": {
+    "docs/concurrency_inventory.json": "626767cf54322e5c68a1bfed8612be5b043428c70fdd9ae67ead98b9b01fec07",
+    "src/verified_execution/webhooks.py": "657076b60f34f43d1ded5c9b66b3831417058f1e690f6a8457701d04a517ffe5",
+    "tests/test_webhooks.py": "9f60e848e6b0f3b36e5072f383b9b7c04a6d145e992acd8b1ba99179a0286a3b",
+    "tests/unit_inventory.json": "2806d54f09dcb3dbe423de80c07709c1ad8818ea805811bbbf1cc1ef6335a800"
+  },
+  "scope": "Each delivery id is recorded once in the receiver's own SQLite file: a duplicate is acknowledged without being applied again, a reused id with another body is refused (409), and a resource's event that is not newer than the last applied one is recorded as stale. All six arrival orders of three events end in the newest state, and eight concurrent copies of one delivery apply it once (one BEGIN IMMEDIATE transaction).",
+  "test_cases": [
+    "tests/test_webhooks.py::test_an_authentic_but_malformed_delivery_is_refused[no_delivery_id]",
+    "tests/test_webhooks.py::test_an_authentic_but_malformed_delivery_is_refused[bad_json]",
+    "tests/test_webhooks.py::test_an_authentic_but_malformed_delivery_is_refused[negative_sequence]",
+    "tests/test_webhooks.py::test_an_authentic_but_malformed_delivery_is_refused[no_resource]",
+    "tests/test_webhooks.py::test_a_duplicate_delivery_is_applied_once",
+    "tests/test_webhooks.py::test_a_reused_delivery_id_with_another_body_is_refused",
+    "tests/test_webhooks.py::test_every_arrival_order_ends_in_the_newest_state[1-2-3]",
+    "tests/test_webhooks.py::test_every_arrival_order_ends_in_the_newest_state[1-3-2]",
+    "tests/test_webhooks.py::test_every_arrival_order_ends_in_the_newest_state[2-1-3]",
+    "tests/test_webhooks.py::test_every_arrival_order_ends_in_the_newest_state[2-3-1]",
+    "tests/test_webhooks.py::test_every_arrival_order_ends_in_the_newest_state[3-1-2]",
+    "tests/test_webhooks.py::test_every_arrival_order_ends_in_the_newest_state[3-2-1]",
+    "tests/test_webhooks.py::test_concurrent_duplicates_apply_once"
+  ]
+}

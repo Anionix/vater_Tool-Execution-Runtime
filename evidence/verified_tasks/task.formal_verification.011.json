@@ -1,0 +1,33 @@
+{
+  "task_id": "task.formal_verification.011",
+  "acceptance_criteria": "移植後のRust関数の全対象入力範囲を実Kaniで検査し、Python試験と区別する",
+  "verified_on": "2026-11-27",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/formal-rust-tests.xml",
+  "report_sha256": "8a3d2e899b6e9ded0eff250b78643b68d1fcd913bc372966cd8aab8ff8b953b0",
+  "source_sha256": {
+    ".github/workflows/python-verification.yml": "a879491debc06e2848298013fc6f1e55b35d3ccb781271fd7ffc2c7d4d0aebdb",
+    "docs/FORMAL_VERIFICATION.md": "4db57395ddb9c9b19706c99e1fd29257243ea6a17d2a14c487dfe82545186a00",
+    "docs/kani_assumptions.json": "d533d45cf5a5eaf105fc39f90affdad07ff1ad55b7644d622d555260428d489f",
+    "evidence/formal/kani-results.json": "5fbe735304b72b27d1fee826e8c16f7b744850387ba4578c49b6343aee3d4474",
+    "rust/vater_core/Cargo.lock": "0a4505785101cbd0a8e361914a5e30d5fe9c99ef3f8677fdb859055a5085fa74",
+    "rust/vater_core/Cargo.toml": "a7c53e6c86ea85c1b6a588d86f2a606b34bd4f798ca4368888e4d5c1ac5f7784",
+    "rust/vater_core/src/lib.rs": "e05b4b00fb4a53f2511aa1bf731b6f10c89b097c925f98e9e6484db044cab7c3",
+    "rust/vater_core/src/proofs.rs": "51f6bed03c9419a00a3870e3ddf82eae917163383ab450dc60944c20f93b7456",
+    "scripts/check_kani.py": "e229ecf810b7ef8f12af1bf644714d90b48701c2d5d7be50d78eb9b1495ae2bb",
+    "tests/test_kani_assumptions.py": "5a1c3ddbffcfa783fa38c0c2c18c8bee26ee5badf651c0ec5bea1842b53543fb"
+  },
+  "scope": "rust/vater_core ports checked_add and the state-transition table (no dependencies, no unsafe code). Kani 0.68.0 with CBMC 6.11.0 verified, in the formal-rust CI job (run 46123196334), four harnesses comparing them with separately written specifications over their whole input range: every u64 pair and every u32 pair for the sum, every pair of the seven states, and all 49 pairs enumerated; every cover was satisfied (evidence/formal/kani-results.json). Kani runs only in that job, never in a Python job, and its result is recorded apart from the Python test results; CI requires each later run to reproduce the record.",
+  "test_cases": [
+    "tests/test_kani_assumptions.py::test_every_harness_is_audited_and_every_audited_harness_exists",
+    "tests/test_kani_assumptions.py::test_the_checker_accepts_a_run_where_everything_verified",
+    "tests/test_kani_assumptions.py::test_the_checker_refuses_every_kind_of_incomplete_run[failed]",
+    "tests/test_kani_assumptions.py::test_the_checker_refuses_every_kind_of_incomplete_run[unsatisfied_cover]",
+    "tests/test_kani_assumptions.py::test_the_checker_refuses_every_kind_of_incomplete_run[missing]",
+    "tests/test_kani_assumptions.py::test_the_checker_refuses_every_kind_of_incomplete_run[extra]",
+    "tests/test_kani_assumptions.py::test_the_checker_refuses_every_kind_of_incomplete_run[no_summary]",
+    "tests/test_kani_assumptions.py::test_the_formal_job_runs_kani_and_the_checker",
+    "tests/test_kani_assumptions.py::test_the_recorded_kani_run_verified_every_audited_harness_with_all_covers"
+  ]
+}

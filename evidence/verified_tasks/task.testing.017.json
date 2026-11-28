@@ -5,7 +5,7 @@
   "verification_status": "passed",
   "executed": true,
   "report_path": "evidence/testing-phase-tests.xml",
-  "report_sha256": "5c330ec017dff6eb1d99f7df268e3ea5b0512c7207f68fd6cbf8654610e99191",
+  "report_sha256": "0a46c428a8262bed5b7a701603d83ea0e1b84244e038e6a1a9a6cff8af4a562d",
   "source_sha256": {
     "contracts/github_issue_destination.json": "fd6a06c0cca8a5519773a17083ef239b87b836d8c8d76809e957ca06735b2cec",
     "src/verified_execution/external_change.py": "45e67a4053b82f165ff34c2608f17fc64fd5415cccaaa25a5edea058d95aa68c",

@@ -5,12 +5,12 @@
   "verification_status": "passed",
   "executed": true,
   "report_path": "evidence/operations-phase-tests.xml",
-  "report_sha256": "4ba44ed438cf5c62050443fe893879b4a13254d82c774b83030265d992ae7122",
+  "report_sha256": "5a380ebef28050ecbd93bc908601d27b4852420519874e8b13f05eaf0adad43c",
   "source_sha256": {
     ".github/workflows/dependency-lock-candidate.yml": "16e254a3bf424a12ee8a18ebffefbc37eba1ab04db4d4bc8937ab90fc6e5a208",
-    ".github/workflows/python-verification.yml": "ea6e336f303d9988bbf296d640b6915a04e858811345ca7457cac366709c752c",
-    "scripts/required_checks.py": "68fcd0752b444cee120be05a325f3405097a0b55e6fe5eafa48d75f4827e4a57",
-    "tests/test_dependency_revalidation.py": "8f4b128d970031c3e007d8b3cc03bb11c48e31a6956e8f3401effee7f995bf73"
+    ".github/workflows/python-verification.yml": "a879491debc06e2848298013fc6f1e55b35d3ccb781271fd7ffc2c7d4d0aebdb",
+    "scripts/required_checks.py": "e120df031d79e77310fa3da296915a1f05731a77829be4c55c9f4cbd19cd002c",
+    "tests/test_dependency_revalidation.py": "ced85c15c2611d76533b0587cd557ffa048e2fd81d74d87543afe30ea5681581"
   },
   "scope": "scripts/required_checks.py runs every run step of the release verification workflow except installs, read from the workflow itself, with the interpreter of a candidate environment. The lock-candidate workflow resolves the newest allowed versions on dependency changes and weekly, installs them by hash and runs them all: run 45945589880 passed 28 of 28 required checks on the candidate set (including the 603 testing-phase cases). The candidate lock and its dependency record are kept for review.",
   "test_cases": [

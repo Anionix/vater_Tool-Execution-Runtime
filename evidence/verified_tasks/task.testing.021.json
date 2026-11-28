@@ -5,7 +5,7 @@
   "verification_status": "passed",
   "executed": true,
   "report_path": "evidence/testing-phase-tests.xml",
-  "report_sha256": "5c330ec017dff6eb1d99f7df268e3ea5b0512c7207f68fd6cbf8654610e99191",
+  "report_sha256": "0a46c428a8262bed5b7a701603d83ea0e1b84244e038e6a1a9a6cff8af4a562d",
   "source_sha256": {
     "docs/verification_scope.json": "34bed48674b2cfd9dd739396e0d224f907ca1e2388c0d8af4020c1c5e54ab069",
     "tests/test_verification_scope.py": "e01853353eb11933972ebd780c0c54d634017f5084fe1bc97d8db6ad27fd7431"

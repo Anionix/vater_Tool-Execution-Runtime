@@ -5,11 +5,11 @@
   "verification_status": "passed",
   "executed": true,
   "report_path": "evidence/testing-phase-tests.xml",
-  "report_sha256": "5c330ec017dff6eb1d99f7df268e3ea5b0512c7207f68fd6cbf8654610e99191",
+  "report_sha256": "0a46c428a8262bed5b7a701603d83ea0e1b84244e038e6a1a9a6cff8af4a562d",
   "source_sha256": {
     "tests/test_unit_gaps.py": "ec9e6cef5837b0b54a2a2bd7420b229181d6b43d3713d10fdfef0b274c6f2270",
     "tests/test_unit_inventory.py": "70a141c3a1751524bb52430e5d4e0fbea8a51c93cfce11fec10d266ddb2c8275",
-    "tests/unit_inventory.json": "56db6d898041dbe95f39007b6357c4cdb7a3679e7d7f7822b55f208c4234bfee",
+    "tests/unit_inventory.json": "2806d54f09dcb3dbe423de80c07709c1ad8818ea805811bbbf1cc1ef6335a800",
     "tests/unit_trace_plugin.py": "14a3a0391a86326fe396a1615d5ace456944894e8656c076bd010898f3d53ba9"
   },
   "scope": "All 110 public functions (module functions and class methods in src/verified_execution and server_mcp.py) are listed in tests/unit_inventory.json with a normal and an abnormal test. The list of public functions is computed from the source, and the listed tests are re-run under a sys.monitoring tracer that checks each declared outcome (return, raise, error value, absent result, or handled abnormal input). Total functions, which have no failure outcome, are marked handled with the reason. A traced run found 20 functions without a normal test and 35 without an abnormal one; tests/test_unit_gaps.py adds them (RequestCancellation had no test at all).",
