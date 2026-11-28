@@ -6,7 +6,7 @@
 | --- | --- | --- | --- |
 | WebAssembly 隔離 | wasmtime 50.0.1 の隔離（承認済みハッシュ、WASI なし、審査済みホスト関数、計算量・メモリ・時間の上限、別プロセス） | 外部作成コードを実行する必要がないため、リリースには導入しない | [WEBASSEMBLY.md](optional/WEBASSEMBLY.md) |
 | 追加通信規格 | GraphQL の上限と主体ごとの読取り、.proto の版互換検査、委任の規則 | GraphQL・gRPC・Agent2Agent・追加のエディター接続規格は導入しない | [MORE_PROTOCOLS.md](optional/MORE_PROTOCOLS.md) |
-| WebMCP | Chromium 158 の `document.modelContext` へのツール登録と、判定を担う Python ホスト | 実験用フラグが必要で、昇格の条件を満たさない。任意の入口に留める | [WEBMCP.md](optional/WEBMCP.md) |
+| WebMCP | Chromium 153 と 158 の `document.modelContext` へのツール登録と、判定を担う Python ホスト | 実験用フラグが必要で、昇格の条件を満たさない。任意の入口に留める | [WEBMCP.md](optional/WEBMCP.md) |
 | WebGPU | WGSL の行列積と正確な CPU 基準実装 | ソフトウェアのアダプターで、転送込みで CPU より速くならない。採用しない | [WEBGPU.md](optional/WEBGPU.md) |
 
 ## 依存と実行

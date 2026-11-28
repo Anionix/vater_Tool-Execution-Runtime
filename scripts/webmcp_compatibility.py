@@ -121,11 +121,12 @@ def main() -> int:
     args = parser.parse_args()
     results = probe_all()
     here = {result["browser"] for result in results}
-    kept = []
+    kept, previous = [], {}
     if args.output.is_file():  # results of browser versions not present here (another machine, CI) are kept
-        kept = [result for result in json.loads(args.output.read_text(encoding="utf-8"))["results"]
-                if result["browser"] not in here]
-    record = {"playwright": "1.63.0", "results": sorted(kept + results, key=lambda item: (item["browser"], 0)),
+        previous = json.loads(args.output.read_text(encoding="utf-8"))
+        kept = [result for result in previous["results"] if result["browser"] not in here]
+    record = {"playwright": "1.63.0", "sources": previous.get("sources", {}),
+              "results": sorted(kept + results, key=lambda item: item["browser"]),
               "not_available_here": ["Firefox", "WebKit (Safari)", "Microsoft Edge", "Chrome stable with a GPU"]}
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(record, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")

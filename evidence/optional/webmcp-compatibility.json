@@ -1,6 +1,99 @@
 {
  "playwright": "1.63.0",
+ "sources": {
+  "153.0.8010.12": "Chrome for Testing 153.0.8010.12, the Chromium build Playwright 1.63.0 downloads (playwright chromium v1243). Transcribed from the optional-prototypes job log of CI run 46167166700 (job 141047162368, head f02d583), where test 011 printed the whole run.",
+  "158.0.8127.36": "Chrome for Testing 158.0.8127.36, the browser this authoring environment provides under the same Playwright directory; run with scripts/webmcp_compatibility.py."
+ },
  "results": [
+  {
+   "configuration": "chromium-headless-shell, experimental flag",
+   "browser": "153.0.8010.12",
+   "flags": [
+    "--enable-experimental-web-platform-features"
+   ],
+   "secure_context": true,
+   "webmcp_detected": true,
+   "reason": "document.modelContext",
+   "registered_tools": [
+    "add_numbers",
+    "checked_add",
+    "send_report"
+   ],
+   "agent_call": "completed",
+   "agent_invalid_call": "invalid_arguments",
+   "execute_tool_arguments": "json_text",
+   "input_schema_form": "string",
+   "consequential_hint_reported": null,
+   "user_click_works": true
+  },
+  {
+   "configuration": "chromium-headless-shell, default",
+   "browser": "153.0.8010.12",
+   "flags": [],
+   "secure_context": true,
+   "webmcp_detected": false,
+   "reason": "no_model_context",
+   "registered_tools": [],
+   "agent_call": null,
+   "agent_invalid_call": null,
+   "execute_tool_arguments": null,
+   "input_schema_form": null,
+   "consequential_hint_reported": null,
+   "user_click_works": true
+  },
+  {
+   "configuration": "chromium (new headless), experimental flag",
+   "browser": "153.0.8010.12",
+   "flags": [
+    "--enable-experimental-web-platform-features"
+   ],
+   "secure_context": true,
+   "webmcp_detected": true,
+   "reason": "document.modelContext",
+   "registered_tools": [
+    "add_numbers",
+    "checked_add",
+    "send_report"
+   ],
+   "agent_call": "completed",
+   "agent_invalid_call": "invalid_arguments",
+   "execute_tool_arguments": "json_text",
+   "input_schema_form": "string",
+   "consequential_hint_reported": null,
+   "user_click_works": true
+  },
+  {
+   "configuration": "chromium (new headless), default",
+   "browser": "153.0.8010.12",
+   "flags": [],
+   "secure_context": true,
+   "webmcp_detected": false,
+   "reason": "no_model_context",
+   "registered_tools": [],
+   "agent_call": null,
+   "agent_invalid_call": null,
+   "execute_tool_arguments": null,
+   "input_schema_form": null,
+   "consequential_hint_reported": null,
+   "user_click_works": true
+  },
+  {
+   "configuration": "chromium-headless-shell, experimental flag, insecure origin",
+   "browser": "153.0.8010.12",
+   "flags": [
+    "--enable-experimental-web-platform-features"
+   ],
+   "secure_context": false,
+   "webmcp_detected": false,
+   "reason": "insecure_context",
+   "registered_tools": [],
+   "agent_call": null,
+   "agent_invalid_call": null,
+   "execute_tool_arguments": null,
+   "input_schema_form": null,
+   "consequential_hint_reported": null,
+   "user_click_works": true
+  },
   {
    "configuration": "chromium-headless-shell, experimental flag",
    "browser": "158.0.8127.36",

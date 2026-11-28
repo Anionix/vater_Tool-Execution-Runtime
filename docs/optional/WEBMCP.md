@@ -1,16 +1,17 @@
 # ブラウザーと WebMCP の試作（任意段階 `optional_webmcp`）
 
-ページは [web/webmcp/](../../web/webmcp/)、ホストは [webmcp_host.py](../../src/vater_optional/webmcp_host.py)、試験は [test_webmcp.py](../../tests/test_webmcp.py)。Playwright 1.63.0（Chromium 158）は任意試作用のロック [requirements-optional-py313.lock](../../requirements-optional-py313.lock) にだけ入り、CI の `optional-prototypes` ジョブで実行する。リリースには入らない。
+ページは [web/webmcp/](../../web/webmcp/)、ホストは [webmcp_host.py](../../src/vater_optional/webmcp_host.py)、試験は [test_webmcp.py](../../tests/test_webmcp.py)。Playwright 1.63.0 は任意試作用のロック [requirements-optional-py313.lock](../../requirements-optional-py313.lock) にだけ入り、CI の `optional-prototypes` ジョブで実行する。リリースには入らない。
 
 ## 対応ブラウザーと仕様版（task.optional_webmcp.001）
 
-WebMCP は W3C Web Machine Learning Community Group の草案で、W3C の標準ではない。実装の有無は、Chrome for Testing 158.0.8127.36（Playwright 1.63.0 の Chromium）で実測した。
+WebMCP は W3C Web Machine Learning Community Group の草案で、W3C の標準ではない。実装の有無は2つの版で実測した。CI では Playwright 1.63.0 が取得する Chrome for Testing 153.0.8010.12、この作成環境では同じ置き場所に用意された Chrome for Testing 158.0.8127.36 を使う。
 
-- 既定の起動では API がない。`--enable-experimental-web-platform-features` を付けると `document.modelContext` が現れる（初期の草案にあった `navigator.modelContext` ではない）。
+- どちらも既定の起動では API がない。`--enable-experimental-web-platform-features` を付けると `document.modelContext` が現れる（初期の草案にあった `navigator.modelContext` ではない）。
 - `registerTool(ツール, {signal})` は Promise を返す。同じ名前の2回目の登録は `InvalidStateError`、`AbortSignal` を中止すると登録が外れる。
-- `getTools()` は名前・題名・説明・登録元の origin・`inputSchema`・注釈（`readOnlyHint`、`consequentialHint`、`untrustedContentHint`）を持つ `Tool` を返す。
-- `executeTool(tool, 引数オブジェクト)` は `execute` の戻り値を JSON 文字列で返す。`toolchange` と `toolactivated` の事象が届く。
-- ブラウザーは `inputSchema` に照らした検査をしない。型違い、欠落、余分な項目、範囲外の値がそのまま `execute` に渡る。
+- `getTools()` は名前・題名・説明・登録元の origin・`inputSchema`・注釈を持つ `Tool` を返す。
+- `executeTool` の引数の形が版で違う。158 は `executeTool(tool, 引数オブジェクト)`、153 は引数を JSON の文字列で受け取り、オブジェクトを渡すと「Failed to parse input arguments」で失敗する。`Tool.inputSchema` も 158 はオブジェクト、153 は文字列で返す。注釈の `consequentialHint` を返すのは 158 だけ。
+- どちらも `execute` の戻り値を JSON 文字列で返し、`toolchange` と `toolactivated` の事象が届く。
+- どちらのブラウザーも `inputSchema` に照らした検査をしない。型違い、欠落、余分な項目、範囲外の値がそのまま `execute` に渡る。
 
 未対応の環境は、ページの `detectWebMCP()` が理由つきで識別する。安全でない文脈（ループバック以外の http）は `insecure_context`、API がない場合は `no_model_context`、API の形が違う場合は `unsupported_api`。
 
@@ -26,7 +27,7 @@ WebMCP は W3C Web Machine Learning Community Group の草案で、W3C の標準
 
 ## ツール登録の試作（task.optional_webmcp.003）
 
-ページは読み込み時に3つのツールを `document.modelContext.registerTool` で登録する。ブラウザーの `getTools()` に、ページの origin、入力スキーマ、注釈（読み取り専用、外部への影響あり）とともに現れ、`executeTool` で呼べる。
+ページは読み込み時に3つのツールを `document.modelContext.registerTool` で登録する。ブラウザーの `getTools()` に、ページの origin、入力スキーマ、注釈（読み取り専用、外部への影響あり。後者は 158 だけが返す）とともに現れ、`executeTool` で呼べる。引数を JSON の文字列で渡す実装に備えて、ページは文字列の引数を解析してから検査する。
 
 ## 入力の型と上限（task.optional_webmcp.004）
 
@@ -58,13 +59,13 @@ WebMCP がない環境では、状態表示に理由を示したうえで、同�
 
 ## 互換性試験（task.optional_webmcp.011）
 
-採用ブラウザーは、Chromium 158（Chrome for Testing 158.0.8127.36）に `--enable-experimental-web-platform-features` を付けた構成だけ。結果は [webmcp-compatibility.json](../../evidence/optional/webmcp-compatibility.json)（`scripts/webmcp_compatibility.py`）にあり、試験は同じ結果を毎回再現することを確かめる。
+採用ブラウザーは、Chromium 153（Chrome for Testing 153.0.8010.12、Playwright 1.63.0 が取得する版）と Chromium 158（Chrome for Testing 158.0.8127.36）に `--enable-experimental-web-platform-features` を付けた構成。結果は [webmcp-compatibility.json](../../evidence/optional/webmcp-compatibility.json)（`scripts/webmcp_compatibility.py`）に版ごとにあり、試験は、実行した環境のブラウザーの版について同じ結果を再現することを確かめる。153 の結果は CI の実行記録から、158 の結果はこの作成環境の実行から取った。
 
-| 構成 | 判定 | 登録・エージェント呼出し | 通常の画面 |
+| 構成 | 判定（153、158 とも） | 登録・エージェント呼出し | 通常の画面 |
 | --- | --- | --- | --- |
-| chromium-headless-shell, experimental flag | document.modelContext | 3ツール登録、呼出し成功、不正入力は拒否 | 動作 |
+| chromium-headless-shell, experimental flag | document.modelContext | 3ツール登録、呼出し成功、不正入力は拒否（引数は 153 が JSON 文字列、158 がオブジェクト） | 動作 |
 | chromium-headless-shell, default | no_model_context | なし | 動作 |
-| chromium (new headless), experimental flag | document.modelContext | 3ツール登録、呼出し成功、不正入力は拒否 | 動作 |
+| chromium (new headless), experimental flag | document.modelContext | 3ツール登録、呼出し成功、不正入力は拒否（同上） | 動作 |
 | chromium (new headless), default | no_model_context | なし | 動作 |
 | chromium-headless-shell, experimental flag, insecure origin | insecure_context | なし | 動作 |
 

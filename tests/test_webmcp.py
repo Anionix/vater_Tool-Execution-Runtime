@@ -1,8 +1,8 @@
-"""task.optional_webmcp.001-012: the WebMCP page prototype in a real Chromium 158.
+"""task.optional_webmcp.001-012: the WebMCP page prototype in a real Chromium (153 in CI, 158 here).
 
-Runs only with requirements-optional-py313.lock (Playwright 1.63.0 and its Chromium build);
+Runs only with requirements-optional-py313.lock (Playwright 1.63.0 and a Chromium build);
 the base jobs skip this module. The page (web/webmcp/) registers tools through
-document.modelContext, which Chrome 158 exposes only with --enable-experimental-web-platform-
+document.modelContext, which Chromium 153 and 158 expose only with --enable-experimental-web-platform-
 features; the Python host (src/vater_optional/webmcp_host.py) decides everything that leaves
 the page. Agent calls go through the browser's own executeTool, as an agent's would.
 """
@@ -99,7 +99,7 @@ def post(site, path, body, cookie=None, origin=None, token=None):
 
 
 def test_supported_and_unsupported_environments_are_identified(playwright, site):
-    """001: WebMCP is detected only where Chrome 158 exposes it; every other case has a named reason."""
+    """001: WebMCP is detected only where the browser exposes it; every other case has a named reason."""
     browser, page = open_page(playwright, site)
     try:
         assert page.get_attribute("#webmcp-status", "data-reason") == "document.modelContext"
