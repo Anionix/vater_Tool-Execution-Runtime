@@ -26,7 +26,7 @@
     "task.minimum_release.009"
   ],
   "report_path": "evidence/gates/minimum_release-tests.xml",
-  "report_sha256": "671c7064f9b872d63ecd50ad7a8216ecdad90befc915a7fbe97c5892f039e2e1",
+  "report_sha256": "c1649c919c3b537168df074e79ffd790df80c83731603967b8acdbba64051a21",
   "source_sha256": {
     "README.md": "041ac79bd0cd34c26befc5fa9e024ff9717e8e0484fb3317ce2e215b2ccf4e4b",
     "config/limits.json": "f10b9be0d6b196cb58aa5175dcd7a7ee45b481087c24834743408b60b387b20f",
@@ -38,12 +38,12 @@
     "contracts/tool_risks.json": "60e34f0ac6f93ec73a0f13c3d0560a59f3ed9e15e76c69e5e4ff434863e5700c",
     "docs/ARCHITECTURE.md": "34f461a014eed576976d5430aa3d64a9c7edf47c39aecf826c6054f72909734c",
     "docs/RELEASE_PROFILES.json": "5d42355ee436ca6f2840b7bf33b777d83d60379391f9ec3ccc637cfc0bb890a7",
-    "evidence/gates/authorization.json": "baf5a4ac85131f5cb724d56ba5b13b993feee741e701d7ad53363f490f1225b8",
-    "evidence/gates/contracts.json": "e68463efbd0f7ea13791407aaa11b1ed29ec9b7ebb5bc3f454d3ae53d1180de4",
-    "evidence/gates/mcp_transport.json": "8a930fbfecebc6890a584860e209e2ee78a47971de8b9546706c9923b0fbf466",
-    "evidence/gates/minimum_validation.json": "5c2779e6edd4875d2760e0312327e6224ed48d2186b3dd8189e099987af7d2e6",
-    "evidence/gates/read_only.json": "f69b82bf1d3a1d16bf601fc3503ae2d44906c8ee255493dc1662d8d6372c1c3d",
-    "evidence/gates/runtime.json": "10b72e3d84edf5e412abfe8870cbfa7589037aa14e0560bd950c7bdcb0a76328",
+    "evidence/gates/authorization.json": "0495e8c2f2843b0f1e88e697faefe91acc27a8cd486601670f6b8cbb69048152",
+    "evidence/gates/contracts.json": "2bcd37285ef4fd18b71d651a2703936bcfa2a8dd28ac48c3265ba39c7e4c646a",
+    "evidence/gates/mcp_transport.json": "4f1bcccae82a77a4f49fa9076cad795e84f6cf01b57770f1d0aeedec77d9d583",
+    "evidence/gates/minimum_validation.json": "d14913bf6a9ad6ff2f035da6f08941b04e22ad483fc9ca48b073b8765cb6797c",
+    "evidence/gates/read_only.json": "1fd86fc3fc98f53fe28c46993b56dc6e454a7e306e8aca1e60eb9ba02dfc4cc8",
+    "evidence/gates/runtime.json": "2192698a28232f68462736004abf1546e21c52543241d1c08d574c33cbe3bf5e",
     "evidence/gates/scope.json": "571b67c17ea4bf0d35ccca02ede9debf2a12b7d812f8e08b8a41075fed0713c3",
     "evidence/gates/trust.json": "380bdeca4e2526df377dbe835ae0416b18fb7246b5c70e5e8fd59d9a8c44a6e9",
     "evidence/minimum-validation-environment.json": "7c5352b19b27d9f4f8e2a54ca3ed2dc28ba4d429fb71075e835c11fdc8c255bf",
@@ -99,7 +99,7 @@
     "tests/fixtures/lifecycle_stdio_child.py": "7b9a739778c27949ebe369d07b49e8a06ea9ecae16dc77e973107b479092c19b",
     "tests/test_adapter_boundary.py": "26d6e6e5fa4f93188b4f4322f9fdf6117a4eecc2adc25bb01f96237544749d71",
     "tests/test_async_request_cancellation.py": "b4c00a77bfede34b5f89f9bfda1a419043806854e28e5dc01b5d79d92b2f5437",
-    "tests/test_cancellation_journal.py": "1a5e6493bccd946329028f8c07a3893bb09205dad0a71e32624859c6e456bcd7",
+    "tests/test_cancellation_journal.py": "15eb55c0a2b0787e0c45c8eba18daa111d9a57f72435a17dded178e2c46c6d3b",
     "tests/test_ci_workflow_contracts.py": "bc04a82f30595c06a71cde6975ae7758f1652e5ce103202ae2bb6e7e6e4e1cfb",
     "tests/test_cli.py": "12a32c51ec4e18a144e4b1002911182dda6d123634183031b9a6265dae7d7f62",
     "tests/test_contracts.py": "9a6aaab898921fe3dafb081eca4ceb45c7f96ad7ac08130a920d7d6ae4167077",
@@ -132,9 +132,9 @@
   },
   "previous_report": {
     "path": "evidence/gates/minimum_release-tests.xml",
-    "sha256": "c3e2952f370fbb1de604fbfdb5a997abd3183442d2e22a406969bb1c40ff9517"
+    "sha256": "671c7064f9b872d63ecd50ad7a8216ecdad90befc915a7fbe97c5892f039e2e1"
   },
-  "refreshed_at": "2026-11-28T16:42:06Z",
+  "refreshed_at": "2026-11-28T16:56:20Z",
   "environment": {
     "python": "3.13.18",
     "platform": "Linux-6.18.44-fc-v880-x86_64-with-glibc2.39"

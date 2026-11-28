@@ -22,7 +22,7 @@
     "task.minimum_validation.015"
   ],
   "report_path": "evidence/gates/minimum_validation-tests.xml",
-  "report_sha256": "5d2c691dd7d1d0699d0a2e4c0b0a1c84bd4cf2e3280f06ee7dc0054b5f87c727",
+  "report_sha256": "7a1d41f39ffdb2ace592d4ec5c43dfc47a845e70f28f4869a84883b948c775a6",
   "source_sha256": {
     "config/limits.json": "f10b9be0d6b196cb58aa5175dcd7a7ee45b481087c24834743408b60b387b20f",
     "config/local_tool.json": "9872e59e51908fd3f95d820d18e6215eac8677d7c4441d6a498f60e34e644731",
@@ -85,7 +85,7 @@
     "tests/fixtures/lifecycle_stdio_child.py": "7b9a739778c27949ebe369d07b49e8a06ea9ecae16dc77e973107b479092c19b",
     "tests/test_adapter_boundary.py": "26d6e6e5fa4f93188b4f4322f9fdf6117a4eecc2adc25bb01f96237544749d71",
     "tests/test_async_request_cancellation.py": "b4c00a77bfede34b5f89f9bfda1a419043806854e28e5dc01b5d79d92b2f5437",
-    "tests/test_cancellation_journal.py": "1a5e6493bccd946329028f8c07a3893bb09205dad0a71e32624859c6e456bcd7",
+    "tests/test_cancellation_journal.py": "15eb55c0a2b0787e0c45c8eba18daa111d9a57f72435a17dded178e2c46c6d3b",
     "tests/test_ci_workflow_contracts.py": "bc04a82f30595c06a71cde6975ae7758f1652e5ce103202ae2bb6e7e6e4e1cfb",
     "tests/test_cli.py": "12a32c51ec4e18a144e4b1002911182dda6d123634183031b9a6265dae7d7f62",
     "tests/test_contracts.py": "9a6aaab898921fe3dafb081eca4ceb45c7f96ad7ac08130a920d7d6ae4167077",
@@ -118,9 +118,9 @@
   },
   "previous_report": {
     "path": "evidence/gates/minimum_validation-tests.xml",
-    "sha256": "0079e7247465991114181427ecf47ce2d3ce20c18ca7830f3f3df607cb732b81"
+    "sha256": "5d2c691dd7d1d0699d0a2e4c0b0a1c84bd4cf2e3280f06ee7dc0054b5f87c727"
   },
-  "refreshed_at": "2026-11-28T16:40:50Z",
+  "refreshed_at": "2026-11-28T16:55:55Z",
   "environment": {
     "python": "3.13.18",
     "platform": "Linux-6.18.44-fc-v880-x86_64-with-glibc2.39"
