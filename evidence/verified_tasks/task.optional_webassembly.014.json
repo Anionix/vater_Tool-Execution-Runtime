@@ -1,0 +1,23 @@
+{
+  "task_id": "task.optional_webassembly.014",
+  "acceptance_criteria": "Python中核を基準にセキュリティと費用を定量的に比較する",
+  "verified_on": "2026-11-28",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/optional-webassembly-tests.xml",
+  "report_sha256": "f25ca2e85b4e5a78ffea8f671c840cb0afcb8d62ee7bc157900e065333766046",
+  "source_sha256": {
+    "docs/optional/WEBASSEMBLY.md": "209c3c9c1821543b62734408fbbacf3c6b40249c4470b40618c0098b4d8dd436",
+    "evidence/optional/webassembly-cost.json": "406555e1b1f964d5f5de9c65f4129f0b0961392d9e51670c60c71915dbb87149",
+    "requirements-optional-py313.lock": "f7923dc88b5345679bcb434ba8350e368c4e916dc6fe9ecd9e245f452a23434d",
+    "scripts/measure_wasm_cost.py": "1d33095ac198b472f3b9ceb9e05b0345b1c1cdd9ba9ef0728605c265b90c5bb5",
+    "src/vater_optional/wasm_sandbox.py": "92d374bef62cf8d94ed644501cafc436a8a91b81e8faa7cf28f4ddc3136ce61e",
+    "tests/fixtures/wasm/approved.json": "a69de29aa04d84c37e0ae78756bd340935d1e5e4e9bef09beaed0408f0bac7e6",
+    "tests/fixtures/wasm/checked_add.wat": "0d4f3ef749afe9dd4aa96d3fb1e481a8d5cd3bb37512abc85c91c618dd203904",
+    "tests/test_wasm_sandbox.py": "84b984f5ae9f4727d325d184f3e32fa369fd61c0d280c3bd5135185e8b95d94c"
+  },
+  "scope": "scripts/measure_wasm_cost.py measured the same addition per call: Python core 0.136 microseconds, wasmtime in process (fresh store) 118 microseconds, behind the process boundary 69 milliseconds; compile 2.8 ms; wasmtime adds 30,232,307 installed bytes. docs/optional/WEBASSEMBLY.md compares security and cost from these numbers, with the Python core as the baseline.",
+  "test_cases": [
+    "tests/test_wasm_sandbox.py::test_the_cost_comparison_is_measured_and_recorded"
+  ]
+}

@@ -56,12 +56,13 @@ def query(packages: list[tuple[str, str]], post=None) -> list[list[str]]:
     return [sorted(vuln["id"] for vuln in result.get("vulns", [])) for result in results]
 
 
-def report(packages: list[tuple[str, str]], ids: list[list[str]], lock_sha256: str) -> dict:
+def report(packages: list[tuple[str, str]], ids: list[list[str]], lock_sha256: str,
+           lock_name: str = "requirements-py313.lock") -> dict:
     rows = [{"name": name, "version": version, "vulnerabilities": found}
             for (name, version), found in zip(packages, ids)]
     return {"source": ENDPOINT, "ecosystem": "PyPI",
             "scanned_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-            "lock": "requirements-py313.lock", "lock_sha256": lock_sha256, "packages": rows,
+            "lock": lock_name, "lock_sha256": lock_sha256, "packages": rows,
             "vulnerable_packages": sum(1 for row in rows if row["vulnerabilities"])}
 
 
@@ -86,18 +87,22 @@ def main(argv: list[str] | None = None) -> int:
     mode = parser.add_mutually_exclusive_group(required=True)
     mode.add_argument("--output", type=Path)
     mode.add_argument("--check-record", type=Path)
+    # The optional prototypes' lock (task.optional_*) is scanned the same way as the base lock.
+    parser.add_argument("--lock", choices=["requirements-py313.lock", "requirements-optional-py313.lock"],
+                        default="requirements-py313.lock")
     args = parser.parse_args(argv)
+    lock = ROOT / args.lock
     if args.check_record is not None:
-        problems = check_record(json.loads(args.check_record.read_text(encoding="utf-8")))
+        problems = check_record(json.loads(args.check_record.read_text(encoding="utf-8")), lock)
         print(json.dumps({"record": str(args.check_record), "problems": problems}))
         return 1 if problems else 0
-    packages = locked_packages()
+    packages = locked_packages(lock)
     try:
         found = query(packages)
     except (OSError, ValueError, KeyError) as error:
         print(json.dumps({"error": f"scan failed: {type(error).__name__}: {error}"}), file=sys.stderr)
         return 1
-    result = report(packages, found, lock_digest())
+    result = report(packages, found, lock_digest(lock), args.lock)
     text = json.dumps(result, indent=1)
     args.output.write_text(text + "\n", encoding="utf-8")
     print(text)

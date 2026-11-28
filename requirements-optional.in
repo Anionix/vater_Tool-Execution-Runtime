@@ -1,0 +1,5 @@
+# Optional prototypes (task.optional_*): not installed by the release or the base test jobs.
+# Locked with the base set into requirements-optional-py313.lock; see docs/OPTIONAL_PROTOTYPES.md.
+wasmtime==50.0.1
+graphql-core==3.3.2
+playwright==1.63.0

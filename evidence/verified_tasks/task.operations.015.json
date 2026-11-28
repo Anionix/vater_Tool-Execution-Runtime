@@ -1,11 +1,11 @@
 {
   "task_id": "task.operations.015",
   "acceptance_criteria": "外部ツールを即停止できる",
-  "verified_on": "2026-11-27",
+  "verified_on": "2026-11-28",
   "verification_status": "passed",
   "executed": true,
   "report_path": "evidence/operations-phase-tests.xml",
-  "report_sha256": "5a380ebef28050ecbd93bc908601d27b4852420519874e8b13f05eaf0adad43c",
+  "report_sha256": "e8cd7d0e7f1b84aa3c9326677628d694971e484e7ba8977d95a17f5d145c9bc6",
   "source_sha256": {
     ".github/workflows/external-change-evidence.yml": "926fb0c25ddc1a85f1c9e5dfadf336740f183a2def4769e0ab7da74aa3420b83",
     "docs/runbooks/disable_external_tools.md": "5d8053fb199331ed953afbca8e093adbe3701ecc42408826e9ba103f50eaae6b",

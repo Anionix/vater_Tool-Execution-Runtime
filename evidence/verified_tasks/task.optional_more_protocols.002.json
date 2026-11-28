@@ -1,0 +1,30 @@
+{
+  "task_id": "task.optional_more_protocols.002",
+  "acceptance_criteria": "過剰問い合わせを拒否",
+  "verified_on": "2026-11-28",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/optional-protocols-tests.xml",
+  "report_sha256": "7220dcfc9a8b5dddd659d98874b6e9fc22fa7f9bba267fdce5aeada6c5d8647e",
+  "source_sha256": {
+    "docs/optional/MORE_PROTOCOLS.md": "6ce24d9fc53916e7e7e820c8e220cf79b571370ad5f30153c08a2513ee0da9a1",
+    "requirements-optional-py313.lock": "f7923dc88b5345679bcb434ba8350e368c4e916dc6fe9ecd9e245f452a23434d",
+    "src/vater_optional/graphql_api.py": "db0262caa6aa32b06565828fd836c0a7b374c55c57a4b8a47652906de306d25b",
+    "tests/test_graphql_api.py": "86a5b1e35de97c4bffe6794b5c57c3793814d11f83006138eedf0c7998ee36ee"
+  },
+  "scope": "Queries over 4 KiB or 400 tokens, deeper than 5, with more than 15 aliases, lists over 50 items (literal or variable) or cost over 300 (counted through fragments) are refused before any resolver runs, as are invalid or cyclic ones; ordinary queries and introspection within the limits are answered.",
+  "test_cases": [
+    "tests/test_graphql_api.py::test_an_excessive_query_is_refused_before_any_resolver_runs[deep]",
+    "tests/test_graphql_api.py::test_an_excessive_query_is_refused_before_any_resolver_runs[first_literal]",
+    "tests/test_graphql_api.py::test_an_excessive_query_is_refused_before_any_resolver_runs[first_variable]",
+    "tests/test_graphql_api.py::test_an_excessive_query_is_refused_before_any_resolver_runs[wide]",
+    "tests/test_graphql_api.py::test_an_excessive_query_is_refused_before_any_resolver_runs[fragments]",
+    "tests/test_graphql_api.py::test_an_excessive_query_is_refused_before_any_resolver_runs[aliases]",
+    "tests/test_graphql_api.py::test_an_excessive_query_is_refused_before_any_resolver_runs[tokens]",
+    "tests/test_graphql_api.py::test_an_excessive_query_is_refused_before_any_resolver_runs[bytes]",
+    "tests/test_graphql_api.py::test_an_excessive_query_is_refused_before_any_resolver_runs[unknown_field]",
+    "tests/test_graphql_api.py::test_an_excessive_query_is_refused_before_any_resolver_runs[fragment_cycle]",
+    "tests/test_graphql_api.py::test_an_excessive_query_is_refused_before_any_resolver_runs[parse]",
+    "tests/test_graphql_api.py::test_the_limits_count_through_fragments_and_allow_ordinary_queries"
+  ]
+}

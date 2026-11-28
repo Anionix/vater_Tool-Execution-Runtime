@@ -1,0 +1,34 @@
+{
+  "task_id": "task.optional_more_protocols.005",
+  "acceptance_criteria": "旧版フィールドを壊さない",
+  "verified_on": "2026-11-28",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/optional-protocols-tests.xml",
+  "report_sha256": "7220dcfc9a8b5dddd659d98874b6e9fc22fa7f9bba267fdce5aeada6c5d8647e",
+  "source_sha256": {
+    "docs/optional/MORE_PROTOCOLS.md": "6ce24d9fc53916e7e7e820c8e220cf79b571370ad5f30153c08a2513ee0da9a1",
+    "src/vater_optional/proto_compat.py": "8fd691dfb5cbae3273ea316555945acb382a7b43b66fdf411f7ca9c57edb3cc9",
+    "tests/test_more_protocols.py": "533930e69da6d223f6cdc9723957bd7af855bf68de4a8e13cf86f5e8411c0cd0"
+  },
+  "scope": "src/vater_optional/proto_compat.py defines the .proto version compatibility test: removing a field without reserving its number and name, changing its type or cardinality, renaming it, or reusing a reserved number or name is reported; adding new numbers is compatible; constructs it cannot judge are refused, not skipped.",
+  "test_cases": [
+    "tests/test_more_protocols.py::test_adding_fields_and_retiring_them_properly_is_compatible",
+    "tests/test_more_protocols.py::test_a_change_that_breaks_an_old_field_is_refused[type]",
+    "tests/test_more_protocols.py::test_a_change_that_breaks_an_old_field_is_refused[cardinality]",
+    "tests/test_more_protocols.py::test_a_change_that_breaks_an_old_field_is_refused[rename]",
+    "tests/test_more_protocols.py::test_a_change_that_breaks_an_old_field_is_refused[removed]",
+    "tests/test_more_protocols.py::test_a_change_that_breaks_an_old_field_is_refused[number_only_reserved]",
+    "tests/test_more_protocols.py::test_a_change_that_breaks_an_old_field_is_refused[reserved_number]",
+    "tests/test_more_protocols.py::test_a_change_that_breaks_an_old_field_is_refused[reserved_name]",
+    "tests/test_more_protocols.py::test_a_change_that_breaks_an_old_field_is_refused[message]",
+    "tests/test_more_protocols.py::test_what_the_check_cannot_judge_is_refused_not_skipped[nested]",
+    "tests/test_more_protocols.py::test_what_the_check_cannot_judge_is_refused_not_skipped[oneof]",
+    "tests/test_more_protocols.py::test_what_the_check_cannot_judge_is_refused_not_skipped[map]",
+    "tests/test_more_protocols.py::test_what_the_check_cannot_judge_is_refused_not_skipped[enum]",
+    "tests/test_more_protocols.py::test_what_the_check_cannot_judge_is_refused_not_skipped[import]",
+    "tests/test_more_protocols.py::test_what_the_check_cannot_judge_is_refused_not_skipped[required]",
+    "tests/test_more_protocols.py::test_what_the_check_cannot_judge_is_refused_not_skipped[duplicate_number]",
+    "tests/test_more_protocols.py::test_what_the_check_cannot_judge_is_refused_not_skipped[no_number]"
+  ]
+}

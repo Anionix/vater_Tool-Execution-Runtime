@@ -87,12 +87,17 @@ jobs:
           python-version: '3.13'
       - name: Query OSV for every locked package
         run: python -I scripts/scan_vulnerabilities.py --output osv-scan.json
+      - name: Query OSV for every package of the optional prototypes' lock
+        if: always()
+        run: python -I scripts/scan_vulnerabilities.py --lock requirements-optional-py313.lock --output osv-scan-optional.json
       - name: Keep the scan result
         if: always()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: osv-scan
-          path: osv-scan.json
+          path: |
+            osv-scan.json
+            osv-scan-optional.json
           if-no-files-found: warn
           retention-days: 90
 
@@ -131,10 +136,51 @@ jobs:
           if-no-files-found: warn
           retention-days: 90
 
+  optional-prototypes:
+    # task.optional_*: the optional prototypes (src/vater_optional and web/, not part of the release)
+    # with their own hash lock (the base lock unchanged plus wasmtime, graphql-core and Playwright)
+    # and the Chromium build the locked Playwright names; every optional phase's exact cases run once
+    # and are checked. Like every verification job, it must pass before release artifacts are built.
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        with:
+          python-version: '3.13'
+      - name: Fail closed without the optional prototypes' hash lock
+        run: python scripts/check_dependency_lock.py requirements-optional-py313.lock
+      - name: Install the optional prototypes' lock with checked artifact hashes
+        # A folded block: ':all: ' would end a plain YAML scalar.
+        run: >-
+          python -m pip install --require-hashes --only-binary :all: -r requirements-optional-py313.lock
+      - name: Check installed dependency compatibility
+        run: python -m pip check
+      - name: Install the Chromium build named by the locked Playwright
+        run: python -m playwright install --with-deps chromium
+      - name: Verify all WebAssembly isolation tasks
+        run: python scripts/verify_phase.py optional_webassembly --junitxml optional-webassembly.xml
+      - name: Verify all additional protocol tasks
+        run: python scripts/verify_phase.py optional_more_protocols --junitxml optional-more-protocols.xml
+      - name: Verify all WebMCP tasks
+        run: python scripts/verify_phase.py optional_webmcp --junitxml optional-webmcp.xml
+      - name: Verify all WebGPU tasks
+        run: python scripts/verify_phase.py optional_webgpu --junitxml optional-webgpu.xml
+      - name: Keep the optional phase reports
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: optional-prototypes
+          path: optional-*.xml
+          if-no-files-found: warn
+          retention-days: 90
+
   release-artifacts:
     # task.operations.006 / 008 / 009: artifacts are built and kept only after every verification
     # job (including the safety tests) and every security check of the release gate has passed.
-    needs: [offline-contracts, durable-state, dependency-vulnerabilities, formal-rust, official-mcp]
+    needs: [offline-contracts, durable-state, dependency-vulnerabilities, formal-rust, optional-prototypes, official-mcp]
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:

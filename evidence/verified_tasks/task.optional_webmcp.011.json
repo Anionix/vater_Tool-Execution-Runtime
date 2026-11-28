@@ -1,0 +1,24 @@
+{
+  "task_id": "task.optional_webmcp.011",
+  "acceptance_criteria": "採用ブラウザ一覧と結果が残る",
+  "verified_on": "2026-11-28",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/optional-webmcp-tests.xml",
+  "report_sha256": "419e67ac89835b41b83bb9742b9d63e02bdc817a089a03abdf64b4d05a514206",
+  "source_sha256": {
+    "docs/optional/WEBMCP.md": "e07647b0b876db9feeccee26f98dd52f1d0058869e62e38b419514cad1daf576",
+    "evidence/optional/webmcp-compatibility.json": "b351be5d1e506b62e7b68da1889276108df3e40ebdd60fd21be66f5de33e627e",
+    "requirements-optional-py313.lock": "f7923dc88b5345679bcb434ba8350e368c4e916dc6fe9ecd9e245f452a23434d",
+    "scripts/webmcp_compatibility.py": "fabde39cb066a883a34f408995b9f0f20285c65160e7f7134f00ae7a04045fbe",
+    "src/vater_optional/webmcp_host.py": "aad404358d4fd8fac24a901208b750fab95e9b426bda3a958feee8dac2da3287",
+    "tests/test_webmcp.py": "273fba61386b320aa70bb4f83f73c982cc8c0201f0e9ea2fbab5b48a66efb2f8",
+    "web/webmcp/index.html": "21ef143afd8e2f8ab91160abd7806b820c4fa15db9221a9e54b03c02121d96a3",
+    "web/webmcp/style.css": "b556b5e89a787629029dbe79d06bf0cf09c5939edb97251930138013c292b682",
+    "web/webmcp/vater-webmcp.js": "6a86ccbafab35b02f6e6a7435d74fbe41da3f81ea5088af936320fa2757f9836"
+  },
+  "scope": "Five configurations (headless shell and new headless, with and without the flag, and an insecure origin) are recorded with their results in evidence/optional/webmcp-compatibility.json and reproduced by a fresh run; the adopted browsers are Chromium 153 (Playwright 1.63.0's build; its results transcribed from CI run 46167166700) and Chromium 158, both with the flag, ten results in all, and Firefox, WebKit and Edge are recorded as not tested here. Run in Chrome for Testing 158.0.8127.36 here and, in CI, in Chromium 153.0.8010.12 (the build Playwright 1.63.0 downloads); in both, document.modelContext exists only with --enable-experimental-web-platform-features.",
+  "test_cases": [
+    "tests/test_webmcp.py::test_the_compatibility_record_matches_a_fresh_run"
+  ]
+}

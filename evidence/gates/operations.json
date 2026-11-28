@@ -25,14 +25,14 @@
     "task.operations.017"
   ],
   "report_path": "evidence/gates/operations-tests.xml",
-  "report_sha256": "20857c1abd4613d6cf01b226a14ee8d6711ad7c2ed193f8877414dca695be261",
+  "report_sha256": "6b8bb86dec00e60ad32d052b67eb186f84d57957319e27e9d06aa024098d5372",
   "source_sha256": {
     ".github/workflows/dependency-lock-candidate.yml": "16e254a3bf424a12ee8a18ebffefbc37eba1ab04db4d4bc8937ab90fc6e5a208",
     ".github/workflows/external-change-evidence.yml": "926fb0c25ddc1a85f1c9e5dfadf336740f183a2def4769e0ab7da74aa3420b83",
-    ".github/workflows/python-verification.yml": "a879491debc06e2848298013fc6f1e55b35d3ccb781271fd7ffc2c7d4d0aebdb",
+    ".github/workflows/python-verification.yml": "9c2af5a962947ab1d5b726daee139332177cc2dafdc392fd87f049cf277464c0",
     "config/monitoring.json": "32bb7715f5d702259c1c3515b0b9f7845358a67ceeb41764f5979cf1f8ef1711",
     "config/test_selection.json": "a100148f0a650aec8e6517acf7cfc4dbb75050d81428d46cbc97bb7e6cda1ce2",
-    "docs/dependency_sources.json": "8771b34e4f8a99bfab2f7d12987f1cf03506a9c00e707dc1115b1c87f49025ec",
+    "docs/dependency_sources.json": "b83d54e36aebce5d2162b294826122372dd9ec5f257869b361947226e064af35",
     "docs/permission_history.jsonl": "c8fe04965325798df1c9772eb1b5134878c066796de622c5fdafb966570cec4a",
     "docs/runbooks/disable_external_tools.md": "5d8053fb199331ed953afbca8e093adbe3701ecc42408826e9ba103f50eaae6b",
     "evidence/security/osv-scan.json": "85322c2c71c91c83108d51aa2fb27b80453d6c0f191793014a5c481d6923dae7",
@@ -42,7 +42,7 @@
     "scripts/audit_logs.py": "d587af4cae351de2a32975b76c79c007c9155d4c35884a1b4cc50ac68b69d174",
     "scripts/backup_ledger.py": "1f62eb09efef72b983829d8d727795adebf5a0e845728bd5782825cf7dc97f27",
     "scripts/check_toolchains.py": "db0d0461391b3f086bc7dab5069dcfc3e3d0fe99dc2b0cb21685b80756501890",
-    "scripts/dependency_sources.py": "bf87934ede57e73173977a7f78eeb67dcec9946231a0b877833ad6401342d394",
+    "scripts/dependency_sources.py": "2a02961d3330fdf0b82707db911ff8574abc0b3868131684f8e819ad8ed71c01",
     "scripts/evidence_freshness.py": "36da33be60da713a9aebeb0e7d8b55852d425f86931b33747b38af2d10a6743e",
     "scripts/kill_switch.py": "a045343ac16de9d7f4f30c5d173da2c9279de28ee86eff3c9ac51297a36f8809",
     "scripts/monitor_operations.py": "202fd1c2f25160eebb88b57a3da58d7f395b40deeecd4e4aeeb4eda2eb7c9088",
@@ -50,9 +50,9 @@
     "scripts/release_decision.py": "a2e1ad5beef2bc3947f5ef58b4b97e30d2eac3a5c65c9e90849350add546db93",
     "scripts/release_gate.py": "87c7b9dc71f2915799e1face3fd01e6db481b690de4b09d2f68f61b543679f39",
     "scripts/release_manifest.py": "65fdaa18d84221d68eb9f94d5e85edb73c2c1a7972262960898c0792fc085c3a",
-    "scripts/required_checks.py": "e120df031d79e77310fa3da296915a1f05731a77829be4c55c9f4cbd19cd002c",
+    "scripts/required_checks.py": "3a28ad903e70407d7385d5556f17b36a8a0b49b82532eff163ed7d8943bedb74",
     "scripts/run_github_issue_evidence.py": "e34256165abf0e700983a988c1b5f42b837b17c5cd4dcdd2969e7e067b226d22",
-    "scripts/scan_vulnerabilities.py": "a463d74ce58fe5bb1d9130fa74b1d5a1dc0321e504b77e91310c098dc41651c7",
+    "scripts/scan_vulnerabilities.py": "57023eeddd6b8ebac70a423f4fea915fb9212137e71a44f31f4fa1bfecb7d5a8",
     "scripts/select_tests.py": "435e8dac973836e17d623b40a84f19a0a119382c7e51667c59274811fc2add4d",
     "scripts/staging_trial.py": "c1db7aa1b2c7f002be6a074b2b4221909e85054a136f9a58534bb956796e86c8",
     "scripts/verify_phase.py": "e9bf7a14813534653fb938125f53ec18d06878fd613573e68f1cdb298afa7290",
@@ -61,8 +61,8 @@
     "src/verified_execution/kill_switch.py": "79618896dcb7d652306f63ee58f8701dcad95729ef14306908f60b5067d5d6ae",
     "src/verified_execution/restore_fence.py": "ef762f5b38e9a745b7a6b13fa3d8e164ddfb41ecc954b618fc1c71b179f17837",
     "tests/test_backup_restore.py": "8eb91824b8c94444aa3b31d492149173993551734cefc976fc2aaa496b821341",
-    "tests/test_dependency_revalidation.py": "ced85c15c2611d76533b0587cd557ffa048e2fd81d74d87543afe30ea5681581",
-    "tests/test_dependency_sources.py": "55f2f743536a5f21c2f06e95a8ccc5a89abd13a018b7545f20c75a8972adc4d3",
+    "tests/test_dependency_revalidation.py": "c206c8b03d975e9f9d738ad2e5c529b8377bbd011ddd8c8c0bad43205dff9375",
+    "tests/test_dependency_sources.py": "07366469abd4f0a0e4fc437f2234b52d1f46cf2a9e55bfe3f232ef0da4441e27",
     "tests/test_evidence_freshness.py": "57b7b3d304c5e7c661aaf287962f847e3eb6738bc309366b2ff363511da16884",
     "tests/test_kill_switch.py": "2c144bf1ce891d52c1b0e2854a72f40317136262fbd31a594811fab509159569",
     "tests/test_log_audit.py": "87c84404829fdaf2b86031cd8c485835495849fa7dcf5bc82513042e4cba5658",
@@ -75,14 +75,14 @@
     "tests/test_staging_trial.py": "13a4fcad209727042365fc0294d211f2c23366e860ac6eb173ee675b6fc2c511",
     "tests/test_toolchain_separation.py": "8e4cb4dd31964b7577b0e3f058e4acf30e9833c9a9b5d3ad9f8869ae802a44e2",
     "tests/test_verify_task.py": "594c2649f88a06013de1794c5b8902f4cad58637cad4b168752a4649be39113d",
-    "tests/test_vulnerability_scan.py": "d7e5464eb9a9d83cc85cef2f117d6d32a3be9a85c42381e64b4f46824ad24949"
+    "tests/test_vulnerability_scan.py": "0cb78222ce573d8b01e678bf80a946069b2040e214f5f9e41dd0c83e7b7692c5"
   },
   "scope": "All 17 operations tasks are done with executed evidence; this report reruns every mapped case in one session (151 cases). CI-only evidence: the OSV scan (run 45945637877), the lock-candidate revalidation (run 45945589880) and the build trial (CI run 45948159854). Not executed here: a real package publication, a real incident, and a restore after real data loss; the release decision still blocks the initial and extended releases while any required gate's evidence is stale.",
   "previous_report": {
     "path": "evidence/gates/operations-tests.xml",
-    "sha256": "927e5504c75310aa394d5d2ec7ce6cd7eb9e52aa450d4f3cced76deb5a6dfb42"
+    "sha256": "20857c1abd4613d6cf01b226a14ee8d6711ad7c2ed193f8877414dca695be261"
   },
-  "refreshed_at": "2026-11-28T07:59:43Z",
+  "refreshed_at": "2026-11-28T16:36:09Z",
   "environment": {
     "python": "3.13.18",
     "platform": "Linux-6.18.44-fc-v880-x86_64-with-glibc2.39"

@@ -26,13 +26,16 @@ def test_the_required_checks_are_every_run_step_of_the_release_verification_exce
     commands = [step["command"] for step in required.required_commands()]
     steps = required.run_steps(RELEASE)
     assert len(steps) == len(re.findall(r"^\s*run:", RELEASE, flags=re.M))
-    # Only installs, and the build job with its own hash-locked backend, are left out.
-    assert required.INDEPENDENT_OF_RUNTIME_DEPENDENCIES == {"release-artifacts", "formal-rust"}
+    # Only installs, and the jobs with their own hash-locked sets or toolchains, are left out.
+    independent = {"release-artifacts", "formal-rust", "optional-prototypes"}
+    assert required.INDEPENDENT_OF_RUNTIME_DEPENDENCIES == independent
     assert commands == [step["command"] for step in steps if "pip install" not in step["command"]
-                        and step["job"] not in {"release-artifacts", "formal-rust"}]
+                        and step["job"] not in independent]
     assert len(commands) >= 25
-    phases = re.findall(r"run: (python scripts/verify_phase\.py [a-z_]+(?: --completed-only)?)", RELEASE)
-    assert phases and set(phases) <= set(commands)
+    phases = [step["command"] for step in steps if step["job"] not in independent
+              and re.fullmatch(r"python scripts/verify_phase\.py [a-z_]+(?: --completed-only)?", step["command"])]
+    assert len(phases) >= 14 and set(phases) <= set(commands)
+    assert not any("optional_" in phase for phase in phases)  # the optional phases run in their own job
     assert "python scripts/staging_trial.py --output staging-trial.json" in commands
     assert any(command.startswith("python -m pytest -q tests/test_adapter_boundary.py") for command in commands)
     assert not any("pip install" in command for command in commands)

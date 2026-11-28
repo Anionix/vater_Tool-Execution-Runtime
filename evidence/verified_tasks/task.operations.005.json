@@ -1,18 +1,18 @@
 {
   "task_id": "task.operations.005",
   "acceptance_criteria": "スキャン結果が保存される",
-  "verified_on": "2026-11-27",
+  "verified_on": "2026-11-28",
   "verification_status": "passed",
   "executed": true,
   "report_path": "evidence/operations-phase-tests.xml",
-  "report_sha256": "5a380ebef28050ecbd93bc908601d27b4852420519874e8b13f05eaf0adad43c",
+  "report_sha256": "e8cd7d0e7f1b84aa3c9326677628d694971e484e7ba8977d95a17f5d145c9bc6",
   "source_sha256": {
-    ".github/workflows/python-verification.yml": "a879491debc06e2848298013fc6f1e55b35d3ccb781271fd7ffc2c7d4d0aebdb",
+    ".github/workflows/python-verification.yml": "9c2af5a962947ab1d5b726daee139332177cc2dafdc392fd87f049cf277464c0",
     "evidence/security/osv-scan.json": "85322c2c71c91c83108d51aa2fb27b80453d6c0f191793014a5c481d6923dae7",
     "evidence/security/osv-scan.provenance.json": "48e18905978e95df4d6b2486c433461954f82ab7e7f7b5b07d00978496ececa1",
     "requirements-py313.lock": "cc651303afe6b684a979e14fdd9d1ca8b73d7bda0ea6e1d0480a20ae792de51c",
-    "scripts/scan_vulnerabilities.py": "a463d74ce58fe5bb1d9130fa74b1d5a1dc0321e504b77e91310c098dc41651c7",
-    "tests/test_vulnerability_scan.py": "d7e5464eb9a9d83cc85cef2f117d6d32a3be9a85c42381e64b4f46824ad24949"
+    "scripts/scan_vulnerabilities.py": "57023eeddd6b8ebac70a423f4fea915fb9212137e71a44f31f4fa1bfecb7d5a8",
+    "tests/test_vulnerability_scan.py": "0cb78222ce573d8b01e678bf80a946069b2040e214f5f9e41dd0c83e7b7692c5"
   },
   "scope": "The dependency-vulnerabilities CI job queries OSV for the exact version of every locked package, with the standard library only, keeps the report as an artifact for 90 days and fails on any known vulnerability. CI run 45945637877 found none in the 33 packages; evidence/security/osv-scan.json is that report, transcribed from the job log, and its canonical SHA-256 equals the one the job printed. The release gate re-runs the scan and checks that the saved report covers exactly the current lock.",
   "test_cases": [

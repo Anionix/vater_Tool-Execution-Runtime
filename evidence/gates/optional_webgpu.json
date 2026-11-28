@@ -1,0 +1,38 @@
+{
+  "task_id": "gate.optional_webgpu.completed",
+  "acceptance_criteria": "同段階の全作業について、実物・独立した合格判定・証拠の所在がある",
+  "verification_status": "passed",
+  "executed": true,
+  "verified_on": "2026-11-28",
+  "prerequisite_gates": [],
+  "tasks": [
+    "task.optional_webgpu.001",
+    "task.optional_webgpu.002",
+    "task.optional_webgpu.003",
+    "task.optional_webgpu.004",
+    "task.optional_webgpu.005",
+    "task.optional_webgpu.006",
+    "task.optional_webgpu.007",
+    "task.optional_webgpu.008",
+    "task.optional_webgpu.009",
+    "task.optional_webgpu.010",
+    "task.optional_webgpu.011",
+    "task.optional_webgpu.012"
+  ],
+  "report_path": "evidence/gates/optional_webgpu-tests.xml",
+  "report_sha256": "05e3d6eb78ab0b689c5027a06b50fc12021e103558920c5ad1e028b4b51abbea",
+  "source_sha256": {
+    "docs/optional/WEBGPU.md": "5b7367a19388c5a92e8e13c69cddb4bd56eef41d3876e6f15f8bd08b88e97b55",
+    "evidence/optional/webgpu-measurements.json": "dcea7583f2b0c4ba6fddb3f173c3aab2915c695f861cef58a189e1753e1ff69a",
+    "requirements-optional-py313.lock": "f7923dc88b5345679bcb434ba8350e368c4e916dc6fe9ecd9e245f452a23434d",
+    "scripts/measure_webgpu.py": "2a98f32ec37847427c2cd8450faf6c8892ad75f83ca5d830940e35f351211045",
+    "scripts/verify_phase.py": "e9bf7a14813534653fb938125f53ec18d06878fd613573e68f1cdb298afa7290",
+    "src/vater_optional/matmul.py": "d6b6f3ebf8d8f9b7f350308f20055a5f895a412afceeb116c0065e40d5c8824f",
+    "src/vater_optional/webmcp_host.py": "aad404358d4fd8fac24a901208b750fab95e9b426bda3a958feee8dac2da3287",
+    "tests/test_webgpu.py": "eaf47ca6d646a3dfad1da504b8a73490df17bd450989af3814cac61b1f2af00d",
+    "web/webgpu/index.html": "078b8d3f4af8807fad55c66e429abce5bc554ac08c4bf15e557bdd9a4917bab6",
+    "web/webgpu/matmul.js": "845e0a1d088e9add9d0132f420c042b02ecc795d2679b0f6d7d72ccb998edc8f",
+    "web/webgpu/matmul.wgsl": "5cb13bf455cb5e14fa3b0113568c58dba80ada4d94ecbe376bb1b0ffaf5c86bb"
+  },
+  "scope": "All 12 WebGPU tasks are done with executed evidence; this report reruns every mapped case in one session (30 cases) on Chromium 158's SwiftShader adapter. There is no hardware GPU here or in CI: correctness, validation, device loss and the host's checks were executed, while the speed figures describe a software adapter, and by the recorded rule WebGPU is not adopted."
+}

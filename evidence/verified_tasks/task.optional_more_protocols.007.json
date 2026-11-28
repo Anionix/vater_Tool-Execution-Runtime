@@ -1,0 +1,28 @@
+{
+  "task_id": "task.optional_more_protocols.007",
+  "acceptance_criteria": "受託先へ無制限権限を渡さない",
+  "verified_on": "2026-11-28",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/optional-protocols-tests.xml",
+  "report_sha256": "7220dcfc9a8b5dddd659d98874b6e9fc22fa7f9bba267fdce5aeada6c5d8647e",
+  "source_sha256": {
+    "docs/optional/MORE_PROTOCOLS.md": "6ce24d9fc53916e7e7e820c8e220cf79b571370ad5f30153c08a2513ee0da9a1",
+    "src/vater_optional/delegation.py": "7774448b3eb9800fdf260f5c637ab1ea7c862a9b628707c4f928621fa576c502",
+    "tests/test_more_protocols.py": "533930e69da6d223f6cdc9723957bd7af855bf68de4a8e13cf86f5e8411c0cd0"
+  },
+  "scope": "src/vater_optional/delegation.py fixes delegation: explicit tool subsets only, a positive budget held back from the parent, expiry within the parent's and one hour, bounded re-delegation, and no approval travelling with a delegation (only the root human principal approves). Wildcards, unbounded budgets and expiries are refused.",
+  "test_cases": [
+    "tests/test_more_protocols.py::test_a_delegate_is_never_given_unbounded_authority[wildcard]",
+    "tests/test_more_protocols.py::test_a_delegate_is_never_given_unbounded_authority[empty]",
+    "tests/test_more_protocols.py::test_a_delegate_is_never_given_unbounded_authority[wider_tools]",
+    "tests/test_more_protocols.py::test_a_delegate_is_never_given_unbounded_authority[zero_budget]",
+    "tests/test_more_protocols.py::test_a_delegate_is_never_given_unbounded_authority[unlimited_budget]",
+    "tests/test_more_protocols.py::test_a_delegate_is_never_given_unbounded_authority[fractional_budget]",
+    "tests/test_more_protocols.py::test_a_delegate_is_never_given_unbounded_authority[past_parent_expiry]",
+    "tests/test_more_protocols.py::test_a_delegate_is_never_given_unbounded_authority[over_an_hour]",
+    "tests/test_more_protocols.py::test_a_delegate_is_never_given_unbounded_authority[to_root]",
+    "tests/test_more_protocols.py::test_delegated_budget_is_held_back_and_chains_are_bounded",
+    "tests/test_more_protocols.py::test_approvals_never_travel_with_a_delegation"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "task_id": "task.optional_more_protocols.006",
+  "acceptance_criteria": "独立した実行主体が複数存在",
+  "verified_on": "2026-11-28",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/optional-protocols-tests.xml",
+  "report_sha256": "7220dcfc9a8b5dddd659d98874b6e9fc22fa7f9bba267fdce5aeada6c5d8647e",
+  "source_sha256": {
+    "docs/optional/MORE_PROTOCOLS.md": "6ce24d9fc53916e7e7e820c8e220cf79b571370ad5f30153c08a2513ee0da9a1",
+    "requirements-optional-py313.lock": "f7923dc88b5345679bcb434ba8350e368c4e916dc6fe9ecd9e245f452a23434d",
+    "requirements-py313.lock": "cc651303afe6b684a979e14fdd9d1ca8b73d7bda0ea6e1d0480a20ae792de51c",
+    "server_mcp.py": "4445686917724617d7be5ebc8ae316417b1d0c029f6a8ff904251c1779ccc877",
+    "src/verified_execution/http_local.py": "3a9f0478fd2f8dd751973baefca8173f15f10007f105ce46c77069aca7ae394b",
+    "src/verified_execution/local_cli.py": "9f6fa1077300a5a56c768b15d1fbc041568cf1b1302cd3bf29bb566eeb318540",
+    "tests/test_more_protocols.py": "533930e69da6d223f6cdc9723957bd7af855bf68de4a8e13cf86f5e8411c0cd0"
+  },
+  "scope": "MCP, local HTTP and the local line interface all call the same ToolRuntime on one host: there are not several independent executors, so no delegation target exists and Agent2Agent is not introduced.",
+  "test_cases": [
+    "tests/test_more_protocols.py::test_one_executor_serves_every_entry_point_so_agent2agent_is_not_introduced"
+  ]
+}

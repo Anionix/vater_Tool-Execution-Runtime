@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vater WebMCP prototype</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="vater-webmcp.js"></script>
+</head>
+<body>
+  <main>
+    <h1>Vater WebMCP 試作</h1>
+    <p id="webmcp-status" data-supported="unknown">WebMCP: 確認中</p>
+
+    <section aria-labelledby="add-heading">
+      <h2 id="add-heading">加算</h2>
+      <label>左 <input id="left" inputmode="numeric" value="2"></label>
+      <label>右 <input id="right" inputmode="numeric" value="3"></label>
+      <button id="add-page" type="button">ページで加算</button>
+      <button id="add-host" type="button">ホストで加算</button>
+      <output id="add-result"></output>
+    </section>
+
+    <section aria-labelledby="report-heading">
+      <h2 id="report-heading">報告の送信（運用者の承認が必要）</h2>
+      <label>題名 <input id="report-title" maxlength="120"></label>
+      <label>本文 <textarea id="report-body" maxlength="2000"></textarea></label>
+      <button id="send-report" type="button">報告を送る</button>
+      <output id="report-result"></output>
+    </section>
+
+    <section aria-labelledby="activity-heading">
+      <h2 id="activity-heading">実行履歴（実行元つき）</h2>
+      <ol id="activity" aria-live="polite"></ol>
+    </section>
+  </main>
+  <!-- A third-party widget, as a compromised dependency would be: the Content-Security-Policy
+       (script-src 'self') blocks it, so it never runs with this page's tools or session. -->
+  <script src="https://widgets.thirdparty.test/widget.js"></script>
+</body>
+</html>

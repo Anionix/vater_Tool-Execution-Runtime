@@ -1,13 +1,13 @@
 {
   "task_id": "task.operations.008",
   "acceptance_criteria": "環境差による違いを記録",
-  "verified_on": "2026-11-27",
+  "verified_on": "2026-11-28",
   "verification_status": "passed",
   "executed": true,
   "report_path": "evidence/operations-phase-tests.xml",
-  "report_sha256": "5a380ebef28050ecbd93bc908601d27b4852420519874e8b13f05eaf0adad43c",
+  "report_sha256": "e8cd7d0e7f1b84aa3c9326677628d694971e484e7ba8977d95a17f5d145c9bc6",
   "source_sha256": {
-    ".github/workflows/python-verification.yml": "a879491debc06e2848298013fc6f1e55b35d3ccb781271fd7ffc2c7d4d0aebdb",
+    ".github/workflows/python-verification.yml": "9c2af5a962947ab1d5b726daee139332177cc2dafdc392fd87f049cf277464c0",
     "requirements-build.lock": "3321335737f7e89634b82b05aa42d3eacc01d1538615d75d4519bff07035b0e2",
     "scripts/release_manifest.py": "65fdaa18d84221d68eb9f94d5e85edb73c2c1a7972262960898c0792fc085c3a",
     "tests/test_release_manifest.py": "c833f6410f0625f3218785922a423ba41cadfda3d5b9027893df704b49b47428"

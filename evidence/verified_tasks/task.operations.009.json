@@ -1,13 +1,13 @@
 {
   "task_id": "task.operations.009",
   "acceptance_criteria": "重大な検査失敗では配布しない",
-  "verified_on": "2026-11-27",
+  "verified_on": "2026-11-28",
   "verification_status": "passed",
   "executed": true,
   "report_path": "evidence/operations-phase-tests.xml",
-  "report_sha256": "5a380ebef28050ecbd93bc908601d27b4852420519874e8b13f05eaf0adad43c",
+  "report_sha256": "e8cd7d0e7f1b84aa3c9326677628d694971e484e7ba8977d95a17f5d145c9bc6",
   "source_sha256": {
-    ".github/workflows/python-verification.yml": "a879491debc06e2848298013fc6f1e55b35d3ccb781271fd7ffc2c7d4d0aebdb",
+    ".github/workflows/python-verification.yml": "9c2af5a962947ab1d5b726daee139332177cc2dafdc392fd87f049cf277464c0",
     "scripts/release_gate.py": "87c7b9dc71f2915799e1face3fd01e6db481b690de4b09d2f68f61b543679f39",
     "tests/test_release_gate.py": "75e1608d12241f6a49f97bc0de13e2489dac9f9a4966e48d08bf0d84fc5c209c"
   },

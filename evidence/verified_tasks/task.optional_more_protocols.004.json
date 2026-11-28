@@ -1,0 +1,23 @@
+{
+  "task_id": "task.optional_more_protocols.004",
+  "acceptance_criteria": "単一プロセスでは導入しない",
+  "verified_on": "2026-11-28",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/optional-protocols-tests.xml",
+  "report_sha256": "7220dcfc9a8b5dddd659d98874b6e9fc22fa7f9bba267fdce5aeada6c5d8647e",
+  "source_sha256": {
+    "docs/optional/MORE_PROTOCOLS.md": "6ce24d9fc53916e7e7e820c8e220cf79b571370ad5f30153c08a2513ee0da9a1",
+    "requirements-optional-py313.lock": "f7923dc88b5345679bcb434ba8350e368c4e916dc6fe9ecd9e245f452a23434d",
+    "requirements-py313.lock": "cc651303afe6b684a979e14fdd9d1ca8b73d7bda0ea6e1d0480a20ae792de51c",
+    "server_mcp.py": "4445686917724617d7be5ebc8ae316417b1d0c029f6a8ff904251c1779ccc877",
+    "src/verified_execution/http_local.py": "3a9f0478fd2f8dd751973baefca8173f15f10007f105ce46c77069aca7ae394b",
+    "src/verified_execution/recorded_cli.py": "ac0cf2a53b80096e94bb014d36ee5b350c42f7b8e4ccf0c41dc1ef03102c8c62",
+    "src/verified_execution/worker_leases.py": "3a328d1fe8043b51059c1c7e9e912a706136fb487ca896e4827cb3dd63a33b72",
+    "tests/test_more_protocols.py": "533930e69da6d223f6cdc9723957bd7af855bf68de4a8e13cf86f5e8411c0cd0"
+  },
+  "scope": "Every inter-process channel (stdio MCP, loopback HTTP, the shared SQLite ledger, test subprocess JSON lines) stays on one host, so gRPC is not introduced; neither lock holds gRPC or protobuf and no source imports grpc. The condition for reconsidering is recorded.",
+  "test_cases": [
+    "tests/test_more_protocols.py::test_every_inter_process_channel_stays_on_one_host_and_grpc_is_not_introduced"
+  ]
+}

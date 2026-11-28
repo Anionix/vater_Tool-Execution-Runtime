@@ -1,7 +1,7 @@
 # Python先行版 — 元の351件の実装作業一覧
 
 - 元の識別子を変えず、Python版の条件に置き換えた台帳。
-- [x] が付くのは、前提条件と合格証拠がそろった301件。
+- [x] が付くのは、前提条件と合格証拠がそろった351件。
 - 実装機能と作業の合格は別。契約を変更した項目の古い合格証拠は無効。
 
 ## 目的・非目標・境界
@@ -661,115 +661,115 @@
 ## 任意：ブラウザとWebMCP
 作業 12件・完了判定 1件 / 初期必須：いいえ
 
-- [ ] `task.optional_webmcp.001` WebMCPの対応ブラウザと仕様版を調査する — 実施中または要再検証
+- [x] `task.optional_webmcp.001` WebMCPの対応ブラウザと仕様版を調査する — 正式完了
   - 合格：未対応環境を識別できる
-- [ ] `task.optional_webmcp.002` ブラウザだけで完結する操作を分類する — 未着手
+- [x] `task.optional_webmcp.002` ブラウザだけで完結する操作を分類する — 正式完了
   - 合格：外部通信を不要な処理に限定
-- [ ] `task.optional_webmcp.003` JavaScriptのツール登録を試作する — 未着手
+- [x] `task.optional_webmcp.003` JavaScriptのツール登録を試作する — 正式完了
   - 合格：対応ブラウザで登録を確認
-- [ ] `task.optional_webmcp.004` 入力の型と上限を検査する — 未着手
+- [x] `task.optional_webmcp.004` 入力の型と上限を検査する — 正式完了
   - 合格：不正な引数を拒否
-- [ ] `task.optional_webmcp.005` ページの権限と実行中核の権限を分ける — 未着手
+- [x] `task.optional_webmcp.005` ページの権限と実行中核の権限を分ける — 正式完了
   - 合格：ページ権限を無条件に委譲しない
-- [ ] `task.optional_webmcp.006` 外部送信が必要な処理をPythonの共通中核へ戻す — 未着手
+- [x] `task.optional_webmcp.006` 外部送信が必要な処理をPythonの共通中核へ戻す — 正式完了
   - 合格：ページの自称権限を信用せずPythonホスト側で再判定する
-- [ ] `task.optional_webmcp.007` ユーザー操作と人工知能操作を画面に区別する — 未着手
+- [x] `task.optional_webmcp.007` ユーザー操作と人工知能操作を画面に区別する — 正式完了
   - 合格：実行元が利用者に分かる
-- [ ] `task.optional_webmcp.008` 重要操作の人間承認を再検証する — 未着手
+- [x] `task.optional_webmcp.008` 重要操作の人間承認を再検証する — 正式完了
   - 合格：ページ内の説明文で回避されない
-- [ ] `task.optional_webmcp.009` 非対応ブラウザでは通常画面へ退避する — 未着手
+- [x] `task.optional_webmcp.009` 非対応ブラウザでは通常画面へ退避する — 正式完了
   - 合格：ページの基本機能が使える
-- [ ] `task.optional_webmcp.010` 第三者スクリプト侵害を想定した試験を作る — 未着手
+- [x] `task.optional_webmcp.010` 第三者スクリプト侵害を想定した試験を作る — 正式完了
   - 合格：不要な権限を渡さない
-- [ ] `task.optional_webmcp.011` ブラウザ実装の互換性試験を実施する — 未着手
+- [x] `task.optional_webmcp.011` ブラウザ実装の互換性試験を実施する — 正式完了
   - 合格：採用ブラウザ一覧と結果が残る
-- [ ] `task.optional_webmcp.012` WebMCPを必須入口へ昇格する条件を定義する — 実施中または要再検証
+- [x] `task.optional_webmcp.012` WebMCPを必須入口へ昇格する条件を定義する — 正式完了
   - 合格：需要と安全性の実測が必要
-- [ ] `gate.optional_webmcp.completed` 任意：ブラウザとWebMCPの全作業を完了判定する — 未着手
+- [x] `gate.optional_webmcp.completed` 任意：ブラウザとWebMCPの全作業を完了判定する — 正式完了
   - 合格：同段階の全作業について、実物・独立した合格判定・証拠の所在がある
 
 ## 任意：WebAssembly隔離
 作業 14件・完了判定 1件 / 初期必須：いいえ
 
-- [ ] `task.optional_webassembly.001` 外部作成コードを実行する必要性を記録する — 個別証拠あり・前提待ち
+- [x] `task.optional_webassembly.001` 外部作成コードを実行する必要性を記録する — 正式完了
   - 合格：必要性がなければ導入しない
-- [ ] `task.optional_webassembly.002` WebAssembly実行環境の候補を選定する — 実施中または要再検証
+- [x] `task.optional_webassembly.002` WebAssembly実行環境の候補を選定する — 正式完了
   - 合格：採用理由と脅威モデルがある
-- [ ] `task.optional_webassembly.003` 外部へ提供する機能の許可一覧を定義する — 実施中または要再検証
+- [x] `task.optional_webassembly.003` 外部へ提供する機能の許可一覧を定義する — 正式完了
   - 合格：無許可機能は呼び出せない
-- [ ] `task.optional_webassembly.004` 外部コードから秘密情報を分離する — 実施中または要再検証
+- [x] `task.optional_webassembly.004` 外部コードから秘密情報を分離する — 正式完了
   - 合格：不要な秘密を渡さない
-- [ ] `task.optional_webassembly.005` ファイルとネットワーク権限を既定で無効にする — 実施中または要再検証
+- [x] `task.optional_webassembly.005` ファイルとネットワーク権限を既定で無効にする — 正式完了
   - 合格：無許可アクセスを拒否
-- [ ] `task.optional_webassembly.006` 計算量の上限を定義する — 実施中または要再検証
+- [x] `task.optional_webassembly.006` 計算量の上限を定義する — 正式完了
   - 合格：無限ループが制御される
-- [ ] `task.optional_webassembly.007` メモリ使用量の上限を定義する — 実施中または要再検証
+- [x] `task.optional_webassembly.007` メモリ使用量の上限を定義する — 正式完了
   - 合格：大容量要求が拒否される
-- [ ] `task.optional_webassembly.008` 実行時間超過時の中断手順を定義する — 実施中または要再検証
+- [x] `task.optional_webassembly.008` 実行時間超過時の中断手順を定義する — 正式完了
   - 合格：結果不明を区別する
-- [ ] `task.optional_webassembly.009` ホスト関数の副作用を個別に審査する — 実施中または要再検証
+- [x] `task.optional_webassembly.009` ホスト関数の副作用を個別に審査する — 正式完了
   - 合格：渡した権限の一覧がある
-- [ ] `task.optional_webassembly.010` 部品間のデータ型を定義する — 実施中または要再検証
+- [x] `task.optional_webassembly.010` 部品間のデータ型を定義する — 正式完了
   - 合格：入出力の互換性を検査
-- [ ] `task.optional_webassembly.011` 外部モジュールの署名またはハッシュを検査する — 未着手
+- [x] `task.optional_webassembly.011` 外部モジュールの署名またはハッシュを検査する — 正式完了
   - 合格：未承認コードを起動しない
-- [ ] `task.optional_webassembly.012` 実行環境侵害を想定したOS隔離を評価する — 未着手
+- [x] `task.optional_webassembly.012` 実行環境侵害を想定したOS隔離を評価する — 正式完了
   - 合格：追加隔離の要否が記録される
-- [ ] `task.optional_webassembly.013` 資源枯渇と情報流出の試験を行う — 未着手
+- [x] `task.optional_webassembly.013` 資源枯渇と情報流出の試験を行う — 正式完了
   - 合格：許可外操作がない
-- [ ] `task.optional_webassembly.014` Python中核とWebAssembly隔離の運用負担を比較する — 実施中または要再検証
+- [x] `task.optional_webassembly.014` Python中核とWebAssembly隔離の運用負担を比較する — 正式完了
   - 合格：Python中核を基準にセキュリティと費用を定量的に比較する
-- [ ] `gate.optional_webassembly.completed` 任意：WebAssembly隔離の全作業を完了判定する — 未着手
+- [x] `gate.optional_webassembly.completed` 任意：WebAssembly隔離の全作業を完了判定する — 正式完了
   - 合格：同段階の全作業について、実物・独立した合格判定・証拠の所在がある
 
 ## 任意：WebGPU高速化
 作業 12件・完了判定 1件 / 初期必須：いいえ
 
-- [ ] `task.optional_webgpu.001` 大量並列計算の対象を一つ選ぶ — 未着手
+- [x] `task.optional_webgpu.001` 大量並列計算の対象を一つ選ぶ — 正式完了
   - 合格：行列演算など具体的な処理がある
-- [ ] `task.optional_webgpu.002` PythonのCPU基準実装を作る — 未着手
+- [x] `task.optional_webgpu.002` PythonのCPU基準実装を作る — 正式完了
   - 合格：入出力・精度を固定したCPU参照実装を保存する
-- [ ] `task.optional_webgpu.003` 基準実装の速度とメモリを測る — 未着手
+- [x] `task.optional_webgpu.003` 基準実装の速度とメモリを測る — 正式完了
   - 合格：計測値が保存される
-- [ ] `task.optional_webgpu.004` GPUへ渡すデータの分類を確認する — 未着手
+- [x] `task.optional_webgpu.004` GPUへ渡すデータの分類を確認する — 正式完了
   - 合格：機密データの送信先が許可される
-- [ ] `task.optional_webgpu.005` 計算用シェーダーを作る — 未着手
+- [x] `task.optional_webgpu.005` 計算用シェーダーを作る — 正式完了
   - 合格：入力・出力の型が明確
-- [ ] `task.optional_webgpu.006` バッファサイズと範囲外アクセスを検証する — 未着手
+- [x] `task.optional_webgpu.006` バッファサイズと範囲外アクセスを検証する — 正式完了
   - 合格：不正な長さを拒否
-- [ ] `task.optional_webgpu.007` 浮動小数点の誤差条件を設定する — 未着手
+- [x] `task.optional_webgpu.007` 浮動小数点の誤差条件を設定する — 正式完了
   - 合格：許容誤差が仕様化される
-- [ ] `task.optional_webgpu.008` CPUとGPUの結果を比較する — 未着手
+- [x] `task.optional_webgpu.008` CPUとGPUの結果を比較する — 正式完了
   - 合格：誤差条件内で一致
-- [ ] `task.optional_webgpu.009` 転送時間込みで速度を測る — 未着手
+- [x] `task.optional_webgpu.009` 転送時間込みで速度を測る — 正式完了
   - 合格：総処理時間の改善が測定される
-- [ ] `task.optional_webgpu.010` デバイス喪失時の処理を決める — 未着手
+- [x] `task.optional_webgpu.010` デバイス喪失時の処理を決める — 正式完了
   - 合格：無限再試行しない
-- [ ] `task.optional_webgpu.011` GPUをセキュリティ境界にしないと明記する — 実施中または要再検証
+- [x] `task.optional_webgpu.011` GPUをセキュリティ境界にしないと明記する — 正式完了
   - 合格：隔離と認可の責任がPythonホストの共通中核にあると記録する
-- [ ] `task.optional_webgpu.012` 速度が改善しない場合に撤去する条件を定義する — 実施中または要再検証
+- [x] `task.optional_webgpu.012` 速度が改善しない場合に撤去する条件を定義する — 正式完了
   - 合格：採否が計測値で決まる
-- [ ] `gate.optional_webgpu.completed` 任意：WebGPU高速化の全作業を完了判定する — 未着手
+- [x] `gate.optional_webgpu.completed` 任意：WebGPU高速化の全作業を完了判定する — 正式完了
   - 合格：同段階の全作業について、実物・独立した合格判定・証拠の所在がある
 
 ## 任意：追加通信規格
 作業 12件・完了判定 1件 / 初期必須：いいえ
 
-- [ ] `task.optional_more_protocols.001` GraphQLへの利用要求を定量化する — 未着手
+- [x] `task.optional_more_protocols.001` GraphQLへの利用要求を定量化する — 正式完了
   - 合格：RESTで不足する問い合わせが特定される
-- [ ] `task.optional_more_protocols.002` GraphQLの問い合わせ深さと計算量を制限する — 未着手
+- [x] `task.optional_more_protocols.002` GraphQLの問い合わせ深さと計算量を制限する — 正式完了
   - 合格：過剰問い合わせを拒否
-- [ ] `task.optional_more_protocols.003` GraphQLの資源単位の認可を実装する — 未着手
+- [x] `task.optional_more_protocols.003` GraphQLの資源単位の認可を実装する — 正式完了
   - 合格：他利用者のデータを参照できない
-- [ ] `task.optional_more_protocols.004` gRPCの必要なプロセス間通信を特定する — 実施中または要再検証
+- [x] `task.optional_more_protocols.004` gRPCの必要なプロセス間通信を特定する — 正式完了
   - 合格：単一プロセスでは導入しない
-- [ ] `task.optional_more_protocols.005` Protocol Buffersの版互換試験を定義する — 実施中または要再検証
+- [x] `task.optional_more_protocols.005` Protocol Buffersの版互換試験を定義する — 正式完了
   - 合格：旧版フィールドを壊さない
-- [ ] `task.optional_more_protocols.006` Agent2Agentの必要な委任処理を特定する — 実施中または要再検証
+- [x] `task.optional_more_protocols.006` Agent2Agentの必要な委任処理を特定する — 正式完了
   - 合格：独立した実行主体が複数存在
-- [ ] `task.optional_more_protocols.007` Agent2Agentの承認と費用委譲を定義する — 実施中または要再検証
+- [x] `task.optional_more_protocols.007` Agent2Agentの承認と費用委譲を定義する — 正式完了
   - 合格：受託先へ無制限権限を渡さない
-- [ ] `task.optional_more_protocols.008` エディター接続規格を必要な場合だけ調査する — 実施中または要再検証
+- [x] `task.optional_more_protocols.008` エディター接続規格を必要な場合だけ調査する — 正式完了
   - 合格：対象エディターが決まっている
 - [x] `task.optional_more_protocols.009` Webhook受信の署名を検証する — 正式完了
   - 合格：認証に失敗した偽の通知を必ず拒否する
@@ -779,6 +779,6 @@
   - 合格：失った結果と再送を区別
 - [x] `task.optional_more_protocols.012` 各追加規格で共通中核を変更しない条件を検査する — 正式完了
   - 合格：変更が原則接続部に閉じる
-- [ ] `gate.optional_more_protocols.completed` 任意：追加通信規格の全作業を完了判定する — 未着手
+- [x] `gate.optional_more_protocols.completed` 任意：追加通信規格の全作業を完了判定する — 正式完了
   - 合格：同段階の全作業について、実物・独立した合格判定・証拠の所在がある
 

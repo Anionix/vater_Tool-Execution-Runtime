@@ -1,0 +1,6 @@
+body { font-family: system-ui, sans-serif; margin: 0; background: #fafafa; color: #1a1a1a; }
+main { max-width: 42rem; margin: 0 auto; padding: 1rem; }
+label { display: block; margin: 0.25rem 0; }
+#activity li[data-source="agent"] { border-left: 4px solid #6b4fbb; padding-left: 0.5rem; }
+#activity li[data-source="user"] { border-left: 4px solid #2a7a3b; padding-left: 0.5rem; }
+#webmcp-status[data-supported="false"] { color: #8a5a00; }

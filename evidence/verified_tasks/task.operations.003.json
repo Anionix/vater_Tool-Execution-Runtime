@@ -1,11 +1,11 @@
 {
   "task_id": "task.operations.003",
   "acceptance_criteria": "一変更が独立した検査単位",
-  "verified_on": "2026-11-27",
+  "verified_on": "2026-11-28",
   "verification_status": "passed",
   "executed": true,
   "report_path": "evidence/operations-phase-tests.xml",
-  "report_sha256": "5a380ebef28050ecbd93bc908601d27b4852420519874e8b13f05eaf0adad43c",
+  "report_sha256": "e8cd7d0e7f1b84aa3c9326677628d694971e484e7ba8977d95a17f5d145c9bc6",
   "source_sha256": {
     "scripts/verify_phase.py": "e9bf7a14813534653fb938125f53ec18d06878fd613573e68f1cdb298afa7290",
     "scripts/verify_task.py": "e5cb40b077332d3fcdca7603a8114c1561aea08028c4821b065975135123cf63",

@@ -1,0 +1,46 @@
+{
+  "task_id": "gate.optional_webmcp.completed",
+  "acceptance_criteria": "同段階の全作業について、実物・独立した合格判定・証拠の所在がある",
+  "verification_status": "passed",
+  "executed": true,
+  "verified_on": "2026-11-28",
+  "prerequisite_gates": [],
+  "tasks": [
+    "task.optional_webmcp.001",
+    "task.optional_webmcp.002",
+    "task.optional_webmcp.003",
+    "task.optional_webmcp.004",
+    "task.optional_webmcp.005",
+    "task.optional_webmcp.006",
+    "task.optional_webmcp.007",
+    "task.optional_webmcp.008",
+    "task.optional_webmcp.009",
+    "task.optional_webmcp.010",
+    "task.optional_webmcp.011",
+    "task.optional_webmcp.012"
+  ],
+  "report_path": "evidence/gates/optional_webmcp-tests.xml",
+  "report_sha256": "a96701ded203ed9e773969fbf161e3bb1be52243afa627d339087cdbc4ef78f9",
+  "source_sha256": {
+    "docs/optional/WEBMCP.md": "e07647b0b876db9feeccee26f98dd52f1d0058869e62e38b419514cad1daf576",
+    "evidence/optional/webmcp-compatibility.json": "b351be5d1e506b62e7b68da1889276108df3e40ebdd60fd21be66f5de33e627e",
+    "requirements-optional-py313.lock": "f7923dc88b5345679bcb434ba8350e368c4e916dc6fe9ecd9e245f452a23434d",
+    "scripts/verify_phase.py": "e9bf7a14813534653fb938125f53ec18d06878fd613573e68f1cdb298afa7290",
+    "scripts/webmcp_compatibility.py": "fabde39cb066a883a34f408995b9f0f20285c65160e7f7134f00ae7a04045fbe",
+    "src/vater_optional/webmcp_host.py": "aad404358d4fd8fac24a901208b750fab95e9b426bda3a958feee8dac2da3287",
+    "tests/test_webmcp.py": "273fba61386b320aa70bb4f83f73c982cc8c0201f0e9ea2fbab5b48a66efb2f8",
+    "web/webmcp/index.html": "21ef143afd8e2f8ab91160abd7806b820c4fa15db9221a9e54b03c02121d96a3",
+    "web/webmcp/style.css": "b556b5e89a787629029dbe79d06bf0cf09c5939edb97251930138013c292b682",
+    "web/webmcp/vater-webmcp.js": "6a86ccbafab35b02f6e6a7435d74fbe41da3f81ea5088af936320fa2757f9836"
+  },
+  "scope": "All 12 WebMCP tasks are done with executed evidence; this report reruns every mapped case in one session (21 cases) in Chrome for Testing 158.0.8127.36 here (Chromium 153.0.8010.12, Playwright 1.63.0's build, in CI), where document.modelContext exists only behind --enable-experimental-web-platform-features. Firefox, WebKit and Edge were not tested; the promotion conditions in docs/optional/WEBMCP.md are not met, so WebMCP stays an optional entry.",
+  "previous_report": {
+    "path": "evidence/gates/optional_webmcp-tests.xml",
+    "sha256": "190ca420fbef681c1324c7239abd52b06531657785fa2e648a102f0fd5d46141"
+  },
+  "refreshed_at": "2026-11-28T16:52:27Z",
+  "environment": {
+    "python": "3.13.18",
+    "platform": "Linux-6.18.44-fc-v880-x86_64-with-glibc2.39"
+  }
+}

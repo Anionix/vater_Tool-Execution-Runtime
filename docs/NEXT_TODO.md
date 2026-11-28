@@ -1,16 +1,19 @@
 # 次の作業
 
-契約段階の完了済み項目は `python scripts/verify_phase.py contracts --completed-only` で再検証できる。対象データの版（`task.contracts.007`）は、保存済みの版同士を比較できる。実行直前の対象の最新版を取得して照合する経路の証拠は未確認。
+作業台帳（[backlog/tasks.jsonl](../backlog/tasks.jsonl)）の351件は、任意段階を含めてすべて正式完了（`python backlog/validate_tasks.py` で集計）。残っているのは台帳の外の判断と確認で、どれも人が行う。
 
-- 正規化の基礎仕様は [RFC 8259](https://www.rfc-editor.org/rfc/rfc8259.html)。キー順、空白、ダイジェスト計算は Vater のローカル契約として試験する。
-- 入力形式は [JSON Schema Draft 2020-12](https://json-schema.org/draft/2020-12) の検証器で試験する。
+## 人による確認が必要なもの
 
-「目的と境界」と「脅威・信頼境界」の完了判定を通過した。次の段階は「契約とデータの意味」。各項目の合格条件と前提は [作業台帳](../backlog/tasks.jsonl) が正本。
+- 「目的と境界」の段階の証拠（[evidence/gates/scope.json](../evidence/gates/scope.json)）は、README の内容が記録後に変わったため鮮度を失っている。`python scripts/release_decision.py` は、この1件を理由に初期公開と拡張公開の両方を止める。README の記述を人が確認し直してから、段階の証拠を作り直す。
+- 承認の記録（`config/local_tool.json`、`evidence/formal/SHA256SUMS`）は、利用者が明示した場合だけ更新する。
+- 外部の課題を作成する実接続の試験は、人が依頼したとき（`run-external-evidence` ラベル）だけ実行する。
+
+## 任意段階の判断
+
+WebAssembly 隔離、追加通信規格、WebMCP、WebGPU は試作と計測まで完了し、いずれもリリースには導入しないと判断した。理由と再検討の条件は [OPTIONAL_PROTOTYPES.md](OPTIONAL_PROTOTYPES.md) にある。条件が変わった場合（外部作成コードの受付、一覧を求める利用者、フラグなしの WebMCP、ハードウェアの GPU）に、その段階の記録を見直す。
 
 ## 進捗と検証
 
-- 全体の正式完了数は `python backlog/validate_tasks.py` で集計する。
-- 第2段階の証拠に対応する試験を再実行するには、固定済みのPython 3.13環境で `python scripts/verify_phase.py trust` を実行する。複数の項目が同じ試験を使う場合、実行は一度で済む。
-- 同じ作業ツリーと環境で全試験を既に実行した場合は、その結果を `python scripts/verify_phase.py trust --report /path/to/results.xml` に渡す。保存時点のファイルと報告書の検査値は `python scripts/verify_phase.py trust --snapshot` で照合できる。
-
-[第1段階の証拠](../evidence/gates/scope.json)・[第2段階の証拠](../evidence/gates/trust.json)
+- 段階ごとの証拠に対応する試験は `python scripts/verify_phase.py <段階>` で再実行できる。複数の項目が同じ試験を使う場合、実行は一度で済む。
+- 保存時点のファイルと報告書の検査値は `python scripts/verify_phase.py <段階> --snapshot` で照合できる。
+- 証拠の鮮度は `python scripts/evidence_freshness.py` で一覧でき、段階の証拠は `--refresh-gate <段階>` で試験を再実行して結び直す（失敗した場合は記録を変えない）。
