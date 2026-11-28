@@ -6,7 +6,6 @@ from pathlib import Path
 import json
 import sqlite3
 import threading
-import time
 
 import anyio
 import pytest
@@ -66,7 +65,11 @@ def test_cancel_db_busy_remains_in_journal_then_recovers(tmp_path):
     assert ledger.get(op.operation_id).state == 'cancelled'
 
 
-def test_running_live_owner_is_never_overwritten(tmp_path):
+def test_running_live_owner_is_never_overwritten(tmp_path, monkeypatch):
+    # A controlled clock: with time.sleep, a slow runner could pass the 280 ms lease before
+    # the first replay (seen in CI), which is not what this test is about.
+    clock = {'now': 1_800_000_000_000}
+    monkeypatch.setattr(LeasedLedger, '_now', staticmethod(lambda: clock['now']))
     ledger = LeasedLedger(tmp_path/'data.sqlite3')
     session = ledger.new_session(duration_ms=280)
     op = operation(ledger)
@@ -76,7 +79,7 @@ def test_running_live_owner_is_never_overwritten(tmp_path):
     assert store.replay(ledger)['pending_owner'] == 1
     assert ledger.get(op.operation_id).state == 'dispatched'
     assert len(store.list_intents()) == 1
-    time.sleep(.31)
+    clock['now'] += 310  # past the 280 ms lease
     assert store.replay(ledger)['expired_unknown'] == 1
     assert ledger.get(op.operation_id).state == 'unknown'
     assert store.list_intents() == []
