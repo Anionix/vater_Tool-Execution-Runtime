@@ -1,0 +1,85 @@
+{
+ "playwright": "1.63.0",
+ "results": [
+  {
+   "configuration": "chromium-headless-shell, experimental flag",
+   "browser": "158.0.8127.36",
+   "flags": [
+    "--enable-experimental-web-platform-features"
+   ],
+   "secure_context": true,
+   "webmcp_detected": true,
+   "reason": "document.modelContext",
+   "registered_tools": [
+    "add_numbers",
+    "checked_add",
+    "send_report"
+   ],
+   "agent_call": "completed",
+   "agent_invalid_call": "invalid_arguments",
+   "user_click_works": true
+  },
+  {
+   "configuration": "chromium-headless-shell, default",
+   "browser": "158.0.8127.36",
+   "flags": [],
+   "secure_context": true,
+   "webmcp_detected": false,
+   "reason": "no_model_context",
+   "registered_tools": [],
+   "agent_call": null,
+   "agent_invalid_call": null,
+   "user_click_works": true
+  },
+  {
+   "configuration": "chromium (new headless), experimental flag",
+   "browser": "158.0.8127.36",
+   "flags": [
+    "--enable-experimental-web-platform-features"
+   ],
+   "secure_context": true,
+   "webmcp_detected": true,
+   "reason": "document.modelContext",
+   "registered_tools": [
+    "add_numbers",
+    "checked_add",
+    "send_report"
+   ],
+   "agent_call": "completed",
+   "agent_invalid_call": "invalid_arguments",
+   "user_click_works": true
+  },
+  {
+   "configuration": "chromium (new headless), default",
+   "browser": "158.0.8127.36",
+   "flags": [],
+   "secure_context": true,
+   "webmcp_detected": false,
+   "reason": "no_model_context",
+   "registered_tools": [],
+   "agent_call": null,
+   "agent_invalid_call": null,
+   "user_click_works": true
+  },
+  {
+   "configuration": "chromium-headless-shell, experimental flag, insecure origin",
+   "browser": "158.0.8127.36",
+   "flags": [
+    "--enable-experimental-web-platform-features"
+   ],
+   "secure_context": false,
+   "webmcp_detected": false,
+   "reason": "insecure_context",
+   "registered_tools": [],
+   "agent_call": null,
+   "agent_invalid_call": null,
+   "user_click_works": true
+  }
+ ],
+ "not_available_here": [
+  "Firefox",
+  "WebKit (Safari)",
+  "Microsoft Edge",
+  "Chrome stable with a GPU"
+ ]
+}
