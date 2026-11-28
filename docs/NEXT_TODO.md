@@ -4,7 +4,7 @@
 
 ## 人による確認が必要なもの
 
-- 「目的と境界」の段階の証拠（[evidence/gates/scope.json](../evidence/gates/scope.json)）は、README の内容が記録後に変わったため鮮度を失っている。`python scripts/release_decision.py` は、この1件を理由に初期公開と拡張公開の両方を止める。README の記述を人が確認し直してから、段階の証拠を作り直す。
+- 「目的と境界」の段階の証拠（[evidence/gates/scope.json](../evidence/gates/scope.json)）は、README を人が確認し直したうえで2026-11-28に作り直した。18件の作業の合格条件を現在のファイルに照らす試験（`tests/test_scope_reconciliation.py`）がすべて通り、`python scripts/release_decision.py` は初期公開と拡張公開の両方を許可する。README か範囲の契約（`docs/SCOPE_CONTRACT.md`）が再び変わったら、人が文面を確認してから `python scripts/rebuild_scope_gate.py --rechecked README.md`（確認したファイルごとに指定）で作り直す。確認の指定がなければ作り直しは拒否される。
 - 承認の記録（`config/local_tool.json`、`evidence/formal/SHA256SUMS`）は、利用者が明示した場合だけ更新する。
 - 外部の課題を作成する実接続の試験は、人が依頼したとき（`run-external-evidence` ラベル）だけ実行する。
 
