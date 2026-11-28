@@ -1,0 +1,25 @@
+{
+  "task_id": "task.optional_more_protocols.003",
+  "acceptance_criteria": "他利用者のデータを参照できない",
+  "verified_on": "2026-11-28",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/optional-protocols-tests.xml",
+  "report_sha256": "7220dcfc9a8b5dddd659d98874b6e9fc22fa7f9bba267fdce5aeada6c5d8647e",
+  "source_sha256": {
+    "docs/optional/MORE_PROTOCOLS.md": "6ce24d9fc53916e7e7e820c8e220cf79b571370ad5f30153c08a2513ee0da9a1",
+    "requirements-optional-py313.lock": "f7923dc88b5345679bcb434ba8350e368c4e916dc6fe9ecd9e245f452a23434d",
+    "src/vater_optional/graphql_api.py": "db0262caa6aa32b06565828fd836c0a7b374c55c57a4b8a47652906de306d25b",
+    "tests/test_graphql_api.py": "86a5b1e35de97c4bffe6794b5c57c3793814d11f83006138eedf0c7998ee36ee"
+  },
+  "scope": "The principal comes only from the host-issued credential; another principal's job reads exactly like a missing one by id, variable, alias, fragment, inline fragment and in lists, no schema field or argument names a principal, and a principal claimed in the request body is ignored over HTTP.",
+  "test_cases": [
+    "tests/test_graphql_api.py::test_another_principals_job_cannot_be_read_in_any_form[by_id]",
+    "tests/test_graphql_api.py::test_another_principals_job_cannot_be_read_in_any_form[variable]",
+    "tests/test_graphql_api.py::test_another_principals_job_cannot_be_read_in_any_form[alias]",
+    "tests/test_graphql_api.py::test_another_principals_job_cannot_be_read_in_any_form[fragment]",
+    "tests/test_graphql_api.py::test_another_principals_job_cannot_be_read_in_any_form[inline_fragment]",
+    "tests/test_graphql_api.py::test_lists_hold_only_the_principals_own_jobs_and_no_owner_is_exposed",
+    "tests/test_graphql_api.py::test_the_http_principal_comes_only_from_the_credential"
+  ]
+}

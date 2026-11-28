@@ -31,7 +31,7 @@
     "task.contracts.024"
   ],
   "report_path": "evidence/gates/contracts-tests.xml",
-  "report_sha256": "07afc7b12061a1666ef523f954aa7a383a375fd144e1ab848674d8aef414b6f2",
+  "report_sha256": "6370bd899e8f835c5216fe792b7fb107a1ef3d2468d6411a4d02ef1f10c2c790",
   "source_sha256": {
     "config/limits.json": "f10b9be0d6b196cb58aa5175dcd7a7ee45b481087c24834743408b60b387b20f",
     "config/local_tool.json": "9872e59e51908fd3f95d820d18e6215eac8677d7c4441d6a498f60e34e644731",
@@ -116,17 +116,17 @@
     "tests/test_runtime_contracts.py": "0999ababce47875e64d2bd06b02db2dc7fdf51f6ce3668005681e0cacd4c8019",
     "tests/test_sqlite_cancel_wait.py": "2178eca869a58f35aa46a0d66daec1e89382ad0a01ca7268c070c4896647d840",
     "tests/test_static_policy.py": "632f69b8b92f4bea3bb29ca990e54c535da5a9d2c0d13367af4f4f445d999ef8",
-    "tests/test_sync_completed_issues.py": "bd0aebaa835af347fb5f74c5a8b5460c0244e739644ce03d0fe17db39b6e23cc",
+    "tests/test_sync_completed_issues.py": "74d5f6082930b6a138343eea9bba6cfe93072c6620c74c45e23cfa54fad12209",
     "tests/test_test_report_gate.py": "a28b035235412c107cb15d1c286472e6b9ec041fdc0b6a04ca240cac06725429",
     "tests/test_unicode_input_validation.py": "0fedc482595548773df14b88a5e951d8e280c5d798fe771add72ae5b46e1eba9",
     "tests/test_worker_bridge.py": "65ca1a471c63634e2ff8095917e7e2714bcbeae607db1c77324169c06a71a991",
     "tests/test_worker_leases.py": "ba3f35e12ce14cc39f403cdbd2c994345811a9a3e3ecce7d71f71ce6a0ee9888"
   },
   "previous_report": {
-    "path": "evidence/contract-completion-tests.xml",
-    "sha256": "66bba61ba6c75625adccdd91081be4e22a2c2329571d54b0e84c0978ec73a3af"
+    "path": "evidence/gates/contracts-tests.xml",
+    "sha256": "07afc7b12061a1666ef523f954aa7a383a375fd144e1ab848674d8aef414b6f2"
   },
-  "refreshed_at": "2026-11-27T05:50:50Z",
+  "refreshed_at": "2026-11-28T16:40:20Z",
   "environment": {
     "python": "3.13.18",
     "platform": "Linux-6.18.44-fc-v880-x86_64-with-glibc2.39"

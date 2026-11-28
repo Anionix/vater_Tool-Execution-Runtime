@@ -1,0 +1,23 @@
+{
+  "task_id": "task.optional_webgpu.002",
+  "acceptance_criteria": "入出力・精度を固定したCPU参照実装を保存する",
+  "verified_on": "2026-11-28",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/optional-webgpu-tests.xml",
+  "report_sha256": "62bd7596b19924905abddb2d02b6bc5de6a4f58bd3300e4835cb7bd0c200ac51",
+  "source_sha256": {
+    "docs/optional/WEBGPU.md": "5b7367a19388c5a92e8e13c69cddb4bd56eef41d3876e6f15f8bd08b88e97b55",
+    "requirements-optional-py313.lock": "f7923dc88b5345679bcb434ba8350e368c4e916dc6fe9ecd9e245f452a23434d",
+    "src/vater_optional/matmul.py": "d6b6f3ebf8d8f9b7f350308f20055a5f895a412afceeb116c0065e40d5c8824f",
+    "src/vater_optional/webmcp_host.py": "aad404358d4fd8fac24a901208b750fab95e9b426bda3a958feee8dac2da3287",
+    "tests/test_webgpu.py": "eaf47ca6d646a3dfad1da504b8a73490df17bd450989af3814cac61b1f2af00d",
+    "web/webgpu/index.html": "078b8d3f4af8807fad55c66e429abce5bc554ac08c4bf15e557bdd9a4917bab6",
+    "web/webgpu/matmul.js": "845e0a1d088e9add9d0132f420c042b02ecc795d2679b0f6d7d72ccb998edc8f",
+    "web/webgpu/matmul.wgsl": "5cb13bf455cb5e14fa3b0113568c58dba80ada4d94ecbe376bb1b0ffaf5c86bb"
+  },
+  "scope": "The Python CPU reference fixes inputs (seeded, float32), output (float32) and precision (the exact sum rounded once), checked against exact rational arithmetic.",
+  "test_cases": [
+    "tests/test_webgpu.py::test_the_cpu_reference_is_the_exactly_rounded_sum"
+  ]
+}

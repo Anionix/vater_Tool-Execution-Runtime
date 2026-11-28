@@ -1,0 +1,22 @@
+{
+  "task_id": "task.optional_more_protocols.001",
+  "acceptance_criteria": "RESTで不足する問い合わせが特定される",
+  "verified_on": "2026-11-28",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/optional-protocols-tests.xml",
+  "report_sha256": "7220dcfc9a8b5dddd659d98874b6e9fc22fa7f9bba267fdce5aeada6c5d8647e",
+  "source_sha256": {
+    "docs/optional/MORE_PROTOCOLS.md": "6ce24d9fc53916e7e7e820c8e220cf79b571370ad5f30153c08a2513ee0da9a1",
+    "evidence/optional/graphql-demand.json": "c569988afaf188f478fa6c9dcac6cfa97de86bdeaaec9f3cd36ebbd686ea1c76",
+    "requirements-optional-py313.lock": "f7923dc88b5345679bcb434ba8350e368c4e916dc6fe9ecd9e245f452a23434d",
+    "scripts/measure_graphql_demand.py": "64ae7d7bc3c489e87ecdf95f764d4b92c634b994850b4ca8c53c6b47535338fa",
+    "src/vater_optional/graphql_api.py": "db0262caa6aa32b06565828fd836c0a7b374c55c57a4b8a47652906de306d25b",
+    "src/verified_execution/http_local.py": "3a9f0478fd2f8dd751973baefca8173f15f10007f105ce46c77069aca7ae394b",
+    "tests/test_graphql_api.py": "86a5b1e35de97c4bffe6794b5c57c3793814d11f83006138eedf0c7998ee36ee"
+  },
+  "scope": "Measured over real loopback HTTP against the local REST interface for 20 jobs: REST needs 20 requests for their states, 21 with the tool schema (7,527 bytes against GraphQL's 2,707), and cannot list jobs by state at all; GraphQL answers each in one request. No current consumer needs these queries, so GraphQL is not introduced into the release.",
+  "test_cases": [
+    "tests/test_graphql_api.py::test_the_queries_rest_cannot_answer_in_one_request_are_measured"
+  ]
+}

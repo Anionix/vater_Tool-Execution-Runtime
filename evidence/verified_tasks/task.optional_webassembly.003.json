@@ -1,0 +1,24 @@
+{
+  "task_id": "task.optional_webassembly.003",
+  "acceptance_criteria": "無許可機能は呼び出せない",
+  "verified_on": "2026-11-28",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/optional-webassembly-tests.xml",
+  "report_sha256": "f25ca2e85b4e5a78ffea8f671c840cb0afcb8d62ee7bc157900e065333766046",
+  "source_sha256": {
+    "docs/optional/WEBASSEMBLY.md": "209c3c9c1821543b62734408fbbacf3c6b40249c4470b40618c0098b4d8dd436",
+    "requirements-optional-py313.lock": "f7923dc88b5345679bcb434ba8350e368c4e916dc6fe9ecd9e245f452a23434d",
+    "src/vater_optional/wasm_sandbox.py": "92d374bef62cf8d94ed644501cafc436a8a91b81e8faa7cf28f4ddc3136ce61e",
+    "tests/fixtures/wasm/approved.json": "a69de29aa04d84c37e0ae78756bd340935d1e5e4e9bef09beaed0408f0bac7e6",
+    "tests/fixtures/wasm/checked_add.wat": "0d4f3ef749afe9dd4aa96d3fb1e481a8d5cd3bb37512abc85c91c618dd203904",
+    "tests/test_wasm_sandbox.py": "84b984f5ae9f4727d325d184f3e32fa369fd61c0d280c3bd5135185e8b95d94c"
+  },
+  "scope": "A module may import only reviewed host functions that the run grants, with exactly the reviewed type; an unreviewed function, an ungranted one, an unknown grant or a mismatched type is refused before instantiation, so nothing outside the allowlist can be called.",
+  "test_cases": [
+    "tests/test_wasm_sandbox.py::test_only_reviewed_and_granted_host_functions_can_be_imported[vater-emit-grants0-import_not_granted]",
+    "tests/test_wasm_sandbox.py::test_only_reviewed_and_granted_host_functions_can_be_imported[vater-unknown-grants1-import_not_allowed]",
+    "tests/test_wasm_sandbox.py::test_only_reviewed_and_granted_host_functions_can_be_imported[host-spawn-grants2-import_not_allowed]",
+    "tests/test_wasm_sandbox.py::test_a_reviewed_import_with_another_type_is_refused"
+  ]
+}

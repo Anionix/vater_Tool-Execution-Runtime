@@ -741,6 +741,18 @@
   },
   {
    "workflow": "python-verification.yml",
+   "command": "python -m pip install --require-hashes --only-binary :all: -r requirements-optional-py313.lock",
+   "kind": "hash_locked",
+   "reason": "Installs the base lock unchanged plus the optional prototypes' packages, every artifact checked against its SHA-256; only the optional-prototypes job uses it."
+  },
+  {
+   "workflow": "python-verification.yml",
+   "command": "python -m playwright install --with-deps chromium",
+   "kind": "tool_pinned",
+   "reason": "The Chromium build named by the hash-locked Playwright 1.63.0 (one exact browser revision), downloaded only in the optional-prototypes job; it never builds a release."
+  },
+  {
+   "workflow": "python-verification.yml",
    "command": "python -m pip install --require-hashes --only-binary :all: -r requirements-build.lock",
    "kind": "hash_locked",
    "reason": "Installs exactly the reviewed build backend, checked against its SHA-256."

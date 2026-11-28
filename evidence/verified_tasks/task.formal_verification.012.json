@@ -1,13 +1,13 @@
 {
   "task_id": "task.formal_verification.012",
   "acceptance_criteria": "実際のRust関数を権限と承認の組合せで検査し、Pythonの認可判定と別の証拠を残す",
-  "verified_on": "2026-11-27",
+  "verified_on": "2026-11-28",
   "verification_status": "passed",
   "executed": true,
   "report_path": "evidence/formal-rust-tests.xml",
-  "report_sha256": "8a3d2e899b6e9ded0eff250b78643b68d1fcd913bc372966cd8aab8ff8b953b0",
+  "report_sha256": "f65e1f890630642b7f421f71cc97a18ea42cceadee8fd0c4493acfaf3da4c9cd",
   "source_sha256": {
-    ".github/workflows/python-verification.yml": "a879491debc06e2848298013fc6f1e55b35d3ccb781271fd7ffc2c7d4d0aebdb",
+    ".github/workflows/python-verification.yml": "9c2af5a962947ab1d5b726daee139332177cc2dafdc392fd87f049cf277464c0",
     "docs/FORMAL_VERIFICATION.md": "4db57395ddb9c9b19706c99e1fd29257243ea6a17d2a14c487dfe82545186a00",
     "docs/kani_assumptions.json": "d533d45cf5a5eaf105fc39f90affdad07ff1ad55b7644d622d555260428d489f",
     "evidence/formal/kani-results.json": "5fbe735304b72b27d1fee826e8c16f7b744850387ba4578c49b6343aee3d4474",

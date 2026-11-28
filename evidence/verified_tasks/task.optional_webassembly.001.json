@@ -1,0 +1,21 @@
+{
+  "task_id": "task.optional_webassembly.001",
+  "acceptance_criteria": "必要性がなければ導入しない",
+  "verified_on": "2026-11-28",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/optional-webassembly-tests.xml",
+  "report_sha256": "f25ca2e85b4e5a78ffea8f671c840cb0afcb8d62ee7bc157900e065333766046",
+  "source_sha256": {
+    "docs/optional/WEBASSEMBLY.md": "209c3c9c1821543b62734408fbbacf3c6b40249c4470b40618c0098b4d8dd436",
+    "requirements-optional-py313.lock": "f7923dc88b5345679bcb434ba8350e368c4e916dc6fe9ecd9e245f452a23434d",
+    "src/vater_optional/wasm_sandbox.py": "92d374bef62cf8d94ed644501cafc436a8a91b81e8faa7cf28f4ddc3136ce61e",
+    "tests/fixtures/wasm/approved.json": "a69de29aa04d84c37e0ae78756bd340935d1e5e4e9bef09beaed0408f0bac7e6",
+    "tests/fixtures/wasm/checked_add.wat": "0d4f3ef749afe9dd4aa96d3fb1e481a8d5cd3bb37512abc85c91c618dd203904",
+    "tests/test_wasm_sandbox.py": "84b984f5ae9f4727d325d184f3e32fa369fd61c0d280c3bd5135185e8b95d94c"
+  },
+  "scope": "The released runtime executes no externally written code, so the WebAssembly runtime is not introduced into the release: pyproject.toml packages only verified_execution and verified_execution_contracts, requirements-py313.lock has no wasmtime, and no release module imports it. wasmtime 50.0.1 is only in the optional prototypes' lock; docs/optional/WEBASSEMBLY.md records the decision.",
+  "test_cases": [
+    "tests/test_wasm_sandbox.py::test_the_release_neither_ships_nor_locks_the_webassembly_runtime"
+  ]
+}

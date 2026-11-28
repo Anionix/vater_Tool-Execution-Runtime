@@ -1,13 +1,13 @@
 {
   "task_id": "task.operations.001",
   "acceptance_criteria": "Pythonの本番候補は依存版を固定し、未導入のLean/Kaniを成功扱いしない",
-  "verified_on": "2026-11-27",
+  "verified_on": "2026-11-28",
   "verification_status": "passed",
   "executed": true,
   "report_path": "evidence/operations-phase-tests.xml",
-  "report_sha256": "5a380ebef28050ecbd93bc908601d27b4852420519874e8b13f05eaf0adad43c",
+  "report_sha256": "e8cd7d0e7f1b84aa3c9326677628d694971e484e7ba8977d95a17f5d145c9bc6",
   "source_sha256": {
-    ".github/workflows/python-verification.yml": "a879491debc06e2848298013fc6f1e55b35d3ccb781271fd7ffc2c7d4d0aebdb",
+    ".github/workflows/python-verification.yml": "9c2af5a962947ab1d5b726daee139332177cc2dafdc392fd87f049cf277464c0",
     "scripts/check_toolchains.py": "db0d0461391b3f086bc7dab5069dcfc3e3d0fe99dc2b0cb21685b80756501890",
     "tests/test_toolchain_separation.py": "8e4cb4dd31964b7577b0e3f058e4acf30e9833c9a9b5d3ad9f8869ae802a44e2"
   },

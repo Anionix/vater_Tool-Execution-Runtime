@@ -1,0 +1,19 @@
+{
+  "task_id": "task.optional_more_protocols.008",
+  "acceptance_criteria": "対象エディターが決まっている",
+  "verified_on": "2026-11-28",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/optional-protocols-tests.xml",
+  "report_sha256": "7220dcfc9a8b5dddd659d98874b6e9fc22fa7f9bba267fdce5aeada6c5d8647e",
+  "source_sha256": {
+    "docs/optional/MORE_PROTOCOLS.md": "6ce24d9fc53916e7e7e820c8e220cf79b571370ad5f30153c08a2513ee0da9a1",
+    "evidence/mcp-conformance/results.json": "e0010b89360f6f56a59ea20a5aba59cecf7d92d79dbb15217128916e4eeac468",
+    "server_mcp.py": "4445686917724617d7be5ebc8ae316417b1d0c029f6a8ff904251c1779ccc877",
+    "tests/test_more_protocols.py": "533930e69da6d223f6cdc9723957bd7af855bf68de4a8e13cf86f5e8411c0cd0"
+  },
+  "scope": "The target editors are decided (Claude Code and Visual Studio Code, as MCP clients of the stdio server); the official conformance run passes tools-list, tools-call-simple-text and tools-call-error, so no further editor protocol is investigated or implemented.",
+  "test_cases": [
+    "tests/test_more_protocols.py::test_the_target_editors_are_decided_and_connect_through_mcp"
+  ]
+}

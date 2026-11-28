@@ -1,13 +1,13 @@
 {
   "task_id": "task.operations.017",
   "acceptance_criteria": "初期Python公開ゲートと追加機能の必須ゲートが全て合格した場合にだけ拡張版を公開する",
-  "verified_on": "2026-11-27",
+  "verified_on": "2026-11-28",
   "verification_status": "passed",
   "executed": true,
   "report_path": "evidence/operations-phase-tests.xml",
-  "report_sha256": "5a380ebef28050ecbd93bc908601d27b4852420519874e8b13f05eaf0adad43c",
+  "report_sha256": "e8cd7d0e7f1b84aa3c9326677628d694971e484e7ba8977d95a17f5d145c9bc6",
   "source_sha256": {
-    ".github/workflows/python-verification.yml": "a879491debc06e2848298013fc6f1e55b35d3ccb781271fd7ffc2c7d4d0aebdb",
+    ".github/workflows/python-verification.yml": "9c2af5a962947ab1d5b726daee139332177cc2dafdc392fd87f049cf277464c0",
     "scripts/evidence_freshness.py": "36da33be60da713a9aebeb0e7d8b55852d425f86931b33747b38af2d10a6743e",
     "scripts/release_decision.py": "a2e1ad5beef2bc3947f5ef58b4b97e30d2eac3a5c65c9e90849350add546db93",
     "tests/test_release_decision.py": "077fd95840e6d4fb2ac960b492a95e31a98f4229bbcf6fb058400a52070a5cea"

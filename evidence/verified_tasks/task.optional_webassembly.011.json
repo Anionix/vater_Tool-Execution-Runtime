@@ -1,0 +1,21 @@
+{
+  "task_id": "task.optional_webassembly.011",
+  "acceptance_criteria": "未承認コードを起動しない",
+  "verified_on": "2026-11-28",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/optional-webassembly-tests.xml",
+  "report_sha256": "f25ca2e85b4e5a78ffea8f671c840cb0afcb8d62ee7bc157900e065333766046",
+  "source_sha256": {
+    "docs/optional/WEBASSEMBLY.md": "209c3c9c1821543b62734408fbbacf3c6b40249c4470b40618c0098b4d8dd436",
+    "requirements-optional-py313.lock": "f7923dc88b5345679bcb434ba8350e368c4e916dc6fe9ecd9e245f452a23434d",
+    "src/vater_optional/wasm_sandbox.py": "92d374bef62cf8d94ed644501cafc436a8a91b81e8faa7cf28f4ddc3136ce61e",
+    "tests/fixtures/wasm/approved.json": "a69de29aa04d84c37e0ae78756bd340935d1e5e4e9bef09beaed0408f0bac7e6",
+    "tests/fixtures/wasm/checked_add.wat": "0d4f3ef749afe9dd4aa96d3fb1e481a8d5cd3bb37512abc85c91c618dd203904",
+    "tests/test_wasm_sandbox.py": "84b984f5ae9f4727d325d184f3e32fa369fd61c0d280c3bd5135185e8b95d94c"
+  },
+  "scope": "Only modules whose SHA-256 the host approved are compiled: an altered, unlisted or extended module is refused without being compiled, and an approved digest of text-format source is refused as not a binary core module. The committed approval names exactly the fixture's binary.",
+  "test_cases": [
+    "tests/test_wasm_sandbox.py::test_an_unapproved_or_altered_module_is_never_compiled"
+  ]
+}

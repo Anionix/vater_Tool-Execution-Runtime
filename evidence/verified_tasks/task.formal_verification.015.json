@@ -1,11 +1,11 @@
 {
   "task_id": "task.formal_verification.015",
   "acceptance_criteria": "実装式をコピーしない同じ入力集合でPythonと移植後Rustを比較する",
-  "verified_on": "2026-11-27",
+  "verified_on": "2026-11-28",
   "verification_status": "passed",
   "executed": true,
   "report_path": "evidence/formal-rust-tests.xml",
-  "report_sha256": "8a3d2e899b6e9ded0eff250b78643b68d1fcd913bc372966cd8aab8ff8b953b0",
+  "report_sha256": "f65e1f890630642b7f421f71cc97a18ea42cceadee8fd0c4493acfaf3da4c9cd",
   "source_sha256": {
     "rust/vater_core/src/lib.rs": "e05b4b00fb4a53f2511aa1bf731b6f10c89b097c925f98e9e6484db044cab7c3",
     "rust/vater_core/tests/expected_values.rs": "14e9d3f57b2ebc5b6130f2a1cee0209027e99811b85ac95faa1825cb27b18106",

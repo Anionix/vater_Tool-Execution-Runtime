@@ -1,13 +1,13 @@
 {
   "task_id": "task.operations.012",
   "acceptance_criteria": "秘密値検出で失敗",
-  "verified_on": "2026-11-27",
+  "verified_on": "2026-11-28",
   "verification_status": "passed",
   "executed": true,
   "report_path": "evidence/operations-phase-tests.xml",
-  "report_sha256": "5a380ebef28050ecbd93bc908601d27b4852420519874e8b13f05eaf0adad43c",
+  "report_sha256": "e8cd7d0e7f1b84aa3c9326677628d694971e484e7ba8977d95a17f5d145c9bc6",
   "source_sha256": {
-    ".github/workflows/python-verification.yml": "a879491debc06e2848298013fc6f1e55b35d3ccb781271fd7ffc2c7d4d0aebdb",
+    ".github/workflows/python-verification.yml": "9c2af5a962947ab1d5b726daee139332177cc2dafdc392fd87f049cf277464c0",
     "scripts/audit_logs.py": "d587af4cae351de2a32975b76c79c007c9155d4c35884a1b4cc50ac68b69d174",
     "tests/test_log_audit.py": "87c84404829fdaf2b86031cd8c485835495849fa7dcf5bc82513042e4cba5658"
   },

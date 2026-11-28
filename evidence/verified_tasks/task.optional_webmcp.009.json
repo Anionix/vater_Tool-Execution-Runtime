@@ -1,0 +1,22 @@
+{
+  "task_id": "task.optional_webmcp.009",
+  "acceptance_criteria": "ページの基本機能が使える",
+  "verified_on": "2026-11-28",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/optional-webmcp-tests.xml",
+  "report_sha256": "d361a815987f1c87f01033802d7c434659dd1c6a7836806d0fe12a634f75a583",
+  "source_sha256": {
+    "docs/optional/WEBMCP.md": "cb74e486d520eddb90c8b1da22b93bd0ac9098b8a7c373f98f32a94ab89832d5",
+    "requirements-optional-py313.lock": "f7923dc88b5345679bcb434ba8350e368c4e916dc6fe9ecd9e245f452a23434d",
+    "src/vater_optional/webmcp_host.py": "aad404358d4fd8fac24a901208b750fab95e9b426bda3a958feee8dac2da3287",
+    "tests/test_webmcp.py": "cf416d736ee7a403ce64d421aeff1f70f914e3846755224bd3c4b7c0bfebac4a",
+    "web/webmcp/index.html": "21ef143afd8e2f8ab91160abd7806b820c4fa15db9221a9e54b03c02121d96a3",
+    "web/webmcp/style.css": "b556b5e89a787629029dbe79d06bf0cf09c5939edb97251930138013c292b682",
+    "web/webmcp/vater-webmcp.js": "06749c2d3e2f2c5bf436872454441eef45c4192cccb91b397236ced4c847c6cd"
+  },
+  "scope": "Without WebMCP the page says why and works as an ordinary page: both additions and the report submission (up to approval) run by clicks. Run in Chromium 158 (Playwright 1.63.0), where document.modelContext exists only with --enable-experimental-web-platform-features.",
+  "test_cases": [
+    "tests/test_webmcp.py::test_without_webmcp_the_page_still_works"
+  ]
+}

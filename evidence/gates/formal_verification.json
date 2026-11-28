@@ -28,9 +28,9 @@
     "task.formal_verification.020"
   ],
   "report_path": "evidence/gates/formal_verification-tests.xml",
-  "report_sha256": "390457c0d72da5977987d4267e7ba814bc50f3f5679999c7d22cca389ade8a80",
+  "report_sha256": "defb8de4e672ffb58e0c24f1d341f20849bf9da12ad097c6acee0a04d9650d12",
   "source_sha256": {
-    ".github/workflows/python-verification.yml": "a879491debc06e2848298013fc6f1e55b35d3ccb781271fd7ffc2c7d4d0aebdb",
+    ".github/workflows/python-verification.yml": "9c2af5a962947ab1d5b726daee139332177cc2dafdc392fd87f049cf277464c0",
     "docs/FORMAL_VERIFICATION.md": "4db57395ddb9c9b19706c99e1fd29257243ea6a17d2a14c487dfe82545186a00",
     "docs/kani_assumptions.json": "d533d45cf5a5eaf105fc39f90affdad07ff1ad55b7644d622d555260428d489f",
     "evidence/formal/SHA256SUMS": "ce04ef1ea448fc43e1a98da8f18ddeac2480b8de37f80eb2e736cff4e966ecf3",
@@ -60,9 +60,9 @@
   "scope": "All 20 formal verification tasks are done with executed evidence; this report reruns every mapped case in one session (153 cases). The Lean results (evidence/formal/lean-4.19.0.log) and the Kani results (CI run 46123196334, evidence/formal/kani-results.json) are CI or recorded runs whose hashes and records are re-checked; Lean and Kani are not run by this report. What stays unproved is listed in docs/FORMAL_VERIFICATION.md (task.formal_verification.020).",
   "previous_report": {
     "path": "evidence/gates/formal_verification-tests.xml",
-    "sha256": "530f46f9480d8a3a763c18d968a24a0f26da3ddca6ecbed0c4567db54d37bebf"
+    "sha256": "390457c0d72da5977987d4267e7ba814bc50f3f5679999c7d22cca389ade8a80"
   },
-  "refreshed_at": "2026-11-28T07:59:50Z",
+  "refreshed_at": "2026-11-28T16:36:16Z",
   "environment": {
     "python": "3.13.18",
     "platform": "Linux-6.18.44-fc-v880-x86_64-with-glibc2.39"

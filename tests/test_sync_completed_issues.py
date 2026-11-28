@@ -23,7 +23,13 @@ def remote(monkeypatch):
         for row in rows
     }
     completed = next(row["issue_number"] for row in rows if row["task_status"] == "done")
-    unfinished = next(row["issue_number"] for row in rows if row["task_status"] != "done")
+    unfinished = next((row["issue_number"] for row in rows if row["task_status"] != "done"), None)
+    if unfinished is None:
+        # Every task in the ledger is done: an open issue outside the completed set must stay
+        # open all the same, so the simulated repository holds one.
+        unfinished = max(issues) + 1
+        issues[unfinished] = {"number": unfinished, "title": "[task.synthetic.unfinished] Not a completed task",
+                              "state": "open"}
     issues[completed]["state"] = "open"
     updates = []
 
