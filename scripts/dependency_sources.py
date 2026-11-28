@@ -50,6 +50,9 @@ def classify(command: str) -> tuple[str, str]:
         return "hash_locked", "Installs exactly the reviewed lock, every artifact checked against its SHA-256."
     if "--require-hashes" in command and "requirements-build.lock" in command:
         return "hash_locked", "Installs exactly the reviewed build backend, checked against its SHA-256."
+    if re.fullmatch(r"cargo install --locked kani-verifier --version \d+\.\d+\.\d+", command):
+        return "tool_pinned", ("The Kani verifier at an exact version with its own lockfile, installed only in the "
+                               "formal-rust job; it never builds or runs the Python release.")
     if re.fullmatch(r"python -m pip install uv==\d+(\.\d+)*", command):
         return "tool_pinned", "The resolver itself, pinned to an exact version, used only to produce a lock candidate."
     return ("diagnostic_unpinned", "Offline or diagnostic tests against the newest allowed versions; never used to "
@@ -60,7 +63,7 @@ def workflow_installs(root: Path = ROOT) -> list[dict]:
     found = []
     for path in sorted((root / ".github" / "workflows").glob("*.yml")):
         for line in path.read_text(encoding="utf-8").splitlines():
-            if re.search(r"\b(pip install|uv pip (sync|install))\b", line):
+            if re.search(r"\b(pip install|uv pip (sync|install)|cargo install)\b", line):
                 command = line.split("run:", 1)[-1].strip()
                 kind, reason = classify(command)
                 found.append({"workflow": path.name, "command": command, "kind": kind, "reason": reason})

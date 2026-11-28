@@ -1,0 +1,12 @@
+[package]
+name = "vater_core"
+version = "0.1.0"
+edition = "2021"
+publish = false
+description = "Rust port of the pure decision functions of the Python core, verified with Kani"
+
+# No dependencies: the port and its tests use the standard library only.
+[dependencies]
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ["cfg(kani)"] }

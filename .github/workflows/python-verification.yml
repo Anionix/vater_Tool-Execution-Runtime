@@ -96,10 +96,45 @@ jobs:
           if-no-files-found: warn
           retention-days: 90
 
+  formal-rust:
+    # task.formal_verification.011 / 012 / 013 / 015: the Rust port is tested against the shared
+    # literal expected values and verified with Kani in a job of its own; no Python job installs a
+    # proof tool (task.operations.001).
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        with:
+          python-version: '3.13'
+      - name: Test the Rust port against the shared literal expected values
+        working-directory: rust/vater_core
+        run: cargo test --locked
+      - name: Install the pinned Kani verifier
+        run: cargo install --locked kani-verifier --version 0.68.0
+      - name: Set up Kani
+        run: cargo kani setup
+      - name: Verify the Rust port with Kani
+        working-directory: rust/vater_core
+        shell: bash
+        run: cargo kani 2>&1 | tee ../../kani-output.txt
+      - name: Require every audited harness to verify with all covers satisfied
+        run: python scripts/check_kani.py kani-output.txt --record evidence/formal/kani-results.json
+      - name: Keep the Kani output
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: kani-output
+          path: kani-output.txt
+          if-no-files-found: warn
+          retention-days: 90
+
   release-artifacts:
     # task.operations.006 / 008 / 009: artifacts are built and kept only after every verification
     # job (including the safety tests) and every security check of the release gate has passed.
-    needs: [offline-contracts, durable-state, dependency-vulnerabilities, official-mcp]
+    needs: [offline-contracts, durable-state, dependency-vulnerabilities, formal-rust, official-mcp]
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -196,14 +231,14 @@ jobs:
         run: python scripts/verify_phase.py minimum_validation
       - name: Verify minimum release tasks
         run: python scripts/verify_phase.py minimum_release
-      - name: Recheck completed durable operation tasks
-        run: python scripts/verify_phase.py durable_operations --completed-only
+      - name: Verify all durable operation tasks
+        run: python scripts/verify_phase.py durable_operations
       - name: Verify all model adapter tasks
         run: python scripts/verify_phase.py provider_adapters
       - name: Check the formal evidence source hashes
         run: sha256sum -c evidence/formal/SHA256SUMS
-      - name: Recheck implementation tests linked to formal evidence
-        run: python scripts/verify_phase.py formal_verification --completed-only
+      - name: Verify all formal verification tasks
+        run: python scripts/verify_phase.py formal_verification
       - name: Verify all local HTTP tasks
         run: python scripts/verify_phase.py http_interface
       - name: Verify all testing tasks (includes the regression registry)

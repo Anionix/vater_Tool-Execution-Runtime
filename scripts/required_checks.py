@@ -24,8 +24,9 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 WORKFLOW = ROOT / ".github" / "workflows" / "python-verification.yml"
 # Jobs that do not use the runtime dependency set: release-artifacts builds with its own
-# hash-locked backend (requirements-build.lock), so a runtime candidate does not change it.
-INDEPENDENT_OF_RUNTIME_DEPENDENCIES = frozenset({"release-artifacts"})
+# hash-locked backend (requirements-build.lock) and formal-rust checks the Rust port with its
+# own toolchain, so a runtime candidate changes neither.
+INDEPENDENT_OF_RUNTIME_DEPENDENCIES = frozenset({"release-artifacts", "formal-rust"})
 
 
 def run_steps(text: str) -> list[dict]:

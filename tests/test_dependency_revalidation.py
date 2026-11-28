@@ -27,9 +27,9 @@ def test_the_required_checks_are_every_run_step_of_the_release_verification_exce
     steps = required.run_steps(RELEASE)
     assert len(steps) == len(re.findall(r"^\s*run:", RELEASE, flags=re.M))
     # Only installs, and the build job with its own hash-locked backend, are left out.
-    assert required.INDEPENDENT_OF_RUNTIME_DEPENDENCIES == {"release-artifacts"}
+    assert required.INDEPENDENT_OF_RUNTIME_DEPENDENCIES == {"release-artifacts", "formal-rust"}
     assert commands == [step["command"] for step in steps if "pip install" not in step["command"]
-                        and step["job"] != "release-artifacts"]
+                        and step["job"] not in {"release-artifacts", "formal-rust"}]
     assert len(commands) >= 25
     phases = re.findall(r"run: (python scripts/verify_phase\.py [a-z_]+(?: --completed-only)?)", RELEASE)
     assert phases and set(phases) <= set(commands)

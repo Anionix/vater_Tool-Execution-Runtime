@@ -5,11 +5,11 @@
   "verification_status": "passed",
   "executed": true,
   "report_path": "evidence/operations-phase-tests.xml",
-  "report_sha256": "4ba44ed438cf5c62050443fe893879b4a13254d82c774b83030265d992ae7122",
+  "report_sha256": "5a380ebef28050ecbd93bc908601d27b4852420519874e8b13f05eaf0adad43c",
   "source_sha256": {
-    ".github/workflows/python-verification.yml": "ea6e336f303d9988bbf296d640b6915a04e858811345ca7457cac366709c752c",
+    ".github/workflows/python-verification.yml": "a879491debc06e2848298013fc6f1e55b35d3ccb781271fd7ffc2c7d4d0aebdb",
     "scripts/check_toolchains.py": "db0d0461391b3f086bc7dab5069dcfc3e3d0fe99dc2b0cb21685b80756501890",
-    "tests/test_toolchain_separation.py": "a7dcc166ff16fc1f5555872691f2dcf2a3cc67b648a6d059c84bf74ab7b136e0"
+    "tests/test_toolchain_separation.py": "8e4cb4dd31964b7577b0e3f058e4acf30e9833c9a9b5d3ad9f8869ae802a44e2"
   },
   "scope": "scripts/check_toolchains.py --require-locked-python runs in the locked CI job and fails unless every package of requirements-py313.lock is installed at its locked version. Lean (pinned 4.19.0) and Kani are only reported, as not_installed, version_mismatch or available; the script runs no proof and reports formal_proofs_run_here: false, so a missing toolchain is never counted as a pass. No workflow installs a proof toolchain; CI checks the recorded Lean evidence by its hashes only.",
   "test_cases": [

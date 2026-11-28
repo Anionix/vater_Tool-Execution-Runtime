@@ -1,0 +1,71 @@
+{
+ "_comment": [
+  "task.formal_verification.011 / 012 / 013: the Kani run of the formal-rust job, transcribed from its log",
+  "(artifact downloads are not reachable from the authoring environment). Every later run must reproduce",
+  "'harnesses' and 'summary' exactly (scripts/check_kani.py --record)."
+ ],
+ "provenance": {
+  "workflow": ".github/workflows/python-verification.yml",
+  "job": "formal-rust",
+  "run_id": 46123196334,
+  "job_id": 140911942736,
+  "head_sha": "2cec072",
+  "artifact": {
+   "name": "kani-output",
+   "id": 15254596551,
+   "retention_days": 90
+  }
+ },
+ "tools": {
+  "kani": "0.68.0",
+  "cbmc": "6.11.0",
+  "rust_toolchain": "nightly-2026-08-21 (pinned by Kani)"
+ },
+ "harnesses": {
+  "an_approval_admits_only_its_exact_unused_unexpired_binding": {
+   "verification": "SUCCESSFUL",
+   "covers_satisfied": 3,
+   "covers_total": 3
+  },
+  "permits_is_the_grant_policy_for_every_grant_and_request": {
+   "verification": "SUCCESSFUL",
+   "covers_satisfied": 3,
+   "covers_total": 3
+  },
+  "exactly_seven_of_the_forty_nine_transitions_are_allowed": {
+   "verification": "SUCCESSFUL",
+   "covers_satisfied": 1,
+   "covers_total": 1
+  },
+  "a_transition_is_allowed_exactly_when_it_is_listed": {
+   "verification": "SUCCESSFUL",
+   "covers_satisfied": 2,
+   "covers_total": 2
+  },
+  "every_unsigned_32_pair_adds_exactly_or_overflows": {
+   "verification": "SUCCESSFUL",
+   "covers_satisfied": 2,
+   "covers_total": 2
+  },
+  "checked_add_matches_the_specification_for_every_u64_pair": {
+   "verification": "SUCCESSFUL",
+   "covers_satisfied": 3,
+   "covers_total": 3
+  }
+ },
+ "summary": {
+  "verified": 6,
+  "failures": 0,
+  "total": 6
+ },
+ "check_statuses": {
+  "SATISFIED": 14,
+  "SUCCESS": 483,
+  "UNREACHABLE": 2
+ },
+ "notes": [
+  "Every cover statement (14) was SATISFIED: no harness is vacuous after its assumptions.",
+  "The unsupported-construct checks Kani adds for standard-library panic paths all have status SUCCESS, i.e. those paths are unreachable, so no unsupported construct weakens a proof.",
+  "The two UNREACHABLE checks are overflow assertions inside panic-message formatting, unreachable because no panic occurs."
+ ]
+}

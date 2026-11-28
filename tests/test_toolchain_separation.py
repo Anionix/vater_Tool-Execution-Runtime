@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from importlib import util
 from pathlib import Path
+import re
 import stat
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -67,10 +68,16 @@ def test_a_locked_environment_passes(monkeypatch):
 
 def test_python_workflows_install_no_proof_tools_and_the_locked_job_checks_the_environment():
     workflows = {path.name: path.read_text() for path in (ROOT / ".github" / "workflows").glob("*.yml")}
+    verification = workflows["python-verification.yml"]
+    jobs = {part.split(":", 1)[0].strip(): part
+            for part in re.split(r"\n  (?=[A-Za-z0-9_-]+:\n)", verification.split("\njobs:\n", 1)[1])}
+    # The Rust port's Kani run has a job of its own (task.formal_verification.011); no other job installs it.
     for name, text in workflows.items():
+        if name == "python-verification.yml":
+            text = "\n".join(body for job, body in jobs.items() if job != "formal-rust")
         for proof_tool in ("elan", "leanprover", "cargo-kani", "kani-verifier"):
             assert proof_tool not in text, (name, proof_tool)
-    verification = workflows["python-verification.yml"]
+    assert "kani-verifier" in jobs["formal-rust"] and "pip install" not in jobs["formal-rust"]
     locked_step = verification.index("python scripts/check_toolchains.py --require-locked-python")
     assert verification.index("--require-hashes -r requirements-py313.lock") < locked_step
     assert "sha256sum -c evidence/formal/SHA256SUMS" in verification  # recorded Lean evidence only

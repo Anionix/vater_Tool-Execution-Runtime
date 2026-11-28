@@ -1,7 +1,7 @@
 # Python先行版 — 元の351件の実装作業一覧
 
 - 元の識別子を変えず、Python版の条件に置き換えた台帳。
-- [x] が付くのは、前提条件と合格証拠がそろった293件。
+- [x] が付くのは、前提条件と合格証拠がそろった301件。
 - 実装機能と作業の合格は別。契約を変更した項目の古い合格証拠は無効。
 
 ## 目的・非目標・境界
@@ -399,15 +399,15 @@
   - 合格：定理ごとに公理一覧が残る
 - [x] `task.formal_verification.010` Leanの独立検査を行う — 正式完了
   - 合格：利用可能な検査器で再検査できる
-- [ ] `task.formal_verification.011` Rust移植を選んだ関数をKaniで検証する — 実施中または要再検証
+- [x] `task.formal_verification.011` Rust移植を選んだ関数をKaniで検証する — 正式完了
   - 合格：移植後のRust関数の全対象入力範囲を実Kaniで検査し、Python試験と区別する
-- [ ] `task.formal_verification.012` Rust移植した権限関数をKaniで検証する — 実施中または要再検証
+- [x] `task.formal_verification.012` Rust移植した権限関数をKaniで検証する — 正式完了
   - 合格：実際のRust関数を権限と承認の組合せで検査し、Pythonの認可判定と別の証拠を残す
-- [ ] `task.formal_verification.013` Kaniの仮定が検証対象を消していないか監査する — 実施中または要再検証
+- [x] `task.formal_verification.013` Kaniの仮定が検証対象を消していないか監査する — 正式完了
   - 合格：各仮定に正当化がある
 - [x] `task.formal_verification.014` Kaniの検証対象と未対応領域を記録する — 正式完了
   - 合格：Rustを採用しない場合は適用外、採用時は上限と仮定を記録する
-- [ ] `task.formal_verification.015` PythonとRustの独立した期待値を人が定義する — 実施中または要再検証
+- [x] `task.formal_verification.015` PythonとRustの独立した期待値を人が定義する — 正式完了
   - 合格：実装式をコピーしない同じ入力集合でPythonと移植後Rustを比較する
 - [x] `task.formal_verification.016` Lean仕様とPython・必要ならRustの境界値を比較する — 正式完了
   - 合格：Lean命題とPython実測を突き合わせ、Rust移植をした場合だけRustも一致させる
@@ -419,7 +419,7 @@
   - 合格：証明対象と実際の呼び出し経路を同じ識別子で追える
 - [x] `task.formal_verification.020` 任意形式証明が保証しない範囲を記録する — 正式完了
   - 合格：Python実行系、コンパイラ、SQLite、MCP、外部サービスの未証明前提が明記される
-- [ ] `gate.formal_verification.completed` 形式証明とコードの接続の全作業を完了判定する — 未着手
+- [x] `gate.formal_verification.completed` 形式証明とコードの接続の全作業を完了判定する — 正式完了
   - 合格：同段階の全作業について、実物・独立した合格判定・証拠の所在がある
 
 ## 各社モデルへの接続
@@ -771,11 +771,11 @@
   - 合格：受託先へ無制限権限を渡さない
 - [ ] `task.optional_more_protocols.008` エディター接続規格を必要な場合だけ調査する — 実施中または要再検証
   - 合格：対象エディターが決まっている
-- [ ] `task.optional_more_protocols.009` Webhook受信の署名を検証する — 未着手
+- [x] `task.optional_more_protocols.009` Webhook受信の署名を検証する — 正式完了
   - 合格：認証に失敗した偽の通知を必ず拒否する
-- [ ] `task.optional_more_protocols.010` イベントの重複と順序違いを検証する — 未着手
+- [x] `task.optional_more_protocols.010` イベントの重複と順序違いを検証する — 正式完了
   - 合格：複数通知で整合性を保つ
-- [ ] `task.optional_more_protocols.011` イベント配信の再接続方針を定義する — 未着手
+- [x] `task.optional_more_protocols.011` イベント配信の再接続方針を定義する — 正式完了
   - 合格：失った結果と再送を区別
 - [x] `task.optional_more_protocols.012` 各追加規格で共通中核を変更しない条件を検査する — 正式完了
   - 合格：変更が原則接続部に閉じる

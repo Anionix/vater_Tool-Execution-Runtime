@@ -5,7 +5,7 @@
   "verification_status": "passed",
   "executed": true,
   "report_path": "evidence/operations-phase-tests.xml",
-  "report_sha256": "4ba44ed438cf5c62050443fe893879b4a13254d82c774b83030265d992ae7122",
+  "report_sha256": "5a380ebef28050ecbd93bc908601d27b4852420519874e8b13f05eaf0adad43c",
   "source_sha256": {
     "config/monitoring.json": "32bb7715f5d702259c1c3515b0b9f7845358a67ceeb41764f5979cf1f8ef1711",
     "scripts/monitor_operations.py": "202fd1c2f25160eebb88b57a3da58d7f395b40deeecd4e4aeeb4eda2eb7c9088",

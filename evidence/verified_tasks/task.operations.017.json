@@ -5,9 +5,9 @@
   "verification_status": "passed",
   "executed": true,
   "report_path": "evidence/operations-phase-tests.xml",
-  "report_sha256": "4ba44ed438cf5c62050443fe893879b4a13254d82c774b83030265d992ae7122",
+  "report_sha256": "5a380ebef28050ecbd93bc908601d27b4852420519874e8b13f05eaf0adad43c",
   "source_sha256": {
-    ".github/workflows/python-verification.yml": "ea6e336f303d9988bbf296d640b6915a04e858811345ca7457cac366709c752c",
+    ".github/workflows/python-verification.yml": "a879491debc06e2848298013fc6f1e55b35d3ccb781271fd7ffc2c7d4d0aebdb",
     "scripts/evidence_freshness.py": "36da33be60da713a9aebeb0e7d8b55852d425f86931b33747b38af2d10a6743e",
     "scripts/release_decision.py": "a2e1ad5beef2bc3947f5ef58b4b97e30d2eac3a5c65c9e90849350add546db93",
     "tests/test_release_decision.py": "077fd95840e6d4fb2ac960b492a95e31a98f4229bbcf6fb058400a52070a5cea"

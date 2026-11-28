@@ -1,0 +1,28 @@
+{
+  "task_id": "task.optional_more_protocols.009",
+  "acceptance_criteria": "認証に失敗した偽の通知を必ず拒否する",
+  "verified_on": "2026-11-27",
+  "verification_status": "passed",
+  "executed": true,
+  "report_path": "evidence/more-protocols-tests.xml",
+  "report_sha256": "1601bd1757aac52db97776df7788582e82baf116cf554a977dbe787868907235",
+  "source_sha256": {
+    "docs/concurrency_inventory.json": "626767cf54322e5c68a1bfed8612be5b043428c70fdd9ae67ead98b9b01fec07",
+    "src/verified_execution/webhooks.py": "657076b60f34f43d1ded5c9b66b3831417058f1e690f6a8457701d04a517ffe5",
+    "tests/test_webhooks.py": "9f60e848e6b0f3b36e5072f383b9b7c04a6d145e992acd8b1ba99179a0286a3b",
+    "tests/unit_inventory.json": "2806d54f09dcb3dbe423de80c07709c1ad8818ea805811bbbf1cc1ef6335a800"
+  },
+  "scope": "src/verified_execution/webhooks.py accepts a delivery only with a valid HMAC-SHA256 signature of the raw body under a shared secret of at least 16 bytes, sent as sha256=<64 hex digits> and compared with hmac.compare_digest. Eight kinds of forged notification (no signature, another algorithm, the wrong secret, a tampered body, a truncated, upper-case, empty or non-hex digest) are refused with 401 before anything is parsed or stored.",
+  "test_cases": [
+    "tests/test_webhooks.py::test_a_signed_delivery_is_applied",
+    "tests/test_webhooks.py::test_a_forged_notification_is_always_refused_and_leaves_nothing[missing]",
+    "tests/test_webhooks.py::test_a_forged_notification_is_always_refused_and_leaves_nothing[other_algorithm]",
+    "tests/test_webhooks.py::test_a_forged_notification_is_always_refused_and_leaves_nothing[wrong_secret]",
+    "tests/test_webhooks.py::test_a_forged_notification_is_always_refused_and_leaves_nothing[tampered_body]",
+    "tests/test_webhooks.py::test_a_forged_notification_is_always_refused_and_leaves_nothing[truncated]",
+    "tests/test_webhooks.py::test_a_forged_notification_is_always_refused_and_leaves_nothing[uppercase]",
+    "tests/test_webhooks.py::test_a_forged_notification_is_always_refused_and_leaves_nothing[empty]",
+    "tests/test_webhooks.py::test_a_forged_notification_is_always_refused_and_leaves_nothing[not_hex]",
+    "tests/test_webhooks.py::test_signatures_are_compared_in_constant_time_and_need_a_real_secret"
+  ]
+}

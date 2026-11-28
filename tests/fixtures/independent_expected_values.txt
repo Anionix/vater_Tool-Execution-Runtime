@@ -1,0 +1,108 @@
+# task.formal_verification.015: expected values written as literals from the documented policy
+# (docs/FORMAL_VERIFICATION.md), never computed from either implementation. The Python suite
+# (tests/test_independent_expected_values.py) and the Rust port's suite
+# (rust/vater_core/tests/expected_values.rs) both read this file, so both implementations are
+# compared on exactly the same inputs.
+
+# add <left> <right> <ok:<sum> | OVERFLOW | OUT_OF_RANGE>
+add 0 0 ok:0
+add 1 1 ok:2
+add 100 200 ok:300
+add 65535 65536 ok:131071
+add 4294967295 0 ok:4294967295
+add 0 4294967295 ok:4294967295
+add 2147483648 2147483647 ok:4294967295
+add 4294967294 1 ok:4294967295
+add 4294967295 1 OVERFLOW
+add 2147483648 2147483648 OVERFLOW
+add 4294967295 4294967295 OVERFLOW
+add 4294967296 0 OUT_OF_RANGE
+add 0 4294967296 OUT_OF_RANGE
+add 18446744073709551615 0 OUT_OF_RANGE
+
+# transition <from> <to> <allowed | forbidden>: all 49 pairs
+transition received received forbidden
+transition received validated allowed
+transition received authorized forbidden
+transition received running forbidden
+transition received completed forbidden
+transition received rejected allowed
+transition received failed forbidden
+transition validated received forbidden
+transition validated validated forbidden
+transition validated authorized allowed
+transition validated running forbidden
+transition validated completed forbidden
+transition validated rejected allowed
+transition validated failed forbidden
+transition authorized received forbidden
+transition authorized validated forbidden
+transition authorized authorized forbidden
+transition authorized running allowed
+transition authorized completed forbidden
+transition authorized rejected forbidden
+transition authorized failed forbidden
+transition running received forbidden
+transition running validated forbidden
+transition running authorized forbidden
+transition running running forbidden
+transition running completed allowed
+transition running rejected forbidden
+transition running failed allowed
+transition completed received forbidden
+transition completed validated forbidden
+transition completed authorized forbidden
+transition completed running forbidden
+transition completed completed forbidden
+transition completed rejected forbidden
+transition completed failed forbidden
+transition rejected received forbidden
+transition rejected validated forbidden
+transition rejected authorized forbidden
+transition rejected running forbidden
+transition rejected completed forbidden
+transition rejected rejected forbidden
+transition rejected failed forbidden
+transition failed received forbidden
+transition failed validated forbidden
+transition failed authorized forbidden
+transition failed running forbidden
+transition failed completed forbidden
+transition failed rejected forbidden
+transition failed failed forbidden
+
+# permit <publisher: local | other> <tool> <destination | -> <revoked: yes | no>
+#        <deadline: - | future | now | past> <granted tools | -> <granted destinations | -> <allow | deny>
+permit local checked_add - no - checked_add - allow
+permit other checked_add - no - checked_add - deny
+permit local delete_file - no - checked_add - deny
+permit local checked_add_recorded - no - checked_add - deny
+permit local checked_add_recorded - no - checked_add,checked_add_recorded - allow
+permit local checked_add - yes - checked_add - deny
+permit local checked_add - no future checked_add - allow
+permit local checked_add - no now checked_add - deny
+permit local checked_add - no past checked_add - deny
+permit local github_test_create_issue github_issues no - github_test_create_issue github_issues allow
+permit local github_test_create_issue other_destination no - github_test_create_issue github_issues deny
+permit local github_test_create_issue github_issues no - github_test_create_issue - deny
+permit local github_test_create_issue github_issues no - checked_add github_issues deny
+permit other github_test_create_issue github_issues no - github_test_create_issue github_issues deny
+permit local github_test_create_issue github_issues yes future github_test_create_issue github_issues deny
+permit local github_test_create_issue github_issues no future github_test_create_issue,checked_add github_issues,other_destination allow
+permit local checked_add - no - - - deny
+permit local checked_add github_issues no - checked_add github_issues allow
+permit local checked_add other_destination no - checked_add github_issues deny
+permit other checked_add - yes past - - deny
+
+# approval <binding differs in: none | principal | tool | target | version | arguments | absent>
+#          <already used: yes | no> <expired at the ledger clock: yes | no> <admit | refuse>
+approval none no no admit
+approval none yes no refuse
+approval none no yes refuse
+approval none yes yes refuse
+approval principal no no refuse
+approval tool no no refuse
+approval target no no refuse
+approval version no no refuse
+approval arguments no no refuse
+approval absent no no refuse

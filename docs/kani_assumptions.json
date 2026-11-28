@@ -1,0 +1,71 @@
+{
+  "_comment": [
+    "task.formal_verification.013 / 014: every Kani harness of rust/vater_core/src/proofs.rs, its input domain, each",
+    "kani::assume with its justification, and the cover statements Kani must report as satisfied. A cover that is",
+    "satisfied shows the harness, after its assumptions, still reaches that case, so no assumption empties it.",
+    "tests/test_kani_assumptions.py keeps this file and the harness source identical; scripts/check_kani.py fails",
+    "the formal-rust CI job unless every harness here is verified and all of its covers are satisfied."
+  ],
+  "kani_version": "0.68.0",
+  "harnesses": {
+    "checked_add_matches_the_specification_for_every_u64_pair": {
+      "task": "task.formal_verification.011",
+      "function": "checked_add",
+      "input_domain": "every pair of u64 values",
+      "unwind": null,
+      "assumptions": [],
+      "covers": ["a sum within range", "an overflow", "an input out of range"],
+      "excluded": "Python integers above 2^64 - 1 are outside the port's u64 domain; Python refuses them as OUT_OF_RANGE (tests/test_core.py)."
+    },
+    "every_unsigned_32_pair_adds_exactly_or_overflows": {
+      "task": "task.formal_verification.011",
+      "function": "checked_add",
+      "input_domain": "every pair of u32 values (the whole valid input range)",
+      "unwind": null,
+      "assumptions": [],
+      "covers": ["the largest sum that fits", "the smallest overflow"],
+      "excluded": "None within the 32-bit range."
+    },
+    "a_transition_is_allowed_exactly_when_it_is_listed": {
+      "task": "task.formal_verification.011",
+      "function": "transition_allowed",
+      "input_domain": "every pair of the seven states",
+      "unwind": 8,
+      "assumptions": [
+        {
+          "expression": "from_index < 7 && to_index < 7",
+          "justification": "The two indices name one of the seven states; every other u8 value names no state (State::from_index returns None for it), so the assumption removes no pair of states. The covers show both an allowed and a forbidden pair are reached."
+        }
+      ],
+      "covers": ["an allowed transition", "a forbidden transition"],
+      "excluded": "None: all 49 pairs remain."
+    },
+    "exactly_seven_of_the_forty_nine_transitions_are_allowed": {
+      "task": "task.formal_verification.011",
+      "function": "transition_allowed",
+      "input_domain": "all 49 pairs, enumerated concretely",
+      "unwind": 8,
+      "assumptions": [],
+      "covers": ["all forty-nine pairs were examined"],
+      "excluded": "None."
+    },
+    "permits_is_the_grant_policy_for_every_grant_and_request": {
+      "task": "task.formal_verification.012",
+      "function": "permits",
+      "input_domain": "every grant (64-bit tool and destination sets, revoked or not, any or no deadline), publisher, tool index, optional destination index and clock value",
+      "unwind": null,
+      "assumptions": [],
+      "covers": ["a permitted request", "refused by tool or destination", "refused only by the deadline"],
+      "excluded": "Hosts with more than 64 registered tools or destinations (indices are refused at 64 and above). The clock is an input: a wrong host clock is outside the proof (docs/FORMAL_VERIFICATION.md)."
+    },
+    "an_approval_admits_only_its_exact_unused_unexpired_binding": {
+      "task": "task.formal_verification.012",
+      "function": "approval_admits",
+      "input_domain": "every reservation binding, approval binding, use flag, expiry, ledger clock, and a present or absent approval",
+      "unwind": null,
+      "assumptions": [],
+      "covers": ["an admitted approval", "refused for use or expiry", "refused for a different binding"],
+      "excluded": "Identifiers stand for the strings and the argument digest the ledger compares; that distinct canonical arguments never share a SHA-256 digest is a cryptographic assumption, not proved."
+    }
+  }
+}

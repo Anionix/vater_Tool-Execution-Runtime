@@ -99,6 +99,15 @@
                 "tests/test_process_kill.py::test_killed_while_the_destination_holds_the_create"]
     },
     {
+      "id": "S10", "kind": "sqlite", "status": "tested",
+      "sites": ["src/verified_execution/webhooks.py::WebhookReceiver._connect",
+                "src/verified_execution/webhooks.py::WebhookReceiver.receive"],
+      "race": "The sender delivers the same event twice at once, or a redelivery overlaps the first attempt.",
+      "guard": "Recording the delivery, applying it and marking it processed happen in one BEGIN IMMEDIATE transaction; the second delivery waits and then reads processed.",
+      "tests": ["tests/test_webhooks.py::test_concurrent_duplicates_apply_once",
+                "tests/test_webhooks.py::test_an_interrupted_delivery_is_applied_on_redelivery_and_a_resend_is_not"]
+    },
+    {
       "id": "T1", "kind": "thread", "status": "tested",
       "sites": ["src/verified_execution/cancellation.py::RequestCancellation.__init__"],
       "race": "A cancellation arrives while the request binds its new operation.",
