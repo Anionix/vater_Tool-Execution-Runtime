@@ -87,12 +87,17 @@ jobs:
           python-version: '3.13'
       - name: Query OSV for every locked package
         run: python -I scripts/scan_vulnerabilities.py --output osv-scan.json
+      - name: Query OSV for every package of the optional prototypes' lock
+        if: always()
+        run: python -I scripts/scan_vulnerabilities.py --lock requirements-optional-py313.lock --output osv-scan-optional.json
       - name: Keep the scan result
         if: always()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: osv-scan
-          path: osv-scan.json
+          path: |
+            osv-scan.json
+            osv-scan-optional.json
           if-no-files-found: warn
           retention-days: 90
 

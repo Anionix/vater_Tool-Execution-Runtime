@@ -50,6 +50,12 @@ def classify(command: str) -> tuple[str, str]:
         return "hash_locked", "Installs exactly the reviewed lock, every artifact checked against its SHA-256."
     if "--require-hashes" in command and "requirements-build.lock" in command:
         return "hash_locked", "Installs exactly the reviewed build backend, checked against its SHA-256."
+    if "--require-hashes" in command and "requirements-optional-py313.lock" in command:
+        return "hash_locked", ("Installs the base lock unchanged plus the optional prototypes' packages, every "
+                               "artifact checked against its SHA-256; only the optional-prototypes job uses it.")
+    if command == "python -m playwright install --with-deps chromium":
+        return "tool_pinned", ("The Chromium build named by the hash-locked Playwright 1.63.0 (one exact browser "
+                               "revision), downloaded only in the optional-prototypes job; it never builds a release.")
     if re.fullmatch(r"cargo install --locked kani-verifier --version \d+\.\d+\.\d+", command):
         return "tool_pinned", ("The Kani verifier at an exact version with its own lockfile, installed only in the "
                                "formal-rust job; it never builds or runs the Python release.")
@@ -63,7 +69,7 @@ def workflow_installs(root: Path = ROOT) -> list[dict]:
     found = []
     for path in sorted((root / ".github" / "workflows").glob("*.yml")):
         for line in path.read_text(encoding="utf-8").splitlines():
-            if re.search(r"\b(pip install|uv pip (sync|install)|cargo install)\b", line):
+            if re.search(r"\b(pip install|uv pip (sync|install)|cargo install|playwright install)\b", line):
                 command = line.split("run:", 1)[-1].strip()
                 kind, reason = classify(command)
                 found.append({"workflow": path.name, "command": command, "kind": kind, "reason": reason})
@@ -85,6 +91,10 @@ def build(root: Path = ROOT) -> dict:
         "packages": parse_lock(lock),
         "build_requirements": {"lock": "requirements-build.lock",
                                "packages": parse_lock((root / "requirements-build.lock").read_text(encoding="utf-8"))},
+        # task.optional_*: the prototypes' lock is the base lock plus wasmtime, graphql-core and Playwright.
+        "optional_requirements": {"lock": "requirements-optional-py313.lock", "input": "requirements-optional.in",
+                                  "packages": parse_lock((root / "requirements-optional-py313.lock")
+                                                         .read_text(encoding="utf-8"))},
         "installs": workflow_installs(root),
     }
 

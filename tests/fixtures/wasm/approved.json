@@ -1,0 +1,6 @@
+{
+ "_comment": "task.optional_webassembly.011: the modules a host may start, by SHA-256 of the binary. checked_add.wat compiled by wasmtime 50.0.1 wat2wasm; changing the module changes the digest and needs a new approval.",
+ "approved": {
+  "3b605a543bf51de98e6c9e20b491ff1f6f8c15e97d830e64488ed895cd4836bb": "checked_add (tests/fixtures/wasm/checked_add.wat)"
+ }
+}

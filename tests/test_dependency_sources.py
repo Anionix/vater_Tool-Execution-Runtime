@@ -48,6 +48,34 @@ def test_direct_requirements_match_pyproject_and_the_lock():
         assert locked[name] in SpecifierSet(specifier), (name, locked[name], specifier)
 
 
+def locked_hashes(name: str) -> dict[str, tuple[str, frozenset[str]]]:
+    found, current = {}, None
+    for line in (ROOT / name).read_text().splitlines():
+        if line and not line[0].isspace() and "==" in line:
+            current, version = line.split(" ", 1)[0].split("==")
+            found[current] = (version, frozenset())
+        elif current and "--hash=sha256:" in line:
+            digest = line.split("--hash=sha256:", 1)[1].split()[0]
+            found[current] = (found[current][0], found[current][1] | {digest})
+    return found
+
+
+def test_the_optional_lock_is_the_base_lock_unchanged_plus_the_prototype_packages():
+    base, optional = locked_hashes("requirements-py313.lock"), locked_hashes("requirements-optional-py313.lock")
+    assert {name: optional[name] for name in base} == base  # same versions, same artifact hashes
+    assert sorted(set(optional) - set(base)) == ["graphql-core", "greenlet", "playwright", "pyee", "wasmtime"]
+    declared = [line for line in (ROOT / "requirements-optional.in").read_text().splitlines()
+                if line and not line.startswith("#")]
+    assert declared == ["wasmtime==50.0.1", "graphql-core==3.3.2", "playwright==1.63.0"]
+    for line in declared:
+        name, version = line.split("==")
+        assert optional[name][0] == version and optional[name][1]
+    text = (ROOT / "requirements-optional-py313.lock").read_text()
+    for directive in ("--index-url", "--extra-index-url", "--find-links", "-e ", "git+", "file:", "http://", "https://"):
+        assert directive not in text, directive
+    assert RECORD["optional_requirements"]["packages"] == sources.parse_lock(text)
+
+
 def test_the_lock_names_no_other_source():
     text = (ROOT / "requirements-py313.lock").read_text()
     for directive in ("--index-url", "--extra-index-url", "--find-links", "-e ", "git+", "file:", "http://", "https://"):

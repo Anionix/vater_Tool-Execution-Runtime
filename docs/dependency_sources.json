@@ -313,6 +313,371 @@
    }
   ]
  },
+ "optional_requirements": {
+  "lock": "requirements-optional-py313.lock",
+  "input": "requirements-optional.in",
+  "packages": [
+   {
+    "name": "annotated-types",
+    "version": "0.8.0",
+    "hashes": 2,
+    "adopted_via": [
+     "-c requirements-py313.lock",
+     "pydantic"
+    ]
+   },
+   {
+    "name": "anyio",
+    "version": "4.16.0",
+    "hashes": 2,
+    "adopted_via": [
+     "-c requirements-py313.lock",
+     "verified-execution-prototype (pyproject.toml)",
+     "httpx2",
+     "mcp",
+     "sse-starlette",
+     "starlette"
+    ]
+   },
+   {
+    "name": "attrs",
+    "version": "26.1.0",
+    "hashes": 2,
+    "adopted_via": [
+     "-c requirements-py313.lock",
+     "jsonschema",
+     "referencing"
+    ]
+   },
+   {
+    "name": "cffi",
+    "version": "2.1.1",
+    "hashes": 100,
+    "adopted_via": [
+     "-c requirements-py313.lock",
+     "cryptography"
+    ]
+   },
+   {
+    "name": "click",
+    "version": "8.5.1",
+    "hashes": 2,
+    "adopted_via": [
+     "-c requirements-py313.lock",
+     "uvicorn"
+    ]
+   },
+   {
+    "name": "cryptography",
+    "version": "50.0.2",
+    "hashes": 59,
+    "adopted_via": [
+     "-c requirements-py313.lock",
+     "pyjwt"
+    ]
+   },
+   {
+    "name": "graphql-core",
+    "version": "3.3.2",
+    "hashes": 2,
+    "adopted_via": [
+     "-r requirements-optional.in"
+    ]
+   },
+   {
+    "name": "greenlet",
+    "version": "3.5.6",
+    "hashes": 79,
+    "adopted_via": [
+     "playwright"
+    ]
+   },
+   {
+    "name": "h11",
+    "version": "0.16.0",
+    "hashes": 2,
+    "adopted_via": [
+     "-c requirements-py313.lock",
+     "httpcore2",
+     "uvicorn"
+    ]
+   },
+   {
+    "name": "httpcore2",
+    "version": "2.16.2",
+    "hashes": 2,
+    "adopted_via": [
+     "-c requirements-py313.lock",
+     "httpx2"
+    ]
+   },
+   {
+    "name": "httpx2",
+    "version": "2.16.2",
+    "hashes": 2,
+    "adopted_via": [
+     "-c requirements-py313.lock",
+     "mcp"
+    ]
+   },
+   {
+    "name": "idna",
+    "version": "3.20",
+    "hashes": 2,
+    "adopted_via": [
+     "-c requirements-py313.lock",
+     "anyio",
+     "httpx2"
+    ]
+   },
+   {
+    "name": "iniconfig",
+    "version": "2.3.1",
+    "hashes": 2,
+    "adopted_via": [
+     "-c requirements-py313.lock",
+     "pytest"
+    ]
+   },
+   {
+    "name": "jsonschema",
+    "version": "4.26.0",
+    "hashes": 2,
+    "adopted_via": [
+     "-c requirements-py313.lock",
+     "verified-execution-prototype (pyproject.toml)",
+     "mcp"
+    ]
+   },
+   {
+    "name": "jsonschema-specifications",
+    "version": "2025.9.1",
+    "hashes": 2,
+    "adopted_via": [
+     "-c requirements-py313.lock",
+     "jsonschema"
+    ]
+   },
+   {
+    "name": "mcp",
+    "version": "2.3.0",
+    "hashes": 2,
+    "adopted_via": [
+     "-c requirements-py313.lock",
+     "verified-execution-prototype (pyproject.toml)"
+    ]
+   },
+   {
+    "name": "mcp-types",
+    "version": "2.3.0",
+    "hashes": 2,
+    "adopted_via": [
+     "-c requirements-py313.lock",
+     "mcp"
+    ]
+   },
+   {
+    "name": "opentelemetry-api",
+    "version": "1.45.2",
+    "hashes": 2,
+    "adopted_via": [
+     "-c requirements-py313.lock",
+     "mcp"
+    ]
+   },
+   {
+    "name": "packaging",
+    "version": "26.4",
+    "hashes": 2,
+    "adopted_via": [
+     "-c requirements-py313.lock",
+     "pytest"
+    ]
+   },
+   {
+    "name": "playwright",
+    "version": "1.63.0",
+    "hashes": 8,
+    "adopted_via": [
+     "-r requirements-optional.in"
+    ]
+   },
+   {
+    "name": "pluggy",
+    "version": "1.7.0",
+    "hashes": 2,
+    "adopted_via": [
+     "-c requirements-py313.lock",
+     "pytest"
+    ]
+   },
+   {
+    "name": "pycparser",
+    "version": "3.12",
+    "hashes": 2,
+    "adopted_via": [
+     "-c requirements-py313.lock",
+     "cffi"
+    ]
+   },
+   {
+    "name": "pydantic",
+    "version": "2.14.4",
+    "hashes": 2,
+    "adopted_via": [
+     "-c requirements-py313.lock",
+     "verified-execution-prototype (pyproject.toml)",
+     "mcp",
+     "mcp-types"
+    ]
+   },
+   {
+    "name": "pydantic-core",
+    "version": "2.50.5",
+    "hashes": 140,
+    "adopted_via": [
+     "-c requirements-py313.lock",
+     "pydantic"
+    ]
+   },
+   {
+    "name": "pyee",
+    "version": "13.0.1",
+    "hashes": 2,
+    "adopted_via": [
+     "playwright"
+    ]
+   },
+   {
+    "name": "pygments",
+    "version": "2.21.0",
+    "hashes": 2,
+    "adopted_via": [
+     "-c requirements-py313.lock",
+     "pytest"
+    ]
+   },
+   {
+    "name": "pyjwt",
+    "version": "2.15.1",
+    "hashes": 2,
+    "adopted_via": [
+     "-c requirements-py313.lock",
+     "mcp"
+    ]
+   },
+   {
+    "name": "pytest",
+    "version": "9.2.0",
+    "hashes": 2,
+    "adopted_via": [
+     "-c requirements-py313.lock",
+     "verified-execution-prototype (pyproject.toml)"
+    ]
+   },
+   {
+    "name": "python-multipart",
+    "version": "0.0.34",
+    "hashes": 2,
+    "adopted_via": [
+     "-c requirements-py313.lock",
+     "mcp"
+    ]
+   },
+   {
+    "name": "referencing",
+    "version": "0.37.0",
+    "hashes": 2,
+    "adopted_via": [
+     "-c requirements-py313.lock",
+     "jsonschema",
+     "jsonschema-specifications"
+    ]
+   },
+   {
+    "name": "rpds-py",
+    "version": "2026.9.1",
+    "hashes": 128,
+    "adopted_via": [
+     "-c requirements-py313.lock",
+     "jsonschema",
+     "referencing"
+    ]
+   },
+   {
+    "name": "sse-starlette",
+    "version": "3.7.1",
+    "hashes": 2,
+    "adopted_via": [
+     "-c requirements-py313.lock",
+     "mcp"
+    ]
+   },
+   {
+    "name": "starlette",
+    "version": "1.10.0",
+    "hashes": 2,
+    "adopted_via": [
+     "-c requirements-py313.lock",
+     "mcp",
+     "sse-starlette"
+    ]
+   },
+   {
+    "name": "truststore",
+    "version": "0.10.5",
+    "hashes": 2,
+    "adopted_via": [
+     "-c requirements-py313.lock",
+     "httpcore2",
+     "httpx2"
+    ]
+   },
+   {
+    "name": "typing-extensions",
+    "version": "4.16.0",
+    "hashes": 2,
+    "adopted_via": [
+     "-c requirements-py313.lock",
+     "anyio",
+     "mcp",
+     "mcp-types",
+     "opentelemetry-api",
+     "pydantic",
+     "pydantic-core",
+     "pyee",
+     "typing-inspection"
+    ]
+   },
+   {
+    "name": "typing-inspection",
+    "version": "0.4.5",
+    "hashes": 2,
+    "adopted_via": [
+     "-c requirements-py313.lock",
+     "mcp",
+     "pydantic"
+    ]
+   },
+   {
+    "name": "uvicorn",
+    "version": "0.54.0",
+    "hashes": 2,
+    "adopted_via": [
+     "-c requirements-py313.lock",
+     "mcp"
+    ]
+   },
+   {
+    "name": "wasmtime",
+    "version": "50.0.1",
+    "hashes": 12,
+    "adopted_via": [
+     "-r requirements-optional.in"
+    ]
+   }
+  ]
+ },
  "installs": [
   {
    "workflow": "dependency-lock-candidate.yml",

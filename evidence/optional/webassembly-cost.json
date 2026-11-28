@@ -1,0 +1,32 @@
+{
+ "measured_at": "2026-11-28T08:19:38Z",
+ "python": "3.13.18",
+ "machine": "x86_64",
+ "wasmtime": "50.0.1",
+ "iterations": 2000,
+ "isolated_iterations": 20,
+ "per_call_microseconds": {
+  "python_core": 0.136,
+  "wasm_in_process": 118.001,
+  "wasm_isolated_process": 69287.379
+ },
+ "compile_milliseconds": 2.8,
+ "added_installed_bytes": 30232307,
+ "added_locked_packages": [
+  "wasmtime"
+ ],
+ "prototype_source_lines": 419,
+ "security": {
+  "host_functions_exposed": 2,
+  "effectful_host_functions": 1,
+  "wasi_capabilities_linked": 0,
+  "checks_before_the_guest_runs": [
+   "approved SHA-256",
+   "binary core module",
+   "export types",
+   "imports reviewed and granted",
+   "input types and ranges"
+  ],
+  "python_core_runs_external_code": false
+ }
+}
