@@ -17,6 +17,9 @@
    ],
    "agent_call": "completed",
    "agent_invalid_call": "invalid_arguments",
+   "execute_tool_arguments": "object",
+   "input_schema_form": "object",
+   "consequential_hint_reported": true,
    "user_click_works": true
   },
   {
@@ -29,6 +32,9 @@
    "registered_tools": [],
    "agent_call": null,
    "agent_invalid_call": null,
+   "execute_tool_arguments": null,
+   "input_schema_form": null,
+   "consequential_hint_reported": null,
    "user_click_works": true
   },
   {
@@ -47,6 +53,9 @@
    ],
    "agent_call": "completed",
    "agent_invalid_call": "invalid_arguments",
+   "execute_tool_arguments": "object",
+   "input_schema_form": "object",
+   "consequential_hint_reported": true,
    "user_click_works": true
   },
   {
@@ -59,6 +68,9 @@
    "registered_tools": [],
    "agent_call": null,
    "agent_invalid_call": null,
+   "execute_tool_arguments": null,
+   "input_schema_form": null,
+   "consequential_hint_reported": null,
    "user_click_works": true
   },
   {
@@ -73,6 +85,9 @@
    "registered_tools": [],
    "agent_call": null,
    "agent_invalid_call": null,
+   "execute_tool_arguments": null,
+   "input_schema_form": null,
+   "consequential_hint_reported": null,
    "user_click_works": true
   }
  ],

@@ -155,6 +155,9 @@ async function registerAll(context) {
       inputSchema: tool.inputSchema,
       annotations: tool.annotations,
       async execute(args) {
+        if (typeof args === "string") { // an implementation that hands over the arguments as JSON text
+          try { args = JSON.parse(args); } catch (error) { args = null; } // null fails validate()
+        }
         const outcome = await run(name, args, "agent");
         return { content: [{ type: "text", text: JSON.stringify(outcome) }], isError: !outcome.ok };
       },

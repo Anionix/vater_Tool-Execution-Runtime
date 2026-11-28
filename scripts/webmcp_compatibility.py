@@ -37,12 +37,25 @@ AGENT_CALLS = """async () => {
   if (!context) return null;
   const tools = await context.getTools();
   const add = tools.find(tool => tool.name === "add_numbers");
-  const parse = text => JSON.parse(JSON.parse(text).content[0].text);
-  return {
-    tools: tools.map(tool => tool.name).sort(),
-    call: parse(await context.executeTool(add, {left: 40, right: 2})).status,
-    refused: parse(await context.executeTool(add, {left: -1, right: 2})).status,
+  const report = tools.find(tool => tool.name === "send_report");
+  // Chromium 158 takes the arguments as an object; an implementation that takes JSON text
+  // fails to parse an object, and then gets the same arguments as text.
+  let form = "object";
+  const call = async args => {
+    if (form === "json_text") return context.executeTool(add, JSON.stringify(args));
+    try { return await context.executeTool(add, args); }
+    catch (error) {
+      if (!/parse input arguments/i.test(String(error && error.message))) throw error;
+      form = "json_text";
+      return context.executeTool(add, JSON.stringify(args));
+    }
   };
+  const parse = raw => JSON.parse((typeof raw === "string" ? JSON.parse(raw) : raw).content[0].text);
+  const done = parse(await call({left: 40, right: 2})).status;
+  const refused = parse(await call({left: -1, right: 2})).status;
+  const hint = report.annotations ? report.annotations.consequentialHint : undefined;
+  return {tools: tools.map(tool => tool.name).sort(), call: done, refused, form,
+          schema: typeof add.inputSchema, consequential: hint === undefined ? null : hint};
 }"""
 
 
@@ -83,6 +96,9 @@ def probe(playwright, name: str, configuration: dict, port: int) -> dict:
             "registered_tools": agent["tools"] if agent else [],
             "agent_call": agent["call"] if agent else None,
             "agent_invalid_call": agent["refused"] if agent else None,
+            "execute_tool_arguments": agent["form"] if agent else None,
+            "input_schema_form": agent["schema"] if agent else None,
+            "consequential_hint_reported": agent["consequential"] if agent else None,
             "user_click_works": page.locator("#activity li[data-source=user]").first.get_attribute("data-status")
             == "completed",
         }
@@ -104,7 +120,12 @@ def main() -> int:
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     results = probe_all()
-    record = {"playwright": "1.63.0", "results": results,
+    here = {result["browser"] for result in results}
+    kept = []
+    if args.output.is_file():  # results of browser versions not present here (another machine, CI) are kept
+        kept = [result for result in json.loads(args.output.read_text(encoding="utf-8"))["results"]
+                if result["browser"] not in here]
+    record = {"playwright": "1.63.0", "results": sorted(kept + results, key=lambda item: (item["browser"], 0)),
               "not_available_here": ["Firefox", "WebKit (Safari)", "Microsoft Edge", "Chrome stable with a GPU"]}
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(record, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
