@@ -1,0 +1,37 @@
+{
+ "jobs": 20,
+ "rest": {
+  "status_of_known_jobs": {
+   "requests": 20,
+   "response_bytes": 911
+  },
+  "jobs_with_tool_schema": {
+   "requests": 21,
+   "response_bytes": 7527
+  },
+  "succeeded_jobs_by_state": {
+   "requests": null,
+   "response_bytes": null,
+   "note": "no list route: the ids must already be known"
+  }
+ },
+ "graphql": {
+  "status_of_known_jobs": {
+   "requests": 1,
+   "response_bytes": 1490
+  },
+  "jobs_with_tool_schema": {
+   "requests": 1,
+   "response_bytes": 2707
+  },
+  "succeeded_jobs_by_state": {
+   "requests": 1,
+   "response_bytes": 1090
+  }
+ },
+ "queries": {
+  "status_of_known_jobs": "{ jobs(first: 20) { id state result } }",
+  "jobs_with_tool_schema": "{ jobs(first: 20) { id state result tool { name } } tools { name inputSchema } }",
+  "succeeded_jobs_by_state": "{ jobs(state: succeeded, first: 20) { id result } }"
+ }
+}
